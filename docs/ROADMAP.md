@@ -12,6 +12,7 @@ Dernière mise à jour : 2026-10-21.
 | Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf` | PR #1                |
 | Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`    | PR #2                |
 | Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                    | hors dépôt           |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                |
 
 ## Hors code (Quentin)
 

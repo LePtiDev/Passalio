@@ -30,3 +30,9 @@ pnpm dev
 | `pnpm build`            | Construit le site et l'application                             |
 | `pnpm db:generate`      | Génère une migration Drizzle depuis `packages/db/src/schema`   |
 | `pnpm db:migrate:local` | Applique les migrations sur la base D1 locale                  |
+
+## Sessions cloud Claude Code
+
+Le hook `.claude/hooks/session-start.sh` prépare chaque session cloud : il installe Node.js 24 dans `/opt/node24`, active pnpm avec corepack et lance `pnpm install`. Il ne fait rien sur un poste local.
+
+L'environnement cloud doit fournir `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID`, et autoriser l'accès réseau à `nodejs.org`, `registry.npmjs.org` et `api.cloudflare.com`. Ensuite `pnpm check`, `pnpm dev` et `pnpm release:staging` fonctionnent dans la session. La production se déploie uniquement sur demande explicite.
