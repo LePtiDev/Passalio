@@ -21,6 +21,11 @@
       "bucket_name": "passalio-local-files"
     }
   ],
+  "vars": {
+    "BETTER_AUTH_URL": "http://localhost:8787",
+    "APP_URL": "http://localhost:5173",
+    "EMAIL_DELIVERY": "log"
+  },
   "env": {
     "staging": {
       "name": "passalio-api-staging",
@@ -38,7 +43,10 @@
           "bucket_name": "passalio-staging-files",
           "jurisdiction": "eu"
         }
-      ]
+      ],
+      "vars": {
+        "EMAIL_DELIVERY": "disabled"
+      }
     },
     "production": {
       "name": "passalio-api",
@@ -56,7 +64,10 @@
           "bucket_name": "passalio-production-files",
           "jurisdiction": "eu"
         }
-      ]
+      ],
+      "vars": {
+        "EMAIL_DELIVERY": "disabled"
+      }
     }
   }
 }

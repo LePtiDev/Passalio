@@ -13,3 +13,13 @@ export const syncedTimestampColumns = () => ({
   ...timestampColumns(),
   deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),
 });
+
+export const defaultedTimestampColumns = () => ({
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    .notNull()
+    .$defaultFn(() => new Date())
+    .$onUpdateFn(() => new Date()),
+});

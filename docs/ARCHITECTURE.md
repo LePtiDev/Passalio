@@ -124,9 +124,19 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 - `superadmin` : tout le backoffice.
 - `support` : lecture des comptes et impersonation en lecture seule.
 
+Un seul propriétaire par entreprise. Il peut transférer ce rôle à un administrateur, qui devient propriétaire pendant que l'ancien devient administrateur. Personne ne peut inviter, nommer ou retirer un propriétaire. Une même personne peut être membre de plusieurs entreprises, avec un rôle par entreprise.
+
 Les permissions sont des chaînes (`customers:write`, `documents:sign`…) définies dans `packages/shared`. Les rôles sont des listes de permissions. Les vérifications sont faites dans les use cases (`assertCan`), l'interface masque seulement ce qui est interdit.
 
 Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/shared/src/roles.ts`), permissions dans `packages/shared/src/permissions.ts`. Chaque permission est de type `read`, `write` ou `export` : pendant une impersonation, seules les permissions `read` passent. `assertCan` lève une `ForbiddenError`, que l'API transforme en réponse 403 avec le `trace_id`.
+
+### Comptes et connexion (contexte `identity`)
+
+- Connexion par lien magique valable 15 minutes, jeton stocké haché. Session de 30 jours renouvelée chaque jour, adresse IP et navigateur gardés pour afficher les appareils connectés.
+- Tables : `users`, `sessions`, `accounts`, `verifications` (Better Auth), `organizations`, `members`, `invitations` (plugin organization), `audit_logs`.
+- Better Auth n'ouvre que la connexion, les sessions et le choix de l'entreprise active (voir ADR 0011). Le reste passe par les routes de l'API : `POST /api/organizations`, `GET /api/members`, `POST /api/invitations`, `POST /api/invitations/:organizationId/:invitationId/accept`, `PATCH` et `DELETE /api/members/:memberId`, `POST /api/ownership-transfer`.
+- Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. Staging et production refusent l'envoi tant que Resend n'est pas branché.
+- Les informations légales de l'entreprise (SIRET, adresse, assurance, qualification) arriveront avec les attestations.
 
 ## 6. Impersonation (« voir comme l'utilisateur »)
 
@@ -163,6 +173,10 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `notifications` | `(organization_id, created_at)`                                                                                   |
 | `audit_logs`    | `(organization_id, created_at)`                                                                                   |
 | `members`       | `(user_id)`, `(organization_id, user_id)` unique                                                                  |
+| `invitations`   | `(organization_id, status)`, `(email)`                                                                            |
+| `sessions`      | `(token)` unique, `(user_id)`                                                                                     |
+| `accounts`      | `(user_id)`                                                                                                       |
+| `verifications` | `(identifier)`                                                                                                    |
 
 Règles :
 

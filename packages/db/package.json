@@ -11,6 +11,7 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@passalio/shared": "workspace:*",
     "drizzle-orm": "^0.45.4"
   },
   "devDependencies": {
