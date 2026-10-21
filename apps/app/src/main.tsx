@@ -1,11 +1,17 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MutationCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { apiErrorOf } from "./lib/api-client";
+import { toastApiError } from "./lib/errors";
 import { router } from "./router";
 import "./styles.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  mutationCache: new MutationCache({
+    onError: (error) => toastApiError(apiErrorOf(error)),
+  }),
+});
 
 const rootElement = document.querySelector("#root");
 

@@ -22,7 +22,7 @@
     }
   ],
   "vars": {
-    "BETTER_AUTH_URL": "http://localhost:8787",
+    "BETTER_AUTH_URL": "http://localhost:5173",
     "APP_URL": "http://localhost:5173",
     "EMAIL_DELIVERY": "log"
   },

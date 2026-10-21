@@ -1,9 +1,11 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
 
 export const rootRoute = createRootRoute({
   component: () => (
-    <main className="mx-auto min-h-dvh max-w-screen-sm p-4">
+    <>
       <Outlet />
-    </main>
+      <Toaster position="top-center" />
+    </>
   ),
 });

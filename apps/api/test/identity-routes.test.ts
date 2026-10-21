@@ -85,6 +85,18 @@ describe("team of an organization", () => {
     ).toEqual(["patron-a@example.fr owner", "tech-a@example.fr technician"]);
   });
 
+  it("tells the app who is signed in and with which role", async () => {
+    const response = await platform.request("/api/me", {}, technicianA);
+    expect(await response.json()).toEqual({
+      actor: {
+        userId: expect.any(String),
+        organizationId: organizationA,
+        role: "technician",
+        isImpersonating: false,
+      },
+    });
+  });
+
   it("refuses an invitation from a technician", async () => {
     const response = await platform.request(
       "/api/invitations",

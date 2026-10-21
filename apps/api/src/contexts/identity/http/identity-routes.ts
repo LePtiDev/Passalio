@@ -47,6 +47,7 @@ const userRoutes = new Hono<UserEnv>()
 
 const memberRoutes = new Hono<ActorEnv>()
   .use(requireActor)
+  .get("/me", (context) => context.json({ actor: context.get("actor") }))
   .get("/members", validateQuery(listMembersQuery), async (context) => {
     const { cursor } = context.req.valid("query");
     const page = await listMembers(identityDependencies(context.var, context.env))(

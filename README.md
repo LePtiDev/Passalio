@@ -16,7 +16,7 @@ pnpm db:migrate:local
 pnpm dev
 ```
 
-Remplacer `BETTER_AUTH_SECRET` dans `apps/api/.dev.vars` par une valeur aléatoire (`openssl rand -base64 32`). En local, les liens de connexion s'affichent dans le terminal de l'API.
+Remplacer `BETTER_AUTH_SECRET` dans `apps/api/.dev.vars` par une valeur aléatoire (`openssl rand -base64 32`). En local, ouvrez http://localhost:5173 : les liens de connexion et d'invitation s'affichent dans le terminal de l'API. Avant le premier `pnpm test:e2e`, installez le navigateur avec `pnpm --filter @passalio/app exec playwright install chromium`.
 
 - Site vitrine (Astro) : `apps/web`
 - Application (React, PWA) : `apps/app`
@@ -31,6 +31,7 @@ Remplacer `BETTER_AUTH_SECRET` dans `apps/api/.dev.vars` par une valeur aléatoi
 | `pnpm lint`             | Oxlint avec règles type-aware                                  |
 | `pnpm typecheck`        | `tsc` et `astro check` dans chaque paquet                      |
 | `pnpm test`             | Vitest dans chaque paquet                                      |
+| `pnpm test:e2e`         | Parcours Playwright (connexion, entreprise, invitation)        |
 | `pnpm build`            | Construit le site et l'application                             |
 | `pnpm db:generate`      | Génère une migration Drizzle depuis `packages/db/src/schema`   |
 | `pnpm db:migrate:local` | Applique les migrations sur la base D1 locale                  |
