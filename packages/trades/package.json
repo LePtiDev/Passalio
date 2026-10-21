@@ -1,0 +1,16 @@
+{
+  "name": "@ramoneur/trades",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ramoneur/shared": "workspace:*",
+    "zod": "^4.6.7"
+  }
+}

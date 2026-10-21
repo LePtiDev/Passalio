@@ -1,0 +1,17 @@
+{
+  "name": "@ramoneur/pdf",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ramoneur/shared": "workspace:*",
+    "@ramoneur/trades": "workspace:*",
+    "pdf-lib": "^1.17.1"
+  }
+}
