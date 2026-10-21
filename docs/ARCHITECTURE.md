@@ -135,6 +135,8 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Connexion par lien magique valable 15 minutes, jeton stocké haché. Session de 30 jours renouvelée chaque jour, adresse IP et navigateur gardés pour afficher les appareils connectés.
 - Tables : `users`, `sessions`, `accounts`, `verifications` (Better Auth), `organizations`, `members`, `invitations` (plugin organization), `audit_logs`.
 - Better Auth n'ouvre que la connexion, les sessions et le choix de l'entreprise active (voir ADR 0011). Le reste passe par les routes de l'API : `POST /api/organizations`, `GET /api/members`, `POST /api/invitations`, `POST /api/invitations/:organizationId/:invitationId/accept`, `PATCH` et `DELETE /api/members/:memberId`, `POST /api/ownership-transfer`.
+- L'application appelle l'API sur la même origine, sous `/api` (proxy Vite en local, route Workers `/api/*` sur le domaine de l'application en staging et production). Les cookies de session restent ainsi `SameSite=Lax` sans CORS. `BETTER_AUTH_URL` vaut donc l'adresse de l'application.
+- Écrans : `/connexion`, `/entreprise/nouvelle`, `/equipe`, `/invitations/:organizationId/:invitationId`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
 - Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. Staging et production refusent l'envoi tant que Resend n'est pas branché.
 - Les informations légales de l'entreprise (SIRET, adresse, assurance, qualification) arriveront avec les attestations.
 
