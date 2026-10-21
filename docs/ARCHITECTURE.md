@@ -126,6 +126,8 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 
 Les permissions sont des chaînes (`customers:write`, `documents:sign`…) définies dans `packages/shared`. Les rôles sont des listes de permissions. Les vérifications sont faites dans les use cases (`assertCan`), l'interface masque seulement ce qui est interdit.
 
+Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/shared/src/roles.ts`), permissions dans `packages/shared/src/permissions.ts`. Chaque permission est de type `read`, `write` ou `export` : pendant une impersonation, seules les permissions `read` passent. `assertCan` lève une `ForbiddenError`, que l'API transforme en réponse 403 avec le `trace_id`.
+
 ## 6. Impersonation (« voir comme l'utilisateur »)
 
 - Réservée à `superadmin` et `support`, via le plugin admin de Better Auth.
@@ -176,7 +178,7 @@ Règles :
 
 - Environnements : `local` (wrangler dev + D1 local), `staging`, `production`. Chacun a sa base D1, son bucket R2, ses clés Stripe/Resend/Sentry/PostHog.
 - Pas de pipeline CI pour l'instant. Déploiement depuis le poste :
-  - `pnpm release:staging` : `pnpm check` → migrations D1 staging → déploiement → upload des sourcemaps Sentry.
+  - `pnpm release:staging` : `pnpm check` → migrations D1 staging → déploiement → upload des sourcemaps Sentry (pas encore branché, Sentry n'est pas installé).
   - `pnpm release:prod` : même chose avec confirmation manuelle, et uniquement depuis `main` propre.
 - Lefthook : `oxfmt` et `oxlint` sur les fichiers modifiés au commit, `typecheck` et tests au push.
 - Données de démonstration : `pnpm db:seed:local` (données fictives uniquement).

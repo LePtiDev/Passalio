@@ -1,5 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import type { AppEnv } from "../env";
+import { createLogger } from "./logger";
 
 export const TRACE_HEADER = "x-trace-id";
 
@@ -15,6 +16,7 @@ const newTraceId = (): string => crypto.randomUUID().replaceAll("-", "");
 export const traceMiddleware = createMiddleware<AppEnv>(async (context, next) => {
   const traceId = extractTraceId(context.req.header("sentry-trace")) ?? newTraceId();
   context.set("traceId", traceId);
-  await next();
+  context.set("logger", createLogger(traceId));
   context.header(TRACE_HEADER, traceId);
+  await next();
 });
