@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
-  "name": "passalio-api",
+  "name": "passalio-api-local",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -14,5 +14,49 @@
       "database_id": "00000000-0000-0000-0000-000000000000",
       "migrations_dir": "../../packages/db/migrations"
     }
-  ]
+  ],
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "passalio-local-files"
+    }
+  ],
+  "env": {
+    "staging": {
+      "name": "passalio-api-staging",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "passalio-staging",
+          "database_id": "ca093890-20f6-4ca9-a1be-3d7ccf75683c",
+          "migrations_dir": "../../packages/db/migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "FILES",
+          "bucket_name": "passalio-staging-files",
+          "jurisdiction": "eu"
+        }
+      ]
+    },
+    "production": {
+      "name": "passalio-api",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "passalio-production",
+          "database_id": "99b939a8-4f72-44f8-a4ea-73528428ce0e",
+          "migrations_dir": "../../packages/db/migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "FILES",
+          "bucket_name": "passalio-production-files",
+          "jurisdiction": "eu"
+        }
+      ]
+    }
+  }
 }
