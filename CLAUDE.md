@@ -1,6 +1,6 @@
 # CLAUDE.md — Règles du projet
 
-Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux données, aux rôles ou à la sécurité, lire aussi `docs/SECURITY.md`. Les décisions structurantes sont dans `docs/adr/`.
+Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux données, aux rôles ou à la sécurité, lire aussi `docs/SECURITY.md`. Les décisions structurantes sont dans `docs/adr/`. L'avancement et la prochaine tâche sont dans `docs/ROADMAP.md`.
 
 ## Langue
 
@@ -83,6 +83,7 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 - Permissions vérifiées et testées.
 - Index ajoutés si nouvelles requêtes.
 - `docs/` mis à jour si la structure, les données ou une décision ont changé.
+- `docs/ROADMAP.md` à jour : tâche cochée, ligne ajoutée dans « Fait », date de mise à jour changée, nouvelles tâches ajoutées.
 
 ## Commandes
 
