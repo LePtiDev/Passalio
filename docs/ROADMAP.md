@@ -13,13 +13,14 @@ Dernière mise à jour : 2026-10-21.
 | Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`    | PR #2                       |
 | Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                    | hors dépôt                  |
 | Parité concurrents, essai de Ramonia (attestations, facture, captures)                     | `docs/competitor-parity.md` |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                      | `docs/competitor-parity.md` |
 | Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                       |
 
 ## Hors code (Quentin)
 
 - [ ] Récupérer un vrai certificat de ramonage et une vraie attestation d'entretien d'appareil remplis
 - [x] Tableau de parité des fonctionnalités : Ramio, Ramonia, OpenFire
-- [ ] Créer le compte d'essai Ramio (case anti-robot à cocher soi-même), puis le faire explorer
+- [x] Créer le compte d'essai Ramio (case anti-robot à cocher soi-même), puis le faire explorer
 - [ ] Vérifier la marque Passalio (INPI, EUIPO), réserver passalio.fr et passalio.com
 - [ ] Choisir l'hébergement du site et de l'application
 - [ ] Lister 10 à 15 ramoneurs indépendants à interroger

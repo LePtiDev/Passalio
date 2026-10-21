@@ -1,10 +1,10 @@
 # Parité concurrents : Ramio, Ramonia, OpenFire
 
-Relevé du 21 octobre 2026. Ramonia : compte d'essai créé et testé (deux interventions, attestations et facture produites). Ramio : site, CGV et page d'aide ; compte d'essai en attente, car l'inscription passe par une case anti-robot Cloudflare. OpenFire : site et grille tarifaire, car il n'existe pas d'essai en libre-service, seulement une démo avec un commercial. Version vivante et commentable : [document Passalio — parité concurrents](https://claude.ai/artifact/7NCqYfBcvEoKv7Atr6U2wk).
+Relevé du 21 octobre 2026. Ramonia : compte d'essai créé et testé (deux interventions, attestations et facture produites). Ramio : compte d'essai créé et testé (certificat sur une chaudière gaz, facture, email au client). OpenFire : site et grille tarifaire, car il n'existe pas d'essai en libre-service, seulement une démo avec un commercial. Version vivante et commentable : [document Passalio — parité concurrents](https://claude.ai/artifact/7NCqYfBcvEoKv7Atr6U2wk).
 
 La V1 couvre 10 des 13 fonctions de base. Passalio est le moins cher dès deux techniciens. Il manque trois fonctions que les concurrents proposent : la facture, le rappel la veille du rendez-vous, la relance des impayés.
 
-Le point fort confirmé : aucune « attestation d'entretien » vue chez les concurrents ne contient ce que demande l'arrêté du 15 septembre 2009 (mesure du CO, rendement, conseils). Celle de Ramonia est l'attestation de ramonage avec un autre titre.
+Le point fort confirmé : aucune « attestation d'entretien » vue chez les concurrents ne contient ce que demande l'arrêté du 15 septembre 2009 (mesure du CO, rendement, conseils). Celle de Ramonia est l'attestation de ramonage avec un autre titre. Ramio produit un « certificat de ramonage » même pour l'entretien d'une chaudière gaz.
 
 ## Tarifs
 
@@ -26,8 +26,8 @@ Le point fort confirmé : aucune « attestation d'entretien » vue chez les conc
 | Fonction                                    | Ramio                                    | Ramonia                         | OpenFire       | Passalio              | Écart                  |
 | ------------------------------------------- | ---------------------------------------- | ------------------------------- | -------------- | --------------------- | ---------------------- |
 | Fiches client, lieu, appareil               | Oui                                      | Oui, sans lieu distinct         | Oui            | V1                    | parité                 |
-| Attestation de ramonage (décret 2023-641)   | Oui                                      | Oui (testée)                    | Oui            | V1                    | parité                 |
-| Attestation d'entretien d'appareil conforme | ?                                        | Non (titre seul, voir plus bas) | ?              | V1                    | **avance sur Ramonia** |
+| Attestation de ramonage (décret 2023-641)   | Oui (testée)                             | Oui (testée)                    | Oui            | V1                    | parité                 |
+| Attestation d'entretien d'appareil conforme | Non (certificat de ramonage seul)        | Non (titre seul, voir plus bas) | ?              | V1                    | **avance**             |
 | Signature du client sur le téléphone        | Oui                                      | Oui (testée)                    | Oui            | V1                    | parité                 |
 | Photos jointes                              | Oui                                      | Oui                             | Oui            | V1                    | parité                 |
 | PDF envoyé par email                        | Oui                                      | Oui (testé)                     | Oui            | V1                    | parité                 |
@@ -35,7 +35,7 @@ Le point fort confirmé : aucune « attestation d'entretien » vue chez les conc
 | Planning et tournée                         | Oui + tournée optimisée                  | Oui + carte IGN, Waze, Maps     | Oui + tournées | V1 (simple)           | parité, sans tournées  |
 | Un compte par technicien, droits            | Oui                                      | Non (un seul utilisateur)       | Oui            | V1                    | **avance sur Ramonia** |
 | Import du fichier clients                   | Oui (CSV)                                | Oui (CSV, Excel)                | ?              | V1                    | parité                 |
-| Facture créée avec l'intervention           | Oui                                      | Oui (brouillon, testée)         | Oui            | V2                    | manque                 |
+| Facture créée avec l'intervention           | Non, saisie à part (testée)              | Oui (brouillon, testée)         | Oui            | V2                    | manque                 |
 | Rappel la veille du rendez-vous             | Oui (SMS)                                | Non vu                          | ?              | V1.1 (email)          | manque face à Ramio    |
 | Relance des factures impayées               | Oui (3 emails)                           | Non vu                          | ?              | V2                    | manque face à Ramio    |
 | Hors ligne complet                          | Oui (Ramio Terrain)                      | Oui (données sur l'appareil)    | Oui            | V1                    | parité                 |
@@ -44,7 +44,7 @@ Le point fort confirmé : aucune « attestation d'entretien » vue chez les conc
 | Prise de rendez-vous en ligne               | Oui                                      | Oui (page de réservation)       | Oui            | V2                    | retard                 |
 | Demande d'avis Google après l'intervention  | Oui (SMS)                                | Oui (email automatique)         | ?              | Non prévu             | **nouveau manque**     |
 | Secrétaire vocale IA                        | Non                                      | Oui (abonnés seulement)         | Non            | Non                   | hors périmètre         |
-| Facture électronique (sept. 2027)           | ?                                        | ?                               | Oui (annoncé)  | V2                    | à surveiller           |
+| Facture électronique (sept. 2027)           | Préparée (SIREN, TVA, IBAN)              | ?                               | Oui (annoncé)  | V2                    | à surveiller           |
 | Données hébergées en Europe                 | Oui                                      | Oui                             | ?              | V1                    | parité                 |
 | Utilisateurs illimités au prix de base      | Non                                      | Non                             | Non            | V1                    | **avance**             |
 | Dictée des observations                     | Non                                      | Oui (bouton « Dicter »)         | Non            | V1.1                  | retard sur Ramonia     |
@@ -65,6 +65,20 @@ Captures et PDF : dossier `concurrents/ramonia/` des fichiers du projet.
 - **Données** : stockées sur l'appareil, export JSON à faire soi-même. Une attestation envoyée peut être supprimée depuis la liste des documents.
 - **Un seul utilisateur** : aucune gestion d'équipe ni de droits dans l'application, malgré le site.
 
+## Ce que montre l'essai de Ramio
+
+Certificat et facture en PDF, captures : dossier `concurrents/ramio/` des fichiers du projet.
+
+- **Inscription** : email et mot de passe, case anti-robot Cloudflare. Essai de 14 jours sans carte.
+- **Certificat** : formulaire riche, listes de contrôle par appareil (poêle, chaudière bois, gaz, dépannage), anomalies, signatures, QR code vers l'espace client. Numéroté `CERT-2026-0001`, deux pages.
+- **Entretien de chaudière gaz** : la nature « Entretien + Ramonage » produit quand même un « CERTIFICAT DE RAMONAGE ». Pas de mesure de CO ni de rendement, et les conseils parlent de bois en bûches. Non conforme à l'arrêté du 15 septembre 2009.
+- **Email au client** : certificat en pièce jointe. Le message commence par « Bonjour {civilite} Testclient » : variable non remplacée.
+- **Facture** : à saisir à part, le lien depuis le certificat ne reprend même pas le client. TVA à 20 % par défaut. En franchise de TVA, le PDF n'affiche pas la mention « TVA non applicable, art. 293 B du CGI », mais garde la mention d'attestation de TVA à taux réduit. Indemnité de 40 € pour frais de recouvrement, comme Ramonia.
+- **Équipe** : comptes par technicien avec droits fins (clients, suppression, finances, stock, SMS).
+- **Relances** : rappel automatique 15 jours avant la date anniversaire (SMS, email ou les deux), rappel SMS 48 h avant le rendez-vous, créneaux proposés selon la proximité.
+- **SMS** : 20 crédits offerts, nom d'expéditeur, campagnes.
+- **Autres** : décharges, diagnostics, devis, contrats, stock, dépenses, statistiques, export CSV des factures.
+
 ## Autres concurrents cités par Ramio
 
 Gazoleen (racheté par Nomadia, 35 à 60 € par utilisateur), MyTour (20 €/mois, sans signature ni SMS), InterFast (généraliste BTP). À ajouter au tableau si un ramoneur interrogé les utilise.
@@ -74,13 +88,14 @@ Gazoleen (racheté par Nomadia, 35 à 60 € par utilisateur), MyTour (20 €/mo
 1. Ajouter à la V1 une facture simple, numérotée, envoyée avec l'attestation. Ligne unique par prestation, mentions adaptées aux particuliers.
 2. Avancer en V1 le rappel la veille par email. Le SMS reste une option payante en V2.
 3. Relance des impayés en V1.1, juste après la facture.
-4. Faire de l'attestation d'entretien conforme (CO, rendement, conseils) un argument de vente : aucun concurrent testé ne l'a.
-5. Envisager en V1.1 la demande d'avis Google après l'intervention : Ramio et Ramonia l'ont, le coût est faible.
-6. Garder hors V1 : devis, prise de rendez-vous en ligne, tournées, secrétaire IA.
+4. Faire de l'attestation d'entretien conforme (CO, rendement, conseils) un argument de vente : ni Ramio ni Ramonia ne l'ont.
+5. Soigner la facture : créée depuis l'intervention, mentions justes selon le régime de TVA, pas d'indemnité de 40 € pour un particulier. Les deux concurrents testés se trompent.
+6. Envisager en V1.1 la demande d'avis Google après l'intervention : Ramio et Ramonia l'ont, le coût est faible.
+7. Garder hors V1 : devis, prise de rendez-vous en ligne, tournées, secrétaire IA.
 
 ## Reste à vérifier
 
-- [ ] Ramio : compte d'essai (Quentin crée le compte, la case anti-robot bloque l'automate), puis PDF d'attestation, attestation d'entretien, facture électronique.
+- [x] Ramio : compte d'essai, PDF du certificat, attestation d'entretien (absente), facture électronique (champs prêts).
 - [ ] OpenFire : attestation d'entretien distincte et import, seulement par une démo commerciale.
 - [x] Ramonia : supplément par technicien (aucun, un seul utilisateur), rappel la veille (non vu), devis (non), HT ou TTC (franchise de TVA).
 - [x] Ramio : hors ligne (oui), import (CSV), prix des SMS (0,05 €), HT.
