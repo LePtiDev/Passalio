@@ -1,6 +1,6 @@
-# Ramoneur
+# Passalio
 
-Logiciel pour artisans d'entretien obligatoire (ramoneurs d'abord). Les règles du projet sont dans `CLAUDE.md`, l'architecture dans `docs/ARCHITECTURE.md`.
+Passalio, logiciel pour artisans d'entretien obligatoire (ramoneurs d'abord). Les règles du projet sont dans `CLAUDE.md`, l'architecture dans `docs/ARCHITECTURE.md`.
 
 ## Prérequis
 

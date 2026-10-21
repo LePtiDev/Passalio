@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/web",
+  "name": "@passalio/web",
   "private": true,
   "type": "module",
   "scripts": {

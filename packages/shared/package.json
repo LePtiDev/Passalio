@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/shared",
+  "name": "@passalio/shared",
   "private": true,
   "type": "module",
   "exports": {

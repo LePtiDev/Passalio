@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/app",
+  "name": "@passalio/app",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,8 +10,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ramoneur/shared": "workspace:*",
-    "@ramoneur/trades": "workspace:*",
+    "@passalio/shared": "workspace:*",
+    "@passalio/trades": "workspace:*",
     "@tanstack/react-query": "^5.104.5",
     "@tanstack/react-router": "^1.170.45",
     "clsx": "^2.1.1",

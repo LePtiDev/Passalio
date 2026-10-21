@@ -11,8 +11,8 @@ export default defineConfig({
     VitePWA({
       registerType: "prompt",
       manifest: {
-        name: "Ramoneur",
-        short_name: "Ramoneur",
+        name: "Passalio",
+        short_name: "Passalio",
         lang: "fr",
         display: "standalone",
         start_url: "/",

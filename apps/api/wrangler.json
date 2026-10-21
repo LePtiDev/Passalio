@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
-  "name": "ramoneur-api",
+  "name": "passalio-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -10,7 +10,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "ramoneur-local",
+      "database_name": "passalio-local",
       "database_id": "00000000-0000-0000-0000-000000000000",
       "migrations_dir": "../../packages/db/migrations"
     }

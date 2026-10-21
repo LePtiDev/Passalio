@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/api",
+  "name": "@passalio/api",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,8 +9,8 @@
     "db:migrate:local": "wrangler d1 migrations apply DB --local"
   },
   "dependencies": {
-    "@ramoneur/db": "workspace:*",
-    "@ramoneur/shared": "workspace:*",
+    "@passalio/db": "workspace:*",
+    "@passalio/shared": "workspace:*",
     "hono": "^4.13.13"
   },
   "devDependencies": {

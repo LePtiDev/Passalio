@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/pdf",
+  "name": "@passalio/pdf",
   "private": true,
   "type": "module",
   "exports": {
@@ -10,8 +10,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ramoneur/shared": "workspace:*",
-    "@ramoneur/trades": "workspace:*",
+    "@passalio/shared": "workspace:*",
+    "@passalio/trades": "workspace:*",
     "pdf-lib": "^1.17.1"
   }
 }

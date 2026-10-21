@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/db",
+  "name": "@passalio/db",
   "private": true,
   "type": "module",
   "exports": {

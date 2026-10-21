@@ -32,10 +32,10 @@ importers:
 
   apps/api:
     dependencies:
-      '@ramoneur/db':
+      '@passalio/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@ramoneur/shared':
+      '@passalio/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       hono:
@@ -51,10 +51,10 @@ importers:
 
   apps/app:
     dependencies:
-      '@ramoneur/shared':
+      '@passalio/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@ramoneur/trades':
+      '@passalio/trades':
         specifier: workspace:*
         version: link:../../packages/trades
       '@tanstack/react-query':
@@ -132,10 +132,10 @@ importers:
 
   packages/pdf:
     dependencies:
-      '@ramoneur/shared':
+      '@passalio/shared':
         specifier: workspace:*
         version: link:../shared
-      '@ramoneur/trades':
+      '@passalio/trades':
         specifier: workspace:*
         version: link:../trades
       pdf-lib:
@@ -146,7 +146,7 @@ importers:
 
   packages/trades:
     dependencies:
-      '@ramoneur/shared':
+      '@passalio/shared':
         specifier: workspace:*
         version: link:../shared
       zod:

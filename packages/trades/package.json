@@ -1,5 +1,5 @@
 {
-  "name": "@ramoneur/trades",
+  "name": "@passalio/trades",
   "private": true,
   "type": "module",
   "exports": {
@@ -10,7 +10,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@ramoneur/shared": "workspace:*",
+    "@passalio/shared": "workspace:*",
     "zod": "^4.6.7"
   }
 }
