@@ -6,18 +6,20 @@ Dernière mise à jour : 2026-10-21.
 
 ## Fait
 
-| Quoi                                                                                       | Où                   |
-| ------------------------------------------------------------------------------------------ | -------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                              | `CLAUDE.md`, `docs/` |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf` | PR #1                |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`    | PR #2                |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                    | hors dépôt           |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                |
+| Quoi                                                                                       | Où                          |
+| ------------------------------------------------------------------------------------------ | --------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                              | `CLAUDE.md`, `docs/`        |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf` | PR #1                       |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`    | PR #2                       |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                    | hors dépôt                  |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                     | `docs/competitor-parity.md` |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                       |
 
 ## Hors code (Quentin)
 
 - [ ] Récupérer un vrai certificat de ramonage et une vraie attestation d'entretien d'appareil remplis
-- [ ] Tableau de parité des fonctionnalités : Ramio, Ramonia, OpenFire
+- [x] Tableau de parité des fonctionnalités : Ramio, Ramonia, OpenFire
+- [ ] Créer le compte d'essai Ramio (case anti-robot à cocher soi-même), puis le faire explorer
 - [ ] Vérifier la marque Passalio (INPI, EUIPO), réserver passalio.fr et passalio.com
 - [ ] Choisir l'hébergement du site et de l'application
 - [ ] Lister 10 à 15 ramoneurs indépendants à interroger
@@ -41,7 +43,7 @@ Avant le premier client payant : CGV, politique de confidentialité, contrat de 
 
 ## Après la V1
 
-- **V1.1** : confirmation J-1, suivi d'arrivée sans GPS, IA (plaque signalétique, carnet papier, dictée), QR code équipement.
+- **V1.1** : confirmation J-1, demande d'avis Google après l'intervention, suivi d'arrivée sans GPS, IA (plaque signalétique, carnet papier, dictée), QR code équipement.
 - **V2** : devis et factures, facture électronique (obligatoire pour les TPE en septembre 2027), option SMS, prise de rendez-vous en ligne, nouveaux métiers (vidange ANC, PAC et climatisation, portes automatiques, hottes).
 
 ## Calendrier
