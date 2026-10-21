@@ -8,5 +8,8 @@
   "scripts": {
     "typecheck": "tsc",
     "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "uuid": "^14.0.3"
   }
 }

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
-    "typecheck": "tsc && tsc -p tsconfig.scripts.json",
+    "typecheck": "tsc && tsc -p tsconfig.scripts.json && tsc -p tsconfig.test.json",
     "test": "vitest run --passWithNoTests",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "release": "node scripts/release.ts"
@@ -12,7 +12,10 @@
   "dependencies": {
     "@passalio/db": "workspace:*",
     "@passalio/shared": "workspace:*",
-    "hono": "^4.13.13"
+    "better-auth": "1.7.12",
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.13",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261021.1",

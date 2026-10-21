@@ -11,8 +11,12 @@ Passalio, logiciel pour artisans d'entretien obligatoire (ramoneurs d'abord). Le
 
 ```sh
 pnpm install
+cp apps/api/.dev.vars.example apps/api/.dev.vars
+pnpm db:migrate:local
 pnpm dev
 ```
+
+Remplacer `BETTER_AUTH_SECRET` dans `apps/api/.dev.vars` par une valeur aléatoire (`openssl rand -base64 32`). En local, les liens de connexion s'affichent dans le terminal de l'API.
 
 - Site vitrine (Astro) : `apps/web`
 - Application (React, PWA) : `apps/app`

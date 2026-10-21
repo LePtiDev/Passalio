@@ -28,6 +28,9 @@ describe("can", () => {
     ["technician", "reminders:manage", false],
     ["admin", "data:export", true],
     ["secretary", "data:export", false],
+    ["technician", "members:read", true],
+    ["owner", "ownership:transfer", true],
+    ["admin", "ownership:transfer", false],
   ])("%s / %s → %s", (role, permission, expected) => {
     expect(can(actorWith(role), permission)).toBe(expected);
   });

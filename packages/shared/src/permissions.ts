@@ -1,6 +1,8 @@
 export const PERMISSIONS = {
   "billing:manage": "write",
   "account:delete": "write",
+  "ownership:transfer": "write",
+  "members:read": "read",
   "members:manage": "write",
   "organization:update": "write",
   "customers:read": "read",

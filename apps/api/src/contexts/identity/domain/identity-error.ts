@@ -1,0 +1,12 @@
+export type IdentityError =
+  | "invalid_organization_name"
+  | "organization_not_found"
+  | "member_not_found"
+  | "already_member"
+  | "owner_role_not_assignable"
+  | "owner_cannot_be_changed"
+  | "transfer_target_not_admin"
+  | "invitation_not_found"
+  | "invitation_expired"
+  | "invitation_email_mismatch"
+  | "impersonation_read_only";
