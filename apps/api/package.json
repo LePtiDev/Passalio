@@ -1,0 +1,20 @@
+{
+  "name": "@passalio/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local"
+  },
+  "dependencies": {
+    "@passalio/db": "workspace:*",
+    "@passalio/shared": "workspace:*",
+    "hono": "^4.13.13"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261021.1",
+    "wrangler": "^4.151.3"
+  }
+}

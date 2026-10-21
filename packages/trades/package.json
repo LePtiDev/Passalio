@@ -1,0 +1,16 @@
+{
+  "name": "@passalio/trades",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@passalio/shared": "workspace:*",
+    "zod": "^4.6.7"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@passalio/pdf",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@passalio/shared": "workspace:*",
+    "@passalio/trades": "workspace:*",
+    "pdf-lib": "^1.17.1"
+  }
+}
