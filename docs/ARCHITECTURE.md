@@ -185,8 +185,4 @@ Règles :
 
 ## 10. Roadmap
 
-**V1** : identity (comptes, rôles), customers, scheduling simple, compliance (ramonage + entretien appareil, signature, PDF), engagement (relances email), billing, hors ligne, import CSV, export, observabilité, backoffice minimal avec impersonation.
-
-**V1.1** : confirmation J-1, suivi d'arrivée sans GPS, IA (plaque signalétique, carnet papier, dictée), QR code équipement.
-
-**V2** : devis et factures, facture électronique (via plateforme agréée), option SMS, prise de rendez-vous en ligne, nouveaux métiers.
+Voir `docs/ROADMAP.md` (périmètre des versions, todo et calendrier).
