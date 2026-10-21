@@ -97,6 +97,7 @@ packages/
 docs/
 ├── ARCHITECTURE.md
 ├── SECURITY.md
+├── regulatory/               # Mentions obligatoires par document et par métier
 └── adr/
 ```
 
