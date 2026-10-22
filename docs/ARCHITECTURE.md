@@ -113,7 +113,7 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 | --------------------------------- | ------------ | -------------- | ----------- | ----------- |
 | Abonnement, suppression du compte | ✓            |                |             |             |
 | Membres et rôles                  | ✓            | ✓              |             |             |
-| Paramètres entreprise             | ✓            | ✓              |             |             |
+| Paramètres entreprise             | ✓            | ✓              | lecture     | lecture     |
 | Clients, lieux, équipements       | ✓            | ✓              | ✓           | ✓           |
 | Planning de toute l'équipe        | ✓            | ✓              | ✓           | lecture     |
 | Ses interventions                 | ✓            | ✓              | ✓           | ✓           |

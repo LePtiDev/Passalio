@@ -9,4 +9,9 @@ export type IdentityError =
   | "invitation_not_found"
   | "invitation_expired"
   | "invitation_email_mismatch"
-  | "impersonation_read_only";
+  | "impersonation_read_only"
+  | "invalid_siret"
+  | "invalid_document_numbering"
+  | "invalid_logo"
+  | "logo_not_found"
+  | "company_search_unavailable";

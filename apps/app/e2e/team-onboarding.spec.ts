@@ -23,15 +23,27 @@ test("an owner creates the company, invites a technician who joins the team", as
   await expect(page).toHaveURL(/\/connexion/);
   await signUp(page, "Jean", "patron@example.fr");
 
-  await expect(page).toHaveURL(/\/entreprise\/nouvelle/);
-  await page.getByLabel("Nom de l'entreprise").fill("Ramonage Dupont");
-  await page.getByRole("button", { name: "Créer l'entreprise" }).click();
+  await expect(page).toHaveURL(/\/configuration\/entreprise/);
+  await page.getByLabel("Nom affiché sur les documents").fill("Ramonage Dupont");
+  await page.getByLabel("SIRET").fill("123 456 789 00012");
+  await page.getByRole("button", { name: "Continuer" }).click();
 
-  await expect(page).toHaveURL(/\/equipe/);
-  await expect(page.getByText("Vous êtes seul pour l'instant")).toBeVisible();
-  await page.getByLabel("Adresse email").fill("tech@example.fr");
+  await expect(page).toHaveURL(/\/configuration\/metiers/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page.getByText("Choisissez au moins un métier.")).toBeVisible();
+  await page.getByText("Ramonage", { exact: true }).click();
+  await page.getByRole("button", { name: "Continuer" }).click();
+
+  await expect(page).toHaveURL(/\/configuration\/documents/);
+  await page.getByRole("button", { name: "Vert" }).click();
+  await page.getByLabel("Premier numéro").fill("0142");
+  await expect(page.getByText(`N° ${new Date().getFullYear()}-0142`)).toBeVisible();
+  await page.getByRole("button", { name: "Continuer" }).click();
+
+  await expect(page).toHaveURL(/\/configuration\/equipe/);
+  await page.getByLabel("Adresse email 1").fill("tech@example.fr");
   await page.getByRole("button", { name: "Envoyer l'invitation" }).click();
-  await expect(page.getByText("Invitation envoyée à tech@example.fr")).toBeVisible();
+  await expect(page.getByText("1 invitation envoyée.")).toBeVisible();
   await expect.poll(() => countEmailLinks(API_LOG_PATH, "invitation")).toBe(1);
 
   const invitationLink = await lastEmailLink(API_LOG_PATH, "invitation");
@@ -46,7 +58,7 @@ test("an owner creates the company, invites a technician who joins the team", as
   await expect(technician.getByText("patron@example.fr")).toBeVisible();
   await expect(technician.getByRole("button", { name: "Envoyer l'invitation" })).toHaveCount(0);
 
-  await page.reload();
+  await page.goto("/equipe");
   await expect(page.getByLabel("Rôle de Marc Dupont")).toBeVisible();
   await technicianContext.close();
 });
@@ -54,7 +66,7 @@ test("an owner creates the company, invites a technician who joins the team", as
 test("a user who forgot the password sets a new one and signs in with it", async ({ page }) => {
   await page.goto("/connexion");
   await signUp(page, "Paul", "oubli@example.fr");
-  await expect(page).toHaveURL(/\/entreprise\/nouvelle/);
+  await expect(page).toHaveURL(/\/configuration\/entreprise/);
   await page.context().clearCookies();
 
   await page.goto("/connexion");
@@ -73,5 +85,5 @@ test("a user who forgot the password sets a new one and signs in with it", async
   await page.getByLabel("Adresse email").fill("oubli@example.fr");
   await page.getByLabel("Mot de passe", { exact: true }).fill("nouveau-ramonage-2027");
   await page.getByRole("button", { name: "Se connecter" }).click();
-  await expect(page).toHaveURL(/\/entreprise\/nouvelle/);
+  await expect(page).toHaveURL(/\/configuration\/entreprise/);
 });

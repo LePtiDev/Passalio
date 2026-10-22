@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
   createInMemoryIdentityDependencies,
   createInMemoryIdentityState,
+  inMemoryOrganization,
   type InMemoryIdentityState,
 } from "../infrastructure/in-memory-identity-dependencies";
 import { acceptInvitation } from "./accept-invitation";
@@ -39,7 +40,9 @@ const addMember = (role: OrganizationRole, organizationId = ORGANIZATION_ID) => 
 
 beforeEach(() => {
   state = createInMemoryIdentityState();
-  state.organizations.push({ id: ORGANIZATION_ID, name: "Ramonage A", slug: "ramonage-a" });
+  state.organizations.push(
+    inMemoryOrganization({ id: ORGANIZATION_ID, name: "Ramonage A", slug: "ramonage-a" }),
+  );
   addMember("owner");
 });
 

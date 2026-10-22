@@ -72,7 +72,7 @@ export const startTestPlatform = async () => {
     if (cookie !== undefined) {
       headers.set("cookie", cookie);
     }
-    if (init.body !== undefined) {
+    if (init.body !== undefined && !headers.has("content-type")) {
       headers.set("content-type", "application/json");
     }
     return app.request(path, { ...init, headers }, env);

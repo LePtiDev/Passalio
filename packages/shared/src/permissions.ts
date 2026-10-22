@@ -4,6 +4,7 @@ export const PERMISSIONS = {
   "ownership:transfer": "write",
   "members:read": "read",
   "members:manage": "write",
+  "organization:read": "read",
   "organization:update": "write",
   "customers:read": "read",
   "customers:write": "write",

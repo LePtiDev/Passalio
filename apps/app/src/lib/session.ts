@@ -19,16 +19,31 @@ export const requireSession = async (returnTo: string) => {
   return session;
 };
 
-export const ensureActiveOrganization = async (returnTo: string) => {
-  const session = await requireSession(returnTo);
-  if (session.session.activeOrganizationId) {
-    return session;
+export const COMPANY_SETUP_PATH = "/configuration/entreprise";
+
+const activateFirstOrganization = async (activeOrganizationId: string | null | undefined) => {
+  if (activeOrganizationId) {
+    return true;
   }
   const { data: organizations } = await authClient.organization.list();
   const first = organizations?.[0];
   if (first === undefined) {
-    throw redirect({ to: "/entreprise/nouvelle" });
+    return false;
   }
   await authClient.organization.setActive({ organizationId: first.id });
+  return true;
+};
+
+export const loadOrganizationState = async (returnTo: string) => {
+  const session = await requireSession(returnTo);
+  const hasOrganization = await activateFirstOrganization(session.session.activeOrganizationId);
+  return { session, hasOrganization };
+};
+
+export const ensureActiveOrganization = async (returnTo: string) => {
+  const { session, hasOrganization } = await loadOrganizationState(returnTo);
+  if (!hasOrganization) {
+    throw redirect({ to: COMPANY_SETUP_PATH });
+  }
   return session;
 };

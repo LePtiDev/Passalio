@@ -1,5 +1,8 @@
+import { DEFAULT_BRAND_COLOR, ok } from "@passalio/shared";
+import type { CompanySummary } from "../domain/company-summary";
 import type { IdentityAuditEntry, IdentityDependencies } from "../domain/identity-ports";
-import type { Invitation, Member, Organization, TeamMember } from "../domain/identity-models";
+import type { Invitation, Member, TeamMember } from "../domain/identity-models";
+import type { OrganizationProfile } from "../domain/organization-profile";
 
 export type InMemoryUser = {
   readonly id: string;
@@ -9,11 +12,13 @@ export type InMemoryUser = {
 
 export type InMemoryIdentityState = {
   readonly users: InMemoryUser[];
-  readonly organizations: Organization[];
+  readonly organizations: OrganizationProfile[];
   readonly members: Member[];
   readonly invitations: Invitation[];
   readonly auditEntries: IdentityAuditEntry[];
   readonly notifiedInvitations: Invitation[];
+  readonly logos: Map<string, string>;
+  readonly companies: CompanySummary[];
 };
 
 export const createInMemoryIdentityState = (): InMemoryIdentityState => ({
@@ -23,6 +28,24 @@ export const createInMemoryIdentityState = (): InMemoryIdentityState => ({
   invitations: [],
   auditEntries: [],
   notifiedInvitations: [],
+  logos: new Map(),
+  companies: [],
+});
+
+export const inMemoryOrganization = (
+  organization: Pick<OrganizationProfile, "id" | "name" | "slug"> & Partial<OrganizationProfile>,
+): OrganizationProfile => ({
+  siret: null,
+  address: null,
+  phone: null,
+  teamSize: null,
+  trades: [],
+  brandColor: DEFAULT_BRAND_COLOR,
+  documentNumberPrefix: "",
+  nextDocumentNumber: 1,
+  logoKey: null,
+  onboardingCompletedAt: null,
+  ...organization,
 });
 
 const replaceWhere = <T>(items: T[], predicate: (item: T) => boolean, update: (item: T) => T) => {
@@ -48,11 +71,39 @@ export const createInMemoryIdentityDependencies = (
   return {
     organizations: {
       createWithOwner: async (organization, owner) => {
-        state.organizations.push(organization);
+        state.organizations.push(inMemoryOrganization(organization));
         state.members.push(owner);
       },
-      findById: async (organizationId) =>
+      findById: async (organizationId) => {
+        const found = state.organizations.find(({ id }) => id === organizationId);
+        return found === undefined
+          ? undefined
+          : { id: found.id, name: found.name, slug: found.slug };
+      },
+      findProfile: async (organizationId) =>
         state.organizations.find(({ id }) => id === organizationId),
+      updateProfile: async (organizationId, changes) => {
+        replaceWhere(
+          state.organizations,
+          ({ id }) => id === organizationId,
+          (organization) => ({ ...organization, ...changes }),
+        );
+      },
+      setLogoKey: async (organizationId, logoKey) => {
+        replaceWhere(
+          state.organizations,
+          ({ id }) => id === organizationId,
+          (organization) => ({ ...organization, logoKey }),
+        );
+      },
+      completeOnboarding: async (organizationId, completedAt) => {
+        replaceWhere(
+          state.organizations,
+          ({ id, onboardingCompletedAt }) =>
+            id === organizationId && onboardingCompletedAt === null,
+          (organization) => ({ ...organization, onboardingCompletedAt: completedAt }),
+        );
+      },
     },
     members: {
       list: async (organizationId, { limit, afterId }) =>
@@ -127,6 +178,19 @@ export const createInMemoryIdentityDependencies = (
       notify: async (invitation) => {
         state.notifiedInvitations.push(invitation);
       },
+    },
+    logoStorage: {
+      put: async (key, _body, contentType) => {
+        state.logos.set(key, contentType);
+      },
+      get: async (key) => {
+        const contentType = state.logos.get(key);
+        return contentType === undefined ? undefined : { body: new Blob([]).stream(), contentType };
+      },
+    },
+    companyDirectory: {
+      search: async (query) =>
+        ok(state.companies.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))),
     },
     now,
   };

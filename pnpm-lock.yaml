@@ -38,6 +38,9 @@ importers:
       '@passalio/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@passalio/trades':
+        specifier: workspace:*
+        version: link:../../packages/trades
       better-auth:
         specifier: 1.7.12
         version: 1.7.12(drizzle-kit@0.31.11)(drizzle-orm@0.45.4(@cloudflare/workers-types@5.20261021.1)(kysely@0.29.7))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(vitest@5.0.5(@types/node@24.19.2)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
@@ -167,6 +170,9 @@ importers:
       '@passalio/shared':
         specifier: workspace:*
         version: link:../shared
+      '@passalio/trades':
+        specifier: workspace:*
+        version: link:../trades
       drizzle-orm:
         specifier: ^0.45.4
         version: 0.45.4(@cloudflare/workers-types@5.20261021.1)(kysely@0.29.7)

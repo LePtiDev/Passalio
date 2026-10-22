@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { identityRoutes } from "./contexts/identity";
+import { identityRoutes, organizationRoutes } from "./contexts/identity";
 import type { AppEnv } from "./env";
 import { authRoutes } from "./platform/auth-routes";
 import { handleError } from "./platform/errors";
@@ -14,7 +14,9 @@ const apiRoutes = new Hono<AppEnv>()
   .use(impersonationGuardMiddleware)
   .route("/auth", authRoutes)
   .route("/", identityRoutes.userRoutes)
-  .route("/", identityRoutes.memberRoutes);
+  .route("/", organizationRoutes.companySearchRoutes)
+  .route("/", identityRoutes.memberRoutes)
+  .route("/", organizationRoutes.organizationSettingsRoutes);
 
 export const app = createApp()
   .get("/health", (context) => context.json({ status: "ok" }))
