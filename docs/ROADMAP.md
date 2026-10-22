@@ -21,6 +21,7 @@ Dernière mise à jour : 2026-10-22.
 | Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base  | PR #13                          |
 | Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe | PR #14                          |
 | Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas  | PR #15                          |
+| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com      | PR #16                          |
 
 ## Hors code (Quentin)
 

@@ -46,6 +46,7 @@ const release = async (environment: Environment): Promise<void> => {
     await assertProductionReady();
   }
   run("pnpm", ["--workspace-root", "check"]);
+  run("pnpm", ["--workspace-root", "--filter", "@passalio/app", "build"]);
   run("pnpm", [
     "exec",
     "wrangler",
