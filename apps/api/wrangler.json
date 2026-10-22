@@ -29,6 +29,12 @@
   "env": {
     "staging": {
       "name": "passalio-api-staging",
+      "assets": {
+        "directory": "../app/dist",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*", "/health"]
+      },
+      "routes": [{ "pattern": "app.staging.passalio.com", "custom_domain": true }],
       "d1_databases": [
         {
           "binding": "DB",
@@ -45,11 +51,19 @@
         }
       ],
       "vars": {
-        "EMAIL_DELIVERY": "disabled"
+        "BETTER_AUTH_URL": "https://app.staging.passalio.com",
+        "APP_URL": "https://app.staging.passalio.com",
+        "EMAIL_DELIVERY": "log"
       }
     },
     "production": {
       "name": "passalio-api",
+      "assets": {
+        "directory": "../app/dist",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*", "/health"]
+      },
+      "routes": [{ "pattern": "app.passalio.com", "custom_domain": true }],
       "d1_databases": [
         {
           "binding": "DB",
@@ -66,6 +80,8 @@
         }
       ],
       "vars": {
+        "BETTER_AUTH_URL": "https://app.passalio.com",
+        "APP_URL": "https://app.passalio.com",
         "EMAIL_DELIVERY": "disabled"
       }
     }

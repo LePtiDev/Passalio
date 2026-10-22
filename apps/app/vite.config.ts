@@ -10,6 +10,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "prompt",
+      workbox: {
+        navigateFallbackDenylist: [/^\/api\//, /^\/health$/],
+      },
       manifest: {
         name: "Passalio",
         short_name: "Passalio",
