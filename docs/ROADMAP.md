@@ -23,7 +23,7 @@ Dernière mise à jour : 2026-10-22.
 | Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas          | PR #15                          |
 | Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com              | PR #16                          |
 | Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation | PR #18                          |
-| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR fiches clients 1             |
+| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR #19                          |
 
 ## Hors code (Quentin)
 
