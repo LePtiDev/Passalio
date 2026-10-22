@@ -21,7 +21,7 @@ export const useTeam = () =>
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-const useTeamMutation = <Input>(
+export const useTeamMutation = <Input>(
   action: (input: Input) => Promise<ApiResult<unknown>>,
   successMessage: (input: Input) => string,
 ) => {

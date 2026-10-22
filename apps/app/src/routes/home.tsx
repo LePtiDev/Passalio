@@ -1,20 +1,19 @@
-import { createRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { fr } from "@/fr";
+import { createRoute } from "@tanstack/react-router";
+import * as z from "zod";
+import { HomeScreen } from "@/components/dashboard/home-screen";
 import { signedInRoute } from "./signed-in-layout";
 
-const HomeScreen = () => (
-  <section className="flex flex-col gap-4">
-    <h1 className="text-2xl font-bold">{fr.home.title}</h1>
-    <p className="text-muted-foreground">{fr.home.subtitle}</p>
-    <Button asChild className="h-12 text-base">
-      <Link to="/equipe">{fr.home.teamLink}</Link>
-    </Button>
-  </section>
-);
+const homeSearch = z.object({
+  bienvenue: z.boolean().optional().catch(undefined),
+});
 
 export const homeRoute = createRoute({
   getParentRoute: () => signedInRoute,
   path: "/",
-  component: HomeScreen,
+  validateSearch: homeSearch,
+  component: function HomeRouteScreen() {
+    const { user } = homeRoute.useRouteContext();
+    const { bienvenue } = homeRoute.useSearch();
+    return <HomeScreen userName={user.name} isWelcome={bienvenue === true} />;
+  },
 });

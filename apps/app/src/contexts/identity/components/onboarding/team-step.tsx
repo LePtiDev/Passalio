@@ -63,7 +63,7 @@ export const TeamStep = () => {
       return;
     }
     await queryClient.invalidateQueries({ queryKey: ORGANIZATION_QUERY_KEY });
-    await navigate({ to: "/" });
+    await navigate({ to: "/", search: { bienvenue: true } });
   }, [navigate, queryClient]);
 
   const submit = form.handleSubmit(async (values) => {

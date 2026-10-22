@@ -20,6 +20,7 @@ Dernière mise à jour : 2026-10-22.
 | Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)       | `docs/adr/`                     |
 | Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base  | PR #13                          |
 | Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe | PR #14                          |
+| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas  | PR #15                          |
 
 ## Hors code (Quentin)
 
@@ -38,7 +39,9 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Écrans comptes selon la maquette validée (https://claude.ai/artifact/NpYPYv6fWoK39vvtGBtfs9) :
   - [x] Connexion email et mot de passe, création de compte avec le nom, mot de passe oublié (ADR 0012)
   - [x] Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numérotation), équipe
-  - [ ] Barre latérale, Équipe en pleine largeur avec invitations en attente, écran « Premiers pas »
+  - [x] Barre latérale, Équipe en pleine largeur avec invitations en attente, écran « Premiers pas »
+- [ ] Équipe : « Dernière activité » de chaque membre (prévue dans la maquette, il faut d'abord stocker la dernière session)
+- [ ] Premiers pas : QR code d'installation de l'app sur le téléphone, une fois l'app installable publiée
 - [ ] Réglages entreprise : modifier après l'onboarding les informations, métiers, logo et numérotation ; bloquer le changement du premier numéro dès la première attestation signée
 - [ ] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
 - [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation

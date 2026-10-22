@@ -45,6 +45,11 @@ test("an owner creates the company, invites a technician who joins the team", as
   await page.getByRole("button", { name: "Envoyer l'invitation" }).click();
   await expect(page.getByText("1 invitation envoyée.")).toBeVisible();
   await expect.poll(() => countEmailLinks(API_LOG_PATH, "invitation")).toBe(1);
+  await expect(page).toHaveURL(/bienvenue=true/);
+  await expect(
+    page.getByText("Votre espace est prêt. 1 invitation envoyée à votre équipe."),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bonjour Jean" })).toBeVisible();
 
   const invitationLink = await lastEmailLink(API_LOG_PATH, "invitation");
   const technicianContext = await browser.newContext();
@@ -56,10 +61,22 @@ test("an owner creates the company, invites a technician who joins the team", as
 
   await expect(technician).toHaveURL(/\/equipe/);
   await expect(technician.getByText("patron@example.fr")).toBeVisible();
-  await expect(technician.getByRole("button", { name: "Envoyer l'invitation" })).toHaveCount(0);
+  await expect(technician.getByRole("button", { name: "Inviter une personne" })).toHaveCount(0);
 
   await page.goto("/equipe");
   await expect(page.getByLabel("Rôle de Marc Dupont")).toBeVisible();
+  await page.getByLabel("Rôle de Marc Dupont").click();
+  await page.getByRole("menuitemradio", { name: "Secrétariat" }).click();
+  await expect(page.getByText("Marc Dupont est maintenant secrétariat.")).toBeVisible();
+
+  await page.getByRole("button", { name: "Inviter une personne" }).click();
+  await page.getByRole("dialog").getByLabel("Adresse email").fill("apprenti@example.fr");
+  await page.getByRole("dialog").getByRole("button", { name: "Envoyer l'invitation" }).click();
+  await expect(page.getByText("Invitation envoyée à apprenti@example.fr.")).toBeVisible();
+  await page.getByRole("tab", { name: /en attente/i }).click();
+  await expect(page.getByText("apprenti@example.fr", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Annuler l'invitation apprenti@example.fr" }).click();
+  await expect(page.getByText("Aucune invitation en attente")).toBeVisible();
   await technicianContext.close();
 });
 

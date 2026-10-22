@@ -26,10 +26,24 @@ const teamMemberSchema = z.object({
   name: z.string(),
   email: z.string(),
   role: roleSchema,
+  joinedAt: z.coerce.date(),
 });
 
 const membersPageResponse = z.object({
   members: z.array(teamMemberSchema),
+  nextCursor: z.string().nullable(),
+});
+
+const pendingInvitationSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  role: roleSchema,
+  expiresAt: z.coerce.date(),
+  sentAt: z.coerce.date(),
+});
+
+const pendingInvitationsPageResponse = z.object({
+  invitations: z.array(pendingInvitationSchema),
   nextCursor: z.string().nullable(),
 });
 
@@ -69,6 +83,7 @@ const companySearchResponse = z.object({ companies: z.array(companySchema) });
 export type CurrentActor = z.infer<typeof actorResponse>["actor"];
 export type TeamMember = z.infer<typeof teamMemberSchema>;
 export type MembersPage = z.infer<typeof membersPageResponse>;
+export type PendingInvitation = z.infer<typeof pendingInvitationSchema>;
 export type OrganizationProfile = z.infer<typeof organizationProfileSchema>;
 export type CompanySummary = z.infer<typeof companySchema>;
 export type NewOrganization = Pick<
@@ -109,6 +124,15 @@ export const identityApi = {
   },
   inviteMember: (email: string, role: OrganizationRole) =>
     apiRequest("/invitations", z.unknown(), { method: "POST", body: { email, role } }),
+  fetchPendingInvitations: (cursor: string | null) =>
+    apiRequest(
+      cursor === null ? "/invitations" : `/invitations?cursor=${encodeURIComponent(cursor)}`,
+      pendingInvitationsPageResponse,
+    ),
+  resendInvitation: (invitationId: string) =>
+    apiRequest(`/invitations/${invitationId}/resend`, z.unknown(), { method: "POST" }),
+  cancelInvitation: (invitationId: string) =>
+    apiRequest(`/invitations/${invitationId}`, noContent, { method: "DELETE" }),
   changeMemberRole: (memberId: string, role: OrganizationRole) =>
     apiRequest(`/members/${memberId}`, noContent, { method: "PATCH", body: { role } }),
   removeMember: (memberId: string) =>

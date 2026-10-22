@@ -65,7 +65,9 @@ export const createInMemoryIdentityDependencies = (
 ): IdentityDependencies => {
   const withUser = (member: Member): TeamMember[] => {
     const user = state.users.find(({ id }) => id === member.userId);
-    return user === undefined ? [] : [{ ...member, name: user.name, email: user.email }];
+    return user === undefined
+      ? []
+      : [{ ...member, name: user.name, email: user.email, joinedAt: now() }];
   };
 
   return {
@@ -167,6 +169,32 @@ export const createInMemoryIdentityDependencies = (
           (current): Invitation => ({ ...current, status: "accepted" }),
         );
         state.members.push(member);
+      },
+      listPending: async (organizationId, { limit, afterId }) =>
+        state.invitations
+          .filter(
+            (invitation) =>
+              invitation.organizationId === organizationId && invitation.status === "pending",
+          )
+          .filter(({ id }) => afterId === undefined || id > afterId)
+          .toSorted((left, right) => left.id.localeCompare(right.id))
+          .slice(0, limit)
+          .map(({ id, email, role, expiresAt }) => ({ id, email, role, expiresAt, sentAt: now() })),
+      renew: async (organizationId, invitationId, expiresAt) => {
+        replaceWhere(
+          state.invitations,
+          (invitation) =>
+            invitation.organizationId === organizationId && invitation.id === invitationId,
+          (invitation) => ({ ...invitation, expiresAt }),
+        );
+      },
+      cancel: async (organizationId, invitationId) => {
+        replaceWhere(
+          state.invitations,
+          (invitation) =>
+            invitation.organizationId === organizationId && invitation.id === invitationId,
+          (invitation): Invitation => ({ ...invitation, status: "canceled" }),
+        );
       },
     },
     auditTrail: {
