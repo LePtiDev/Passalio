@@ -23,6 +23,7 @@ Dernière mise à jour : 2026-10-22.
 | Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas          | PR #15                          |
 | Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com              | PR #16                          |
 | Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation | PR #18                          |
+| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR fiches clients 1             |
 
 ## Hors code (Quentin)
 
@@ -48,9 +49,11 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Équipe : « Dernière activité » de chaque membre (prévue dans la maquette, il faut d'abord stocker la dernière session)
 - [ ] Premiers pas : QR code d'installation de l'app sur le téléphone, une fois l'app installable publiée
 - [ ] Réglages entreprise : modifier après l'onboarding les informations, métiers, logo et numérotation ; bloquer le changement du premier numéro dès la première attestation signée
-- [ ] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
-- [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation
-- [ ] Écrans clients : liste, fiche, lieux, équipements
+- [x] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
+- [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation (clients, lieux, appareils, photos en attente d'envoi)
+- [ ] Écrans clients selon la maquette validée le 2026-10-22 (https://claude.ai/artifact/Tha55S1NCL2MsWPN3TxquD) : liste, fiche, nouveau client, nouvel appareil, remplacement
+- [ ] Lecture de la plaque signalétique d'un appareil par photo (API Claude), champs à confirmer par le technicien, téléphone seulement
+- [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (configuration dans `packages/trades`)
 - [ ] Métier ramonage et entretien d'appareil dans `packages/trades` (bloqué par les documents réels)
 - [ ] Attestation : formulaire, photos sur R2, signature, PDF sur le téléphone, numérotation, immuable une fois signée
 - [ ] Planning simple : interventions par technicien et par jour

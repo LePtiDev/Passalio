@@ -115,6 +115,7 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 | Membres et rôles                  | ✓            | ✓              |             |             |
 | Paramètres entreprise             | ✓            | ✓              | lecture     | lecture     |
 | Clients, lieux, équipements       | ✓            | ✓              | ✓           | ✓           |
+| Archiver un client                | ✓            | ✓              | ✓           |             |
 | Planning de toute l'équipe        | ✓            | ✓              | ✓           | lecture     |
 | Ses interventions                 | ✓            | ✓              | ✓           | ✓           |
 | Remplir et signer une attestation | ✓            | ✓              |             | ✓           |
@@ -146,6 +147,17 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. En staging, même mode « log » : le lien apparaît dans les logs du Worker, pour tester invitations et mot de passe oublié. La production refuse l'envoi tant que Resend n'est pas branché.
 - Les informations légales de l'entreprise (SIRET, adresse, assurance, qualification) arriveront avec les attestations.
 
+### Clients, lieux, équipements (contexte `customers`)
+
+- Tables : `customers` (particulier ou entreprise, `search_name` normalisé), `sites` (adresse d'intervention, occupant facultatif), `equipments`, `equipment_photos`. Toutes synchronisées : identifiant UUIDv7 que le téléphone peut choisir hors ligne, `updated_at`, `deleted_at`.
+- Type d'appareil : catalogue `EQUIPMENT_CATALOG` de `packages/trades`. Les métiers d'un appareil se déduisent de son type (un insert relève du ramonage et de l'entretien de poêle) : pas de `trade_id` sur `equipments`. L'API refuse un type qu'aucun métier de l'entreprise ne couvre.
+- Champs propres à un métier (conduit, type de chaudière, fluide frigorigène d'une PAC) : colonne JSON `details`, validée par le schéma de la famille d'appareil (`detailsSchemaOf`).
+- Installation et remplacement : `is_installed_by_us`, `commissioned_on`. Ajouter un appareil avec `replacesEquipmentId` passe l'ancien en `removed` (`removed_on`, `replaced_by_equipment_id`) dans le même lot. Un appareil retiré reste visible dans l'historique.
+- `last_sweeping_on` et `last_service_on` gardent le dernier passage fait avant Passalio. `next_due_date` reste vide tant que les périodicités par métier ne sont pas configurées.
+- Photos : fichiers dans R2 sous `organizations/{organization_id}/equipment-photos/{photo_id}`, 5 Mo maximum, JPEG, PNG ou WebP. La clé R2 n'est jamais renvoyée au navigateur.
+- Archivage (permission `customers:archive`) : suppression logique du client, de ses lieux, appareils et photos. Un client n'est jamais supprimé définitivement s'il a une attestation signée.
+- Routes : `GET` et `POST /api/customers` (recherche par préfixe `q`, curseur), `GET`, `PATCH` et `DELETE /api/customers/:customerId`, `POST /api/customers/:customerId/sites`, `PATCH /api/sites/:siteId`, `POST /api/sites/:siteId/equipments`, `PATCH /api/equipments/:equipmentId`, `POST /api/equipments/:equipmentId/removal`, `POST /api/equipments/:equipmentId/photos?kind=plate|overview`, `GET /api/photos/:photoId`.
+
 ## 6. Impersonation (« voir comme l'utilisateur »)
 
 - Réservée à `superadmin` et `support`, via le plugin admin de Better Auth.
@@ -170,22 +182,23 @@ Voir `docs/SECURITY.md` pour la protection et les sauvegardes.
 
 D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, un index inutile l'augmente à chaque écriture.
 
-| Table           | Index                                                                                                             |
-| --------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `customers`     | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                 |
-| `sites`         | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                 |
-| `equipments`    | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                 |
-| `interventions` | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                               |
-| `documents`     | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)` |
-| `reminders`     | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                |
-| `notifications` | `(organization_id, created_at)`                                                                                   |
-| `audit_logs`    | `(organization_id, created_at)`                                                                                   |
-| `members`       | `(user_id)`, `(organization_id, user_id)` unique                                                                  |
-| `invitations`   | `(organization_id, status)`, `(email)`                                                                            |
-| `sessions`      | `(token)` unique, `(user_id)`                                                                                     |
-| `accounts`      | `(user_id)`                                                                                                       |
-| `verifications` | `(identifier)`                                                                                                    |
-| `rate_limits`   | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                              |
+| Table              | Index                                                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `customers`        | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                 |
+| `sites`            | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                 |
+| `equipments`       | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                 |
+| `equipment_photos` | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                |
+| `interventions`    | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                               |
+| `documents`        | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)` |
+| `reminders`        | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                |
+| `notifications`    | `(organization_id, created_at)`                                                                                   |
+| `audit_logs`       | `(organization_id, created_at)`                                                                                   |
+| `members`          | `(user_id)`, `(organization_id, user_id)` unique                                                                  |
+| `invitations`      | `(organization_id, status)`, `(email)`                                                                            |
+| `sessions`         | `(token)` unique, `(user_id)`                                                                                     |
+| `accounts`         | `(user_id)`                                                                                                       |
+| `verifications`    | `(identifier)`                                                                                                    |
+| `rate_limits`      | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                              |
 
 Règles :
 
