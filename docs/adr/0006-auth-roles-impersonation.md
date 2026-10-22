@@ -1,7 +1,7 @@
 # 0006 — Authentification, rôles et impersonation avec Better Auth
 
 - Date : 2026-10-21
-- Statut : accepté
+- Statut : accepté, connexion modifiée par 0012
 
 ## Contexte
 
