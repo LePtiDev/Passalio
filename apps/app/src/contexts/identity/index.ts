@@ -1,3 +1,7 @@
+export { AuthLayout } from "./components/auth-layout";
+export { ForgotPasswordForm } from "./components/forgot-password-form";
+export { ResetPasswordForm } from "./components/reset-password-form";
+export { SignUpForm } from "./components/sign-up-form";
 export { AcceptInvitationCard } from "./components/accept-invitation-card";
 export { CreateOrganizationForm } from "./components/create-organization-form";
 export { InviteMemberForm } from "./components/invite-member-form";

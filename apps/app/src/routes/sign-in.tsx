@@ -1,18 +1,13 @@
 import { createRoute, redirect } from "@tanstack/react-router";
-import * as z from "zod";
-import { SignInForm } from "@/contexts/identity";
+import { AuthLayout, SignInForm } from "@/contexts/identity";
 import { loadSession, SIGN_IN_PATH } from "@/lib/session";
-import { PublicLayout } from "./public-layout";
 import { rootRoute } from "./root";
-
-const signInSearch = z.object({
-  retour: z.string().startsWith("/").optional(),
-});
+import { returnToSearch } from "./return-to-search";
 
 export const signInRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: SIGN_IN_PATH,
-  validateSearch: signInSearch,
+  validateSearch: returnToSearch,
   beforeLoad: async ({ search }) => {
     if ((await loadSession()) !== null) {
       throw redirect({ to: search.retour ?? "/" });
@@ -21,9 +16,9 @@ export const signInRoute = createRoute({
   component: function SignInScreen() {
     const { retour } = signInRoute.useSearch();
     return (
-      <PublicLayout>
+      <AuthLayout showcase="sign-in">
         <SignInForm returnTo={retour ?? "/"} />
-      </PublicLayout>
+      </AuthLayout>
     );
   },
 });

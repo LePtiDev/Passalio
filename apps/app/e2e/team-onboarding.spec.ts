@@ -2,13 +2,17 @@ import { expect, test, type Page } from "@playwright/test";
 import { API_LOG_PATH } from "../playwright.config";
 import { countEmailLinks, lastEmailLink } from "./emails";
 
-const signInWithMagicLink = async (page: Page, email: string) => {
-  const sentBefore = await countEmailLinks(API_LOG_PATH, "magic_link");
-  await page.getByLabel("Adresse email").fill(email);
-  await page.getByRole("button", { name: "Recevoir le lien" }).click();
-  await expect(page.getByText("Vérifiez votre boîte mail")).toBeVisible();
-  await expect.poll(() => countEmailLinks(API_LOG_PATH, "magic_link")).toBe(sentBefore + 1);
-  await page.goto(await lastEmailLink(API_LOG_PATH, "magic_link"));
+const PASSWORD = "cheminee-propre-2026";
+
+const signUp = async (page: Page, firstName: string, email: string) => {
+  await page.getByRole("link", { name: "Créer un compte" }).click();
+  await expect(page).toHaveURL(/\/inscription/);
+  await page.getByLabel("Prénom").fill(firstName);
+  await page.getByLabel("Nom", { exact: true }).fill("Dupont");
+  await page.getByLabel("Adresse email professionnelle").fill(email);
+  await page.getByLabel("Mot de passe", { exact: true }).fill(PASSWORD);
+  await page.getByText("J'accepte les conditions").click();
+  await page.getByRole("button", { name: "Créer mon compte" }).click();
 };
 
 test("an owner creates the company, invites a technician who joins the team", async ({
@@ -17,7 +21,7 @@ test("an owner creates the company, invites a technician who joins the team", as
 }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/\/connexion/);
-  await signInWithMagicLink(page, "patron@example.fr");
+  await signUp(page, "Jean", "patron@example.fr");
 
   await expect(page).toHaveURL(/\/entreprise\/nouvelle/);
   await page.getByLabel("Nom de l'entreprise").fill("Ramonage Dupont");
@@ -35,7 +39,7 @@ test("an owner creates the company, invites a technician who joins the team", as
   const technician = await technicianContext.newPage();
   await technician.goto(invitationLink);
   await expect(technician).toHaveURL(/\/connexion/);
-  await signInWithMagicLink(technician, "tech@example.fr");
+  await signUp(technician, "Marc", "tech@example.fr");
   await technician.getByRole("button", { name: "Accepter l'invitation" }).click();
 
   await expect(technician).toHaveURL(/\/equipe/);
@@ -43,6 +47,31 @@ test("an owner creates the company, invites a technician who joins the team", as
   await expect(technician.getByRole("button", { name: "Envoyer l'invitation" })).toHaveCount(0);
 
   await page.reload();
-  await expect(page.getByLabel("Rôle de tech@example.fr")).toBeVisible();
+  await expect(page.getByLabel("Rôle de Marc Dupont")).toBeVisible();
   await technicianContext.close();
+});
+
+test("a user who forgot the password sets a new one and signs in with it", async ({ page }) => {
+  await page.goto("/connexion");
+  await signUp(page, "Paul", "oubli@example.fr");
+  await expect(page).toHaveURL(/\/entreprise\/nouvelle/);
+  await page.context().clearCookies();
+
+  await page.goto("/connexion");
+  await page.getByRole("link", { name: "Mot de passe oublié ?" }).click();
+  await page.getByLabel("Adresse email").fill("oubli@example.fr");
+  await page.getByRole("button", { name: "Recevoir le lien" }).click();
+  await expect(page.getByText("Si un compte existe pour cette adresse")).toBeVisible();
+  await expect.poll(() => countEmailLinks(API_LOG_PATH, "password_reset")).toBe(1);
+
+  await page.goto(await lastEmailLink(API_LOG_PATH, "password_reset"));
+  await expect(page).toHaveURL(/\/mot-de-passe\/nouveau\?token=/);
+  await page.getByLabel("Nouveau mot de passe", { exact: true }).fill("nouveau-ramonage-2027");
+  await page.getByRole("button", { name: "Enregistrer le mot de passe" }).click();
+
+  await expect(page).toHaveURL(/\/connexion/);
+  await page.getByLabel("Adresse email").fill("oubli@example.fr");
+  await page.getByLabel("Mot de passe", { exact: true }).fill("nouveau-ramonage-2027");
+  await page.getByRole("button", { name: "Se connecter" }).click();
+  await expect(page).toHaveURL(/\/entreprise\/nouvelle/);
 });

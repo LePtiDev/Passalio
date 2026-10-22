@@ -33,6 +33,10 @@ export const fr = {
       transfer_target_not_admin: "La propriété se transfère uniquement à un administrateur.",
       invitation_not_found: "Cette invitation n'existe plus ou a déjà été utilisée.",
       invitation_expired: "Cette invitation a expiré. Demandez-en une nouvelle.",
+      invalid_credentials: "Adresse email ou mot de passe incorrect.",
+      email_already_used: "Un compte existe déjà avec cette adresse. Connectez-vous.",
+      weak_password: "Le mot de passe doit faire au moins 12 caractères.",
+      invalid_reset_token: "Ce lien n'est plus valable. Demandez-en un nouveau.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
     },

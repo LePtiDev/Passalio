@@ -5,6 +5,11 @@ export type MagicLinkEmail = {
   readonly url: string;
 };
 
+export type PasswordResetEmail = {
+  readonly email: string;
+  readonly url: string;
+};
+
 export type InvitationEmail = {
   readonly email: string;
   readonly organizationName: string;
@@ -13,6 +18,7 @@ export type InvitationEmail = {
 
 export type EmailSender = {
   readonly sendMagicLink: (email: MagicLinkEmail) => Promise<void>;
+  readonly sendPasswordReset: (email: PasswordResetEmail) => Promise<void>;
   readonly sendInvitation: (email: InvitationEmail) => Promise<void>;
 };
 
@@ -29,6 +35,9 @@ const createLogEmailSender = (logger: Logger): EmailSender => ({
   sendMagicLink: async ({ url }) => {
     logger.info({ event: "email_logged", kind: "magic_link", url });
   },
+  sendPasswordReset: async ({ url }) => {
+    logger.info({ event: "email_logged", kind: "password_reset", url });
+  },
   sendInvitation: async ({ url }) => {
     logger.info({ event: "email_logged", kind: "invitation", url });
   },
@@ -36,6 +45,9 @@ const createLogEmailSender = (logger: Logger): EmailSender => ({
 
 const disabledEmailSender: EmailSender = {
   sendMagicLink: async () => {
+    throw new EmailDeliveryDisabledError();
+  },
+  sendPasswordReset: async () => {
     throw new EmailDeliveryDisabledError();
   },
   sendInvitation: async () => {

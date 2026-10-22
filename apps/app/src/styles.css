@@ -140,3 +140,11 @@
   --normal-border: var(--border);
   --border-radius: var(--radius);
 }
+
+.brand-grid {
+  background-color: var(--brand-navy);
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

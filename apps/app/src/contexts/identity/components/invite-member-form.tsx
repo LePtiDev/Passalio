@@ -10,7 +10,7 @@ import { useInviteMember } from "../hooks/use-team";
 import { RoleSelect } from "./role-select";
 
 const inviteSchema = z.object({
-  email: z.email({ error: identityFr.signIn.invalidEmail }),
+  email: z.email({ error: identityFr.fields.invalidEmail }),
   role: z.enum(ORGANIZATION_ROLES).exclude(["owner"]),
 });
 
