@@ -6,16 +6,17 @@ Dernière mise à jour : 2026-10-22.
 
 ## Fait
 
-| Quoi                                                                                       | Où                          |
-| ------------------------------------------------------------------------------------------ | --------------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                              | `CLAUDE.md`, `docs/`        |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf` | PR #1                       |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`    | PR #2                       |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                    | hors dépôt                  |
-| Parité concurrents, essai de Ramonia (attestations, facture, captures)                     | `docs/competitor-parity.md` |
-| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                      | `docs/competitor-parity.md` |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                       |
-| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels       | `docs/regulatory/`          |
+| Quoi                                                                                       | Où                              |
+| ------------------------------------------------------------------------------------------ | ------------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                              | `CLAUDE.md`, `docs/`            |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf` | PR #1                           |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`    | PR #2                           |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                    | hors dépôt                      |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                     | `docs/competitor-parity.md`     |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                      | `docs/competitor-parity.md`     |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                           |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels       | `docs/regulatory/`              |
+| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion        | `CLAUDE.md`, skill `new-screen` |
 
 ## Hors code (Quentin)
 
@@ -30,6 +31,7 @@ Dernière mise à jour : 2026-10-22.
 ## V1, dans l'ordre
 
 - [ ] Comptes et entreprises : Better Auth (lien magique, organisations, rôles), `Actor` dans l'API, lecture seule pendant l'impersonation
+- [ ] Revue visuelle des écrans connexion, entreprise, équipe, invitation : appliquer les retours de Quentin
 - [ ] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
 - [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation
 - [ ] Écrans clients : liste, fiche, lieux, équipements

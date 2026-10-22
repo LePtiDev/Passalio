@@ -71,6 +71,8 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 ## Façon de travailler
 
 - Avant de coder : plan court (fichiers, tables, index, permissions, tests), puis attendre ma validation.
+- Avant de coder un écran : maquette (artifact Design ou captures) de chaque état, mobile et ordinateur, puis attendre ma validation visuelle. Aucun écran ne se code ni ne se fusionne sans maquette validée.
+- Après avoir codé un écran : me montrer les captures mobile et ordinateur de chaque état (vide, chargement, erreur, succès) avant de fusionner.
 - Utiliser les skills de `.claude/skills/` quand elles s'appliquent.
 - Tests écrits avec le code. Tout bug corrigé reçoit un test qui le reproduit.
 - Ne jamais lancer de déploiement sans que je le demande explicitement.
@@ -80,6 +82,7 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 - `pnpm check` passe (format, lint, types, tests).
 - Fonctionne hors ligne si c'est un écran terrain.
 - Skeletons, état vide et erreurs gérés.
+- Écran conforme à la maquette que j'ai validée, captures montrées.
 - Permissions vérifiées et testées.
 - Index ajoutés si nouvelles requêtes.
 - `docs/` mis à jour si la structure, les données ou une décision ont changé.
