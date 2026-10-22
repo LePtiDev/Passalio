@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-21.
+Dernière mise à jour : 2026-10-22.
 
 ## Fait
 
@@ -15,10 +15,12 @@ Dernière mise à jour : 2026-10-21.
 | Parité concurrents, essai de Ramonia (attestations, facture, captures)                     | `docs/competitor-parity.md` |
 | Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                      | `docs/competitor-parity.md` |
 | Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                       |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels       | `docs/regulatory/`          |
 
 ## Hors code (Quentin)
 
-- [ ] Récupérer un vrai certificat de ramonage et une vraie attestation d'entretien d'appareil remplis
+- [ ] Récupérer un vrai certificat de ramonage et une vraie attestation d'entretien d'appareil remplis, pour les comparer à `docs/regulatory/`
+- [ ] Trancher les points ouverts des fiches `docs/regulatory/` (lectures « Non vérifié sur texte officiel »), au besoin avec un juriste ou une fédération
 - [x] Tableau de parité des fonctionnalités : Ramio, Ramonia, OpenFire
 - [x] Créer le compte d'essai Ramio (case anti-robot à cocher soi-même), puis le faire explorer
 - [ ] Vérifier la marque Passalio (INPI, EUIPO), réserver passalio.fr et passalio.com
