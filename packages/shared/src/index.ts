@@ -1,5 +1,20 @@
 export type { Actor } from "./actor";
 export { assertCan, can } from "./authorization";
+export {
+  BUILDING_TYPES,
+  CALENDAR_DATE_PATTERN,
+  CIVILITIES,
+  CUSTOMER_KINDS,
+  EQUIPMENT_PHOTO_CONTENT_TYPES,
+  EQUIPMENT_PHOTO_KINDS,
+  EQUIPMENT_PHOTO_MAX_BYTES,
+  EQUIPMENT_STATUSES,
+  type BuildingType,
+  type Civility,
+  type CustomerKind,
+  type EquipmentPhotoKind,
+  type EquipmentStatus,
+} from "./customers";
 export { ForbiddenError } from "./errors";
 export { newId } from "./id";
 export {

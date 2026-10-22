@@ -8,6 +8,7 @@ export const PERMISSIONS = {
   "organization:update": "write",
   "customers:read": "read",
   "customers:write": "write",
+  "customers:archive": "write",
   "schedule:read": "read",
   "schedule:write": "write",
   "interventions:write-own": "write",

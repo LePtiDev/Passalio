@@ -21,6 +21,7 @@ const ADMIN_PERMISSIONS: readonly Permission[] = [
   ...SHARED_PERMISSIONS,
   "members:manage",
   "organization:update",
+  "customers:archive",
   "schedule:write",
   "documents:sign",
   "documents:read-all",
@@ -33,6 +34,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrganizationRole, ReadonlySet<Per
   admin: new Set(ADMIN_PERMISSIONS),
   secretary: new Set([
     ...SHARED_PERMISSIONS,
+    "customers:archive",
     "schedule:write",
     "documents:read-all",
     "reminders:manage",

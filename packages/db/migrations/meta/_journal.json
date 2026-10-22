@@ -29,6 +29,13 @@
       "when": 1792710708296,
       "tag": "0003_terms_acceptance",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1792712149041,
+      "tag": "0004_customers",
+      "breakpoints": true
     }
   ]
 }
