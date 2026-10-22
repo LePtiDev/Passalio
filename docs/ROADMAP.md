@@ -17,6 +17,7 @@ Dernière mise à jour : 2026-10-22.
 | Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste | PR #5                           |
 | Mentions obligatoires par document et par métier, vérifiées sur les textes officiels       | `docs/regulatory/`              |
 | Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion        | `CLAUDE.md`, skill `new-screen` |
+| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)  | `docs/adr/`                     |
 
 ## Hors code (Quentin)
 
@@ -31,7 +32,10 @@ Dernière mise à jour : 2026-10-22.
 ## V1, dans l'ordre
 
 - [ ] Comptes et entreprises : Better Auth (lien magique, organisations, rôles), `Actor` dans l'API, lecture seule pendant l'impersonation
-- [ ] Revue visuelle des écrans connexion, entreprise, équipe, invitation : appliquer les retours de Quentin
+- [ ] Écrans comptes selon la maquette validée (https://claude.ai/artifact/NpYPYv6fWoK39vvtGBtfs9) :
+  - [ ] Connexion email et mot de passe, création de compte avec le nom, mot de passe oublié (ADR 0012)
+  - [ ] Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numérotation), équipe
+  - [ ] Barre latérale, Équipe en pleine largeur avec invitations en attente, écran « Premiers pas »
 - [ ] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
 - [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation
 - [ ] Écrans clients : liste, fiche, lieux, équipements
@@ -39,6 +43,7 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Attestation : formulaire, photos sur R2, signature, PDF sur le téléphone, numérotation, immuable une fois signée
 - [ ] Planning simple : interventions par technicien et par jour
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
+- [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations
 - [ ] Abonnement : Stripe Billing, 29,99 €/mois et 299,90 €/an, essai gratuit
 - [ ] Observabilité : Sentry navigateur et API, PostHog UE, sourcemaps dans `release`
 - [ ] Import CSV et export des données

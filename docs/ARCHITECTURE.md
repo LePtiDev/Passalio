@@ -30,19 +30,21 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 2. Glossaire métier
 
-| Terme        | Code           | Définition                                                       |
-| ------------ | -------------- | ---------------------------------------------------------------- |
-| Entreprise   | `Organization` | Le client payant (l'artisan et son équipe)                       |
-| Membre       | `Member`       | Utilisateur rattaché à une entreprise avec un rôle               |
-| Client       | `Customer`     | Particulier ou entreprise chez qui l'artisan intervient          |
-| Lieu         | `Site`         | Adresse d'intervention d'un client                               |
-| Équipement   | `Equipment`    | Appareil ou conduit entretenu                                    |
-| Métier       | `Trade`        | Configuration d'une activité (ramonage, PAC…)                    |
-| Intervention | `Intervention` | Passage planifié ou réalisé                                      |
-| Tournée      | `Route`        | Suite ordonnée des interventions d'un technicien sur une journée |
-| Attestation  | `Document`     | Document réglementaire signé, immuable                           |
-| Échéance     | `DueDate`      | Date du prochain entretien obligatoire                           |
-| Relance      | `Reminder`     | Message envoyé au client à l'approche de l'échéance              |
+| Terme              | Code              | Définition                                                                  |
+| ------------------ | ----------------- | --------------------------------------------------------------------------- |
+| Entreprise         | `Organization`    | Le client payant (l'artisan et son équipe)                                  |
+| Membre             | `Member`          | Utilisateur rattaché à une entreprise avec un rôle                          |
+| Client             | `Customer`        | Particulier ou entreprise chez qui l'artisan intervient                     |
+| Lieu               | `Site`            | Adresse d'intervention d'un client                                          |
+| Équipement         | `Equipment`       | Appareil ou conduit entretenu                                               |
+| Métier             | `Trade`           | Configuration d'une activité (ramonage, PAC…)                               |
+| Intervention       | `Intervention`    | Passage planifié ou réalisé                                                 |
+| Tournée            | `Route`           | Suite ordonnée des interventions d'un technicien sur une journée            |
+| Attestation        | `Document`        | Document réglementaire signé, immuable                                      |
+| Échéance           | `DueDate`         | Date du prochain entretien obligatoire                                      |
+| Relance            | `Reminder`        | Message envoyé au client à l'approche de l'échéance                         |
+| Espace particulier | `CustomerAccount` | Compte Passalio d'un particulier, commun à tous ses prestataires (ADR 0013) |
+| Lien client        | `CustomerLink`    | Lien consenti entre un espace particulier et une fiche client               |
 
 ## 3. Contextes métier (DDD léger)
 
@@ -133,7 +135,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 ### Comptes et connexion (contexte `identity`)
 
-- Connexion par lien magique valable 15 minutes, jeton stocké haché. Session de 30 jours renouvelée chaque jour, adresse IP et navigateur gardés pour afficher les appareils connectés.
+- Connexion par email et mot de passe (12 caractères minimum, voir ADR 0012), mot de passe oublié par lien valable 1 heure. Le lien magique valable 15 minutes reste en option. Jetons stockés hachés. Session de 30 jours renouvelée chaque jour, adresse IP et navigateur gardés pour afficher les appareils connectés.
 - Tables : `users`, `sessions`, `accounts`, `verifications` (Better Auth), `organizations`, `members`, `invitations` (plugin organization), `audit_logs`.
 - Better Auth n'ouvre que la connexion, les sessions et le choix de l'entreprise active (voir ADR 0011). Le reste passe par les routes de l'API : `POST /api/organizations`, `GET /api/members`, `POST /api/invitations`, `POST /api/invitations/:organizationId/:invitationId/accept`, `PATCH` et `DELETE /api/members/:memberId`, `POST /api/ownership-transfer`.
 - L'application appelle l'API sur la même origine, sous `/api` (proxy Vite en local, route Workers `/api/*` sur le domaine de l'application en staging et production). Les cookies de session restent ainsi `SameSite=Lax` sans CORS. `BETTER_AUTH_URL` vaut donc l'adresse de l'application.
