@@ -13,16 +13,25 @@ const errorBody = z.object({ error: z.string(), traceId: z.string().optional() }
 const TRACE_HEADER = "x-trace-id";
 
 type ApiRequest = {
-  readonly method?: "GET" | "POST" | "PATCH" | "DELETE";
+  readonly method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   readonly body?: unknown;
+  readonly file?: Blob;
 };
 
-const send = async ({ method = "GET", body }: ApiRequest, path: string) =>
+const requestBody = ({ body, file }: ApiRequest): RequestInit => {
+  if (file !== undefined) {
+    return { body: file, headers: { "content-type": file.type } };
+  }
+  return body === undefined
+    ? {}
+    : { body: JSON.stringify(body), headers: { "content-type": "application/json" } };
+};
+
+const send = async (request: ApiRequest, path: string) =>
   fetch(`/api${path}`, {
-    method,
+    method: request.method ?? "GET",
     credentials: "include",
-    headers: body === undefined ? {} : { "content-type": "application/json" },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    ...requestBody(request),
   });
 
 const toApiError = async (response: Response): Promise<ApiError> => {

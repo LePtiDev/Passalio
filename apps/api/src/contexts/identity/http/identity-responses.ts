@@ -14,6 +14,11 @@ const ERROR_STATUS: Readonly<Record<IdentityError, ContentfulStatusCode>> = {
   invitation_expired: 410,
   invitation_email_mismatch: 403,
   impersonation_read_only: 403,
+  invalid_siret: 422,
+  invalid_document_numbering: 422,
+  invalid_logo: 422,
+  logo_not_found: 404,
+  company_search_unavailable: 503,
 };
 
 export const identityErrorResponse = (context: Context, error: IdentityError, traceId: string) =>

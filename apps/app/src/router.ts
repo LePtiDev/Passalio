@@ -2,7 +2,12 @@ import { createRouter } from "@tanstack/react-router";
 import { forgotPasswordRoute } from "./routes/forgot-password";
 import { homeRoute } from "./routes/home";
 import { invitationRoute } from "./routes/invitation";
-import { newOrganizationRoute } from "./routes/new-organization";
+import {
+  onboardingCompanyRoute,
+  onboardingDocumentsRoute,
+  onboardingTeamRoute,
+  onboardingTradesRoute,
+} from "./routes/onboarding";
 import { resetPasswordRoute } from "./routes/reset-password";
 import { rootRoute } from "./routes/root";
 import { signInRoute } from "./routes/sign-in";
@@ -15,7 +20,10 @@ const routeTree = rootRoute.addChildren([
   signUpRoute,
   forgotPasswordRoute,
   resetPasswordRoute,
-  newOrganizationRoute,
+  onboardingCompanyRoute,
+  onboardingTradesRoute,
+  onboardingDocumentsRoute,
+  onboardingTeamRoute,
   invitationRoute,
   signedInRoute.addChildren([homeRoute, teamRoute]),
 ]);

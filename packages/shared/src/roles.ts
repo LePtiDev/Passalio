@@ -9,6 +9,7 @@ export const isOrganizationRole = (value: string): value is OrganizationRole =>
 
 const SHARED_PERMISSIONS: readonly Permission[] = [
   "members:read",
+  "organization:read",
   "customers:read",
   "customers:write",
   "schedule:read",

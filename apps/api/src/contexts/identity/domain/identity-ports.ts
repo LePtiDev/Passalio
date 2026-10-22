@@ -1,14 +1,45 @@
-import type { OrganizationRole } from "@passalio/shared";
+import type { OrganizationRole, Result } from "@passalio/shared";
+import type { CompanySummary } from "./company-summary";
 import type { Invitation, Member, Organization, TeamMember } from "./identity-models";
+import type {
+  CompanyDetails,
+  NormalizedProfileChanges,
+  OrganizationProfile,
+} from "./organization-profile";
 
 export type Page = {
   readonly limit: number;
   readonly afterId?: string;
 };
 
+export type NewOrganization = Organization & CompanyDetails;
+
 export type OrganizationRepository = {
-  readonly createWithOwner: (organization: Organization, owner: Member) => Promise<void>;
+  readonly createWithOwner: (organization: NewOrganization, owner: Member) => Promise<void>;
   readonly findById: (organizationId: string) => Promise<Organization | undefined>;
+  readonly findProfile: (organizationId: string) => Promise<OrganizationProfile | undefined>;
+  readonly updateProfile: (
+    organizationId: string,
+    changes: NormalizedProfileChanges,
+  ) => Promise<void>;
+  readonly setLogoKey: (organizationId: string, logoKey: string) => Promise<void>;
+  readonly completeOnboarding: (organizationId: string, completedAt: Date) => Promise<void>;
+};
+
+export type StoredLogo = {
+  readonly body: ReadableStream;
+  readonly contentType: string;
+};
+
+export type LogoStorage = {
+  readonly put: (key: string, body: ArrayBuffer, contentType: string) => Promise<void>;
+  readonly get: (key: string) => Promise<StoredLogo | undefined>;
+};
+
+export type CompanyDirectory = {
+  readonly search: (
+    query: string,
+  ) => Promise<Result<readonly CompanySummary[], "company_search_unavailable">>;
 };
 
 export type MemberRepository = {
@@ -40,6 +71,9 @@ export type InvitationRepository = {
 
 export type IdentityAuditAction =
   | "organization.created"
+  | "organization.updated"
+  | "organization.logo_updated"
+  | "organization.onboarding_completed"
   | "member.invited"
   | "invitation.accepted"
   | "member.role_changed"
@@ -69,5 +103,7 @@ export type IdentityDependencies = {
   readonly invitations: InvitationRepository;
   readonly auditTrail: IdentityAuditTrail;
   readonly invitationNotifier: InvitationNotifier;
+  readonly logoStorage: LogoStorage;
+  readonly companyDirectory: CompanyDirectory;
   readonly now: () => Date;
 };

@@ -12,6 +12,7 @@
   "dependencies": {
     "@passalio/db": "workspace:*",
     "@passalio/shared": "workspace:*",
+    "@passalio/trades": "workspace:*",
     "better-auth": "1.7.12",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.13",

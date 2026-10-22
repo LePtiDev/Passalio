@@ -6,19 +6,20 @@ Dernière mise à jour : 2026-10-22.
 
 ## Fait
 
-| Quoi                                                                                           | Où                              |
-| ---------------------------------------------------------------------------------------------- | ------------------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                  | `CLAUDE.md`, `docs/`            |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`     | PR #1                           |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`        | PR #2                           |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                        | hors dépôt                      |
-| Parité concurrents, essai de Ramonia (attestations, facture, captures)                         | `docs/competitor-parity.md`     |
-| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                          | `docs/competitor-parity.md`     |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste     | PR #5                           |
-| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels           | `docs/regulatory/`              |
-| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion            | `CLAUDE.md`, skill `new-screen` |
-| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)      | `docs/adr/`                     |
-| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base | PR #13                          |
+| Quoi                                                                                            | Où                              |
+| ----------------------------------------------------------------------------------------------- | ------------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                   | `CLAUDE.md`, `docs/`            |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`      | PR #1                           |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`         | PR #2                           |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                         | hors dépôt                      |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                          | `docs/competitor-parity.md`     |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                           | `docs/competitor-parity.md`     |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste      | PR #5                           |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels            | `docs/regulatory/`              |
+| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion             | `CLAUDE.md`, skill `new-screen` |
+| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)       | `docs/adr/`                     |
+| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base  | PR #13                          |
+| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe | PR #14                          |
 
 ## Hors code (Quentin)
 
@@ -36,8 +37,9 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Comptes et entreprises : Better Auth (lien magique, organisations, rôles), `Actor` dans l'API, lecture seule pendant l'impersonation
 - [ ] Écrans comptes selon la maquette validée (https://claude.ai/artifact/NpYPYv6fWoK39vvtGBtfs9) :
   - [x] Connexion email et mot de passe, création de compte avec le nom, mot de passe oublié (ADR 0012)
-  - [ ] Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numérotation), équipe
+  - [x] Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numérotation), équipe
   - [ ] Barre latérale, Équipe en pleine largeur avec invitations en attente, écran « Premiers pas »
+- [ ] Réglages entreprise : modifier après l'onboarding les informations, métiers, logo et numérotation ; bloquer le changement du premier numéro dès la première attestation signée
 - [ ] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
 - [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation
 - [ ] Écrans clients : liste, fiche, lieux, équipements

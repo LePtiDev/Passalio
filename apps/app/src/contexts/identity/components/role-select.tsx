@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { ROLE_LABELS } from "../fr";
 
 const ASSIGNABLE_ROLES = ORGANIZATION_ROLES.filter((role) => role !== "owner");
@@ -19,10 +20,18 @@ type RoleSelectProps = {
   readonly value: OrganizationRole;
   readonly label: string;
   readonly isDisabled?: boolean;
+  readonly className?: string;
   readonly onChange: (role: OrganizationRole) => void;
 };
 
-export const RoleSelect = ({ id, value, label, isDisabled = false, onChange }: RoleSelectProps) => {
+export const RoleSelect = ({
+  id,
+  value,
+  label,
+  isDisabled = false,
+  className,
+  onChange,
+}: RoleSelectProps) => {
   const onValueChange = useCallback(
     (next: string) => {
       const role = toAssignableRole(next);
@@ -37,7 +46,7 @@ export const RoleSelect = ({ id, value, label, isDisabled = false, onChange }: R
       <SelectTrigger
         id={id}
         aria-label={label}
-        className="h-12 w-full text-base data-[size=default]:h-12"
+        className={cn("h-12 w-full text-base data-[size=default]:h-12", className)}
       >
         <SelectValue />
       </SelectTrigger>

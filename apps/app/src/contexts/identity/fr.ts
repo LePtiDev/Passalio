@@ -119,15 +119,6 @@ export const identityFr = {
     invalidLink: "Ce lien n'est plus valable. Demandez-en un nouveau.",
     requestNewLink: "Recevoir un nouveau lien",
   },
-  newOrganization: {
-    title: "Créez votre entreprise",
-    subtitle: "Le nom apparaîtra sur vos attestations. Vous pourrez le modifier plus tard.",
-    nameLabel: "Nom de l'entreprise",
-    namePlaceholder: "Ramonage Dupont",
-    submit: "Créer l'entreprise",
-    creating: "Création…",
-    created: (name: string) => `${name} est créée. Vous pouvez inviter votre équipe.`,
-  },
   team: {
     title: "Équipe",
     subtitle: "Les personnes qui ont accès à votre entreprise.",

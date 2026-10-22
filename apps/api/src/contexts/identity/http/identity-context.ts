@@ -12,6 +12,8 @@ export const identityDependencies = (
     database: variables.database,
     auditTrail: variables.auditTrail,
     emailSender: variables.emailSender,
+    files: bindings.FILES,
+    logger: variables.logger,
     appUrl: bindings.APP_URL,
   });
 

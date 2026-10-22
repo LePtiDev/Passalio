@@ -36,6 +36,8 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 ## 5. Application
 
 - Sessions Better Auth en cookie `HttpOnly`, `Secure`, `SameSite=Lax`, durée limitée, révocables.
+- Logo d'entreprise : PNG, JPEG, WebP ou SVG, 2 Mo au plus, stocké dans R2 sous `organizations/{id}/logo`. Servi uniquement aux membres connectés, avec `Content-Security-Policy: default-src 'none'` et `X-Content-Type-Options: nosniff`, pour qu'un SVG piégé ne puisse pas exécuter de script.
+- Recherche d'entreprise : l'API proxifie l'API publique « Recherche d'entreprises » (données Sirene) pour les seuls utilisateurs connectés. Seul le texte recherché est transmis.
 - Rate limiting sur la connexion, l'inscription, les liens publics et l'IA. Pour l'authentification, Better Auth compte les tentatives par adresse IP (`cf-connecting-ip`) dans la table D1 `rate_limits` : connexion 10 par minute, inscription 5, lien magique 5, mot de passe oublié 3. Le compteur en mémoire ne convient pas, car un Worker ne garde pas d'état entre deux requêtes.
 - Cloudflare Turnstile sur l'inscription et les formulaires publics.
 - En-têtes de sécurité : CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`.

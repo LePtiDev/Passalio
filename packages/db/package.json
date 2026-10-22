@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@passalio/shared": "workspace:*",
+    "@passalio/trades": "workspace:*",
     "drizzle-orm": "^0.45.4"
   },
   "devDependencies": {

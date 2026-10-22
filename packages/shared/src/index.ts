@@ -8,6 +8,17 @@ export {
   passwordStrength,
   type PasswordStrength,
 } from "./password-policy";
+export {
+  BRAND_COLORS,
+  DEFAULT_BRAND_COLOR,
+  DOCUMENT_NUMBER_PREFIX_PATTERN,
+  LOGO_CONTENT_TYPES,
+  LOGO_MAX_BYTES,
+  MAX_FIRST_DOCUMENT_NUMBER,
+  TEAM_SIZES,
+  type BrandColor,
+  type TeamSize,
+} from "./organization-profile";
 export { isReadPermission, PERMISSIONS, type Permission } from "./permissions";
 export { err, ok, type Err, type Ok, type Result } from "./result";
 export {
