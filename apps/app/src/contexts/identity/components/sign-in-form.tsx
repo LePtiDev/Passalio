@@ -11,6 +11,7 @@ import { createTraceRecorder } from "@/lib/auth-errors";
 import { toastApiError } from "@/lib/errors";
 import { FORGOT_PASSWORD_PATH, SIGN_UP_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
+import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AuthHeading } from "./auth-heading";
 import {
@@ -22,6 +23,7 @@ import {
 import { CheckboxField } from "./checkbox-field";
 import { MagicLinkSent } from "./magic-link-sent";
 import { PasswordInput } from "./password-input";
+import { TurnstileSlot } from "./turnstile-slot";
 
 const text = identityFr.signIn;
 
@@ -65,18 +67,25 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
   const navigate = useNavigate();
   const [magicLinkSentTo, setMagicLinkSentTo] = useState<string | null>(null);
   const [isSendingLink, setIsSendingLink] = useState(false);
+  const turnstile = useTurnstile();
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "", rememberMe: true },
   });
 
   const submit = form.handleSubmit(async ({ email, password, rememberMe }) => {
+    const headers = await turnstile.captchaHeaders();
+    if (headers === null) {
+      toastApiError({ code: "captcha_failed", traceId: null });
+      return;
+    }
     const trace = createTraceRecorder();
     const { error } = await authClient.signIn.email(
       { email, password, rememberMe },
-      { onResponse: trace.onResponse },
+      { headers, onResponse: trace.onResponse },
     );
     if (error) {
+      turnstile.reset();
       toastApiError(trace.toApiError(error));
       return;
     }
@@ -161,9 +170,15 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
           />
         </AuthField>
         <CheckboxField control={form.control} name="rememberMe" label={text.rememberMe} />
-        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
-          {isSubmitting ? text.submitting : text.submit}
-        </Button>
+        <div className="flex flex-col">
+          <TurnstileSlot
+            containerRef={turnstile.containerRef}
+            isInteractive={turnstile.isInteractive}
+          />
+          <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+            {isSubmitting ? text.submitting : text.submit}
+          </Button>
+        </div>
         <div className="flex items-center gap-3 text-xs text-[#94A3B8]">
           <span className="h-px flex-1 bg-[#E3E8EF]" />
           {text.or}

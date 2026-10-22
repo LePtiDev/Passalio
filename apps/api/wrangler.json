@@ -24,7 +24,8 @@
   "vars": {
     "BETTER_AUTH_URL": "http://localhost:5173",
     "APP_URL": "http://localhost:5173",
-    "EMAIL_DELIVERY": "log"
+    "EMAIL_DELIVERY": "log",
+    "TURNSTILE_SECRET_KEY": "1x0000000000000000000000000000000AA"
   },
   "env": {
     "staging": {

@@ -95,6 +95,7 @@ export const fr = {
       email_already_used: "Un compte existe déjà avec cette adresse. Connectez-vous.",
       weak_password: "Le mot de passe doit faire au moins 12 caractères.",
       invalid_reset_token: "Ce lien n'est plus valable. Demandez-en un nouveau.",
+      captcha_failed: "La vérification anti-robot a échoué. Réessayez.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
     },

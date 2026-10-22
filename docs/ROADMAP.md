@@ -22,6 +22,7 @@ Dernière mise à jour : 2026-10-22.
 | Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe | PR #14                          |
 | Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas  | PR #15                          |
 | Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com      | PR #16                          |
+| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié       | PR à venir                      |
 
 ## Hors code (Quentin)
 
@@ -54,7 +55,8 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations
 - [ ] Abonnement : Stripe Billing, 29,99 €/mois et 299,90 €/an, essai gratuit
 - [ ] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
-- [ ] Vérification des mots de passe divulgués et Turnstile sur l'inscription (ADR 0012)
+- [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié
+- [ ] Vérification des mots de passe divulgués (ADR 0012)
 - [ ] Observabilité : Sentry navigateur et API, PostHog UE, sourcemaps dans `release`
 - [ ] Import CSV et export des données
 - [ ] Backoffice minimal avec impersonation, sauvegardes externes chiffrées (ADR 0008)
