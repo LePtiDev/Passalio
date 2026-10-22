@@ -20,6 +20,7 @@ export {
   type TeamSize,
 } from "./organization-profile";
 export { isReadPermission, PERMISSIONS, type Permission } from "./permissions";
+export { TERMS_VERSION } from "./terms";
 export { err, ok, type Err, type Ok, type Result } from "./result";
 export {
   isOrganizationRole,

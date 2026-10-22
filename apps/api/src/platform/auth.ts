@@ -1,6 +1,7 @@
 import { schema } from "@passalio/db";
-import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, newId } from "@passalio/shared";
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, newId, TERMS_VERSION } from "@passalio/shared";
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, magicLink, organization } from "better-auth/plugins";
 import type { AuditTrail } from "./audit-trail";
@@ -26,9 +27,11 @@ const RATE_LIMIT_RULES = {
   "/reset-password": { window: MINUTE_IN_SECONDS, max: 5 },
 } as const;
 
-type PasswordResetRequest = {
-  readonly user: { readonly email: string };
-  readonly url: string;
+const withAcceptedTerms = <User extends Readonly<Record<string, unknown>>>(user: User) => {
+  if (user["termsVersion"] !== TERMS_VERSION) {
+    throw new APIError("BAD_REQUEST", { code: "TERMS_NOT_ACCEPTED" });
+  }
+  return { ...user, termsAcceptedAt: new Date() };
 };
 
 export type AuthDependencies = {
@@ -80,22 +83,17 @@ export const createAuth = ({
       ipAddress: { ipAddressHeaders: ["cf-connecting-ip"] },
       database: { generateId: () => newId() },
     },
-    databaseHooks: {
-      emailAndPassword: {
-        enabled: true,
-        minPasswordLength: MIN_PASSWORD_LENGTH,
-        maxPasswordLength: MAX_PASSWORD_LENGTH,
-        autoSignIn: true,
-        requireEmailVerification: false,
-        resetPasswordTokenExpiresIn: PASSWORD_RESET_LIFETIME_SECONDS,
-        revokeSessionsOnPasswordReset: true,
-        sendResetPassword: ({ user, url }: PasswordResetRequest) =>
-          emailSender.sendPasswordReset({ email: user.email, url }),
+    user: {
+      additionalFields: {
+        termsVersion: { type: "number", required: true, input: true },
+        termsAcceptedAt: { type: "date", required: false, input: false },
       },
-      rateLimit: {
-        enabled: true,
-        storage: "database",
-        customRules: RATE_LIMIT_RULES,
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (user) => ({ data: withAcceptedTerms(user) }),
+        },
       },
       session: {
         create: {

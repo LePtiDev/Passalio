@@ -1,3 +1,4 @@
+import { TERMS_VERSION } from "@passalio/shared";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startTestPlatform, APP_URL, type TestPlatform } from "./test-platform";
 
@@ -9,8 +10,8 @@ const RESET_REDIRECT = `${APP_URL}/mot-de-passe/nouveau`;
 const post = (path: string, body: unknown, headers: HeadersInit = {}, cookie?: string) =>
   platform.request(path, { method: "POST", body: JSON.stringify(body), headers }, cookie);
 
-const signUp = (email: string, password = PASSWORD) =>
-  post("/api/auth/sign-up/email", { name: "Jean Dupont", email, password });
+const signUp = (email: string, password = PASSWORD, termsVersion: number | null = TERMS_VERSION) =>
+  post("/api/auth/sign-up/email", { name: "Jean Dupont", email, password, termsVersion });
 
 const signInWithPassword = (email: string, password: string, headers: HeadersInit = {}) =>
   post("/api/auth/sign-in/email", { email, password }, headers);
@@ -36,6 +37,21 @@ describe("password sign-up and sign-in", () => {
     const response = await signUp("nouveau@example.fr");
     expect(response.status).toBe(200);
     expect(sessionCookieOf(response)).not.toBe("");
+  });
+
+  it("records the accepted terms version and date", async () => {
+    const response = await signUp("conditions@example.fr");
+    const body: unknown = await response.json();
+    expect(body).toMatchObject({
+      user: { termsVersion: TERMS_VERSION, termsAcceptedAt: expect.any(String) },
+    });
+  });
+
+  it("refuses a sign-up without the current terms", async () => {
+    const withoutTerms = await signUp("sans-conditions@example.fr", PASSWORD, null);
+    const oldTerms = await signUp("anciennes-conditions@example.fr", PASSWORD, TERMS_VERSION - 1);
+    expect(withoutTerms.status).toBe(400);
+    expect(oldTerms.status).toBe(400);
   });
 
   it("refuses a password shorter than 12 characters", async () => {

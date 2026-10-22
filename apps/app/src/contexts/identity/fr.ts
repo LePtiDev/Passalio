@@ -91,7 +91,6 @@ export const identityFr = {
     firstNameLabel: "Prénom",
     lastNameLabel: "Nom",
     nameRequired: "Champ obligatoire.",
-    acceptTerms: "J'accepte les conditions d'utilisation et la politique de confidentialité.",
     termsRequired: "Acceptez les conditions pour continuer.",
     submit: "Créer mon compte",
     submitting: "Création…",

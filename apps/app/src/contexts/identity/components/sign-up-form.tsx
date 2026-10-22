@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { TERMS_VERSION } from "@passalio/shared";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -11,6 +12,7 @@ import { toastApiError } from "@/lib/errors";
 import { SIGN_IN_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
 import { AuthField, authFieldErrorId } from "./auth-field";
+import { AcceptTermsLabel } from "./accept-terms-label";
 import { AuthHeading } from "./auth-heading";
 import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
 import { CheckboxField } from "./checkbox-field";
@@ -39,6 +41,8 @@ type SignUpFormProps = {
 
 const STRENGTH_ID = "password-strength";
 
+const ACCEPT_TERMS_LABEL = <AcceptTermsLabel />;
+
 export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
   const navigate = useNavigate();
   const form = useForm<SignUpInput, unknown, SignUpValues>({
@@ -55,7 +59,7 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
   const submit = form.handleSubmit(async ({ firstName, lastName, email, password }) => {
     const trace = createTraceRecorder();
     const { error } = await authClient.signUp.email(
-      { name: `${firstName} ${lastName}`, email, password },
+      { name: `${firstName} ${lastName}`, email, password, termsVersion: TERMS_VERSION },
       { onResponse: trace.onResponse },
     );
     if (error) {
@@ -139,7 +143,7 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
         <CheckboxField
           control={form.control}
           name="hasAcceptedTerms"
-          label={text.acceptTerms}
+          label={ACCEPT_TERMS_LABEL}
           error={errors.hasAcceptedTerms?.message}
         />
         <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>

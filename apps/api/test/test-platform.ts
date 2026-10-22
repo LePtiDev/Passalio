@@ -1,5 +1,6 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { TERMS_VERSION } from "@passalio/shared";
 import { vi } from "vitest";
 import { getPlatformProxy } from "wrangler";
 import { app } from "../src/app";
@@ -84,7 +85,11 @@ export const startTestPlatform = async () => {
     const credentials = { email, password: TEST_PASSWORD };
     const signedUp = await request("/api/auth/sign-up/email", {
       method: "POST",
-      body: JSON.stringify({ ...credentials, name: email.split("@")[0] }),
+      body: JSON.stringify({
+        ...credentials,
+        name: email.split("@")[0],
+        termsVersion: TERMS_VERSION,
+      }),
     });
     if (signedUp.ok) {
       return sessionCookieOf(signedUp);

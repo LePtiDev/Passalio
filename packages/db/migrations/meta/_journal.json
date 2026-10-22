@@ -22,6 +22,13 @@
       "when": 1792687515787,
       "tag": "0002_organization_profile",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1792710708296,
+      "tag": "0003_terms_acceptance",
+      "breakpoints": true
     }
   ]
 }

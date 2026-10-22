@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, type ReactNode } from "react";
 import {
   useController,
   type Control,
@@ -11,7 +11,7 @@ import { AUTH_ERROR_CLASS } from "./auth-styles";
 type CheckboxFieldProps<Values extends FieldValues> = {
   readonly control: Control<Values>;
   readonly name: FieldPathByValue<Values, boolean>;
-  readonly label: string;
+  readonly label: ReactNode;
   readonly error?: string | undefined;
 };
 

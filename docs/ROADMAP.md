@@ -6,22 +6,23 @@ Dernière mise à jour : 2026-10-22.
 
 ## Fait
 
-| Quoi                                                                                            | Où                              |
-| ----------------------------------------------------------------------------------------------- | ------------------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                   | `CLAUDE.md`, `docs/`            |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`      | PR #1                           |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`         | PR #2                           |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                         | hors dépôt                      |
-| Parité concurrents, essai de Ramonia (attestations, facture, captures)                          | `docs/competitor-parity.md`     |
-| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                           | `docs/competitor-parity.md`     |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste      | PR #5                           |
-| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels            | `docs/regulatory/`              |
-| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion             | `CLAUDE.md`, skill `new-screen` |
-| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)       | `docs/adr/`                     |
-| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base  | PR #13                          |
-| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe | PR #14                          |
-| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas  | PR #15                          |
-| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com      | PR #16                          |
+| Quoi                                                                                                    | Où                              |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                           | `CLAUDE.md`, `docs/`            |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`              | PR #1                           |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                 | PR #2                           |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                 | hors dépôt                      |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                  | `docs/competitor-parity.md`     |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                   | `docs/competitor-parity.md`     |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste              | PR #5                           |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                    | `docs/regulatory/`              |
+| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                     | `CLAUDE.md`, skill `new-screen` |
+| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)               | `docs/adr/`                     |
+| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base          | PR #13                          |
+| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe         | PR #14                          |
+| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas          | PR #15                          |
+| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com              | PR #16                          |
+| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation | PR #18                          |
 
 ## Hors code (Quentin)
 
@@ -29,7 +30,10 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Trancher les points ouverts des fiches `docs/regulatory/` (lectures « Non vérifié sur texte officiel »), au besoin avec un juriste ou une fédération
 - [x] Tableau de parité des fonctionnalités : Ramio, Ramonia, OpenFire
 - [x] Créer le compte d'essai Ramio (case anti-robot à cocher soi-même), puis le faire explorer
-- [ ] Rédiger les conditions d'utilisation et la politique de confidentialité (liens à ajouter sur l'inscription et en pied de page)
+- [x] Rédiger les conditions d'utilisation et la politique de confidentialité (liens à ajouter sur l'inscription et en pied de page)
+- [ ] Donner les informations de l'éditeur (raison sociale, SIREN, adresse, TVA, prix HT ou TTC, email, téléphone, directeur de la publication, ville du tribunal) et la date de mise en ligne, à reporter dans `apps/app/src/legal/legal-fr.ts`
+- [ ] Faire relire les conditions et la politique de confidentialité par un juriste avant le premier client payant (responsabilité, tribunal, sous-traitance, durées)
+- [ ] Désigner un médiateur de la consommation avant l'ouverture de l'espace particulier
 - [ ] Vérifier la marque Passalio (INPI, EUIPO), réserver passalio.fr et passalio.com
 - [ ] Choisir l'hébergement du site et de l'application
 - [ ] Lister 10 à 15 ramoneurs indépendants à interroger
@@ -51,15 +55,15 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Attestation : formulaire, photos sur R2, signature, PDF sur le téléphone, numérotation, immuable une fois signée
 - [ ] Planning simple : interventions par technicien et par jour
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
-- [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations
-- [ ] Abonnement : Stripe Billing, 29,99 €/mois et 299,90 €/an, essai gratuit
+- [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
+- [ ] Abonnement : Stripe Billing, 29,99 €/mois et 299,90 €/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
 - [ ] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
 - [ ] Vérification des mots de passe divulgués et Turnstile sur l'inscription (ADR 0012)
-- [ ] Observabilité : Sentry navigateur et API, PostHog UE, sourcemaps dans `release`
-- [ ] Import CSV et export des données
+- [ ] Observabilité : Sentry navigateur et API, PostHog UE avec accord préalable de l'utilisateur (bannière), sourcemaps dans `release`
+- [ ] Import CSV et export des données (export CSV et PDF promis par les conditions, article 11), suppression des données 90 jours après la fin de l'abonnement
 - [ ] Backoffice minimal avec impersonation, sauvegardes externes chiffrées (ADR 0008)
 
-Avant le premier client payant : CGV, politique de confidentialité, contrat de sous-traitance RGPD, SPF/DKIM/DMARC.
+Avant le premier client payant : informations de l'éditeur dans les pages légales, relecture juridique, SPF/DKIM/DMARC.
 
 ## Après la V1
 
