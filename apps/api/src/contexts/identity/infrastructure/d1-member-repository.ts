@@ -15,7 +15,12 @@ const inOrganization = (organizationId: string) => eq(members.organizationId, or
 export const createD1MemberRepository = (database: Database): MemberRepository => ({
   list: async (organizationId, { limit, afterId }) =>
     database
-      .select({ ...MEMBER_COLUMNS, name: users.name, email: users.email })
+      .select({
+        ...MEMBER_COLUMNS,
+        name: users.name,
+        email: users.email,
+        joinedAt: members.createdAt,
+      })
       .from(members)
       .innerJoin(users, eq(users.id, members.userId))
       .where(

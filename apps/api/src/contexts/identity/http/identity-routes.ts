@@ -1,11 +1,14 @@
 import { Hono } from "hono";
 import { validateJson, validateParam, validateQuery } from "../../../platform/validation";
 import { acceptInvitation } from "../application/accept-invitation";
+import { cancelInvitation } from "../application/cancel-invitation";
 import { changeMemberRole } from "../application/change-member-role";
 import { createOrganization } from "../application/create-organization";
 import { inviteMember } from "../application/invite-member";
 import { listMembers } from "../application/list-members";
+import { listPendingInvitations } from "../application/list-pending-invitations";
 import { removeMember } from "../application/remove-member";
+import { resendInvitation } from "../application/resend-invitation";
 import { transferOwnership } from "../application/transfer-ownership";
 import { identityDependencies } from "./identity-context";
 import { identityErrorResponse } from "./identity-responses";
@@ -16,6 +19,7 @@ import {
   inviteMemberBody,
   listMembersQuery,
   memberParams,
+  pendingInvitationParams,
   transferOwnershipBody,
 } from "./identity-schemas";
 import { requireActor, requireUser, type ActorEnv, type UserEnv } from "./require-actor";
@@ -63,6 +67,36 @@ const memberRoutes = new Hono<ActorEnv>()
     );
     return result.isOk
       ? context.json({ invitation: { id: result.value.id, role: result.value.role } }, 201)
+      : identityErrorResponse(context, result.error, context.get("traceId"));
+  })
+  .get("/invitations", validateQuery(listMembersQuery), async (context) => {
+    const { cursor } = context.req.valid("query");
+    const page = await listPendingInvitations(identityDependencies(context.var, context.env))(
+      context.get("actor"),
+      cursor === undefined ? {} : { afterId: cursor },
+    );
+    return context.json(page);
+  })
+  .post(
+    "/invitations/:invitationId/resend",
+    validateParam(pendingInvitationParams),
+    async (context) => {
+      const result = await resendInvitation(identityDependencies(context.var, context.env))(
+        context.get("actor"),
+        context.req.valid("param"),
+      );
+      return result.isOk
+        ? context.json({ invitation: { expiresAt: result.value } })
+        : identityErrorResponse(context, result.error, context.get("traceId"));
+    },
+  )
+  .delete("/invitations/:invitationId", validateParam(pendingInvitationParams), async (context) => {
+    const result = await cancelInvitation(identityDependencies(context.var, context.env))(
+      context.get("actor"),
+      context.req.valid("param"),
+    );
+    return result.isOk
+      ? context.body(null, 204)
       : identityErrorResponse(context, result.error, context.get("traceId"));
   })
   .patch(

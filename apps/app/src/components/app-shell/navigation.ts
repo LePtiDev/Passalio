@@ -1,0 +1,44 @@
+import {
+  BellRing,
+  Building2,
+  CalendarDays,
+  CreditCard,
+  FileCheck2,
+  House,
+  LayoutDashboard,
+  Settings,
+  Users,
+  UsersRound,
+  type LucideIcon,
+} from "lucide-react";
+import { fr } from "@/fr";
+
+export type NavigationItem = {
+  readonly label: string;
+  readonly icon: LucideIcon;
+  readonly to: "/" | "/equipe" | "/reglages" | null;
+  readonly activeFor?: readonly string[];
+};
+
+const text = fr.shell;
+
+export const MAIN_NAVIGATION: readonly NavigationItem[] = [
+  { label: text.dashboard, icon: LayoutDashboard, to: "/" },
+  { label: text.schedule, icon: CalendarDays, to: null },
+  { label: text.customers, icon: Users, to: null },
+  { label: text.documents, icon: FileCheck2, to: null },
+  { label: text.reminders, icon: BellRing, to: null },
+];
+
+export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
+  { label: text.team, icon: UsersRound, to: "/equipe" },
+  { label: text.company, icon: Building2, to: null },
+  { label: text.subscription, icon: CreditCard, to: null },
+];
+
+export const MOBILE_NAVIGATION: readonly NavigationItem[] = [
+  { label: text.home, icon: House, to: "/" },
+  { label: text.schedule, icon: CalendarDays, to: null },
+  { label: text.customers, icon: Users, to: null },
+  { label: text.settings, icon: Settings, to: "/reglages", activeFor: ["/reglages", "/equipe"] },
+];

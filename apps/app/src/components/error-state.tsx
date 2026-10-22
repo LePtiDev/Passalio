@@ -12,10 +12,21 @@ export const ErrorState = ({ error, onRetry }: ErrorStateProps) => {
   const apiError = apiErrorOf(error);
   const codeLine = errorCodeLine(apiError);
   return (
-    <div role="alert" className="flex flex-col items-start gap-3 rounded-lg border p-4">
-      <p>{errorMessage(apiError.code)}</p>
-      {codeLine === undefined ? null : <p className="text-sm text-muted-foreground">{codeLine}</p>}
-      <Button variant="outline" className="h-12 text-base" onClick={onRetry}>
+    <div
+      role="alert"
+      className="flex flex-col items-start gap-3 rounded-[14px] border border-[#E3E8EF] bg-white p-4 lg:rounded-xl"
+    >
+      <span className="flex flex-col gap-1">
+        <span className="text-[15px] font-semibold lg:text-sm">{errorMessage(apiError.code)}</span>
+        {codeLine === undefined ? null : (
+          <span className="text-[13px] text-[#64748B] tabular-nums lg:text-xs">{codeLine}</span>
+        )}
+      </span>
+      <Button
+        variant="outline"
+        className="h-12 rounded-[10px] border-[#D5DDE6] text-[15px] font-semibold lg:h-8 lg:rounded-[7px] lg:px-3 lg:text-[13px]"
+        onClick={onRetry}
+      >
         {fr.errors.retry}
       </Button>
     </div>

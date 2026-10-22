@@ -22,6 +22,7 @@ export type Member = {
 export type TeamMember = Member & {
   readonly name: string;
   readonly email: string;
+  readonly joinedAt: Date;
 };
 
 export type InvitationStatus = "pending" | "accepted" | "rejected" | "canceled";
@@ -34,4 +35,8 @@ export type Invitation = {
   readonly status: InvitationStatus;
   readonly inviterId: string;
   readonly expiresAt: Date;
+};
+
+export type PendingInvitation = Pick<Invitation, "id" | "email" | "role" | "expiresAt"> & {
+  readonly sentAt: Date;
 };

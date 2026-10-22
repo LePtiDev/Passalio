@@ -9,6 +9,7 @@ import {
   onboardingTradesRoute,
 } from "./routes/onboarding";
 import { resetPasswordRoute } from "./routes/reset-password";
+import { settingsRoute } from "./routes/settings";
 import { rootRoute } from "./routes/root";
 import { signInRoute } from "./routes/sign-in";
 import { signUpRoute } from "./routes/sign-up";
@@ -25,7 +26,7 @@ const routeTree = rootRoute.addChildren([
   onboardingDocumentsRoute,
   onboardingTeamRoute,
   invitationRoute,
-  signedInRoute.addChildren([homeRoute, teamRoute]),
+  signedInRoute.addChildren([homeRoute, teamRoute, settingsRoute]),
 ]);
 
 export const router = createRouter({ routeTree });

@@ -66,3 +66,7 @@ export const invitationParams = z.object({
   organizationId: z.uuid(),
   invitationId: z.uuid(),
 });
+
+export const pendingInvitationParams = z.object({
+  invitationId: z.uuid(),
+});

@@ -248,3 +248,61 @@ describe("impersonation", () => {
     expect(await errorOf(write)).toBe("impersonation_read_only");
   });
 });
+
+const pendingInvitationsResponse = z.object({
+  invitations: z.array(z.object({ id: z.string(), email: z.string(), role: z.string() })),
+  nextCursor: z.string().nullable(),
+});
+
+const pendingEmails = async (cookie: string) => {
+  const response = await platform.request("/api/invitations", {}, cookie);
+  expectStatus(response, 200);
+  return pendingInvitationsResponse
+    .parse(await response.json())
+    .invitations.map(({ email }) => email);
+};
+
+describe("pending invitations", () => {
+  it("lists, resends and cancels an invitation, only within the organization", async () => {
+    await platform.request(
+      "/api/invitations",
+      json({ email: "apprenti-a@example.fr", role: "technician" }),
+      ownerA,
+    );
+    const invitationPath = new URL(platform.lastLoggedUrl()).pathname;
+    const invitationId = invitationPath.split("/").at(-1) ?? "";
+    expect(await pendingEmails(ownerA)).toContain("apprenti-a@example.fr");
+    expect(await pendingEmails(ownerB)).toEqual([]);
+
+    const resent = await platform.request(
+      `/api/invitations/${invitationId}/resend`,
+      { method: "POST" },
+      ownerA,
+    );
+    expect(resent.status).toBe(200);
+    expect(new URL(platform.lastLoggedUrl()).pathname).toBe(invitationPath);
+
+    const canceledByOther = await platform.request(
+      `/api/invitations/${invitationId}`,
+      { method: "DELETE" },
+      ownerB,
+    );
+    expect(canceledByOther.status).toBe(404);
+
+    const canceled = await platform.request(
+      `/api/invitations/${invitationId}`,
+      { method: "DELETE" },
+      ownerA,
+    );
+    expect(canceled.status).toBe(204);
+    expect(await pendingEmails(ownerA)).not.toContain("apprenti-a@example.fr");
+
+    const invitee = await platform.signIn("apprenti-a@example.fr");
+    const accepted = await platform.request(
+      `/api${invitationPath}/accept`,
+      { method: "POST" },
+      invitee,
+    );
+    expect(accepted.status).toBe(404);
+  });
+});

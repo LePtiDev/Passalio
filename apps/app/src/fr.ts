@@ -2,13 +2,71 @@ export const fr = {
   app: {
     name: "Passalio",
     tagline: "Chaque passage, en règle.",
-    team: "Équipe",
     signOut: "Se déconnecter",
   },
+  shell: {
+    mainNavigation: "Navigation principale",
+    dashboard: "Tableau de bord",
+    home: "Accueil",
+    schedule: "Planning",
+    customers: "Clients",
+    documents: "Attestations",
+    reminders: "Relances",
+    settings: "Réglages",
+    team: "Équipe",
+    company: "Entreprise",
+    subscription: "Abonnement",
+    soon: "Bientôt",
+    breadcrumb: "Fil d'Ariane",
+  },
   home: {
-    title: "Bienvenue",
-    subtitle: "Vos attestations, signées sur place, même sans réseau.",
-    teamLink: "Gérer votre équipe",
+    greeting: (firstName: string) => (firstName === "" ? "Bonjour" : `Bonjour ${firstName}`),
+    subtitle: "Encore quelques étapes pour remettre votre première attestation.",
+    ready: "Votre espace est prêt.",
+    readyWithInvitations: (count: number) =>
+      count === 1
+        ? "Votre espace est prêt. 1 invitation envoyée à votre équipe."
+        : `Votre espace est prêt. ${count} invitations envoyées à votre équipe.`,
+    gettingStarted: "Premiers pas",
+    progress: (done: number, total: number) => `${done} sur ${total}`,
+    progressLabel: (done: number, total: number) => `${done} étapes sur ${total} terminées`,
+    tasks: {
+      company: {
+        title: "Créer votre entreprise",
+        text: "Nom, métiers et documents configurés.",
+      },
+      team: {
+        title: "Inviter votre équipe",
+        todoText: "Vos techniciens et votre secrétariat reçoivent un lien par email.",
+        doneText: (count: number) =>
+          count <= 1
+            ? "Votre équipe est invitée."
+            : `${count} personnes dans l'équipe ou invitées.`,
+        action: "Inviter",
+      },
+      customers: {
+        title: "Ajouter vos clients",
+        text: "Importez un fichier Excel ou CSV, ou ajoutez-les un par un.",
+      },
+      schedule: {
+        title: "Planifier une intervention",
+        text: "Placez-la dans la tournée d'un technicien.",
+      },
+      document: {
+        title: "Remplir votre première attestation",
+        text: "Sur le téléphone, signée sur place.",
+      },
+      reminders: {
+        title: "Activer les relances",
+        text: "Vos clients sont prévenus avant leur prochain passage.",
+      },
+    },
+    trialTitle: "Essai gratuit en cours",
+    trialText: "Puis 29,99 € par mois, utilisateurs illimités, sans engagement.",
+  },
+  settings: {
+    title: "Réglages",
+    signedInAs: "Connecté en tant que",
   },
   errors: {
     code: (shortTraceId: string) => `Code : ${shortTraceId}`,

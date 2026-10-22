@@ -1,6 +1,12 @@
 import type { OrganizationRole, Result } from "@passalio/shared";
 import type { CompanySummary } from "./company-summary";
-import type { Invitation, Member, Organization, TeamMember } from "./identity-models";
+import type {
+  Invitation,
+  Member,
+  Organization,
+  PendingInvitation,
+  TeamMember,
+} from "./identity-models";
 import type {
   CompanyDetails,
   NormalizedProfileChanges,
@@ -67,6 +73,12 @@ export type InvitationRepository = {
     invitationId: string,
   ) => Promise<Invitation | undefined>;
   readonly accept: (invitation: Invitation, member: Member) => Promise<void>;
+  readonly listPending: (
+    organizationId: string,
+    page: Page,
+  ) => Promise<readonly PendingInvitation[]>;
+  readonly renew: (organizationId: string, invitationId: string, expiresAt: Date) => Promise<void>;
+  readonly cancel: (organizationId: string, invitationId: string) => Promise<void>;
 };
 
 export type IdentityAuditAction =
@@ -76,6 +88,8 @@ export type IdentityAuditAction =
   | "organization.onboarding_completed"
   | "member.invited"
   | "invitation.accepted"
+  | "invitation.resent"
+  | "invitation.canceled"
   | "member.role_changed"
   | "member.removed"
   | "ownership.transferred";
