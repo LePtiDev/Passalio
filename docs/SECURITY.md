@@ -36,7 +36,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 ## 5. Application
 
 - Sessions Better Auth en cookie `HttpOnly`, `Secure`, `SameSite=Lax`, durée limitée, révocables.
-- Rate limiting sur la connexion, l'inscription, les liens publics et l'IA (binding de rate limiting Workers ou règles Cloudflare).
+- Rate limiting sur la connexion, l'inscription, les liens publics et l'IA. Pour l'authentification, Better Auth compte les tentatives par adresse IP (`cf-connecting-ip`) dans la table D1 `rate_limits` : connexion 10 par minute, inscription 5, lien magique 5, mot de passe oublié 3. Le compteur en mémoire ne convient pas, car un Worker ne garde pas d'état entre deux requêtes.
 - Cloudflare Turnstile sur l'inscription et les formulaires publics.
 - En-têtes de sécurité : CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`.
 - Liens publics (PDF, suivi) : jetons longs aléatoires, expiration, accès en lecture seule.

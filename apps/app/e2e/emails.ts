@@ -7,7 +7,7 @@ const loggedEmail = z.object({
   url: z.string(),
 });
 
-type EmailKind = "magic_link" | "invitation";
+type EmailKind = "magic_link" | "invitation" | "password_reset";
 
 const loggedLinks = async (logPath: string, kind: EmailKind) => {
   const lines = (await readFile(logPath, "utf8")).split("\n");

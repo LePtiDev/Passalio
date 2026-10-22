@@ -182,6 +182,7 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `sessions`      | `(token)` unique, `(user_id)`                                                                                     |
 | `accounts`      | `(user_id)`                                                                                                       |
 | `verifications` | `(identifier)`                                                                                                    |
+| `rate_limits`   | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                              |
 
 Règles :
 

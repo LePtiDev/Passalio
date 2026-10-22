@@ -2,6 +2,9 @@ import { redirect } from "@tanstack/react-router";
 import { authClient } from "./auth-client";
 
 export const SIGN_IN_PATH = "/connexion";
+export const SIGN_UP_PATH = "/inscription";
+export const FORGOT_PASSWORD_PATH = "/mot-de-passe-oublie";
+export const RESET_PASSWORD_PATH = "/mot-de-passe/nouveau";
 
 export const loadSession = async () => {
   const { data } = await authClient.getSession();
