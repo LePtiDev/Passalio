@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import logo from "@/assets/passalio-logo.svg";
 import logoWhite from "@/assets/passalio-logo-white.svg";
 import { fr } from "@/fr";
+import { LegalLinks } from "@/legal";
 import { identityFr } from "../fr";
 import { SignInShowcase } from "./sign-in-showcase";
 import { SignUpShowcase } from "./sign-up-showcase";
@@ -28,11 +29,12 @@ const MobileBrandBand = () => (
 );
 
 const AuthFooter = () => (
-  <footer className="flex flex-wrap justify-center gap-4 text-xs text-[#64748B] lg:justify-between">
+  <footer className="flex flex-col-reverse items-center gap-1 text-xs text-[#64748B] lg:flex-row lg:justify-between">
     <span className="inline-flex items-center gap-1.5">
       <ShieldCheck aria-hidden="true" className="size-3.5 text-success" />
       {identityFr.authLayout.euHosting}
     </span>
+    <LegalLinks className="-mx-1.5 justify-center" />
   </footer>
 );
 
