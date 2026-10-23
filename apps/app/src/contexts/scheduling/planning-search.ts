@@ -1,8 +1,6 @@
 import * as z from "zod";
 
-const DAY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-
-const dayParam = z.string().regex(DAY_PATTERN);
+const dayParam = z.iso.date();
 
 export const PLANNING_VIEWS = ["jour", "semaine"] as const;
 

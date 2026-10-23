@@ -32,7 +32,7 @@ export const newVisitRoute = createRoute({
 export const visitRoute = createRoute({
   getParentRoute: () => signedInRoute,
   path: "/passages/$interventionId",
-  params: { parse: visitParams.parse },
+  params: { parse: (params) => visitParams.parse(params) },
   component: function VisitRouteScreen() {
     const { interventionId } = visitRoute.useParams();
     return <VisitScreen interventionId={interventionId} />;

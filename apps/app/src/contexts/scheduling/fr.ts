@@ -1,13 +1,15 @@
 const plural = (count: number, one: string, many: string) => `${count} ${count <= 1 ? one : many}`;
 
-const EUROS = new Intl.NumberFormat("fr-FR", {
+const WHOLE_EUROS = new Intl.NumberFormat("fr-FR", {
   style: "currency",
   currency: "EUR",
-  maximumFractionDigits: 2,
-  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
 });
 
-export const formatEuros = (cents: number) => EUROS.format(cents / 100);
+const EUROS_AND_CENTS = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+export const formatEuros = (cents: number) =>
+  (cents % 100 === 0 ? WHOLE_EUROS : EUROS_AND_CENTS).format(cents / 100);
 
 export const schedulingFr = {
   planning: {
