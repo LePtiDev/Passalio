@@ -106,6 +106,7 @@ export const DECLARED_ROUTES: readonly DeclaredRoute[] = [
   member("POST", "/api/equipments/:equipmentId/removal", "customers:write", 404),
   member("POST", "/api/equipments/:equipmentId/photos", "customers:write", 404),
   member("GET", "/api/photos/:photoId", "customers:read", 404),
+  member("POST", "/api/plate-readings", "customers:write"),
   member("POST", "/api/sync/push", "customers:write"),
   member("GET", "/api/sync/pull", "customers:read"),
 

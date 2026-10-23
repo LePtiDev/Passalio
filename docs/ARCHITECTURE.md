@@ -21,7 +21,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | Emails                           | Resend, gabarits HTML (ADR 0016)                            |
 | SMS (option, plus tard)          | Octopush ou SMSFactor                                       |
 | Itinéraire                       | OpenRouteService                                            |
-| IA                               | API Claude (modèle léger) ou Workers AI                     |
+| IA                               | AI SDK, modèle interchangeable par variable (ADR 0022)      |
 | Erreurs et traces                | Sentry (navigateur + `@sentry/cloudflare`)                  |
 | Analytics produit, feature flags | PostHog (hébergement UE)                                    |
 | Lint / format                    | Oxlint / Oxfmt                                              |
@@ -171,7 +171,8 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - `last_sweeping_on` et `last_service_on` gardent le dernier passage fait avant Passalio. `next_due_date` reste vide tant que les périodicités par métier ne sont pas configurées.
 - Photos : fichiers dans R2 sous `organizations/{organization_id}/equipment-photos/{photo_id}`, 5 Mo maximum, JPEG, PNG ou WebP. La clé R2 n'est jamais renvoyée au navigateur.
 - Archivage (permission `customers:archive`) : suppression logique du client, de ses lieux, appareils et photos. Un client n'est jamais supprimé définitivement s'il a une attestation signée.
-- Routes : `POST /api/sync/push` et `GET /api/sync/pull` (voir plus bas), `GET` et `POST /api/customers` (recherche par préfixe `q`, curseur), `GET`, `PATCH` et `DELETE /api/customers/:customerId`, `POST /api/customers/:customerId/sites`, `PATCH /api/sites/:siteId`, `POST /api/sites/:siteId/equipments`, `PATCH /api/equipments/:equipmentId`, `POST /api/equipments/:equipmentId/removal`, `POST /api/equipments/:equipmentId/photos?kind=plate|overview`, `GET /api/photos/:photoId`.
+- Routes : `POST /api/sync/push` et `GET /api/sync/pull` (voir plus bas), `GET` et `POST /api/customers` (recherche par préfixe `q`, curseur), `GET`, `PATCH` et `DELETE /api/customers/:customerId`, `POST /api/customers/:customerId/sites`, `PATCH /api/sites/:siteId`, `POST /api/sites/:siteId/equipments`, `PATCH /api/equipments/:equipmentId`, `POST /api/equipments/:equipmentId/removal`, `POST /api/equipments/:equipmentId/photos?kind=plate|overview`, `GET /api/photos/:photoId`, `POST /api/plate-readings`.
+- Lecture de plaque (ADR 0022) : photo envoyée au modèle choisi par `PLATE_READER_MODEL`, réponse revalidée par `sanitizePlateReading`, quota de 200 lectures par entreprise et par jour dans `plate_readings` (sans aucune valeur lue).
 
 - Écrans (terrain, hors ligne) : `/clients` (liste, recherche par nom, ville ou téléphone, filtres d'échéance), `/clients/nouveau`, `/clients/:customerId` (fiche), `/clients/:customerId/modifier`, `/clients/:customerId/lieux/nouveau`, `/clients/:customerId/appareils/nouveau?lieu=&remplace=`. Ils lisent et écrivent uniquement dans Dexie. Les types d'appareil proposés suivent les métiers de l'entreprise. Photos et lecture de plaque : téléphone seulement. L'adresse est complétée par la Base Adresse Nationale (`data.geopf.fr`), saisie manuelle possible hors ligne.
 
@@ -238,6 +239,7 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `sites`                  | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                                                                        |
 | `equipments`             | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                                                                        |
 | `equipment_photos`       | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                                                                       |
+| `plate_readings`         | `(organization_id, day)` pour le quota du jour                                                                                                                           |
 | `interventions`          | `(organization_id, updated_at)`                                                                                                                                          |
 | `documents`              | `(organization_id, number)` unique, `(organization_id, cancels_document_id)` unique, `(organization_id, updated_at)`, `(organization_id, signed_by_user_id, updated_at)` |
 | `document_number_blocks` | `(organization_id, user_id, last_number)` pour vérifier qu'un numéro est réservé                                                                                         |

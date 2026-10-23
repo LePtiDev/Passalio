@@ -8,3 +8,4 @@ export {
 export { customerDependencies } from "./http/customer-context";
 export { customerRoutes } from "./http/customer-routes";
 export { equipmentRoutes } from "./http/equipment-routes";
+export { plateReadingRoutes } from "./http/plate-reading-routes";

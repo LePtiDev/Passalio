@@ -228,3 +228,19 @@ export {
   type ProspectFiltersResponse,
   type ProspectMapResponse,
 } from "./prospect-responses";
+export {
+  PLATE_READING_DAILY_LIMIT,
+  PLATE_READING_FIELDS,
+  PLATE_READING_STATUSES,
+  plateReaderAnswer,
+  plateReadingFieldCount,
+  plateReadingFields,
+  plateReadingResponse,
+  plateReadingStatusOf,
+  sanitizePlateReading,
+  type PlateReaderAnswer,
+  type PlateReadingField,
+  type PlateReadingFields,
+  type PlateReadingResponse,
+  type PlateReadingStatus,
+} from "./plate-reading";

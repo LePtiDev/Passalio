@@ -48,6 +48,7 @@ Dernière mise à jour : 2026-10-23.
 | Filtres en cascade avec recherche (sous-menus sur ordinateur, panneau du bas sur mobile), coche à droite dans tous les menus                                                  | `components/list` (app)          |
 | Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                                                              | `CLAUDE.md`                      |
 | Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois                                       | ADR 0021                         |
+| Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
 
 ## Hors code (Quentin)
@@ -88,7 +89,9 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Champs obligatoires : remplacer « facultatif » par l'astérisque rouge sur les écrans existants (clients, onboarding, Commercial)
 - [ ] Import d'un fichier de clients (bouton « Importer un fichier » affiché « Bientôt »)
 - [ ] Modifier un lieu et un appareil depuis la fiche (le menu propose seulement Remplacer et Retirer)
-- [ ] Lecture de la plaque signalétique d'un appareil par photo (API Claude), champs à confirmer par le technicien, téléphone seulement
+- [x] Lecture de plaque, API : route, modèle interchangeable, format imposé, quota de 200 par jour, outil de mesure (ADR 0022)
+- [ ] Lecture de plaque, mesure : comparer 4 ou 5 modèles sur le jeu de photos (clés de test OpenAI et Google à fournir), choisir le modèle, l'ajouter aux sous-traitants
+- [ ] Lecture de plaque, écran selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/47mxtXeueVzaQiqhSdCmwv) : listes déroulantes type et combustible, valeurs lues à vérifier, file hors ligne, téléphone seulement
 - [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (fait pour le ramonage : 12 mois ; appareils collectifs à 6 mois et règles locales à faire)
 - [x] Métier ramonage dans `packages/trades` : schéma du certificat version 1 et règles bloquantes tirées de `docs/regulatory/`
 - [ ] Métier entretien d'appareil dans `packages/trades` (bloqué par les documents réels)
