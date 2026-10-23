@@ -35,7 +35,7 @@ const GroupSubMenu = ({
   readonly onPicked: () => void;
 }) => (
   <DropdownMenuSub>
-    <DropdownMenuSubTrigger className="min-h-9 gap-3 px-2.5 text-[13px]">
+    <DropdownMenuSubTrigger chevronSide="start" className="min-h-9 gap-2 px-2.5 text-[13px]">
       <span className="font-medium text-[#0F2A44]">{group.label}</span>
       <span
         className={cn(
@@ -46,7 +46,7 @@ const GroupSubMenu = ({
         {selectedLabelOf(group)}
       </span>
     </DropdownMenuSubTrigger>
-    <DropdownMenuSubContent sideOffset={6} className="w-72 p-0">
+    <DropdownMenuSubContent dir="ltr" sideOffset={6} className="w-72 p-0">
       <FilterOptionList group={group} onPicked={onPicked} />
     </DropdownMenuSubContent>
   </DropdownMenuSub>
@@ -62,11 +62,11 @@ const DesktopFiltersMenu = ({
   const close = useCallback(() => setIsOpen(false), []);
   const desktopGroups = groups.filter((group) => group.isMobileOnly !== true);
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu dir="rtl" open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <FilterTrigger activeCount={activeCount} desktopActiveCount={desktopActiveCount} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent dir="ltr" align="end" className="w-80">
         <DropdownMenuLabel className="text-xs font-semibold tracking-[0.04em] text-[#64748B] uppercase">
           {text.filters}
         </DropdownMenuLabel>
