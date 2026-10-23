@@ -111,3 +111,13 @@ export const BETTER_AUTH_TABLES: readonly string[] = [
   "members",
   "invitations",
 ];
+
+export const APPEND_ONLY_TABLES: Readonly<Record<string, string>> = {
+  document_number_blocks: "a reserved block is written once and never updated, see ADR 0021",
+};
+
+const isOwnTable = (table: string) => !BETTER_AUTH_TABLES.includes(table);
+
+export const OWN_UPDATABLE_ORGANIZATION_TABLES = ORGANIZATION_DATA_TABLES.filter(
+  (table) => isOwnTable(table) && !Object.hasOwn(APPEND_ONLY_TABLES, table),
+);

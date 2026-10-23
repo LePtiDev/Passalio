@@ -1,7 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
+  APPEND_ONLY_TABLES,
   ARCHITECTURE_INDEXES,
+  BETTER_AUTH_TABLES,
   ORGANIZATION_DATA_TABLES,
+  OWN_UPDATABLE_ORGANIZATION_TABLES,
   PASSALIO_TABLES,
   SYNCHRONIZED_TABLES,
   TABLES_WITHOUT_ORGANIZATION,
@@ -63,7 +66,7 @@ describe("schema rules of docs/ARCHITECTURE.md and docs/SECURITY.md", () => {
     ).toBe(true);
   });
 
-  it.each(ORGANIZATION_DATA_TABLES)(
+  it.each(OWN_UPDATABLE_ORGANIZATION_TABLES)(
     "%s has the required id, created_at and updated_at columns",
     (table) => {
       expect({
@@ -71,6 +74,23 @@ describe("schema rules of docs/ARCHITECTURE.md and docs/SECURITY.md", () => {
         createdAt: columnOf(shapes, table, "created_at")?.notnull,
         updatedAt: columnOf(shapes, table, "updated_at")?.notnull,
       }).toEqual({ id: 1, createdAt: 1, updatedAt: 1 });
+    },
+  );
+
+  it.each(Object.keys(APPEND_ONLY_TABLES))(
+    "%s is written once, so it has the required id and created_at columns",
+    (table) => {
+      expect({
+        id: columnOf(shapes, table, "id")?.pk,
+        createdAt: columnOf(shapes, table, "created_at")?.notnull,
+      }).toEqual({ id: 1, createdAt: 1 });
+    },
+  );
+
+  it.each(BETTER_AUTH_TABLES)(
+    "%s follows the schema of Better Auth, which identifies every row by its id",
+    (table) => {
+      expect(columnOf(shapes, table, "id")).toMatchObject({ pk: 1 });
     },
   );
 
