@@ -24,6 +24,12 @@ describe("createTraceRecorder", () => {
     );
   });
 
+  it("asks to reload a page that sends outdated terms", () => {
+    expect(createTraceRecorder().toApiError({ status: 400, code: "TERMS_NOT_ACCEPTED" }).code).toBe(
+      "terms_outdated",
+    );
+  });
+
   it("reports a failed anti-robot check", () => {
     const recorder = createTraceRecorder();
     expect(recorder.toApiError({ status: 403, code: "VERIFICATION_FAILED" }).code).toBe(

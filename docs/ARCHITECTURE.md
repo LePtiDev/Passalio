@@ -18,7 +18,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | Asynchrone                       | Cron Triggers, Cloudflare Queues                            |
 | Auth et rôles                    | Better Auth (plugins organization et admin)                 |
 | Paiement                         | Stripe Billing                                              |
-| Emails                           | Resend + React Email                                        |
+| Emails                           | Resend, gabarits HTML (ADR 0016)                            |
 | SMS (option, plus tard)          | Octopush ou SMSFactor                                       |
 | Itinéraire                       | OpenRouteService                                            |
 | IA                               | API Claude (modèle léger) ou Workers AI                     |
@@ -100,7 +100,7 @@ packages/
 ├── shared/                   # Shared kernel
 ├── trades/                   # Un dossier par métier
 ├── pdf/                      # Rendu des attestations
-└── emails/                   # Modèles React Email
+└── emails/                   # Gabarits d'e-mail HTML et texte (ADR 0016)
 docs/
 ├── ARCHITECTURE.md
 ├── SECURITY.md
@@ -132,7 +132,7 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 
 - `superadmin` : tout le backoffice.
 - `support` : tout le backoffice sauf bloquer un compte.
-- `sales` : seulement la prospection (Commercial), pas les comptes clients (ADR 0016).
+- `sales` : seulement la prospection (Commercial), pas les comptes clients (ADR 0017).
 
 Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|support>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Lecture des comptes clients : `GET /api/admin/overview`, `/accounts`, `/accounts/:id` (et `/members`, `/usage`, `/journal`), `/journal`, réponses décrites par les schémas zod de `packages/shared/src/backoffice-responses.ts`. L'utilisation se mesure en jours d'utilisation par personne (`activity_days`). Voir ADR 0015.
 
@@ -149,13 +149,13 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Connexion par email et mot de passe (12 caractères minimum, voir ADR 0012), mot de passe oublié par lien valable 1 heure. Le lien magique valable 15 minutes reste en option. Jetons stockés hachés. Session de 30 jours renouvelée chaque jour, adresse IP et navigateur gardés pour afficher les appareils connectés.
 - Tables : `users`, `sessions`, `accounts`, `verifications` (Better Auth), `organizations`, `members`, `invitations` (plugin organization), `audit_logs`.
 - Better Auth n'ouvre que la connexion, les sessions et le choix de l'entreprise active (voir ADR 0011). Le reste passe par les routes de l'API : `POST /api/organizations`, `GET /api/members`, `GET` et `POST /api/invitations` (invitations en attente, invitation), `POST /api/invitations/:invitationId/resend` (renvoi, validité repoussée de 7 jours), `DELETE /api/invitations/:invitationId` (annulation), `POST /api/invitations/:organizationId/:invitationId/accept`, `PATCH` et `DELETE /api/members/:memberId`, `POST /api/ownership-transfer`.
-- Déploiement : un seul Worker par environnement sert l'application (fichiers statiques de `apps/app/dist`, repli sur `index.html`) et l'API (`/api/*` et `/health` passent d'abord par le Worker). Domaines : `app.staging.passalio.com` (Worker `passalio-api-staging`) et `app.passalio.com` (Worker `passalio-api`). `passalio.com` est réservé au site. Le service worker de la PWA ne répond jamais à la place de `/api`.
+- Déploiement : un seul Worker par environnement sert l'application (fichiers statiques de `apps/app/dist`, repli sur `index.html`) et l'API (`/api/*` et `/health` passent d'abord par le Worker). Domaines : `app.staging.passalio.com` (Worker `passalio-api-staging`) et `app.passalio.com` (Worker `passalio-api`). `passalio.com` est réservé au site. Le service worker de la PWA ne répond jamais à la place de `/api`. Mise à jour automatique : le nouveau service worker prend la main dès son installation et la page se recharge sur la nouvelle version (`apps/app/src/lib/service-worker.ts`). Le navigateur vérifie s'il existe une version plus récente au retour sur l'onglet et toutes les 30 minutes. Les modifications faites hors ligne restent dans Dexie, un rechargement ne les perd pas.
 - L'application appelle l'API sur la même origine, sous `/api` (proxy Vite en local, route Workers `/api/*` sur le domaine de l'application en staging et production). Les cookies de session restent ainsi `SameSite=Lax` sans CORS. `BETTER_AUTH_URL` vaut donc l'adresse de l'application.
 - Écrans : `/connexion`, `/inscription`, `/mot-de-passe-oublie`, `/mot-de-passe/nouveau`, `/configuration/{entreprise,metiers,documents,equipe}`, `/` (Premiers pas), `/equipe`, `/reglages`, `/invitations/:organizationId/:invitationId`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
 - Pages légales publiques : `/conditions` (conditions générales et accord de sous-traitance RGPD), `/confidentialite`, `/mentions-legales`. Textes dans `apps/app/src/legal/`, informations de l'éditeur dans `PUBLISHER` (`legal-fr.ts`). L'inscription envoie `termsVersion` ; l'API refuse une version différente de `TERMS_VERSION` (`packages/shared`) et enregistre `users.terms_version` et `users.terms_accepted_at`. Changer les conditions = incrémenter `TERMS_VERSION`.
 - Champ de recherche des listes : composant partagé `apps/app/src/components/search-field.tsx` (48 px sur mobile, 32 px sur ordinateur), à réutiliser sur toutes les listes.
 - Coque de l'application connectée : barre latérale sur ordinateur, barre d'onglets en bas sur mobile (`apps/app/src/components/app-shell/`). Les entrées pas encore construites sont affichées grisées avec « Bientôt ».
-- Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. En staging, même mode « log » : le lien apparaît dans les logs du Worker, pour tester invitations et mot de passe oublié. La production refuse l'envoi tant que Resend n'est pas branché.
+- Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. En staging et en production (`EMAIL_DELIVERY=resend`), l'API envoie par Resend depuis `ne-pas-repondre@passalio.com` avec le secret `RESEND_API_KEY` ; sans ce secret, l'envoi est refusé. L'invitation affiche le nom de la personne qui invite. Gabarits dans `packages/emails`, images dans `apps/app/public/email/` (ADR 0016).
 - Les informations légales de l'entreprise (SIRET, adresse, assurance, qualification) arriveront avec les attestations.
 
 ### Clients, lieux, équipements (contexte `customers`)
@@ -171,7 +171,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 - Écrans (terrain, hors ligne) : `/clients` (liste, recherche par nom, ville ou téléphone, filtres d'échéance), `/clients/nouveau`, `/clients/:customerId` (fiche), `/clients/:customerId/modifier`, `/clients/:customerId/lieux/nouveau`, `/clients/:customerId/appareils/nouveau?lieu=&remplace=`. Ils lisent et écrivent uniquement dans Dexie. Les types d'appareil proposés suivent les métiers de l'entreprise. Photos et lecture de plaque : téléphone seulement. L'adresse est complétée par la Base Adresse Nationale (`data.geopf.fr`), saisie manuelle possible hors ligne.
 
-### Prospection (contexte `sales`, ADR 0016)
+### Prospection (contexte `sales`, ADR 0017)
 
 - Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
 - Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `support`, `sales`).
@@ -245,8 +245,8 @@ Règles :
 
 - Environnements : `local` (wrangler dev + D1 local), `staging`, `production`. Chacun a sa base D1, son bucket R2, ses clés Stripe/Resend/Sentry/PostHog.
 - Pas de pipeline CI pour l'instant. Déploiement depuis le poste :
-  - `pnpm release:staging` : `pnpm check` → migrations D1 staging → déploiement → upload des sourcemaps Sentry (pas encore branché, Sentry n'est pas installé).
-  - `pnpm release:prod` : même chose avec confirmation manuelle, et uniquement depuis `main` propre.
+  - `pnpm release:staging` : `pnpm check` → migrations D1 staging → déploiement de l'app et de l'API → build et déploiement du site (`apps/web`, Worker d'assets statiques `passalio-web-staging` sur staging.passalio.com, non indexé, liens vers app.staging.passalio.com) → upload des sourcemaps Sentry (pas encore branché, Sentry n'est pas installé).
+  - `pnpm release:prod` : même chose avec confirmation manuelle, et uniquement depuis `main` propre. Le site part sur `passalio-web` (passalio.com).
 - Lefthook : `oxfmt` et `oxlint` sur les fichiers modifiés au commit, `typecheck` et tests au push.
 - Données de démonstration : `pnpm db:seed:local` (données fictives uniquement).
 

@@ -1,5 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import * as z from "zod";
+import { createD1MemberRepository } from "../src/contexts/identity/infrastructure/d1-member-repository";
+import { createDatabase } from "../src/platform/database";
 import { startTestPlatform, type TestPlatform } from "./test-platform";
 
 const organizationResponse = z.object({ organization: z.object({ id: z.string() }) });
@@ -304,5 +306,18 @@ describe("pending invitations", () => {
       invitee,
     );
     expect(accepted.status).toBe(404);
+  });
+});
+
+describe("inviter name for the invitation email", () => {
+  const sessionResponse = z.object({ user: z.object({ id: z.string() }) });
+
+  it("finds the inviter's name only inside their own company", async () => {
+    const session = await platform.request("/api/auth/get-session", {}, ownerA);
+    const { user } = sessionResponse.parse(await session.json());
+    const members = createD1MemberRepository(createDatabase(platform.env.DB));
+
+    expect(await members.findName(organizationA, user.id)).toBe("patron-a");
+    expect(await members.findName(organizationB, user.id)).toBeUndefined();
   });
 });

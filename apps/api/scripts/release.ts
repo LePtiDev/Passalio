@@ -9,9 +9,13 @@ type Environment = (typeof ENVIRONMENTS)[number];
 const isEnvironment = (value: string | undefined): value is Environment =>
   ENVIRONMENTS.some((environment) => environment === value);
 
-const run = (command: string, args: readonly string[]): void => {
+const run = (
+  command: string,
+  args: readonly string[],
+  env: Readonly<Record<string, string>> = {},
+): void => {
   console.info(`\n> ${command} ${args.join(" ")}`);
-  execFileSync(command, args, { stdio: "inherit" });
+  execFileSync(command, args, { stdio: "inherit", env: { ...process.env, ...env } });
 };
 
 const read = (command: string, args: readonly string[]): string =>
@@ -59,6 +63,18 @@ const release = async (environment: Environment): Promise<void> => {
     environment,
   ]);
   run("pnpm", ["exec", "wrangler", "deploy", "--env", environment]);
+  run("pnpm", ["--workspace-root", "--filter", "@passalio/web", "build"], {
+    PUBLIC_SITE_ENV: environment,
+  });
+  run("pnpm", [
+    "exec",
+    "wrangler",
+    "deploy",
+    "--config",
+    "../web/wrangler.json",
+    "--env",
+    environment,
+  ]);
   console.info(`\nDéploiement ${environment} terminé.`);
 };
 

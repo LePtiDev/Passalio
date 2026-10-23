@@ -1,3 +1,4 @@
+import { isPlatformRole } from "@passalio/shared";
 import { redirect } from "@tanstack/react-router";
 import { authClient } from "./auth-client";
 import { readOfflineSession, rememberOfflineSession, type OfflineSession } from "./offline-session";
@@ -79,7 +80,7 @@ export const loadSignedInSession = async (returnTo: string): Promise<OfflineSess
   const { user } = fetched.data;
   const organizationId = await activateFirstOrganization(fetched.data.session.activeOrganizationId);
   if (organizationId === null) {
-    throw redirect({ to: COMPANY_SETUP_PATH });
+    throw redirect({ to: isPlatformRole(user.role) ? ADMIN_PATH : COMPANY_SETUP_PATH });
   }
   const session = { userId: user.id, name: user.name, email: user.email, organizationId };
   rememberOfflineSession(session);
