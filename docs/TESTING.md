@@ -67,6 +67,21 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
+## Planning et passages dans l'app
+
+| Famille | Ce qui est vérifié                                                                                                                                                                                              | Test                                                                          |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 2       | Techniciens : utilisateur courant en premier et en bleu, autres triés par nom, 8 couleurs qui bouclent, agendas choisis                                                                                         | `scheduling/technicians.test.ts`, `scheduling/technician-colors.test.ts`      |
+| 2       | Dates : semaine du lundi au dimanche, jours en UTC, aujourd'hui et heure courante à Paris, changements d'heure                                                                                                  | `scheduling/planning-dates.test.ts`                                           |
+| 2       | Grille : 8 h à 19 h élargie, couloirs pour les chevauchements, « +N » au-delà du maximum, heures et positions                                                                                                   | `scheduling/planning-layout.test.ts`                                          |
+| 2       | Passages : annulés masqués, « fait » si terminé ou tout signé, tri par heure, total en centimes, prochain passage                                                                                               | `scheduling/planning-visits.test.ts`                                          |
+| 2       | Paramètres d'URL tolérants (jour, vue, agendas séparés par « . », passage, nouveau passage)                                                                                                                     | `scheduling/planning-search.test.ts`                                          |
+| 2       | Formulaire nouveau passage : champs obligatoires, prix en euros vers centimes, durée de 60 min, accepté par le serveur                                                                                          | `scheduling/visit-form-schema.test.ts`                                        |
+| 2       | Statut affiché d'un passage ; montants en euros                                                                                                                                                                 | `scheduling/components/passage/visit-status.test.ts`, `scheduling/fr.test.ts` |
+| 3, 13   | Technicien : son seul planning, même avec `agendas` ; propriétaire, administrateur, secrétariat : équipe, filtres, création ; impersonation : pas de création ; rôle en cache hors ligne ; vues jour et semaine | `scheduling/hooks/use-planning.test.tsx`                                      |
+| 11      | Créer, annuler un passage hors ligne : Dexie et outbox ; membres récupérés par pages de 50, cache remplacé                                                                                                      | `scheduling/intervention-store.test.ts`, `scheduling/members-store.test.ts`   |
+| 11      | Pull des passages et documents, suppressions, modification locale en attente gardée ; refus de `create_intervention` et `sign_document`                                                                         | `lib/sync/planning-sync.test.ts`                                              |
+
 ## Parcours de bout en bout
 
 | Espace          | Parcours                                                                                | Test                      |
