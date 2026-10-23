@@ -1,6 +1,8 @@
 export { activityDays } from "./activity-days";
 export { customers, sites } from "./customers";
+export { documentNumberBlocks, documents } from "./documents";
 export { equipmentPhotos, equipments } from "./equipments";
+export { interventions } from "./interventions";
 export { auditLogs } from "./audit-logs";
 export { platformInvitations } from "./platform-invitations";
 export { prospectCompanies, prospectContacts, prospectEvents } from "./prospects";

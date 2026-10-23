@@ -1,3 +1,4 @@
+import type { ChangesAfter } from "@passalio/shared";
 import type { TradeId } from "@passalio/trades";
 import type { Customer, CustomerSummary, Equipment, EquipmentPhoto, Site } from "./customer-models";
 import type { Changes } from "./record-changes";
@@ -88,18 +89,7 @@ export type OrganizationTrades = {
   readonly of: (organizationId: string) => Promise<readonly TradeId[]>;
 };
 
-export type ChangeCursor = {
-  readonly updatedAt: Date;
-  readonly id: string;
-};
-
-export type Tombstoned<T> = T & { readonly deletedAt: Date | null };
-
-type ChangesAfter<T> = (
-  organizationId: string,
-  after: ChangeCursor | undefined,
-  limit: number,
-) => Promise<readonly Tombstoned<T>[]>;
+export type { ChangeCursor, Tombstoned } from "@passalio/shared";
 
 export type ChangeFeed = {
   readonly customers: ChangesAfter<Customer>;

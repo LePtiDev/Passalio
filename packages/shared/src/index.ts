@@ -22,6 +22,14 @@ export {
 } from "./backoffice-responses";
 export { assertCan, can } from "./authorization";
 export {
+  changePageOf,
+  SYNC_PAGE_SIZE,
+  type ChangeCursor,
+  type ChangePage,
+  type ChangesAfter,
+  type Tombstoned,
+} from "./change-pages";
+export {
   BUILDING_TYPES,
   CALENDAR_DATE_PATTERN,
   CIVILITIES,
@@ -41,14 +49,47 @@ export {
   type EquipmentStatus,
 } from "./customers";
 export {
-  customerMutation,
+  complianceMutation,
+  DOCUMENT_KINDS,
+  DOCUMENT_NUMBER_BLOCK_SIZE,
+  DOCUMENT_NUMBER_REFILL_THRESHOLD,
+  MAX_DOCUMENT_NUMBER,
+  numberBlockResponse,
+  reserveNumberBlockBody,
+  type ComplianceMutation,
+  type DocumentKind,
+  type NumberBlockResponse,
+  type ReserveNumberBlockBody,
+} from "./compliance";
+export { customerMutation, type CustomerMutation } from "./customer-mutations";
+export {
+  INTERVENTION_STATUSES,
+  interventionChanges,
+  interventionCompletion,
+  interventionFields,
+  MAX_INTERVENTION_EQUIPMENTS,
+  PAYMENT_METHODS,
+  schedulingMutation,
+  TIME_OF_DAY_PATTERN,
+  type InterventionChanges,
+  type InterventionCompletion,
+  type InterventionFields,
+  type InterventionStatus,
+  type PaymentMethod,
+  type SchedulingMutation,
+} from "./scheduling";
+export {
+  isComplianceMutation,
+  isCustomerMutation,
+  isSchedulingMutation,
+  SYNC_PUSH_MAX_MUTATIONS,
+  syncMutation,
   syncPushBody,
   syncPushResult,
-  SYNC_PUSH_MAX_MUTATIONS,
-  type CustomerMutation,
+  type SyncMutation,
   type SyncPushBody,
   type SyncPushResult,
-} from "./customer-mutations";
+} from "./sync-mutations";
 export {
   calendarDateOf,
   displayNameOf,

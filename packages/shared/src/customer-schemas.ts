@@ -1,44 +1,16 @@
-import {
-  BUILDING_TYPES,
-  CALENDAR_DATE_PATTERN,
-  CIVILITIES,
-  CUSTOMER_KINDS,
-  ENERGIES,
-  EQUIPMENT_KINDS,
-} from "./customers";
+import { BUILDING_TYPES, CIVILITIES, CUSTOMER_KINDS, ENERGIES, EQUIPMENT_KINDS } from "./customers";
 
 import * as z from "zod";
-
-const SHORT_TEXT_MAX_LENGTH = 120;
-const ADDRESS_MAX_LENGTH = 200;
-const NOTES_MAX_LENGTH = 2000;
-
-const optionalText = (maxLength: number) =>
-  z
-    .string()
-    .trim()
-    .max(maxLength)
-    .transform((value) => (value === "" ? null : value))
-    .nullable()
-    .optional();
-
-const requiredText = (maxLength: number) => z.string().trim().min(1).max(maxLength);
-
-const phone = z
-  .string()
-  .trim()
-  .regex(/^(\+?[\d][\d .-]{5,24})?$/)
-  .transform((value) => (value === "" ? null : value))
-  .nullable()
-  .optional();
-
-const email = z
-  .union([z.literal(""), z.email().max(254)])
-  .transform((value) => (value === "" ? null : value.toLowerCase()))
-  .nullable()
-  .optional();
-
-const calendarDate = z.string().regex(CALENDAR_DATE_PATTERN).nullable().optional();
+import {
+  ADDRESS_MAX_LENGTH,
+  calendarDate,
+  email,
+  NOTES_MAX_LENGTH,
+  optionalText,
+  phone,
+  requiredText,
+  SHORT_TEXT_MAX_LENGTH,
+} from "./text-fields";
 
 export const customerFields = z.object({
   kind: z.enum(CUSTOMER_KINDS),

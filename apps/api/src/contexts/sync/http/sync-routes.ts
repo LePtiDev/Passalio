@@ -1,17 +1,18 @@
 import { syncPushBody, type SyncPushResult } from "@passalio/shared";
 import { Hono } from "hono";
 import * as z from "zod";
-import { applyCustomerMutation, customerDependencies, pullCustomerChanges } from "../../customers";
 import { requireActor, type ActorEnv } from "../../identity";
 import { validateJson, validateQuery } from "../../../platform/validation";
 import { decodeSyncCursor, encodeSyncCursor } from "./sync-cursor";
+import { syncMutationApplier } from "./sync-mutation-router";
+import { pullSyncChanges } from "./sync-pull";
 
 const pullQuery = z.object({ cursor: z.string().max(2000).optional() });
 
 export const syncRoutes = new Hono<ActorEnv>()
   .use(requireActor)
   .post("/sync/push", validateJson(syncPushBody), async (context) => {
-    const apply = applyCustomerMutation(customerDependencies(context.var, context.env));
+    const apply = syncMutationApplier(context.var, context.env);
     const actor = context.get("actor");
     const results = await context.req
       .valid("json")
@@ -34,10 +35,7 @@ export const syncRoutes = new Hono<ActorEnv>()
     if (cursors === undefined) {
       return context.json({ error: "invalid_request", traceId: context.get("traceId") }, 400);
     }
-    const page = await pullCustomerChanges(customerDependencies(context.var, context.env))(
-      context.get("actor"),
-      cursors,
-    );
+    const page = await pullSyncChanges(context.var, context.env)(context.get("actor"), cursors);
     return context.json({
       changes: page.changes,
       cursor: encodeSyncCursor(page.cursors),

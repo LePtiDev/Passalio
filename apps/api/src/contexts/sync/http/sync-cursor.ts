@@ -1,9 +1,16 @@
 import * as z from "zod";
-import { CUSTOMER_SYNC_TABLES, type CustomerSyncCursors } from "../../customers";
+import type { ChangeCursor } from "@passalio/shared";
+import { CUSTOMER_SYNC_TABLES } from "../../customers";
+
+export const SYNC_TABLES = [...CUSTOMER_SYNC_TABLES, "interventions", "documents"] as const;
+
+export type SyncTable = (typeof SYNC_TABLES)[number];
+
+export type SyncCursors = Partial<Record<SyncTable, ChangeCursor>>;
 
 const tableCursor = z.tuple([z.number().int().nonnegative(), z.string().min(1).max(64)]);
 
-const encodedCursors = z.partialRecord(z.enum(CUSTOMER_SYNC_TABLES), tableCursor);
+const encodedCursors = z.partialRecord(z.enum(SYNC_TABLES), tableCursor);
 
 const toBase64Url = (text: string) =>
   btoa(text).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
@@ -26,7 +33,7 @@ const decodeBase64Url = (encoded: string) => {
   }
 };
 
-export const decodeSyncCursor = (encoded: string | undefined): CustomerSyncCursors | undefined => {
+export const decodeSyncCursor = (encoded: string | undefined): SyncCursors | undefined => {
   if (encoded === undefined) {
     return {};
   }
@@ -42,7 +49,7 @@ export const decodeSyncCursor = (encoded: string | undefined): CustomerSyncCurso
   );
 };
 
-export const encodeSyncCursor = (cursors: CustomerSyncCursors) =>
+export const encodeSyncCursor = (cursors: SyncCursors) =>
   toBase64Url(
     JSON.stringify(
       Object.fromEntries(
