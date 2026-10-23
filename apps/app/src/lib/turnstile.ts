@@ -2,8 +2,11 @@ const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render
 
 const ALWAYS_PASSING_TEST_SITE_KEY = "1x00000000000000000000AA";
 
-export const TURNSTILE_SITE_KEY: string =
-  import.meta.env["VITE_TURNSTILE_SITE_KEY"] ?? ALWAYS_PASSING_TEST_SITE_KEY;
+const PASSALIO_SITE_KEY = "0x4AAAAAAFiIzDUiQbmqacq6";
+
+export const TURNSTILE_SITE_KEY = import.meta.env.DEV
+  ? ALWAYS_PASSING_TEST_SITE_KEY
+  : PASSALIO_SITE_KEY;
 
 export const CAPTCHA_HEADER = "x-captcha-response";
 
