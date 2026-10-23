@@ -49,6 +49,7 @@ Dernière mise à jour : 2026-10-23.
 | Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                                                              | `CLAUDE.md`                      |
 | Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois                                       | ADR 0021                         |
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
+| Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)     |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
 
 ## Hors code (Quentin)
@@ -91,7 +92,8 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Modifier un lieu et un appareil depuis la fiche (le menu propose seulement Remplacer et Retirer)
 - [x] Lecture de plaque, API : route, modèle interchangeable, format imposé, quota de 200 par jour, outil de mesure (ADR 0022)
 - [ ] Lecture de plaque, mesure : comparer 4 ou 5 modèles sur le jeu de photos (clés de test OpenAI et Google à fournir), choisir le modèle, l'ajouter aux sous-traitants
-- [ ] Lecture de plaque, écran selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/47mxtXeueVzaQiqhSdCmwv) : listes déroulantes type et combustible, valeurs lues à vérifier, file hors ligne, téléphone seulement
+- [x] Lecture de plaque, écran en ligne selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/47mxtXeueVzaQiqhSdCmwv) : listes déroulantes type et combustible, champs vides remplis, « Lu sur la plaque », lue en partie, illisible, limite, erreur
+- [ ] Lecture de plaque hors ligne : photo gardée dans Dexie, lue au retour du réseau, seuls les champs vides remplis, « Plaque lue · à vérifier » et « C'est vérifié » sur la fiche (`equipments.plate_check_pending_since`)
 - [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (fait pour le ramonage : 12 mois ; appareils collectifs à 6 mois et règles locales à faire)
 - [x] Métier ramonage dans `packages/trades` : schéma du certificat version 1 et règles bloquantes tirées de `docs/regulatory/`
 - [ ] Métier entretien d'appareil dans `packages/trades` (bloqué par les documents réels)

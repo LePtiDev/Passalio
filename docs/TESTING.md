@@ -69,13 +69,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 
 ## Lecture de plaque (ADR 0022)
 
-| Famille | Ce qui est vérifié                                                                                      | Test                                                                              |
-| ------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| 2       | Nettoyage de la réponse du modèle : liste fermée, bornes, fluide, propriété « jamais hors formulaire »  | `packages/shared/src/plate-reading.test.ts`                                       |
-| 4       | Statut, quota par jour de Paris, photo refusée, échec du modèle, rôles, impersonation, logs sans valeur | `customers/application/read-equipment-plate.test.ts`                              |
-| 4       | Format JSON imposé, consignes, `trace_id`, modèle de secours, réponse hors schéma                       | `customers/infrastructure/ai-plate-reader.test.ts`, `plate-reader-models.test.ts` |
-| 5–8, 10 | `POST /api/plate-readings` : 401, 422, 403, 429, isolation du quota, index, logs sans valeur lue        | `apps/api/test/plate-reading-routes.test.ts`, `test/matrices`                     |
-| Mesure  | Précision par modèle sur le jeu de photos annoté, valeurs inventées, jetons (hors `pnpm check`)         | `apps/api/eval/`, `pnpm --filter @passalio/api plate-reading:eval`                |
+| Famille | Ce qui est vérifié                                                                                                                                 | Test                                                                              |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 2       | Nettoyage de la réponse du modèle : liste fermée, bornes, fluide, propriété « jamais hors formulaire »                                             | `packages/shared/src/plate-reading.test.ts`                                       |
+| 4       | Statut, quota par jour de Paris, photo refusée, échec du modèle, rôles, impersonation, logs sans valeur                                            | `customers/application/read-equipment-plate.test.ts`                              |
+| 4       | Format JSON imposé, consignes, `trace_id`, modèle de secours, réponse hors schéma                                                                  | `customers/infrastructure/ai-plate-reader.test.ts`, `plate-reader-models.test.ts` |
+| 5–8, 10 | `POST /api/plate-readings` : 401, 422, 403, 429, isolation du quota, index, logs sans valeur lue                                                   | `apps/api/test/plate-reading-routes.test.ts`, `test/matrices`                     |
+| 2       | Fusion de la lecture : champs vides seulement, type proposé par l'entreprise, combustible par défaut, nombres à la française                       | `apps/app/src/contexts/customers/plate-reading.test.ts`, `plate-fr.test.ts`       |
+| 13      | Lecture côté téléphone : envoi, lue, illisible, limite sans erreur, erreur avec code, lecteur absent, hors ligne, photo retirée pendant la lecture | `apps/app/src/contexts/customers/hooks/use-plate-reading.test.tsx`                |
+| 14      | Photo de plaque : champs vides remplis sans écraser la saisie ; limite du jour, photo gardée                                                       | `apps/app/e2e/customers.spec.ts`                                                  |
+| Mesure  | Précision par modèle sur le jeu de photos annoté, valeurs inventées, jetons (hors `pnpm check`)                                                    | `apps/api/eval/`, `pnpm --filter @passalio/api plate-reading:eval`                |
 
 ## Parcours de bout en bout
 
