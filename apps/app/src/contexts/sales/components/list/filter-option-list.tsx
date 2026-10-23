@@ -29,12 +29,12 @@ const OptionItem = ({ value, label, isSelected, onPick }: OptionItemProps) => {
   const select = useCallback(() => onPick(value), [onPick, value]);
   return (
     <CommandItem value={label} onSelect={select} className={ITEM_CLASS}>
+      <span className={cn("truncate", isSelected && "font-semibold")}>{label}</span>
       <Check
         aria-hidden="true"
-        className={cn("size-4 text-[#0F2A44]", isSelected ? "opacity-100" : "opacity-0")}
+        className={cn("ml-auto size-4 text-[#0F2A44]", isSelected ? "opacity-100" : "opacity-0")}
         strokeWidth={2.4}
       />
-      <span className={cn("truncate", isSelected && "font-semibold")}>{label}</span>
     </CommandItem>
   );
 };
