@@ -7,6 +7,7 @@ export const GROWING_TABLES = [
   "sites",
   "equipments",
   "equipment_photos",
+  "plate_readings",
   "interventions",
   "documents",
   "document_number_blocks",

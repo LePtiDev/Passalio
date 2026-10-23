@@ -32,6 +32,7 @@ const FILES_QUERYING_D1 = [
   "contexts/customers/infrastructure/d1-equipment-repository.ts",
   "contexts/customers/infrastructure/d1-organization-trades.ts",
   "contexts/customers/infrastructure/d1-photo-repository.ts",
+  "contexts/customers/infrastructure/d1-plate-reading-repository.ts",
   "contexts/customers/infrastructure/d1-site-repository.ts",
   "contexts/identity/infrastructure/d1-invitation-repository.ts",
   "contexts/identity/infrastructure/d1-member-repository.ts",

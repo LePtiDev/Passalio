@@ -2,8 +2,10 @@ import { newId } from "@passalio/shared";
 import { CERTIFICATE_TEMPLATE_VERSION } from "@passalio/trades";
 import { validCertificateData } from "../../src/contexts/compliance/application/certificate-data.fixture";
 import type { SignedDocument } from "../../src/contexts/compliance/domain/document-models";
+import type { PlateReading } from "../../src/contexts/customers/domain/plate-reading-ports";
 import type { Intervention } from "../../src/contexts/scheduling/domain/intervention-models";
 import { AT, LATER } from "./domain-fixtures";
+import { TRACE_ID } from "./repositories";
 
 export const DEVICE_ID = "0192f3a4-5b6c-7d8e-9f01-0000000000d1";
 
@@ -60,5 +62,20 @@ export const sweepingOf = (equipmentId: string) => ({
   equipmentId,
   lastSweepingOn: "2026-10-22",
   nextDueDate: "2027-10-22",
+  updatedAt: LATER,
+});
+
+export const aPlateReading = (organizationId: string, userId: string): PlateReading => ({
+  id: newId(),
+  organizationId,
+  userId,
+  day: "2026-10-22",
+  status: "read",
+  fieldCount: 5,
+  model: "claude-haiku-4-5",
+  inputTokens: 1480,
+  outputTokens: 96,
+  traceId: TRACE_ID,
+  createdAt: LATER,
   updatedAt: LATER,
 });

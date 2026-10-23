@@ -7,6 +7,7 @@ import { createD1ChangeFeed } from "../../src/contexts/customers/infrastructure/
 import { createD1CustomerRepository } from "../../src/contexts/customers/infrastructure/d1-customer-repository";
 import { createD1EquipmentRepository } from "../../src/contexts/customers/infrastructure/d1-equipment-repository";
 import { createD1OrganizationTrades } from "../../src/contexts/customers/infrastructure/d1-organization-trades";
+import { createD1PlateReadingRepository } from "../../src/contexts/customers/infrastructure/d1-plate-reading-repository";
 import { createD1PhotoRepository } from "../../src/contexts/customers/infrastructure/d1-photo-repository";
 import { createD1SiteRepository } from "../../src/contexts/customers/infrastructure/d1-site-repository";
 import { createD1InvitationRepository } from "../../src/contexts/identity/infrastructure/d1-invitation-repository";
@@ -41,6 +42,7 @@ export const createRepositories = (database: Database) => {
     sites: createD1SiteRepository(database),
     equipments: createD1EquipmentRepository(database),
     photos: createD1PhotoRepository(database),
+    plateReadings: createD1PlateReadingRepository(database),
     organizationTrades: createD1OrganizationTrades(database),
     changes: createD1ChangeFeed(database),
     organizations: createD1OrganizationRepository(database),

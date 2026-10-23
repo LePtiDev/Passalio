@@ -15,7 +15,13 @@ import {
   aTeamInvitation,
   LATER,
 } from "./domain-fixtures";
-import { aSignedDocument, anIntervention, DEVICE_ID, sweepingOf } from "./field-fixtures";
+import {
+  aPlateReading,
+  aSignedDocument,
+  anIntervention,
+  DEVICE_ID,
+  sweepingOf,
+} from "./field-fixtures";
 import { TRACE_ID, type Repositories } from "./repositories";
 
 const aUser = (name: string, role: "user" | "superadmin" | "sales") => ({
@@ -76,6 +82,7 @@ export const seedDatabase = async (database: Database, repositories: Repositorie
   await repositories.customers.create(aCustomer(otherOrganization.id, technician.id), undefined);
   await repositories.equipments.create(equipment);
   await repositories.photos.create(photo);
+  await repositories.plateReadings.create(aPlateReading(organization.id, technician.id));
 
   const invitation = anInvitation(organization.id, owner.id);
   await repositories.invitations.create(invitation);
