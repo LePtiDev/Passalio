@@ -12,6 +12,7 @@ type RecordChanges<T> = Changes<Omit<T, "id" | "organizationId" | "createdAt">>;
 
 export type CustomerRepository = {
   readonly exists: (id: string) => Promise<boolean>;
+  readonly existsInOrganization: (organizationId: string, id: string) => Promise<boolean>;
   readonly create: (customer: Customer, site: Site | undefined) => Promise<void>;
   readonly findById: (organizationId: string, customerId: string) => Promise<Customer | undefined>;
   readonly update: (
@@ -28,6 +29,7 @@ export type CustomerRepository = {
 
 export type SiteRepository = {
   readonly exists: (id: string) => Promise<boolean>;
+  readonly existsInOrganization: (organizationId: string, id: string) => Promise<boolean>;
   readonly create: (site: Site) => Promise<void>;
   readonly findById: (organizationId: string, siteId: string) => Promise<Site | undefined>;
   readonly update: (
@@ -45,6 +47,7 @@ export type EquipmentReplacement = {
 
 export type EquipmentRepository = {
   readonly exists: (id: string) => Promise<boolean>;
+  readonly existsInOrganization: (organizationId: string, id: string) => Promise<boolean>;
   readonly create: (equipment: Equipment, replacement?: EquipmentReplacement) => Promise<void>;
   readonly findById: (
     organizationId: string,

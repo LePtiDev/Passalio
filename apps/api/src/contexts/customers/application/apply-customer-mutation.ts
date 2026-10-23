@@ -65,11 +65,11 @@ const isAlreadyApplied = async (
 ) => {
   switch (mutation.type) {
     case "create_customer":
-      return (await customers.findById(organizationId, mutation.customerId)) !== undefined;
+      return customers.existsInOrganization(organizationId, mutation.customerId);
     case "add_site":
-      return (await sites.findById(organizationId, mutation.siteId)) !== undefined;
+      return sites.existsInOrganization(organizationId, mutation.siteId);
     case "add_equipment":
-      return (await equipments.findById(organizationId, mutation.equipmentId)) !== undefined;
+      return equipments.existsInOrganization(organizationId, mutation.equipmentId);
     default:
       return false;
   }
@@ -83,8 +83,7 @@ export const applyCustomerMutation =
       if (outcome.isOk) {
         return ok(undefined);
       }
-      return outcome.error === "already_exists" &&
-        (await isAlreadyApplied(dependencies, actor, mutation))
+      return (await isAlreadyApplied(dependencies, actor, mutation))
         ? ok(undefined)
         : err(outcome.error);
     } catch (error) {
