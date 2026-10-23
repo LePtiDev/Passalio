@@ -14,7 +14,7 @@ export const MapSearch = ({ value, placeholder, onChange }: MapSearchProps) => {
     [onChange],
   );
   return (
-    <label className="absolute inset-x-3 top-3 z-10 flex h-12 items-center gap-2 rounded-xl border border-[#E3E8EF] bg-white px-3 shadow-[0_2px_8px_rgba(15,42,68,0.08)] lg:hidden">
+    <label className="absolute inset-x-3 top-3 z-10 flex h-[50px] items-center gap-2 rounded-xl border border-[#E3E8EF] bg-white px-3 shadow-[0_2px_8px_rgba(15,42,68,0.08)] lg:hidden">
       <Search aria-hidden="true" className="size-[18px] shrink-0 text-[#94A3B8]" />
       <input
         type="search"

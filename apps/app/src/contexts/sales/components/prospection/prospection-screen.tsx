@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 import { ErrorState } from "@/components/error-state";
 import { AdminHeading, AdminPage, type AdminTrailStep } from "@/contexts/backoffice";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { departmentLocative } from "../../department-locatives";
 import { departmentLabel, departmentName } from "../../department-names";
 import { salesFr } from "../../fr";
 import { useCompanies, useProspectFilters, useProspectMap } from "../../hooks/use-sales-queries";
@@ -109,7 +110,15 @@ export const ProspectionScreen = ({ scope, onScopeChange }: ProspectionScreenPro
     <AdminPage section="commercial" layout="map" trail={TRAIL} mobileTitle={text.title}>
       <AdminHeading
         title={text.title}
-        subtitle={count === null ? text.subtitleLoading : text.subtitle(scope.tab, count, label)}
+        subtitle={
+          count === null
+            ? text.subtitleLoading
+            : text.subtitle(
+                scope.tab,
+                count,
+                scope.department === null ? null : departmentLocative(scope.department),
+              )
+        }
       />
       <div className="hidden lg:block">
         <ListToolbar

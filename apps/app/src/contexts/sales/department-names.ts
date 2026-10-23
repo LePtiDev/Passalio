@@ -1,4 +1,4 @@
-const DEPARTMENT_NAMES: ReadonlyMap<string, string> = new Map([
+export const DEPARTMENT_NAMES: ReadonlyMap<string, string> = new Map([
   ["01", "Ain"],
   ["02", "Aisne"],
   ["03", "Allier"],

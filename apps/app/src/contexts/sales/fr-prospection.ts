@@ -20,7 +20,7 @@ export const prospectionFr = {
   subtitle: (tab: ProspectionTab, count: number, department: string | null) =>
     department === null
       ? `${TAB_SUBTITLES[tab](count)}.`
-      : `${TAB_SUBTITLES[tab](count)} · ${department}.`,
+      : `${TAB_SUBTITLES[tab](count)} ${department}.`,
   subtitleLoading: "Les ramoneurs à situer et à qualifier.",
   mobilePlaceholder: (tab: ProspectionTab, count: number | null, department: string | null) =>
     [department, count === null ? null : `${count} ${TAB_SHORT[tab]}`]

@@ -41,7 +41,7 @@ const LeadFile = ({
 }) => (
   <>
     <div className="flex flex-col gap-0.5 px-3.5 pt-3.5 pb-2.5">
-      <strong className="text-sm">{file.company.name}</strong>
+      <strong className="text-sm leading-[1.26]">{file.company.name}</strong>
       <span className="text-[#64748B]">{townOf(file)}</span>
     </div>
     <dl>
