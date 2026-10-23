@@ -4,6 +4,8 @@ import { TERMS_VERSION } from "@passalio/shared";
 import { vi } from "vitest";
 import { getPlatformProxy } from "wrangler";
 import { app } from "../src/app";
+import { handleRequest } from "../src/index";
+import { TestExecutionContext } from "./test-execution-context";
 import type { Bindings } from "../src/env";
 
 const MIGRATIONS_DIRECTORY = join(import.meta.dirname, "../../../packages/db/migrations");
@@ -107,6 +109,11 @@ export const startTestPlatform = async () => {
     return app.request(path, { ...init, headers }, env);
   };
 
+  const workerRequest = async (path: string, init: RequestInit = {}) =>
+    handleRequest(new Request(`${APP_URL}${path}`, init), env, new TestExecutionContext());
+
+  const loggedLines = () => logs.mock.calls.map(([line]) => String(line));
+
   const lastLoggedUrl = () => loggedUrls(logs.mock.calls).at(-1) ?? "";
 
   const signIn = async (email: string): Promise<string> => {
@@ -148,6 +155,8 @@ export const startTestPlatform = async () => {
   return {
     env,
     request,
+    workerRequest,
+    loggedLines,
     signIn,
     signInWithMagicLink,
     sessionCookieOf,

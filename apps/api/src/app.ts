@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { backofficeRoutes } from "./contexts/backoffice";
 import { customerRoutes, equipmentRoutes } from "./contexts/customers";
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
+import { mcpAuthorizationRoutes, mcpRoutes } from "./contexts/mcp";
 import { teamInvitationRoutes, teamRoutes } from "./contexts/platform-team";
 import { prospectCompanyRoutes, prospectContactRoutes } from "./contexts/sales";
 import { syncRoutes } from "./contexts/sync";
@@ -21,6 +22,7 @@ const apiRoutes = new Hono<AppEnv>()
   .route("/admin/prospects", prospectCompanyRoutes)
   .route("/admin/prospects", prospectContactRoutes)
   .route("/admin/team", teamRoutes)
+  .route("/admin/mcp/authorization", mcpAuthorizationRoutes)
   .route("/admin", backofficeRoutes)
   .route("/team-invitations", teamInvitationRoutes)
   .route("/", identityRoutes.userRoutes)
@@ -33,4 +35,5 @@ const apiRoutes = new Hono<AppEnv>()
 
 export const app = createApp()
   .get("/health", (context) => context.json({ status: "ok" }))
+  .route("/", mcpRoutes)
   .route("/api", apiRoutes);

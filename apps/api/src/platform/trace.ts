@@ -11,7 +11,7 @@ const extractTraceId = (sentryTrace: string | undefined): string | undefined => 
   return candidate !== undefined && TRACE_ID_PATTERN.test(candidate) ? candidate : undefined;
 };
 
-const newTraceId = (): string => crypto.randomUUID().replaceAll("-", "");
+export const newTraceId = (): string => crypto.randomUUID().replaceAll("-", "");
 
 export const traceMiddleware = createMiddleware<AppEnv>(async (context, next) => {
   const traceId = extractTraceId(context.req.header("sentry-trace")) ?? newTraceId();

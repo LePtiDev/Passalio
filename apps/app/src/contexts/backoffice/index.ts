@@ -17,3 +17,4 @@ export type { PlatformAdmin } from "./backoffice-api";
 export { useNow } from "./hooks/use-now";
 export { JoinTeamScreen } from "./components/team/join-team-screen";
 export { TeamScreen } from "./components/team/team-screen";
+export { AuthorizeClaudeScreen } from "./components/mcp/authorize-claude-screen";

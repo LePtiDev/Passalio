@@ -23,6 +23,7 @@ import {
   adminProspectionRoute,
   adminContactsRoute,
 } from "./routes/admin-commercial";
+import { adminMcpAuthorizeRoute } from "./routes/admin-mcp";
 import { adminCodeRoute, adminSecurityRoute } from "./routes/admin-security";
 import { forgotPasswordRoute } from "./routes/forgot-password";
 import { homeRoute } from "./routes/home";
@@ -62,6 +63,7 @@ const routeTree = rootRoute.addChildren([
   adminRootRoute.addChildren([
     adminCodeRoute,
     adminSecurityRoute,
+    adminMcpAuthorizeRoute,
     adminShellRoute.addChildren([
       adminOverviewRoute,
       adminAccountsRoute,

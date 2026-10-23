@@ -1,8 +1,16 @@
 import { app } from "./app";
+import { isAuthorizationServerRequest, serveAuthorizationServer } from "./contexts/mcp";
 import type { Bindings } from "./env";
 
-const worker: ExportedHandler<Bindings> = {
-  fetch: (request, env, executionContext) => app.fetch(request, env, executionContext),
-};
+export const handleRequest = async (
+  request: Request,
+  env: Bindings,
+  executionContext: ExecutionContext,
+): Promise<Response> =>
+  isAuthorizationServerRequest(request)
+    ? serveAuthorizationServer(request, env, executionContext)
+    : app.fetch(request, env, executionContext);
+
+const worker: ExportedHandler<Bindings> = { fetch: handleRequest };
 
 export default worker;

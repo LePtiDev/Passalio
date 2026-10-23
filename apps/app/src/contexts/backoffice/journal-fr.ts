@@ -13,6 +13,13 @@ const PLATFORM_ROLE_LABELS: Readonly<Record<string, string>> = {
   support: "support",
 };
 
+const MCP_ACCESS_JOURNAL_LABELS: Readonly<Record<string, string>> = {
+  read: "lecture seule",
+  write: "lecture et écriture",
+};
+
+const VIA_CLAUDE = "via Claude";
+
 const platformRoleLabel = (role: string | undefined) => PLATFORM_ROLE_LABELS[role ?? ""] ?? "";
 
 export const JOURNAL_ACTIONS: Readonly<
@@ -42,6 +49,16 @@ export const JOURNAL_ACTIONS: Readonly<
   "platform.invitation_canceled": () => "a annulé une invitation dans l'équipe Passalio",
   "platform.invitation_accepted": (data) =>
     `a rejoint l'équipe Passalio (${platformRoleLabel(data["role"])})`,
+  "mcp.authorized": (data) =>
+    `a connecté ${data["client"] ?? "Claude"} à l'espace admin (${MCP_ACCESS_JOURNAL_LABELS[data["access"] ?? ""] ?? ""})`,
+  "mcp.revoked": (_data, target) => `a coupé les accès de Claude de ${target}`,
+  "mcp.create_prospect_company": (data) =>
+    `a créé l'entreprise prospectée « ${data["company"] ?? ""} » ${VIA_CLAUDE}`,
+  "mcp.update_prospect_company": () => `a modifié une entreprise prospectée ${VIA_CLAUDE}`,
+  "mcp.change_prospect_stage": () => `a changé l'étape d'une entreprise prospectée ${VIA_CLAUDE}`,
+  "mcp.add_prospect_note": () => `a ajouté une note à une entreprise prospectée ${VIA_CLAUDE}`,
+  "mcp.add_prospect_contact": () => `a ajouté un contact à une entreprise prospectée ${VIA_CLAUDE}`,
+  "mcp.update_prospect_contact": () => `a modifié un contact prospecté ${VIA_CLAUDE}`,
 };
 
 export const unknownAction = (action: string) => `a fait l'action « ${action} » sur`;

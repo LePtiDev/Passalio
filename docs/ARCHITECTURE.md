@@ -62,6 +62,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | `backoffice`    | Outils internes : support, impersonation, métriques                  |
 | `sales`         | Prospection de Passalio : entreprises, contacts, étapes, historique  |
 | `platform-team` | Équipe Passalio : membres, rôles plateforme, invitations             |
+| `mcp`           | Serveur MCP admin : OAuth, consentement, outils pour Claude          |
 | `sync`          | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
@@ -181,6 +182,13 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Écrans (espace admin, `apps/app/src/contexts/sales/`) : `/admin/entreprises?etape=&departement=&suivi=&recherche=`, `/admin/entreprises/:companyId`, `/admin/contacts?onglet=&departement=&recherche=`, `/admin/contacts/:contactId`. Onglets par étape, filtres actifs à gauche, recherche et menu « Filtres » à droite. Le rôle `sales`, sans `platform:read`, ne voit que Commercial : les pages Plateforme le renvoient vers `/admin/entreprises`.
 - Prospection (`/admin/prospection?etape=&departement=&recherche=&entreprise=`) : onglets À qualifier, Qualifiées, Pas intéressées ; liste à gauche, carte Leaflet (dépendance `leaflet`) sur le fond Plan IGN v2 servi par `data.geopf.fr` (WMTS, sans clé, attribution « © IGN »), points colorés par étape, fiche flottante pour qualifier sans quitter la carte. Sur mobile, carte plein écran, recherche flottante et feuille en bas. La fiche entreprise montre une mini-carte et un lien « Voir sur la carte » (tuile « Carte » sur mobile).
 - Import : `pnpm prospects:import --env <local|staging|production> --file <csv>` (géocodage IGN, relançable sans perdre étapes et notes).
+
+### Serveur MCP admin (contexte `mcp`, ADR 0019)
+
+- `/mcp` (Streamable HTTP, jeton Bearer), OAuth sur `/oauth/register`, `/oauth/token`, `/.well-known/oauth-authorization-server`, `/.well-known/oauth-protected-resource/mcp`. Ces chemins passent par le Worker avant les fichiers statiques (`run_worker_first`).
+- Consentement : écran `/admin/mcp/autoriser` (`apps/app/src/contexts/backoffice/components/mcp/`), API `GET`, `POST /api/admin/mcp/authorization` et `POST /denial`. Permission `mcp:connect` (super admin, admin).
+- Outils lecture : `get_overview`, `list_accounts`, `get_account`, `list_journal`, `get_prospect_filters`, `list_prospect_companies`, `get_prospect_company`, `list_prospect_contacts`, `get_prospect_contact`. Outils écriture (accès « Lecture et écriture ») : `create_prospect_company`, `update_prospect_company`, `change_prospect_stage`, `add_prospect_note`, `add_prospect_contact`, `update_prospect_contact`.
+- Retrait : `pnpm mcp:revoke --env <local|staging|production> --email <email>`. Activé par `MCP_ENABLED` et le KV `OAUTH_KV`.
 
 ### Hors ligne et synchronisation (ADR 0003 et 0014)
 

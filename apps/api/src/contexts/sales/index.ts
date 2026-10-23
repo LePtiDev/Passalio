@@ -1,2 +1,15 @@
+export { addCompanyNote } from "./application/add-company-note";
+export { addContact } from "./application/add-contact";
+export { changeCompanyStage } from "./application/change-company-stage";
+export { createCompany } from "./application/create-company";
+export { getCompanyFile } from "./application/get-company-file";
+export { getContactFile } from "./application/get-contact-file";
+export { getProspectFilters } from "./application/get-prospect-filters";
+export { listCompanies } from "./application/list-companies";
+export { listContacts } from "./application/list-contacts";
+export { updateCompany } from "./application/update-company";
+export { updateContact } from "./application/update-contact";
+export type { ProspectError } from "./domain/prospect-error";
 export { companyRoutes as prospectCompanyRoutes } from "./http/company-routes";
 export { contactRoutes as prospectContactRoutes } from "./http/contact-routes";
+export { createSalesDependencies } from "./infrastructure/sales-dependencies";

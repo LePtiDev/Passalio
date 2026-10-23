@@ -3,7 +3,7 @@
   "name": "passalio-api-local",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "observability": {
     "enabled": true
   },
@@ -21,12 +21,19 @@
       "bucket_name": "passalio-local-files"
     }
   ],
+  "kv_namespaces": [
+    {
+      "binding": "OAUTH_KV",
+      "id": "passalio-local-oauth"
+    }
+  ],
   "vars": {
     "BETTER_AUTH_URL": "http://localhost:5173",
     "APP_URL": "http://localhost:5173",
     "EMAIL_DELIVERY": "log",
     "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
-    "TURNSTILE_SECRET_KEY": "1x0000000000000000000000000000000AA"
+    "TURNSTILE_SECRET_KEY": "1x0000000000000000000000000000000AA",
+    "MCP_ENABLED": "true"
   },
   "env": {
     "staging": {
@@ -34,7 +41,15 @@
       "assets": {
         "directory": "../app/dist",
         "not_found_handling": "single-page-application",
-        "run_worker_first": ["/api/*", "/health"]
+        "run_worker_first": [
+          "/api/*",
+          "/health",
+          "/mcp",
+          "/oauth/*",
+          "/.well-known/oauth-authorization-server",
+          "/.well-known/oauth-protected-resource",
+          "/.well-known/oauth-protected-resource/*"
+        ]
       },
       "routes": [{ "pattern": "app.staging.passalio.com", "custom_domain": true }],
       "d1_databases": [
@@ -56,7 +71,8 @@
         "BETTER_AUTH_URL": "https://app.staging.passalio.com",
         "APP_URL": "https://app.staging.passalio.com",
         "EMAIL_DELIVERY": "resend",
-        "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>"
+        "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
+        "MCP_ENABLED": "false"
       }
     },
     "production": {
@@ -64,7 +80,15 @@
       "assets": {
         "directory": "../app/dist",
         "not_found_handling": "single-page-application",
-        "run_worker_first": ["/api/*", "/health"]
+        "run_worker_first": [
+          "/api/*",
+          "/health",
+          "/mcp",
+          "/oauth/*",
+          "/.well-known/oauth-authorization-server",
+          "/.well-known/oauth-protected-resource",
+          "/.well-known/oauth-protected-resource/*"
+        ]
       },
       "routes": [{ "pattern": "app.passalio.com", "custom_domain": true }],
       "d1_databases": [
@@ -86,7 +110,8 @@
         "BETTER_AUTH_URL": "https://app.passalio.com",
         "APP_URL": "https://app.passalio.com",
         "EMAIL_DELIVERY": "resend",
-        "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>"
+        "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
+        "MCP_ENABLED": "false"
       }
     }
   }
