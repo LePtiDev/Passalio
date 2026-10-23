@@ -35,6 +35,9 @@ importers:
       '@passalio/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@passalio/emails':
+        specifier: workspace:*
+        version: link:../../packages/emails
       '@passalio/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -192,6 +195,8 @@ importers:
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
+
+  packages/emails: {}
 
   packages/pdf:
     dependencies:

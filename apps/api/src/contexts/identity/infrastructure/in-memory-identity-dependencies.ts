@@ -121,6 +121,12 @@ export const createInMemoryIdentityDependencies = (
         state.members
           .filter(inOrganization(organizationId))
           .find((member) => member.userId === userId),
+      findName: async (organizationId, userId) => {
+        const member = state.members
+          .filter(inOrganization(organizationId))
+          .find((candidate) => candidate.userId === userId);
+        return member === undefined ? undefined : withUser(member)[0]?.name;
+      },
       findByEmail: async (organizationId, email) =>
         state.members
           .filter(inOrganization(organizationId))
