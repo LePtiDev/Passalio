@@ -2,13 +2,14 @@ import type { TradeId } from "@passalio/trades";
 import type { Customer, Equipment, EquipmentPhoto, Site } from "../domain/customer-models";
 import type { CustomerDependencies } from "../domain/customer-ports";
 import { withChanges, type Changes } from "../domain/record-changes";
+import { createInMemoryChangeFeed } from "./in-memory-change-feed";
 
 export type InMemoryCustomerState = {
   readonly customers: Customer[];
   readonly sites: Site[];
   readonly equipments: Equipment[];
   readonly photos: EquipmentPhoto[];
-  readonly archivedIds: Set<string>;
+  readonly archivedAt: Map<string, Date>;
   readonly storedPhotos: Map<string, string>;
   readonly trades: Map<string, readonly TradeId[]>;
 };
@@ -18,7 +19,7 @@ export const createInMemoryCustomerState = (): InMemoryCustomerState => ({
   sites: [],
   equipments: [],
   photos: [],
-  archivedIds: new Set(),
+  archivedAt: new Map(),
   storedPhotos: new Map(),
   trades: new Map(),
 });
@@ -40,7 +41,7 @@ export const createInMemoryCustomerDependencies = (
   const isActiveIn =
     (organizationId: string) =>
     ({ id, organizationId: rowOrganizationId }: Row) =>
-      rowOrganizationId === organizationId && !state.archivedIds.has(id);
+      rowOrganizationId === organizationId && !state.archivedAt.has(id);
   const findIn = <T extends Row>(items: readonly T[], organizationId: string, id: string) =>
     items.filter(isActiveIn(organizationId)).find((item) => item.id === id);
   const updateIn = <T extends Row>(
@@ -68,7 +69,7 @@ export const createInMemoryCustomerDependencies = (
         findIn(state.customers, organizationId, customerId),
       update: async (organizationId, customerId, changes) =>
         updateIn<Customer>(state.customers, organizationId, customerId, changes),
-      archive: async (organizationId, customerId) => {
+      archive: async (organizationId, customerId, at) => {
         const siteIds = state.sites
           .filter(
             (site) => site.organizationId === organizationId && site.customerId === customerId,
@@ -81,7 +82,7 @@ export const createInMemoryCustomerDependencies = (
           .filter((photo) => equipmentIds.includes(photo.equipmentId))
           .map(({ id }) => id);
         [customerId, ...siteIds, ...equipmentIds, ...photoIds].forEach((id) =>
-          state.archivedIds.add(id),
+          state.archivedAt.set(id, at),
         );
       },
       list: async (organizationId, { limit, after, range }) =>
@@ -184,6 +185,7 @@ export const createInMemoryCustomerDependencies = (
     organizationTrades: {
       of: async (organizationId) => state.trades.get(organizationId) ?? [],
     },
+    changes: createInMemoryChangeFeed(state),
     now,
   };
 };

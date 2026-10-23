@@ -148,6 +148,6 @@ describe("archiveCustomer", () => {
       isOk: false,
       error: "customer_not_found",
     });
-    expect(state.archivedIds.size).toBe(2);
+    expect(state.archivedAt.size).toBe(2);
   });
 });

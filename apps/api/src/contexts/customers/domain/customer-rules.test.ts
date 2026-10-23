@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  calendarDateOf,
-  checkCustomerName,
-  displayNameOf,
-  normalizeSearchText,
-  searchRange,
-} from "./customer-rules";
+import { calendarDateOf, displayNameOf, normalizeSearchText } from "@passalio/shared";
+import { checkCustomerName, searchRange } from "./customer-rules";
 import { checkKindOffered, checkReplaceable, parseDetails } from "./equipment-rules";
 import { withChanges } from "./record-changes";
 

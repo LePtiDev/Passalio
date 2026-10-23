@@ -1,7 +1,13 @@
-import { assertCan, err, ok, type Actor, type Result } from "@passalio/shared";
+import {
+  assertCan,
+  err,
+  ok,
+  type Actor,
+  type Result,
+  type EquipmentChanges,
+} from "@passalio/shared";
 import type { CustomerError } from "../domain/customer-error";
 import type { CustomerDependencies } from "../domain/customer-ports";
-import type { EquipmentChanges } from "../domain/customer-schemas";
 import { equipmentUpdates } from "../domain/equipment-records";
 
 export type UpdateEquipmentInput = {

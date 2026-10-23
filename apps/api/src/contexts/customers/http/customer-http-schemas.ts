@@ -1,13 +1,14 @@
-import { CALENDAR_DATE_PATTERN, EQUIPMENT_PHOTO_KINDS } from "@passalio/shared";
-import * as z from "zod";
 import {
+  CALENDAR_DATE_PATTERN,
+  EQUIPMENT_PHOTO_KINDS,
   customerChanges,
   customerFields,
   equipmentChanges,
   equipmentFields,
   siteChanges,
   siteFields,
-} from "../domain/customer-schemas";
+} from "@passalio/shared";
+import * as z from "zod";
 
 const clientId = z.uuid().optional();
 

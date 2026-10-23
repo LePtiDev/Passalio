@@ -1,10 +1,9 @@
-import { ok, type Result } from "@passalio/shared";
+import { ok, type Result, type EquipmentChanges, type EquipmentFields } from "@passalio/shared";
 import type { TradeId } from "@passalio/trades";
 import type { CustomerError } from "./customer-error";
 import type { Equipment } from "./customer-models";
 import type { RecordContext } from "./customer-records";
 import type { Changes } from "./record-changes";
-import type { EquipmentChanges, EquipmentFields } from "./customer-schemas";
 import { checkKindOffered, parseDetails } from "./equipment-rules";
 
 export const newEquipment = (

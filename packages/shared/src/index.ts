@@ -9,12 +9,48 @@ export {
   EQUIPMENT_PHOTO_KINDS,
   EQUIPMENT_PHOTO_MAX_BYTES,
   EQUIPMENT_STATUSES,
+  ENERGIES,
+  EQUIPMENT_KINDS,
   type BuildingType,
   type Civility,
   type CustomerKind,
+  type Energy,
+  type EquipmentKind,
   type EquipmentPhotoKind,
   type EquipmentStatus,
 } from "./customers";
+export {
+  customerMutation,
+  syncPushBody,
+  syncPushResult,
+  SYNC_PUSH_MAX_MUTATIONS,
+  type CustomerMutation,
+  type SyncPushBody,
+  type SyncPushResult,
+} from "./customer-mutations";
+export {
+  calendarDateOf,
+  displayNameOf,
+  hasRequiredName,
+  namedCustomer,
+  normalizeSearchText,
+  searchNameOf,
+  type NamedCustomer,
+} from "./customer-names";
+export {
+  customerChanges,
+  customerFields,
+  equipmentChanges,
+  equipmentFields,
+  siteChanges,
+  siteFields,
+  type CustomerChanges,
+  type CustomerFields,
+  type EquipmentChanges,
+  type EquipmentFields,
+  type SiteChanges,
+  type SiteFields,
+} from "./customer-schemas";
 export { ForbiddenError } from "./errors";
 export { newId } from "./id";
 export {

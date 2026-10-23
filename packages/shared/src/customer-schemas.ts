@@ -3,8 +3,10 @@ import {
   CALENDAR_DATE_PATTERN,
   CIVILITIES,
   CUSTOMER_KINDS,
-} from "@passalio/shared";
-import { ENERGIES, EQUIPMENT_KINDS } from "@passalio/trades";
+  ENERGIES,
+  EQUIPMENT_KINDS,
+} from "./customers";
+
 import * as z from "zod";
 
 const SHORT_TEXT_MAX_LENGTH = 120;

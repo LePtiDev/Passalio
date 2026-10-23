@@ -48,15 +48,16 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 3. Contextes métier (DDD léger)
 
-| Contexte     | Responsabilité                                                   |
-| ------------ | ---------------------------------------------------------------- |
-| `identity`   | Comptes, entreprises, membres, rôles, permissions, impersonation |
-| `customers`  | Clients, lieux, équipements, historique                          |
-| `scheduling` | Interventions, tournées, confirmation J-1, suivi d'arrivée       |
-| `compliance` | Attestations, signature, PDF, numérotation, versions             |
-| `engagement` | Échéances, relances, envois email/SMS                            |
-| `billing`    | Abonnement Stripe, état du compte                                |
-| `backoffice` | Outils internes : support, impersonation, métriques              |
+| Contexte     | Responsabilité                                                       |
+| ------------ | -------------------------------------------------------------------- |
+| `identity`   | Comptes, entreprises, membres, rôles, permissions, impersonation     |
+| `customers`  | Clients, lieux, équipements, historique                              |
+| `scheduling` | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
+| `compliance` | Attestations, signature, PDF, numérotation, versions                 |
+| `engagement` | Échéances, relances, envois email/SMS                                |
+| `billing`    | Abonnement Stripe, état du compte                                    |
+| `backoffice` | Outils internes : support, impersonation, métriques                  |
+| `sync`       | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
 
@@ -156,7 +157,15 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - `last_sweeping_on` et `last_service_on` gardent le dernier passage fait avant Passalio. `next_due_date` reste vide tant que les périodicités par métier ne sont pas configurées.
 - Photos : fichiers dans R2 sous `organizations/{organization_id}/equipment-photos/{photo_id}`, 5 Mo maximum, JPEG, PNG ou WebP. La clé R2 n'est jamais renvoyée au navigateur.
 - Archivage (permission `customers:archive`) : suppression logique du client, de ses lieux, appareils et photos. Un client n'est jamais supprimé définitivement s'il a une attestation signée.
-- Routes : `GET` et `POST /api/customers` (recherche par préfixe `q`, curseur), `GET`, `PATCH` et `DELETE /api/customers/:customerId`, `POST /api/customers/:customerId/sites`, `PATCH /api/sites/:siteId`, `POST /api/sites/:siteId/equipments`, `PATCH /api/equipments/:equipmentId`, `POST /api/equipments/:equipmentId/removal`, `POST /api/equipments/:equipmentId/photos?kind=plate|overview`, `GET /api/photos/:photoId`.
+- Routes : `POST /api/sync/push` et `GET /api/sync/pull` (voir plus bas), `GET` et `POST /api/customers` (recherche par préfixe `q`, curseur), `GET`, `PATCH` et `DELETE /api/customers/:customerId`, `POST /api/customers/:customerId/sites`, `PATCH /api/sites/:siteId`, `POST /api/sites/:siteId/equipments`, `PATCH /api/equipments/:equipmentId`, `POST /api/equipments/:equipmentId/removal`, `POST /api/equipments/:equipmentId/photos?kind=plate|overview`, `GET /api/photos/:photoId`.
+
+### Hors ligne et synchronisation (ADR 0003 et 0014)
+
+- Base locale Dexie par entreprise (`passalio-{organization_id}`, `apps/app/src/lib/db/`) : `customers`, `sites`, `equipments`, `photos`, plus `outbox` (modifications en attente), `pendingPhotos` (photos à envoyer), `rejections` (modifications refusées) et `syncState` (curseur, dernière synchronisation). Supprimée à la déconnexion.
+- Les écrans écrivent dans Dexie et ajoutent la modification à `outbox` dans la même transaction (`apps/app/src/contexts/customers/`). Types de modification et schémas zod communs dans `packages/shared` (`customer-mutations.ts`, `customer-schemas.ts`).
+- Cycle (`apps/app/src/lib/sync/`) : envoi de `outbox` par lots de 50 (`POST /api/sync/push`), envoi des photos une fois leur appareil connu du serveur, puis chargement (`GET /api/sync/pull?cursor=`) par pages de 200 lignes par table, suppressions comprises (`deletedAt`). Le curseur est opaque : un couple (`updated_at`, `id`) par table. Déclenché à l'ouverture, au retour du réseau, toutes les minutes et une seconde après chaque modification.
+- `useSyncStatus` donne l'état (`idle`, `syncing`, `offline`, `error`), le nombre de modifications en attente, de refus et l'heure de la dernière synchronisation, pour l'indicateur des écrans terrain.
+- Démarrage sans réseau : la dernière session (id, nom, email, entreprise active) est gardée dans `localStorage` et sert quand l'API est injoignable. Effacée à la déconnexion.
 
 ## 6. Impersonation (« voir comme l'utilisateur »)
 

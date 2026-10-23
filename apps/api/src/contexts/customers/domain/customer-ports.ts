@@ -88,6 +88,26 @@ export type OrganizationTrades = {
   readonly of: (organizationId: string) => Promise<readonly TradeId[]>;
 };
 
+export type ChangeCursor = {
+  readonly updatedAt: Date;
+  readonly id: string;
+};
+
+export type Tombstoned<T> = T & { readonly deletedAt: Date | null };
+
+type ChangesAfter<T> = (
+  organizationId: string,
+  after: ChangeCursor | undefined,
+  limit: number,
+) => Promise<readonly Tombstoned<T>[]>;
+
+export type ChangeFeed = {
+  readonly customers: ChangesAfter<Customer>;
+  readonly sites: ChangesAfter<Site>;
+  readonly equipments: ChangesAfter<Equipment>;
+  readonly photos: ChangesAfter<EquipmentPhoto>;
+};
+
 export type CustomerDependencies = {
   readonly customers: CustomerRepository;
   readonly sites: SiteRepository;
@@ -95,5 +115,6 @@ export type CustomerDependencies = {
   readonly photos: PhotoRepository;
   readonly photoStorage: PhotoStorage;
   readonly organizationTrades: OrganizationTrades;
+  readonly changes: ChangeFeed;
   readonly now: () => Date;
 };
