@@ -16,6 +16,12 @@ export type Bindings = {
   readonly RESEND_API_KEY?: string;
   readonly MCP_ENABLED?: string;
   readonly OAUTH_KV?: KVNamespace;
+  readonly PLATE_READER_MODEL?: string;
+  readonly PLATE_READER_FALLBACK_MODEL?: string;
+  readonly OPENAI_API_KEY?: string;
+  readonly GOOGLE_GENERATIVE_AI_API_KEY?: string;
+  readonly ANTHROPIC_API_KEY?: string;
+  readonly MISTRAL_API_KEY?: string;
 };
 
 export type Variables = {

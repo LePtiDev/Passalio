@@ -1,14 +1,14 @@
-import { useCallback, useState, type ChangeEvent, type FormEvent } from "react";
+import { useCallback, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { createTraceRecorder } from "@/lib/auth-errors";
 import { errorMessage, toastApiError } from "@/lib/errors";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
-import { AUTH_FIELD_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "../auth-styles";
+import { AUTH_PRIMARY_BUTTON_CLASS } from "../auth-styles";
 import { QrCode } from "./qr-code";
+import { TotpCodeInput } from "./totp-code-input";
 
 const text = twoFactorFr.setup;
 
@@ -26,10 +26,6 @@ export const TotpEnrollment = ({ totpUri, backupCodes, onActivated }: TotpEnroll
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const change = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => setCode(event.target.value),
-    [],
-  );
   const submit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -73,16 +69,12 @@ export const TotpEnrollment = ({ totpUri, backupCodes, onActivated }: TotpEnroll
       </div>
       <div className="flex flex-col gap-4">
         <AuthField id="totp-code" label={text.codeLabel} error={error}>
-          <Input
+          <TotpCodeInput
             id="totp-code"
             value={code}
-            onChange={change}
-            autoComplete="one-time-code"
-            inputMode="numeric"
-            maxLength={7}
-            className={`${AUTH_FIELD_CLASS} tracking-[0.3em] tabular-nums`}
-            aria-invalid={error !== undefined}
-            aria-describedby={error === undefined ? undefined : authFieldErrorId("totp-code")}
+            onChange={setCode}
+            isInvalid={error !== undefined}
+            describedBy={error === undefined ? undefined : authFieldErrorId("totp-code")}
           />
         </AuthField>
         <p className="-mt-2 text-xs text-[#64748B]">{text.codeHint}</p>

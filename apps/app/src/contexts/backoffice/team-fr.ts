@@ -60,9 +60,6 @@ export const teamFr = {
   cancel: "Annuler",
   resent: (email: string) => `Invitation renvoyée à ${email}.`,
   canceled: (email: string) => `Invitation à ${email} annulée.`,
-  rolesTitle: "Ce que permet chaque rôle",
-  rolesNote:
-    "Chaque membre active la double authentification avant d'entrer. Chaque invitation, changement de rôle ou retrait est écrit dans le journal.",
   loadError: "Impossible de charger l'équipe. Vérifiez votre connexion et réessayez.",
   back: "Retour",
   inviteDialog: {

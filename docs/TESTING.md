@@ -67,6 +67,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
+## Lecture de plaque (ADR 0022)
+
+| Famille | Ce qui est vérifié                                                                                      | Test                                                                              |
+| ------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 2       | Nettoyage de la réponse du modèle : liste fermée, bornes, fluide, propriété « jamais hors formulaire »  | `packages/shared/src/plate-reading.test.ts`                                       |
+| 4       | Statut, quota par jour de Paris, photo refusée, échec du modèle, rôles, impersonation, logs sans valeur | `customers/application/read-equipment-plate.test.ts`                              |
+| 4       | Format JSON imposé, consignes, `trace_id`, modèle de secours, réponse hors schéma                       | `customers/infrastructure/ai-plate-reader.test.ts`, `plate-reader-models.test.ts` |
+| 5–8, 10 | `POST /api/plate-readings` : 401, 422, 403, 429, isolation du quota, index, logs sans valeur lue        | `apps/api/test/plate-reading-routes.test.ts`, `test/matrices`                     |
+| Mesure  | Précision par modèle sur le jeu de photos annoté, valeurs inventées, jetons (hors `pnpm check`)         | `apps/api/eval/`, `pnpm --filter @passalio/api plate-reading:eval`                |
+
 ## Parcours de bout en bout
 
 | Espace          | Parcours                                                                                | Test                      |
@@ -110,7 +120,7 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | Admin           | Le rôle Commercial ne voit que Commercial                                               | à écrire                  |
 | Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification         | à écrire                  |
 | Équipe Passalio | Changer un rôle, retirer un membre ; un super admin ne change pas son propre rôle       | à écrire                  |
-| Commercial      | Entreprises : onglets d'étape, filtres, recherche, pagination                           | à écrire                  |
+| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination | à écrire                  |
 | Commercial      | Créer, modifier, supprimer une entreprise prospectée                                    | à écrire                  |
 | Commercial      | Changer l'étape, ajouter une note, historique                                           | à écrire                  |
 | Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                          | à écrire                  |
@@ -118,4 +128,4 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | Site            | Liens de la landing, environnement staging ou production                                | `apps/web` (unitaire)     |
 | Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne           | à écrire                  |
 
-À ajouter avec leurs écrans : lecture de plaque, attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.
+À ajouter avec leurs écrans : lecture de plaque (écran), attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.

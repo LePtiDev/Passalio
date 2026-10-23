@@ -21,3 +21,6 @@ export const activeFiltersOf = (groups: readonly FilterGroup[]) =>
   });
 
 export type ActiveFilter = ReturnType<typeof activeFiltersOf>[number];
+
+export const selectedLabelOf = (group: FilterGroup) =>
+  group.options.find(({ value }) => value === group.value)?.label ?? group.anyLabel;

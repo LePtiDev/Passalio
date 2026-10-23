@@ -10,15 +10,21 @@
     "release": "node scripts/release.ts",
     "platform:role": "node scripts/platform-role.ts",
     "prospects:import": "node scripts/prospects-import.ts",
-    "mcp:revoke": "node scripts/mcp-revoke.ts"
+    "mcp:revoke": "node scripts/mcp-revoke.ts",
+    "plate-reading:eval": "vitest run --config vitest.eval.config.ts"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "4.0.78",
+    "@ai-sdk/google": "4.0.93",
+    "@ai-sdk/mistral": "4.0.62",
+    "@ai-sdk/openai": "4.0.91",
     "@cloudflare/workers-oauth-provider": "1.2.4",
     "@modelcontextprotocol/sdk": "1.32.1",
     "@passalio/db": "workspace:*",
     "@passalio/emails": "workspace:*",
     "@passalio/shared": "workspace:*",
     "@passalio/trades": "workspace:*",
+    "ai": "7.0.137",
     "better-auth": "1.7.12",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.13",

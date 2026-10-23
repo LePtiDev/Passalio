@@ -5,6 +5,7 @@ export const backofficeFr = {
   shell: {
     navigation: "Navigation de l'espace admin",
     space: "Espace admin",
+    badge: "Admin",
     commercial: "Commercial",
     platform: "Plateforme",
     companies: "Entreprises",

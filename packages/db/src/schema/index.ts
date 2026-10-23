@@ -3,6 +3,7 @@ export { customers, sites } from "./customers";
 export { documentNumberBlocks, documents } from "./documents";
 export { equipmentPhotos, equipments } from "./equipments";
 export { interventions } from "./interventions";
+export { plateReadings } from "./plate-readings";
 export { auditLogs } from "./audit-logs";
 export { platformInvitations } from "./platform-invitations";
 export { prospectCompanies, prospectContacts, prospectEvents } from "./prospects";
