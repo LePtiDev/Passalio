@@ -1,5 +1,6 @@
+import { createHash } from "node:crypto";
 import { verifications } from "@passalio/db";
-import { eq, like } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createDatabase } from "../../src/platform/database";
 import { APP_URL, startTestPlatform, TEST_PASSWORD, type TestPlatform } from "../test-platform";
@@ -9,6 +10,9 @@ const ONE_HOUR_IN_MILLISECONDS = 60 * 60 * 1000;
 const TOLERANCE_IN_MILLISECONDS = 5_000;
 
 let platform: TestPlatform;
+
+const storedIdentifierOf = (token: string) =>
+  createHash("sha256").update(`reset-password:${token}`).digest("base64url");
 
 const requestResetToken = async (email: string) => {
   await platform.signIn(email);
@@ -33,7 +37,7 @@ const resetVerificationOf = (token: string) =>
       expiresAt: verifications.expiresAt,
     })
     .from(verifications)
-    .where(like(verifications.identifier, `%${token}%`));
+    .where(eq(verifications.identifier, storedIdentifierOf(token)));
 
 beforeAll(async () => {
   platform = await startTestPlatform();
