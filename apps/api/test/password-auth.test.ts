@@ -16,6 +16,13 @@ const signUp = (email: string, password = PASSWORD, termsVersion: number | null 
 const signInWithPassword = (email: string, password: string, headers: HeadersInit = {}) =>
   post("/api/auth/sign-in/email", { email, password }, headers);
 
+const signUpWithCaptcha = (email: string, captchaToken: string) =>
+  post(
+    "/api/auth/sign-up/email",
+    { name: "Jean Dupont", email, password: PASSWORD },
+    { "x-captcha-response": captchaToken },
+  );
+
 const sessionCookieOf = (response: Response) => platform.sessionCookieOf(response);
 
 const requestReset = (email: string) =>
@@ -141,5 +148,32 @@ describe("magic link", () => {
   it("does not create an account for an unknown email", async () => {
     const cookie = await platform.signInWithMagicLink("sans-compte@example.fr");
     expect(cookie).toBe("");
+  });
+});
+
+describe("anti-robot check", () => {
+  it("refuses a sign-up without a Turnstile token", async () => {
+    const response = await signUpWithCaptcha("sans-jeton@example.fr", "");
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({ code: "MISSING_RESPONSE" });
+  });
+
+  it("refuses a sign-up whose Turnstile token Cloudflare rejects", async () => {
+    const response = await signUpWithCaptcha("robot@example.fr", "jeton-refuse");
+    expect(response.status).toBe(403);
+    expect(await response.json()).toMatchObject({ code: "VERIFICATION_FAILED" });
+  });
+
+  it("refuses a sign-in and a password reset request whose token Cloudflare rejects", async () => {
+    await signUp("protege@example.fr");
+    const headers = { "x-captcha-response": "jeton-refuse" };
+    const signIn = await signInWithPassword("protege@example.fr", PASSWORD, headers);
+    const reset = await post(
+      "/api/auth/request-password-reset",
+      { email: "protege@example.fr", redirectTo: RESET_REDIRECT },
+      headers,
+    );
+    expect(signIn.status).toBe(403);
+    expect(reset.status).toBe(403);
   });
 });

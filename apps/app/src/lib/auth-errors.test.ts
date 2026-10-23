@@ -23,4 +23,14 @@ describe("createTraceRecorder", () => {
       "internal",
     );
   });
+
+  it("reports a failed anti-robot check", () => {
+    const recorder = createTraceRecorder();
+    expect(recorder.toApiError({ status: 403, code: "VERIFICATION_FAILED" }).code).toBe(
+      "captcha_failed",
+    );
+    expect(recorder.toApiError({ status: 400, code: "MISSING_RESPONSE" }).code).toBe(
+      "captcha_failed",
+    );
+  });
 });

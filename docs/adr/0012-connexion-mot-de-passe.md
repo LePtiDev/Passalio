@@ -20,4 +20,4 @@ Quentin préfère une connexion par email et mot de passe, plus familière pour 
 
 - Nouvelles routes Better Auth ouvertes dans `auth-routes.ts` : inscription, connexion par mot de passe, demande et réinitialisation du mot de passe.
 - Le nom de la personne est saisi à l'inscription : la liste de l'équipe affiche des noms et plus seulement des emails.
-- Les mots de passe sont un nouveau risque (réutilisation, fuite). À ajouter plus tard : vérification contre les mots de passe divulgués et Turnstile sur l'inscription.
+- Les mots de passe sont un nouveau risque (réutilisation, fuite). Turnstile protège l'inscription, la connexion et le mot de passe oublié (voir `docs/SECURITY.md`). À ajouter plus tard : vérification contre les mots de passe divulgués.

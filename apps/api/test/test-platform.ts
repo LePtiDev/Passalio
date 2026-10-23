@@ -11,6 +11,28 @@ const STATEMENT_BREAKPOINT = "--> statement-breakpoint";
 
 export const APP_URL = "http://localhost:5173";
 export const TEST_PASSWORD = "mot-de-passe-de-test";
+export const VALID_CAPTCHA_TOKEN = "jeton-turnstile-valide";
+
+const TURNSTILE_SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+const captchaTokenOf = (init: RequestInit | undefined): unknown => {
+  const body: unknown = JSON.parse(typeof init?.body === "string" ? init.body : "{}");
+  return typeof body === "object" && body !== null && "response" in body ? body.response : null;
+};
+
+const stubTurnstileSiteverify = () => {
+  const realFetch = globalThis.fetch;
+  vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+    const url = input instanceof Request ? input.url : String(input);
+    if (!url.startsWith(TURNSTILE_SITEVERIFY_URL)) {
+      return realFetch(input, init);
+    }
+    const isValid = captchaTokenOf(init) === VALID_CAPTCHA_TOKEN;
+    return Response.json(
+      isValid ? { success: true } : { success: false, "error-codes": ["invalid-input-response"] },
+    );
+  });
+};
 
 const applyMigrations = async (database: D1Database) => {
   const files = (await readdir(MIGRATIONS_DIRECTORY))
@@ -60,7 +82,9 @@ export const startTestPlatform = async () => {
     BETTER_AUTH_URL: "http://localhost:8787",
     APP_URL,
     EMAIL_DELIVERY: "log",
+    TURNSTILE_SECRET_KEY: "test-turnstile-secret",
   };
+  stubTurnstileSiteverify();
   const logs = vi.spyOn(console, "info").mockImplementation(() => undefined);
   vi.spyOn(console, "warn").mockImplementation(() => undefined);
 
@@ -69,6 +93,9 @@ export const startTestPlatform = async () => {
     headers.set("origin", APP_URL);
     if (!headers.has("cf-connecting-ip")) {
       headers.set("cf-connecting-ip", randomIpAddress());
+    }
+    if (!headers.has("x-captcha-response")) {
+      headers.set("x-captcha-response", VALID_CAPTCHA_TOKEN);
     }
     if (cookie !== undefined) {
       headers.set("cookie", cookie);

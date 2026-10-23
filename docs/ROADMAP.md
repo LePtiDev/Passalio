@@ -25,6 +25,7 @@ Dernière mise à jour : 2026-10-23.
 | Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation | PR #18                          |
 | Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR #19                          |
 | Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau     | PR #20                          |
+| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié               | PR #17                          |
 
 ## Hors code (Quentin)
 
@@ -64,7 +65,8 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [ ] Abonnement : Stripe Billing, 29,99 €/mois et 299,90 €/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
 - [ ] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
-- [ ] Vérification des mots de passe divulgués et Turnstile sur l'inscription (ADR 0012)
+- [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié
+- [ ] Vérification des mots de passe divulgués (ADR 0012)
 - [ ] Observabilité : Sentry navigateur et API, PostHog UE avec accord préalable de l'utilisateur (bannière), sourcemaps dans `release`
 - [ ] Import CSV et export des données (export CSV et PDF promis par les conditions, article 11), suppression des données 90 jours après la fin de l'abonnement
 - [ ] Backoffice minimal avec impersonation, sauvegardes externes chiffrées (ADR 0008)
