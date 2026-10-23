@@ -122,11 +122,12 @@ Dernière mise à jour : 2026-10-23.
 ## Tests (ADR 0020, inventaire dans `docs/TESTING.md`)
 
 - [x] Règles, garde-fou `test:guard`, lint des tests, agents, skill `fix-bug`
+- [ ] Synchronisation : rejouer une modification ou un retrait après archivage, doublons dans un même lot (comportement à décider)
 - [ ] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
-- [ ] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection
+- [x] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection, clients, identité
 - [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
 - [ ] Sécurité transverse et aucune donnée personnelle dans les logs
-- [ ] Synchronisation : tests de propriétés, conflits, envoi rejoué
+- [x] Synchronisation : tests de propriétés (fast-check), envoi rejoué, curseur, refus, photos
 - [ ] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest en mode navigateur)
 - [ ] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
 - [ ] Parcours Clients et hors ligne réel
