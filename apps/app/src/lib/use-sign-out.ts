@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { authClient } from "./auth-client";
 import { deleteLocalDatabases } from "./db/local-database";
 import { forgetOfflineSession } from "./offline-session";
+import { forgetRememberedChecks } from "./remembered-check";
 import { SIGN_IN_PATH } from "./session";
 
 export const useSignOut = () => {
@@ -13,6 +14,7 @@ export const useSignOut = () => {
     await authClient.signOut();
     queryClient.clear();
     forgetOfflineSession();
+    forgetRememberedChecks();
     await deleteLocalDatabases();
     await navigate({ to: SIGN_IN_PATH, search: {} });
   }, [navigate, queryClient]);
