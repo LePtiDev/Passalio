@@ -43,6 +43,13 @@
       "when": 1792713954170,
       "tag": "0005_equipment_installation_year",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1792749306223,
+      "tag": "0006_two_factor",
+      "breakpoints": true
     }
   ]
 }

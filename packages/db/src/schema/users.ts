@@ -15,6 +15,7 @@ export const users = sqliteTable("users", {
   banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
   termsVersion: integer("terms_version"),
   termsAcceptedAt: integer("terms_accepted_at", { mode: "timestamp_ms" }),
+  twoFactorEnabled: integer("two_factor_enabled", { mode: "boolean" }).default(false),
   ...timestampColumns(),
 });
 
@@ -68,4 +69,23 @@ export const verifications = sqliteTable(
     ...timestampColumns(),
   },
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
+);
+
+export const twoFactors = sqliteTable(
+  "two_factors",
+  {
+    id: idColumn(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    secret: text("secret").notNull(),
+    backupCodes: text("backup_codes").notNull(),
+    verified: integer("verified", { mode: "boolean" }).default(true),
+    failedVerificationCount: integer("failed_verification_count").default(0),
+    lockedUntil: integer("locked_until", { mode: "timestamp_ms" }),
+  },
+  (table) => [
+    index("two_factors_user_id_idx").on(table.userId),
+    index("two_factors_secret_idx").on(table.secret),
+  ],
 );

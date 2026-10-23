@@ -3,7 +3,7 @@ import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, newId, TERMS_VERSION } from "
 import { betterAuth } from "better-auth";
 import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, captcha, magicLink, organization } from "better-auth/plugins";
+import { admin, captcha, magicLink, organization, twoFactor } from "better-auth/plugins";
 import type { AuditTrail } from "./audit-trail";
 import type { Database } from "./database";
 import type { EmailSender } from "./email";
@@ -17,6 +17,7 @@ const DAY_IN_SECONDS = 24 * 60 * MINUTE_IN_SECONDS;
 export const MAGIC_LINK_LIFETIME_SECONDS = 15 * MINUTE_IN_SECONDS;
 export const IMPERSONATION_LIFETIME_SECONDS = 30 * MINUTE_IN_SECONDS;
 export const PASSWORD_RESET_LIFETIME_SECONDS = 60 * MINUTE_IN_SECONDS;
+export const TWO_FACTOR_BACKUP_CODE_COUNT = 10;
 
 const RATE_LIMIT_RULES = {
   "/get-session": false,
@@ -25,6 +26,8 @@ const RATE_LIMIT_RULES = {
   "/sign-in/magic-link": { window: MINUTE_IN_SECONDS, max: 5 },
   "/request-password-reset": { window: MINUTE_IN_SECONDS, max: 3 },
   "/reset-password": { window: MINUTE_IN_SECONDS, max: 5 },
+  "/two-factor/verify-totp": { window: MINUTE_IN_SECONDS, max: 5 },
+  "/two-factor/verify-backup-code": { window: MINUTE_IN_SECONDS, max: 5 },
 } as const;
 
 export const CAPTCHA_PROTECTED_PATHS = [
@@ -130,6 +133,10 @@ export const createAuth = ({
         sendMagicLink: ({ email, url }) => emailSender.sendMagicLink({ email, url }),
       }),
       organization({ creatorRole: "owner" }),
+      twoFactor({
+        issuer: "Passalio",
+        backupCodeOptions: { amount: TWO_FACTOR_BACKUP_CODE_COUNT },
+      }),
       admin({
         roles: PLATFORM_ROLES,
         defaultRole: "user",
