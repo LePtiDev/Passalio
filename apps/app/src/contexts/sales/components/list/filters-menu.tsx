@@ -46,7 +46,7 @@ const GroupSubMenu = ({
         {selectedLabelOf(group)}
       </span>
     </DropdownMenuSubTrigger>
-    <DropdownMenuSubContent dir="ltr" sideOffset={6} className="w-72 p-0">
+    <DropdownMenuSubContent sideOffset={6} className="w-72 p-0 [direction:ltr]">
       <FilterOptionList group={group} onPicked={onPicked} />
     </DropdownMenuSubContent>
   </DropdownMenuSub>
@@ -66,7 +66,7 @@ const DesktopFiltersMenu = ({
       <DropdownMenuTrigger asChild>
         <FilterTrigger activeCount={activeCount} desktopActiveCount={desktopActiveCount} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent dir="ltr" align="end" className="w-80">
+      <DropdownMenuContent align="start" className="w-80 [direction:ltr]">
         <DropdownMenuLabel className="text-xs font-semibold tracking-[0.04em] text-[#64748B] uppercase">
           {text.filters}
         </DropdownMenuLabel>
