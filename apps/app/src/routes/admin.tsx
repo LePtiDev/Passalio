@@ -16,7 +16,9 @@ import {
 import { ErrorState } from "@/components/error-state";
 import { FormSkeleton } from "@/components/page-skeleton";
 import { ApiRequestError } from "@/lib/api-client";
+import { createRememberedCheck } from "@/lib/remembered-check";
 import { ADMIN_CODE_PATH, ADMIN_SECURITY_PATH, requireSession } from "@/lib/session";
+import { useRevalidateOnNavigation } from "@/lib/use-revalidate-on-navigation";
 import { rootRoute } from "./root";
 
 export const adminRootRoute = createRoute({
@@ -25,26 +27,28 @@ export const adminRootRoute = createRoute({
   component: Outlet,
 });
 
+const adminAccess = createRememberedCheck(async (returnTo: string) => {
+  await requireSession(returnTo);
+  const access = await loadAdminAccess();
+  if (access.status === "granted") {
+    return { admin: access.admin };
+  }
+  if (access.status === "hidden") {
+    throw redirect({ to: "/" });
+  }
+  if (access.status === "setup") {
+    throw redirect({ to: ADMIN_SECURITY_PATH });
+  }
+  if (access.status === "code") {
+    throw redirect({ to: ADMIN_CODE_PATH, search: { retour: returnTo } });
+  }
+  throw new ApiRequestError({ code: "network", traceId: null });
+});
+
 export const adminShellRoute = createRoute({
   getParentRoute: () => adminRootRoute,
   id: "shell",
-  beforeLoad: async ({ location }) => {
-    await requireSession(location.href);
-    const access = await loadAdminAccess();
-    if (access.status === "granted") {
-      return { admin: access.admin };
-    }
-    if (access.status === "hidden") {
-      throw redirect({ to: "/" });
-    }
-    if (access.status === "setup") {
-      throw redirect({ to: ADMIN_SECURITY_PATH });
-    }
-    if (access.status === "code") {
-      throw redirect({ to: ADMIN_CODE_PATH, search: { retour: location.href } });
-    }
-    throw new ApiRequestError({ code: "network", traceId: null });
-  },
+  beforeLoad: ({ location }) => adminAccess.read(location.href),
   errorComponent: function AdminUnavailable({ error, reset }) {
     return (
       <main className="mx-auto max-w-screen-sm p-4">
@@ -58,6 +62,7 @@ export const adminShellRoute = createRoute({
     </main>
   ),
   component: function AdminShell() {
+    useRevalidateOnNavigation(adminAccess);
     const admin = adminShellRoute.useRouteContext({ select: (context) => context.admin });
     return <AdminLayout admin={admin} />;
   },
