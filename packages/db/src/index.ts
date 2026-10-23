@@ -20,6 +20,7 @@ export {
   invitations,
   members,
   organizations,
+  plateReadings,
   platformInvitations,
   prospectCompanies,
   prospectContacts,

@@ -25,7 +25,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 - Email administrateur dédié, différent de l'email personnel.
 - Jetons API Cloudflare à droits minimaux, un par usage, avec expiration. Jamais la clé API globale.
 - Le jeton de déploiement local ne donne pas le droit de supprimer les bases D1 ni les buckets R2. Les opérations destructives se font à la main dans le tableau de bord.
-- Secrets en production via `wrangler secret`, en local dans `.dev.vars` (ignoré par git).
+- Secrets en production via `wrangler secret`, en local dans `.dev.vars` (ignoré par git). Les clés des fournisseurs de modèles (`OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `ANTHROPIC_API_KEY`, `MISTRAL_API_KEY`) suivent la même règle.
 
 ## 4. Isolation entre entreprises
 
@@ -39,7 +39,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 - Invitations en attente : la liste demande `members:read` (lisible pendant une impersonation), le renvoi et l'annulation demandent `members:manage`. Une invitation acceptée, annulée ou d'une autre entreprise répond « introuvable ». Chaque renvoi et chaque annulation est écrit dans `audit_logs`.
 - Logo d'entreprise : PNG, JPEG, WebP ou SVG, 2 Mo au plus, stocké dans R2 sous `organizations/{id}/logo`. Servi uniquement aux membres connectés, avec `Content-Security-Policy: default-src 'none'` et `X-Content-Type-Options: nosniff`, pour qu'un SVG piégé ne puisse pas exécuter de script.
 - Recherche d'entreprise : l'API proxifie l'API publique « Recherche d'entreprises » (données Sirene) pour les seuls utilisateurs connectés. Seul le texte recherché est transmis.
-- Rate limiting sur la connexion, l'inscription, les liens publics et l'IA. Pour l'authentification, Better Auth compte les tentatives par adresse IP (`cf-connecting-ip`) dans la table D1 `rate_limits` : connexion 10 par minute, inscription 5, lien magique 5, mot de passe oublié 3. Le compteur en mémoire ne convient pas, car un Worker ne garde pas d'état entre deux requêtes.
+- Rate limiting sur la connexion, l'inscription, les liens publics et l'IA (lecture de plaque : 200 par entreprise et par jour, ADR 0022). Pour l'authentification, Better Auth compte les tentatives par adresse IP (`cf-connecting-ip`) dans la table D1 `rate_limits` : connexion 10 par minute, inscription 5, lien magique 5, mot de passe oublié 3. Le compteur en mémoire ne convient pas, car un Worker ne garde pas d'état entre deux requêtes.
 - Cloudflare Turnstile sur l'inscription, la connexion par mot de passe et le mot de passe oublié : le plugin `captcha` de Better Auth exige l'en-tête `x-captcha-response` et le vérifie auprès de Cloudflare (400 s'il manque, 403 s'il est refusé, 500 si Cloudflare ne répond pas). Le widget s'affiche seulement si Cloudflare a un doute. Un seul widget pour app.passalio.com et app.staging.passalio.com ; la clé du site est publique (`apps/app/src/lib/turnstile.ts`), la clé secrète est un secret Worker `TURNSTILE_SECRET_KEY`. En local et dans les tests, clés de test de Cloudflare. Le lien magique n'est pas couvert : il ne crée pas de compte et reste limité à 5 par minute.
 - En-têtes de sécurité : CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`.
 - Liens publics (PDF, suivi) : jetons longs aléatoires, expiration, accès en lecture seule.
@@ -57,7 +57,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 
 ## 7. Données personnelles (RGPD)
 
-- L'artisan est responsable du traitement pour ses clients, l'éditeur est sous-traitant : accord de sous-traitance en annexe des conditions générales (`/conditions`). Politique de confidentialité sur `/confidentialite`, liste des sous-traitants ultérieurs à tenir à jour à chaque nouveau prestataire.
+- L'artisan est responsable du traitement pour ses clients, l'éditeur est sous-traitant : accord de sous-traitance en annexe des conditions générales (`/conditions`). Politique de confidentialité sur `/confidentialite`, liste des sous-traitants ultérieurs à tenir à jour à chaque nouveau prestataire. Le fournisseur du modèle de lecture de plaque (ADR 0022) y entre avant l'activation en production.
 - Preuve d'acceptation des conditions : version et date enregistrées sur `users` à l'inscription, refus côté serveur si la version manque ou n'est pas la courante.
 - Données minimales : ce que demande l'attestation et la relance, rien de plus.
 - Prospection (ADR 0017) : données publiques d'entreprises et de leurs dirigeants, sur intérêt légitime. Opposition traitée en supprimant la fiche, contacts et historique compris. Le fichier d'import reste hors du dépôt.

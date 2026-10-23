@@ -33,6 +33,7 @@
     "EMAIL_DELIVERY": "log",
     "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
     "TURNSTILE_SECRET_KEY": "1x0000000000000000000000000000000AA",
+    "PLATE_READER_MODEL": "fake",
     "MCP_ENABLED": "true"
   },
   "env": {

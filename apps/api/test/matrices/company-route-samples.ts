@@ -90,6 +90,7 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
   "POST /api/equipments/:equipmentId/photos": (ids) =>
     withBytes("POST", `/api/equipments/${ids.equipmentId}/photos?kind=plate`, "image/jpeg"),
   "GET /api/photos/:photoId": (ids) => read(`/api/photos/${ids.photoId}`),
+  "POST /api/plate-readings": () => withBytes("POST", "/api/plate-readings", "image/jpeg"),
   "POST /api/sync/push": (ids) =>
     withJson("POST", "/api/sync/push", syncPushBody, {
       mutations: [
