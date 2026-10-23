@@ -282,3 +282,32 @@ describe("applyCustomerMutation, replays and concurrent changes", () => {
     expect(state.customers.find(({ id }) => id === "customer-b")?.phone).toBeNull();
   });
 });
+
+describe("applyCustomerMutation, replays after an archive", () => {
+  const addSite = {
+    type: "add_site",
+    customerId: "customer-a",
+    siteId: "site-new",
+    site,
+  } as const;
+  const addInsert = {
+    type: "add_equipment",
+    siteId: "site-a",
+    equipmentId: "equipment-new",
+    equipment: { kind: "insert" },
+  } as const;
+  const archiveCustomerA = { type: "archive_customer", customerId: "customer-a" } as const;
+  const secretary = organizationActorWith("secretary");
+
+  it("accepts a replayed site creation even after its customer was archived", async () => {
+    await run()(technician, addSite);
+    await run()(secretary, archiveCustomerA);
+    expect(await run()(technician, addSite)).toEqual({ isOk: true, value: undefined });
+  });
+
+  it("accepts a replayed equipment creation even after its customer was archived", async () => {
+    await run()(technician, addInsert);
+    await run()(secretary, archiveCustomerA);
+    expect(await run()(technician, addInsert)).toEqual({ isOk: true, value: undefined });
+  });
+});
