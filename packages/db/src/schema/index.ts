@@ -1,3 +1,4 @@
+export { activityDays } from "./activity-days";
 export { customers, sites } from "./customers";
 export { equipmentPhotos, equipments } from "./equipments";
 export { auditLogs } from "./audit-logs";

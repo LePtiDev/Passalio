@@ -52,6 +52,12 @@ export const PRIVACY_FR: LegalDocument = {
               "12 mois",
             ],
             [
+              "Jours où vous utilisez l'application, sans le détail de ce que vous faites",
+              "Repérer les entreprises qui utilisent moins Passalio pour les accompagner",
+              "Intérêt légitime",
+              "12 mois",
+            ],
+            [
               "Journal des actions sensibles (rôles, exports, suppressions)",
               "Tracer et pouvoir enquêter en cas d'incident",
               "Intérêt légitime",

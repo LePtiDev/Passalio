@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import * as z from "zod";
 import { startTestPlatform, TEST_PASSWORD, type TestPlatform } from "./test-platform";
-import { secretOfTotpUri, totpCode } from "./totp";
+import { enableTwoFactor as enableTwoFactorOf, grantPlatformRole } from "./admin-session";
+import { totpCode } from "./totp";
 
 const errorResponse = z.object({ error: z.string(), traceId: z.string() });
-const enableResponse = z.object({ totpURI: z.string(), backupCodes: z.array(z.string()) });
 const adminResponse = z.object({
   admin: z.object({ userId: z.string(), email: z.string(), role: z.string() }),
 });
@@ -14,31 +14,12 @@ let platform: TestPlatform;
 
 const json = (body: unknown): RequestInit => ({ method: "POST", body: JSON.stringify(body) });
 
-const grantRole = async (email: string, role: "superadmin" | "support") => {
-  await platform.env.DB.prepare("UPDATE users SET role = ? WHERE email = ?")
-    .bind(role, email)
-    .run();
-};
+const grantRole = (email: string, role: "superadmin" | "support") =>
+  grantPlatformRole(platform, email, role);
 
 const errorOf = async (response: Response) => errorResponse.parse(await response.json()).error;
 
-const enableTwoFactor = async (cookie: string) => {
-  const enabled = await platform.request(
-    "/api/auth/two-factor/enable",
-    json({ password: TEST_PASSWORD }),
-    cookie,
-  );
-  expect(enabled.status).toBe(200);
-  const { totpURI, backupCodes } = enableResponse.parse(await enabled.json());
-  const secret = secretOfTotpUri(totpURI);
-  const verified = await platform.request(
-    "/api/auth/two-factor/verify-totp",
-    json({ code: await totpCode(secret) }),
-    cookie,
-  );
-  expect(verified.status).toBe(200);
-  return { secret, backupCodes, cookie: platform.sessionCookieOf(verified) || cookie };
-};
+const enableTwoFactor = (cookie: string) => enableTwoFactorOf(platform, cookie);
 
 beforeAll(async () => {
   platform = await startTestPlatform();

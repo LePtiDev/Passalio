@@ -1,5 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import type { AppEnv } from "../env";
+import { createActivityLog } from "./activity-log";
 import { createAuditTrail } from "./audit-trail";
 import { createAuth } from "./auth";
 import { createDatabase } from "./database";
@@ -13,6 +14,7 @@ export const requestServicesMiddleware = createMiddleware<AppEnv>(async (context
     database,
     emailSender,
     auditTrail,
+    activityLog: createActivityLog(database),
     secret: context.env.BETTER_AUTH_SECRET,
     baseUrl: context.env.BETTER_AUTH_URL,
     appUrl: context.env.APP_URL,

@@ -4,6 +4,7 @@ import { betterAuth } from "better-auth";
 import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, captcha, magicLink, organization, twoFactor } from "better-auth/plugins";
+import type { ActivityLog } from "./activity-log";
 import type { AuditTrail } from "./audit-trail";
 import type { Database } from "./database";
 import type { EmailSender } from "./email";
@@ -47,16 +48,32 @@ export type AuthDependencies = {
   readonly database: Database;
   readonly emailSender: EmailSender;
   readonly auditTrail: AuditTrail;
+  readonly activityLog: ActivityLog;
   readonly secret: string;
   readonly baseUrl: string;
   readonly appUrl: string;
   readonly turnstileSecretKey: string;
 };
 
+type ActivitySession = {
+  readonly userId: string;
+  readonly impersonatedBy?: unknown;
+};
+
+const activityRecorder =
+  (activityLog: ActivityLog) =>
+  async ({ userId, impersonatedBy }: ActivitySession): Promise<void> => {
+    if (typeof impersonatedBy === "string" && impersonatedBy !== "") {
+      return;
+    }
+    await activityLog.recordDay(userId, new Date());
+  };
+
 export const createAuth = ({
   database,
   emailSender,
   auditTrail,
+  activityLog,
   secret,
   baseUrl,
   appUrl,
@@ -116,7 +133,11 @@ export const createAuth = ({
               targetType: "session",
               targetId: session.id,
             });
+            await activityRecorder(activityLog)(session);
           },
+        },
+        update: {
+          after: activityRecorder(activityLog),
         },
       },
     },

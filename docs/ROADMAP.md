@@ -31,6 +31,7 @@ Dernière mise à jour : 2026-10-23.
 | Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                      | ADR 0014, `docs/company.md`     |
 | Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                 | PR #24                          |
 | Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin` | ADR 0015                        |
+| Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux       | ADR 0015                        |
 
 ## Hors code (Quentin)
 
@@ -86,6 +87,7 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)
+- [ ] Purge automatique après 12 mois : `activity_days`, journaux de connexion et d'actions (politique de confidentialité)
 
 ## Site passalio.com
 

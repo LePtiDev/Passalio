@@ -8,6 +8,7 @@ export {
 export * as schema from "./schema";
 export {
   accounts,
+  activityDays,
   auditLogs,
   customers,
   equipmentPhotos,
