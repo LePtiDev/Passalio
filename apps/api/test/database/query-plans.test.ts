@@ -10,6 +10,7 @@ import {
   isReadOrWrite,
   organizationFilteredTables,
   stepsNotUsingOrganizationIndex,
+  wholeIndexReadsOfGrowingTables,
   type ExplainedStatement,
 } from "./query-plan";
 import { RecordingD1 } from "./recording-d1";
@@ -141,6 +142,16 @@ describe("query plans of the D1 repositories", () => {
         );
 
         expect(checked.filter(({ violations }) => violations.length > 0)).toEqual([]);
+      });
+
+      it("reads a whole index of a table that grows only to walk one page in index order", () => {
+        const reads = explained.map((statement) => ({
+          sql: statement.sql,
+          plan: statement.plan,
+          wholeIndexReads: wholeIndexReadsOfGrowingTables(statement),
+        }));
+
+        expect(reads.filter(({ wholeIndexReads }) => wholeIndexReads.length > 0)).toEqual([]);
       });
     },
   );
