@@ -5,6 +5,7 @@ import {
   dueStatusOf,
   equipmentNameOf,
   nextDueOf,
+  singleActivityOf,
   routeUrlOf,
   tradeTagsOf,
 } from "./customer-view";
@@ -89,6 +90,14 @@ describe("customer view", () => {
   });
 });
 
+describe("single activity", () => {
+  it("names the only activity due on an equipment", () => {
+    expect(singleActivityOf({ kind: "open_fireplace" })).toBe("chimney_sweeping");
+    expect(singleActivityOf({ kind: "air_to_water_heat_pump" })).toBe("maintenance");
+    expect(singleActivityOf({ kind: "insert" })).toBeNull();
+  });
+});
+
 describe("equipment detail line", () => {
   it("lists the room, the flue and the serial number", () => {
     expect(
@@ -111,15 +120,31 @@ describe("equipment detail line", () => {
         }),
         null,
       ),
-    ).toBe("Installé par nous le 22 oct. 2026 · R32, 1,40 kg");
+    ).toBe("Installée par nous le 22 oct. 2026 · R32, 1,40 kg");
   });
 
   it("explains a replacement", () => {
     expect(
       equipmentDetailLine(
-        equipment({ kind: "boiler", energy: "gas", status: "removed", removedOn: "2026-10-22" }),
-        "PAC air/eau",
+        equipment({
+          kind: "boiler",
+          energy: "gas",
+          room: "Cuisine",
+          status: "removed",
+          removedOn: "2026-10-22",
+          details: { flueType: "sealed_concentric" },
+        }),
+        "air_to_water_heat_pump",
       ),
-    ).toBe("retiré le 22 oct. 2026, remplacé par PAC air/eau");
+    ).toBe("Cuisine · retirée le 22 oct. 2026, remplacée par la pompe à chaleur");
+  });
+
+  it("agrees with a masculine equipment", () => {
+    expect(
+      equipmentDetailLine(
+        equipment({ kind: "insert", status: "removed", removedOn: "2026-10-22" }),
+        "pellet_stove",
+      ),
+    ).toBe("retiré le 22 oct. 2026, remplacé par le poêle à granulés");
   });
 });

@@ -9,12 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLocalSession } from "@/lib/db/local-database-context";
+import type { EquipmentKind } from "@passalio/shared";
 import type { EquipmentRecord, PhotoRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import {
   dueStatusOf,
   equipmentNameOf,
   formatCalendarDate,
+  singleActivityOf,
   tradeTagsOf,
   type TradeTag,
 } from "../../customer-view";
@@ -46,10 +48,14 @@ const EquipmentDue = ({
   }
   const status = dueStatusOf(equipment.nextDueDate, today);
   const date = formatCalendarDate(equipment.nextDueDate);
+  const activity = singleActivityOf(equipment);
+  const overdueLabel =
+    activity === null ? text.overdueSince(date) : text.activityOverdue[activity](date);
+  const nextLabel = activity === null ? text.nextDue(date) : text.nextActivity[activity](date);
   return (
     <DueDate
       status={status === "later" ? null : status}
-      label={status === "overdue" ? text.overdueSince(date) : text.nextDue(date)}
+      label={status === "overdue" ? overdueLabel : nextLabel}
     />
   );
 };
@@ -120,7 +126,7 @@ type EquipmentRowProps = {
   readonly equipment: EquipmentRecord;
   readonly customerId: string;
   readonly photo: PhotoRecord | undefined;
-  readonly replacementName: string | null;
+  readonly replacementKind: EquipmentKind | null;
   readonly today: Date;
 };
 
@@ -128,7 +134,7 @@ export const EquipmentRow = ({
   equipment,
   customerId,
   photo,
-  replacementName,
+  replacementKind,
   today,
 }: EquipmentRowProps) => {
   const isRemoved = equipment.status === "removed";
@@ -162,7 +168,7 @@ export const EquipmentRow = ({
                 ))}
           </span>
           <span className="text-[13px] text-[#64748B]">
-            {equipmentDetailLine(equipment, replacementName)}
+            {equipmentDetailLine(equipment, replacementKind)}
           </span>
         </div>
         {isRemoved ? null : (

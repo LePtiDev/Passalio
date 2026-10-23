@@ -29,6 +29,15 @@ const TRAIL = [{ label: text.title }];
 
 type ListState = NonNullable<ReturnType<typeof useCustomerList>>;
 
+const subtitleOf = (list: ListState | undefined, hasFailed: boolean) => {
+  if (hasFailed) {
+    return text.errorSubtitle;
+  }
+  return list === undefined || list.customerCount === 0
+    ? text.emptySubtitle
+    : text.subtitle(list.customerCount, list.equipmentCount);
+};
+
 const ListBody = ({
   list,
   query,
@@ -88,10 +97,8 @@ export const CustomerListScreen = () => {
     list !== undefined && list.customerCount === 0 && sync.lastSyncedAt === null && sync.isLoaded;
   const hasFailed = isWaitingForFirstSync && (sync.phase === "error" || sync.isOffline);
   const isLoading = list === undefined || !sync.isLoaded || (isWaitingForFirstSync && !hasFailed);
-  const subtitle =
-    list === undefined || list.customerCount === 0
-      ? text.emptySubtitle
-      : text.subtitle(list.customerCount, list.equipmentCount);
+  const subtitle = subtitleOf(list, hasFailed);
+  const isEmpty = !isLoading && !hasFailed && list?.customerCount === 0;
 
   return (
     <>
@@ -102,7 +109,10 @@ export const CustomerListScreen = () => {
         <span className="flex min-w-0 flex-1 flex-col">
           <h1 className="text-[17px] font-bold">{text.title}</h1>
           {isLoading ? (
-            <span className="text-[13px] text-[#64748B]">{text.loading}</span>
+            <span className="flex items-center gap-1.5 text-[13px] text-[#64748B]">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-[#0E7C5A]" />
+              {text.loading}
+            </span>
           ) : (
             <MobileSyncLine
               prefix={hasFailed ? undefined : text.customerCount(list?.customerCount ?? 0)}
@@ -140,13 +150,15 @@ export const CustomerListScreen = () => {
             text={customersFr.sync.offlineText(sync.pendingCount)}
           />
         ) : null}
-        <CustomerListToolbar
-          query={query}
-          filter={filter}
-          counts={isLoading || hasFailed || list === undefined ? null : list.counts}
-          onQueryChange={setQuery}
-          onFilterChange={setFilter}
-        />
+        {isEmpty ? null : (
+          <CustomerListToolbar
+            query={query}
+            filter={filter}
+            counts={isLoading || hasFailed || list === undefined ? null : list.counts}
+            onQueryChange={setQuery}
+            onFilterChange={setFilter}
+          />
+        )}
         {hasFailed ? <CustomerListError error={sync.error} onRetry={retry} /> : null}
         {isLoading ? <CustomerListSkeleton /> : null}
         {!isLoading && !hasFailed && list !== undefined ? (

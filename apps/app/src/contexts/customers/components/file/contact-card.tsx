@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { BellRing, Mail, MapPin, Phone, type LucideIcon } from "lucide-react";
 import type { CustomerRecord, SiteRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
-import { BUILDING_TYPE_LABELS, customersFr } from "../../fr";
+import { customersFr } from "../../fr";
 import { useCustomerParams } from "../../hooks/use-route-params";
 import { CARD_CLASS } from "../customer-styles";
 
@@ -24,7 +24,9 @@ const billingOf = (customer: CustomerRecord, firstSite: SiteRecord | undefined) 
   if (firstSite === undefined) {
     return null;
   }
-  return text.billingSameAs(firstSite.label ?? BUILDING_TYPE_LABELS[firstSite.buildingType]);
+  return firstSite.label === null
+    ? text.billingSameAsBuilding(firstSite.buildingType)
+    : text.billingSameAsSite(firstSite.label);
 };
 
 const remindersOf = (customer: CustomerRecord) => {
@@ -65,12 +67,12 @@ export const ContactCard = ({ customer, firstSite }: ContactCardProps) => {
   const params = useCustomerParams(customer.id);
   return (
     <section className={cn(CARD_CLASS, "flex flex-col")}>
-      <div className="flex items-center justify-between gap-3 px-3.5 pt-2 pb-1 lg:pt-3">
+      <div className="flex items-center justify-between gap-3 px-3.5 pt-3.5 pb-1">
         <h2 className="text-[15px] font-bold lg:text-sm">{text.contact}</h2>
         <Link
           to="/clients/$customerId/modifier"
           params={params}
-          className="flex h-12 items-center text-[13px] font-semibold text-[#0E7C5A] lg:h-auto"
+          className="-my-3.5 flex h-12 items-center text-[13px] font-semibold text-[#0E7C5A] lg:my-0 lg:h-auto"
         >
           {text.edit}
         </Link>

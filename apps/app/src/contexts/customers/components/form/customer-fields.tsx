@@ -119,6 +119,7 @@ export const CustomerFields = () => {
             <Input
               id="first-name"
               autoComplete="given-name"
+              placeholder={text.firstNamePlaceholder}
               className={FIELD_CLASS}
               {...form.register("customer.firstName")}
             />

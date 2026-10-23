@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { EquipmentPhotoKind } from "@passalio/shared";
+import type { EquipmentKind, EquipmentPhotoKind } from "@passalio/shared";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { FormSkeleton } from "@/components/page-skeleton";
 import { useLocalSession } from "@/lib/db/local-database-context";
 import type { EquipmentRecord, SiteRecord } from "@/lib/db/local-records";
-import { customerNameOf, fullAddressOf } from "../../customer-view";
+import { customerNameOf } from "../../customer-view";
 import { addEquipment, addEquipmentPhoto } from "../../equipment-store";
 import { BUILDING_TYPE_LABELS, customersFr } from "../../fr";
 import { useCustomerFile, type CustomerFile } from "../../hooks/use-customer-file";
@@ -40,7 +40,20 @@ type NewEquipmentFormProps = {
 };
 
 const siteLineOf = (name: string, site: SiteRecord) =>
-  `${name} · ${site.label ?? BUILDING_TYPE_LABELS[site.buildingType]}, ${fullAddressOf(site)}`;
+  `${name} · ${site.label ?? BUILDING_TYPE_LABELS[site.buildingType]}, ${site.address}`;
+
+const noteOf = (
+  kind: EquipmentKind | null,
+  replaced: EquipmentRecord | undefined,
+  isReplacing: boolean,
+) => {
+  if (!isReplacing) {
+    return text.note;
+  }
+  return kind === null || replaced === undefined
+    ? text.replaceNote
+    : text.replaceNoteOf(kind, replaced.kind);
+};
 
 const NewEquipmentForm = ({ file, site, replacesEquipmentId }: NewEquipmentFormProps) => {
   const { database, actor } = useLocalSession();
@@ -111,7 +124,11 @@ const NewEquipmentForm = ({ file, site, replacesEquipmentId }: NewEquipmentFormP
     <FormProvider {...form}>
       <FormShell
         title={text.title}
-        note={isReplacing ? text.replaceNote : text.note}
+        note={noteOf(
+          kind,
+          candidates.find(({ id }) => id === replacesEquipmentChoice),
+          isReplacing,
+        )}
         trail={trail}
         primaryLabel={text.save}
         isSubmitting={form.formState.isSubmitting}

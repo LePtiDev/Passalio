@@ -1,4 +1,5 @@
 import { EQUIPMENT_CATALOG, flueApplianceDetails, heatPumpDetails } from "@passalio/trades";
+import type { EquipmentKind } from "@passalio/shared";
 import type { EquipmentRecord } from "@/lib/db/local-records";
 import { formatCalendarDate } from "./customer-view";
 import { customersFr, FLUE_TYPE_LABELS } from "./fr";
@@ -37,31 +38,36 @@ const heatPumpParts = (details: EquipmentRecord["details"]) => {
 
 const installationPart = (equipment: EquipmentRecord) =>
   equipment.isInstalledByUs && equipment.commissionedOn !== null
-    ? text.installedByUsOn(formatCalendarDate(equipment.commissionedOn))
+    ? text.installedByUsOn(equipment.kind, formatCalendarDate(equipment.commissionedOn))
     : null;
 
-export const equipmentDetailLine = (equipment: EquipmentRecord, replacementName: string | null) => {
+const removalPart = (equipment: EquipmentRecord, replacementKind: EquipmentKind | null) =>
+  [
+    equipment.removedOn === null
+      ? null
+      : text.removedOn(equipment.kind, formatCalendarDate(equipment.removedOn)),
+    replacementKind === null ? null : text.replacedBy(equipment.kind, replacementKind),
+  ]
+    .filter((part) => part !== null)
+    .join(", ");
+
+const joinParts = (parts: readonly (string | null)[]) =>
+  parts.filter((part) => part !== null && part !== "").join(" · ");
+
+export const equipmentDetailLine = (
+  equipment: EquipmentRecord,
+  replacementKind: EquipmentKind | null,
+) => {
+  if (equipment.status === "removed") {
+    return joinParts([equipment.room, removalPart(equipment, replacementKind)]);
+  }
   const family = EQUIPMENT_CATALOG[equipment.kind].family;
   const technical =
     family === "heat_pump" ? heatPumpParts(equipment.details) : flueParts(equipment.details);
-  const removal =
-    equipment.status === "removed" && equipment.removedOn !== null
-      ? [
-          [
-            text.removedOn(formatCalendarDate(equipment.removedOn)),
-            replacementName === null ? null : text.replacedBy(replacementName),
-          ]
-            .filter((part) => part !== null)
-            .join(", "),
-        ]
-      : [];
-  return [
+  return joinParts([
     equipment.room,
     installationPart(equipment),
     ...technical,
     equipment.serialNumber === null ? null : text.serial(equipment.serialNumber),
-    ...removal,
-  ]
-    .filter((part) => part !== null && part !== "")
-    .join(" · ");
+  ]);
 };

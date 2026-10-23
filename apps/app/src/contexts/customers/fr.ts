@@ -23,6 +23,32 @@ export const EQUIPMENT_KIND_LABELS: Readonly<Record<EquipmentKind, string>> = {
   air_conditioner: "Climatisation",
 };
 
+const FEMININE_KINDS: ReadonlySet<EquipmentKind> = new Set([
+  "open_fireplace",
+  "boiler",
+  "solid_fuel_cooker",
+  "air_to_water_heat_pump",
+  "air_to_air_heat_pump",
+  "air_conditioner",
+]);
+
+const agreed = (kind: EquipmentKind, word: string) =>
+  FEMININE_KINDS.has(kind) ? `${word}e` : word;
+
+const capitalized = (value: string) => `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+
+const KINDS_WITH_ARTICLE: Readonly<Record<EquipmentKind, string>> = {
+  open_fireplace: "la cheminée",
+  insert: "l'insert",
+  log_stove: "le poêle à bûches",
+  pellet_stove: "le poêle à granulés",
+  boiler: "la chaudière",
+  solid_fuel_cooker: "la cuisinière",
+  air_to_water_heat_pump: "la pompe à chaleur",
+  air_to_air_heat_pump: "la pompe à chaleur",
+  air_conditioner: "la climatisation",
+};
+
 export const ENERGY_LABELS: Readonly<Record<Energy, string>> = {
   wood_logs: "Bûches",
   pellets: "Granulés",
@@ -52,6 +78,12 @@ export const BUILDING_TYPE_LABELS: Readonly<Record<BuildingType, string>> = {
   house: "Maison",
   apartment: "Appartement",
   business: "Local pro",
+};
+
+const BUILDING_TYPES_WITH_ARTICLE: Readonly<Record<BuildingType, string>> = {
+  house: "la maison",
+  apartment: "l'appartement",
+  business: "le local pro",
 };
 
 export const CIVILITY_LABELS: Readonly<Record<Civility, string>> = {
@@ -89,6 +121,7 @@ export const customersFr = {
     subtitle: (customers: number, equipments: number) =>
       `${plural(customers, "client", "clients")}, ${plural(equipments, "appareil suivi", "appareils suivis")}. Disponibles même sans réseau.`,
     emptySubtitle: "Vos clients, leurs lieux et leurs appareils. Disponibles même sans réseau.",
+    errorSubtitle: "Vos clients, leurs lieux et leurs appareils.",
     customerCount: (customers: number) =>
       customers === 0 ? "Aucun client" : plural(customers, "client", "clients"),
     loading: "Chargement…",
@@ -133,6 +166,7 @@ export const customersFr = {
     civility: "Civilité",
     civilityUnknown: "Non précisé",
     firstName: "Prénom",
+    firstNamePlaceholder: "Martine",
     lastName: "Nom",
     companyName: "Raison sociale",
     contactName: "Contact sur place",
@@ -203,14 +237,16 @@ export const customersFr = {
     serialNumber: "Numéro de série",
     serialNumberPlaceholder: "Sur la plaque signalétique",
     room: "Pièce",
-    power: "Puissance (kW)",
+    power: "Puissance",
+    powerUnit: "kW",
     flueSection: "Le conduit",
     flueType: "Type de conduit",
     flueTypePlaceholder: "Choisir",
     flueLocation: "Repère",
     flueLocationPlaceholder: "Ex. : souche côté rue",
     refrigerant: "Fluide frigorigène",
-    refrigerantCharge: "Charge (kg)",
+    refrigerantCharge: "Charge",
+    refrigerantChargeUnit: "kg",
     outdoorUnit: "Unité extérieure",
     indoorUnit: "Unité intérieure",
     installation: "Installation",
@@ -223,18 +259,24 @@ export const customersFr = {
     replacesNothing: "Aucun appareil",
     replacesHint: "L'ancien appareil passe dans l'historique avec ses attestations.",
     lastVisit: "Le dernier passage",
-    lastVisitText: "Si vous le connaissez, l'échéance se calculera toute seule.",
+    lastVisitText: "Si vous le connaissez, l'échéance se calcule toute seule.",
     lastSweeping: "Dernier ramonage",
     lastService: "Dernier entretien",
     save: "Ajouter l'appareil",
     note: "Les champs facultatifs pourront être complétés sur place.",
     replaceNote: "Le nouvel appareil remplace l'ancien, qui reste dans l'historique.",
+    replaceNoteOf: (kind: EquipmentKind, replaced: EquipmentKind) =>
+      `${capitalized(KINDS_WITH_ARTICLE[kind])} remplace ${KINDS_WITH_ARTICLE[replaced]}, qui reste dans l'historique.`,
   },
   file: {
-    customerSince: (date: string) => `Client depuis le ${date}`,
-    customerSinceToday: "Client depuis aujourd'hui",
+    customerSince: (date: string, isFeminine: boolean) =>
+      `${isFeminine ? "Cliente" : "Client"} depuis le ${date}`,
+    customerSinceToday: (isFeminine: boolean) =>
+      `${isFeminine ? "Cliente" : "Client"} depuis aujourd'hui`,
     summary: (equipments: number, sites: number) =>
-      `${plural(equipments, "appareil", "appareils")} sur ${plural(sites, "lieu", "lieux")}`,
+      sites <= 1
+        ? `${plural(equipments, "appareil", "appareils")} en service`
+        : `${plural(equipments, "appareil", "appareils")} sur ${plural(sites, "lieu", "lieux")}`,
     call: "Appeler",
     edit: "Modifier",
     schedule: "Planifier",
@@ -252,18 +294,29 @@ export const customersFr = {
     occupant: (value: string) => `Occupant : ${value}`,
     noEquipmentTitle: "Aucun appareil sur ce lieu",
     noEquipmentText:
-      "Ajoutez l'insert, le poêle ou la chaudière à entretenir. L'échéance se calculera toute seule.",
+      "Ajoutez l'insert, le poêle ou la chaudière à entretenir. L'échéance se calcule toute seule.",
     addEquipment: "Ajouter un appareil",
     removedEquipments: (count: number) => `Appareils retirés (${count})`,
-    removedOn: (date: string) => `retiré le ${date}`,
-    replacedBy: (name: string) => `remplacé par ${name}`,
-    installedByUsOn: (date: string) => `Installé par nous le ${date}`,
+    removedOn: (kind: EquipmentKind, date: string) => `${agreed(kind, "retiré")} le ${date}`,
+    replacedBy: (kind: EquipmentKind, replacement: EquipmentKind) =>
+      `${agreed(kind, "remplacé")} par ${KINDS_WITH_ARTICLE[replacement]}`,
+    installedByUsOn: (kind: EquipmentKind, date: string) =>
+      `${agreed(kind, "Installé")} par nous le ${date}`,
     serial: (value: string) => `n° ${value}`,
     nextDue: (date: string) => `Prochaine échéance le ${date}`,
+    nextActivity: {
+      chimney_sweeping: (date: string) => `Prochain ramonage le ${date}`,
+      maintenance: (date: string) => `Prochain entretien le ${date}`,
+    },
+    activityOverdue: {
+      chimney_sweeping: (date: string) => `Ramonage en retard depuis le ${date}`,
+      maintenance: (date: string) => `Entretien en retard depuis le ${date}`,
+    },
     dueUnknown: "Échéance à définir",
     photo: "Photo de l'appareil",
     overdueSince: (date: string) => `En retard depuis le ${date}`,
     equipmentActions: "Actions sur l'appareil",
+    siteActions: "Actions sur le lieu",
     replace: "Remplacer",
     remove: "Retirer",
     removed: "Appareil retiré. Il reste dans l'historique.",
@@ -277,9 +330,11 @@ export const customersFr = {
     contact: "Coordonnées",
     phone: "Téléphone",
     billing: "Facturation",
-    billingSameAs: (label: string) => `Identique à : ${label.toLowerCase()}`,
+    billingSameAsBuilding: (buildingType: BuildingType) =>
+      `Identique à ${BUILDING_TYPES_WITH_ARTICLE[buildingType]}`,
+    billingSameAsSite: (label: string) => `Identique à « ${label} »`,
     reminders: "Relances",
-    remindersByEmail: "Par email, avant l'échéance",
+    remindersByEmail: "Par email, un mois avant l'échéance",
     remindersNeedEmail: "Ajoutez un email pour les relances",
     remindersOff: "Le client ne veut pas de relance",
     notSet: "Non renseigné",

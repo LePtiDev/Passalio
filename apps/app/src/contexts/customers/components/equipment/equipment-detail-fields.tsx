@@ -32,7 +32,13 @@ export const IdentityFields = () => {
           placeholder={text.serialNumberPlaceholder}
         />
         {isHeatPumpKind(kind) ? (
-          <EquipmentTextField name="powerKw" label={text.power} isOptional inputMode="decimal" />
+          <EquipmentTextField
+            name="powerKw"
+            label={text.power}
+            unit={text.powerUnit}
+            isOptional
+            inputMode="decimal"
+          />
         ) : (
           <EquipmentTextField name="room" label={text.room} isOptional />
         )}
@@ -53,6 +59,7 @@ export const HeatPumpFields = () => (
       <EquipmentTextField
         name="refrigerantCharge"
         label={text.refrigerantCharge}
+        unit={text.refrigerantChargeUnit}
         isOptional
         inputMode="decimal"
       />

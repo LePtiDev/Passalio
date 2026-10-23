@@ -39,10 +39,7 @@ export const ConfirmDialog = ({
         <AlertDialogCancel className={BUTTON_CLASS}>
           {customersFr.file.confirmCancel}
         </AlertDialogCancel>
-        <AlertDialogAction
-          className={`${BUTTON_CLASS} bg-destructive hover:bg-destructive/90`}
-          onClick={onConfirm}
-        >
+        <AlertDialogAction variant="destructive" className={BUTTON_CLASS} onClick={onConfirm}>
           {confirmLabel}
         </AlertDialogAction>
       </AlertDialogFooter>

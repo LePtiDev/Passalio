@@ -11,9 +11,9 @@ export const DASHED_CARD_CLASS =
   "flex flex-col items-start gap-3 rounded-[14px] border border-dashed border-[#D5DDE6] bg-white p-5 lg:rounded-xl lg:p-6";
 
 export const FIELD_CLASS =
-  "h-12 rounded-[10px] border-[#D5DDE6] bg-white px-3.5 text-base shadow-[0_1px_2px_rgba(15,42,68,0.05)] lg:h-10 lg:rounded-lg lg:px-3 lg:text-sm";
+  "h-12 rounded-[10px] border-[#D5DDE6] bg-white px-3.5 text-base shadow-[0_1px_2px_rgba(15,42,68,0.05)] lg:h-10 lg:rounded-lg lg:px-3 lg:text-sm placeholder:text-[#94A3B8] aria-invalid:border-[#B42318] aria-invalid:ring-[3px] aria-invalid:ring-[#B42318]/15";
 
-export const LABEL_CLASS = "text-sm font-semibold lg:text-[13px]";
+export const LABEL_CLASS = "gap-1 text-sm font-semibold lg:text-[13px]";
 
 export const ERROR_TEXT_CLASS = "text-sm text-destructive lg:text-[13px]";
 

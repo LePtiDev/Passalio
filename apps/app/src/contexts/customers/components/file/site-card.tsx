@@ -1,13 +1,30 @@
 import { Link } from "@tanstack/react-router";
-import { Building2, History, House, KeyRound, Navigation, Plus, Store, User } from "lucide-react";
+import {
+  Building2,
+  Ellipsis,
+  History,
+  House,
+  KeyRound,
+  Navigation,
+  Plus,
+  Store,
+  User,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { EquipmentRecord, PhotoRecord, SiteRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import { fullAddressOf, routeUrlOf } from "../../customer-view";
 import { BUILDING_TYPE_LABELS, customersFr } from "../../fr";
 import {
   CARD_CLASS,
+  ICON_BUTTON_CLASS,
   LINK_BUTTON_CLASS,
   NEUTRAL_BADGE_CLASS,
   PRIMARY_BUTTON_CLASS,
@@ -28,15 +45,8 @@ type SiteCardProps = {
   readonly today: Date;
 };
 
-const replacementNameOf = (
-  equipment: EquipmentRecord,
-  allEquipments: readonly EquipmentRecord[],
-) => {
-  const replacement = allEquipments.find(({ id }) => id === equipment.replacedByEquipmentId);
-  return replacement === undefined
-    ? null
-    : customersFr.equipmentName(replacement.kind, replacement.energy);
-};
+const replacementKindOf = (equipment: EquipmentRecord, allEquipments: readonly EquipmentRecord[]) =>
+  allEquipments.find(({ id }) => id === equipment.replacedByEquipmentId)?.kind ?? null;
 
 const NoEquipment = ({ site }: { readonly site: SiteRecord }) => {
   const params = useCustomerParams(site.customerId);
@@ -55,6 +65,25 @@ const NoEquipment = ({ site }: { readonly site: SiteRecord }) => {
   );
 };
 
+const SiteMenu = ({ site }: { readonly site: SiteRecord }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger
+      aria-label={text.siteActions}
+      className={cn(ICON_BUTTON_CLASS, "-my-2.5 -mr-2 lg:hidden")}
+    >
+      <Ellipsis aria-hidden="true" className="size-4" />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem asChild className="min-h-12">
+        <a href={routeUrlOf(site)} target="_blank" rel="noreferrer">
+          <Navigation aria-hidden="true" className="size-4" />
+          {text.route}
+        </a>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
+
 const SiteHeader = ({ site }: { readonly site: SiteRecord }) => {
   const Icon = BUILDING_ICONS[site.buildingType];
   const typeLabel = BUILDING_TYPE_LABELS[site.buildingType];
@@ -66,7 +95,7 @@ const SiteHeader = ({ site }: { readonly site: SiteRecord }) => {
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="text-[15px] font-semibold lg:text-[13px]">{site.label ?? typeLabel}</h3>
-          {site.label === null ? null : <span className={NEUTRAL_BADGE_CLASS}>{typeLabel}</span>}
+          <span className={NEUTRAL_BADGE_CLASS}>{typeLabel}</span>
         </div>
         <span className="text-[15px] lg:text-[13px]">{fullAddressOf(site)}</span>
         {site.addressDetails === null ? null : (
@@ -87,6 +116,7 @@ const SiteHeader = ({ site }: { readonly site: SiteRecord }) => {
           </span>
         )}
       </div>
+      <SiteMenu site={site} />
       <Button
         asChild
         variant="outline"
@@ -121,7 +151,7 @@ export const SiteCard = ({ site, equipments, allEquipments, photos, today }: Sit
               equipment={equipment}
               customerId={site.customerId}
               photo={photoOf(equipment.id)}
-              replacementName={null}
+              replacementKind={null}
               today={today}
             />
           ))}
@@ -141,7 +171,7 @@ export const SiteCard = ({ site, equipments, allEquipments, photos, today }: Sit
                   equipment={equipment}
                   customerId={site.customerId}
                   photo={undefined}
-                  replacementName={replacementNameOf(equipment, allEquipments)}
+                  replacementKind={replacementKindOf(equipment, allEquipments)}
                   today={today}
                 />
               ))}

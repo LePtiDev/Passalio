@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { useMemo } from "react";
 import { DesktopTopBar, MobileTopBar, PageContent } from "@/components/app-shell/page-bars";
 import { Button } from "@/components/ui/button";
-import type { EquipmentRecord } from "@/lib/db/local-records";
+import type { CustomerRecord, EquipmentRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import { customerNameOf, formatTimestamp } from "../../customer-view";
 import { customersFr } from "../../fr";
@@ -29,10 +29,12 @@ const LOADING_TRAIL = [{ label: customersFr.list.title, to: "/clients" as const 
 
 const NO_EQUIPMENT: readonly EquipmentRecord[] = [];
 
-const sinceOf = (createdAt: string, today: Date) =>
-  calendarDateOf(new Date(createdAt)) === calendarDateOf(today)
-    ? text.customerSinceToday
-    : text.customerSince(formatTimestamp(createdAt));
+const sinceOf = (customer: CustomerRecord, today: Date) => {
+  const isFeminine = customer.kind === "individual" && customer.civility === "mrs";
+  return calendarDateOf(new Date(customer.createdAt)) === calendarDateOf(today)
+    ? text.customerSinceToday(isFeminine)
+    : text.customerSince(formatTimestamp(customer.createdAt), isFeminine);
+};
 
 const groupBySite = (equipments: readonly EquipmentRecord[]) =>
   equipments.reduce(
@@ -44,9 +46,10 @@ const groupBySite = (equipments: readonly EquipmentRecord[]) =>
 const CustomerFileContent = ({ file }: { readonly file: CustomerFile }) => {
   const { customer, sites, equipments, photos, today } = file;
   const name = customerNameOf(customer);
-  const since = sinceOf(customer.createdAt, today);
+  const since = sinceOf(customer, today);
   const activeCount = equipments.filter(({ status }) => status === "active").length;
-  const subtitle = `${since} · ${text.summary(activeCount, sites.length)}`;
+  const subtitle =
+    activeCount === 0 ? since : `${since} · ${text.summary(activeCount, sites.length)}`;
   const firstSite = sites.at(0);
   const params = useCustomerParams(customer.id);
   const trail = useMemo(() => [...LOADING_TRAIL, { label: name }], [name]);

@@ -52,6 +52,19 @@ export const tradeTagsOf = (equipment: Pick<EquipmentRecord, "kind">): readonly 
   ),
 ];
 
+export type DueActivity = keyof typeof customersFr.file.nextActivity;
+
+const ACTIVITY_OF_TAG: Readonly<Record<TradeTag, DueActivity>> = {
+  chimney_sweeping: "chimney_sweeping",
+  maintenance: "maintenance",
+  heat_pump: "maintenance",
+};
+
+export const singleActivityOf = (equipment: Pick<EquipmentRecord, "kind">): DueActivity | null => {
+  const activities = [...new Set(tradeTagsOf(equipment).map((tag) => ACTIVITY_OF_TAG[tag]))];
+  return activities.length === 1 ? (activities[0] ?? null) : null;
+};
+
 export const equipmentNameOf = (
   equipment: Pick<EquipmentRecord, "kind" | "energy" | "brand" | "model">,
 ) => {

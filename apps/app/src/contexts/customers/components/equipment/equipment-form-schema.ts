@@ -101,8 +101,8 @@ export const emptyEquipmentForm = (
 export const isHeatPumpKind = (kind: EquipmentKind | null) =>
   kind !== null && EQUIPMENT_CATALOG[kind].family === "heat_pump";
 
-export const visitFieldsOf = (kind: EquipmentKind | null) => {
-  const trades = kind === null ? [] : tradesOfKind(kind);
+export const visitFieldsOf = (kind: EquipmentKind | null, isInstalledByUs: boolean) => {
+  const trades = kind === null || isInstalledByUs ? [] : tradesOfKind(kind);
   return {
     hasSweeping: trades.includes("chimney_sweeping"),
     hasService: trades.some((trade) => trade !== "chimney_sweeping"),
@@ -132,7 +132,7 @@ const withoutUndefined = (record: Readonly<Record<string, unknown>>) =>
   Object.fromEntries(Object.entries(record).filter(([, value]) => value !== undefined));
 
 export const toEquipmentFields = (values: EquipmentFormValues): EquipmentFields => {
-  const { hasSweeping, hasService } = visitFieldsOf(values.kind);
+  const { hasSweeping, hasService } = visitFieldsOf(values.kind, values.isInstalledByUs);
   const details =
     values.kind === null
       ? {}

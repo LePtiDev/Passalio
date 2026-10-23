@@ -69,7 +69,7 @@ test("a technician creates a customer, adds a boiler, then replaces it by a heat
   ).toBeVisible();
   await expect(page.getByText("PAC air/eau · Atlantic")).toBeVisible();
   await expect(page.getByRole("button", { name: "Appareils retirés (1)" })).toBeVisible();
-  await expect(page.getByText(/remplacé par PAC air\/eau/)).toBeVisible();
+  await expect(page.getByText(/remplacée par la pompe à chaleur/)).toBeVisible();
   await expect(page.getByText("Particulier · à jour")).toBeVisible({ timeout: 15_000 });
 
   await page.reload();

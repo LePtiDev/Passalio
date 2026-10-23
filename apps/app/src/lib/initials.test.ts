@@ -7,4 +7,10 @@ describe("initialsOf", () => {
     expect(initialsOf("Jean")).toBe("J");
     expect(initialsOf(" ")).toBe("");
   });
+
+  it("skips the legal form of a company", () => {
+    expect(initialsOf("SCI Les Tilleuls")).toBe("LT");
+    expect(initialsOf("Ramonage Dupont SARL")).toBe("RD");
+    expect(initialsOf("SAS")).toBe("S");
+  });
 });

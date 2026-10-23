@@ -79,7 +79,11 @@ export const CustomerListEmpty = () => (
     </span>
     <span className="flex w-full flex-col gap-2 lg:w-auto lg:flex-row">
       <NewCustomerLink label={text.newCustomer} />
-      <Button variant="outline" disabled className={cn(SECONDARY_BUTTON_CLASS, "text-[#94A3B8]")}>
+      <Button
+        variant="outline"
+        disabled
+        className={cn(SECONDARY_BUTTON_CLASS, "text-[#94A3B8] disabled:opacity-100")}
+      >
         <Upload aria-hidden="true" className="size-4 lg:size-3.5" />
         {text.import}
         <span className={SOON_BADGE_CLASS}>{fr.shell.soon}</span>

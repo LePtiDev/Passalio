@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { customersFr } from "../../fr";
 import { PRIMARY_BUTTON_CLASS, SECONDARY_BUTTON_CLASS } from "../customer-styles";
+import { SyncPill } from "../sync-indicator";
 
 type FormShellProps = {
   readonly title: string;
@@ -34,7 +35,9 @@ export const FormShell = ({
     onSubmit={onSubmit}
     className="flex min-h-dvh flex-1 flex-col bg-white pb-[100px] lg:pb-0"
   >
-    <DesktopTopBar trail={trail} />
+    <DesktopTopBar trail={trail}>
+      <SyncPill />
+    </DesktopTopBar>
     <header className="sticky top-0 z-10 flex min-h-16 items-center gap-2 border-b border-[#E3E8EF] bg-white px-3 py-2 lg:hidden">
       <button
         type="button"

@@ -7,8 +7,10 @@ import { EquipmentTextField } from "./equipment-text-field";
 const text = customersFr.equipmentForm;
 
 export const LastVisitFields = () => {
-  const kind = useWatch<EquipmentFormValues, "kind">({ name: "kind" });
-  const { hasSweeping, hasService } = visitFieldsOf(kind);
+  const [kind, isInstalledByUs] = useWatch<EquipmentFormValues, ["kind", "isInstalledByUs"]>({
+    name: ["kind", "isInstalledByUs"],
+  });
+  const { hasSweeping, hasService } = visitFieldsOf(kind, isInstalledByUs);
   if (!hasSweeping && !hasService) {
     return null;
   }

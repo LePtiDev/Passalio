@@ -72,6 +72,20 @@ describe("equipment form", () => {
     });
   });
 
+  it("drops the last visit of an equipment we installed", () => {
+    const fields = toEquipmentFields(
+      form({
+        kind: "pellet_stove",
+        energy: "pellets",
+        isInstalledByUs: true,
+        commissionedOn: "2026-10-22",
+        lastSweepingOn: "2025-01-01",
+        lastServiceOn: "2025-02-01",
+      }),
+    );
+    expect(fields).toMatchObject({ lastSweepingOn: null, lastServiceOn: null });
+  });
+
   it("rejects an invalid year and refrigerant", () => {
     const result = equipmentFormSchema.safeParse(
       form({ kind: "air_conditioner", installationYear: "19", refrigerant: "gaz" }),
