@@ -1,5 +1,15 @@
 import { expect, test, type Page } from "@playwright/test";
 
+const OWN_CLIENT_ADDRESS = "198.51.100.20";
+
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/**", (route) =>
+    route.continue({
+      headers: { ...route.request().headers(), "cf-connecting-ip": OWN_CLIENT_ADDRESS },
+    }),
+  );
+});
+
 const onboard = async (page: Page) => {
   await page.goto("/connexion");
   await page.getByRole("link", { name: "Créer un compte" }).click();
