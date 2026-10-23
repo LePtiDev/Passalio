@@ -24,6 +24,29 @@ const onboard = async (page: Page, email = "clients@example.fr") => {
   await expect(page.getByRole("heading", { name: "Bonjour Jean" })).toBeVisible();
 };
 
+const chooseOption = async (page: Page, field: string, option: string) => {
+  await page.getByLabel(field, { exact: true }).click();
+  await page.getByRole("option", { name: option, exact: true }).click();
+};
+
+const createCustomer = async (page: Page) => {
+  await page.goto("/clients/nouveau");
+  await page.getByLabel("Nom", { exact: true }).fill("Lefort");
+  await page.getByLabel("Prénom").fill("Martine");
+  await page.getByLabel("Adresse", { exact: true }).fill("12 rue du Pont de Créteil");
+  await page.getByRole("button", { name: "Saisir à la main" }).click();
+  await page.getByLabel("Code postal").fill("94100");
+  await page.getByLabel("Ville").fill("Saint-Maur-des-Fossés");
+  await page.getByRole("button", { name: "Enregistrer le client" }).click();
+  await expect(page.getByRole("heading", { name: "Martine Lefort" })).toBeVisible();
+};
+
+const PLATE_PHOTO = {
+  name: "plaque.jpg",
+  mimeType: "image/jpeg",
+  buffer: Buffer.from([255, 216, 255, 224, 0, 16, 74, 70, 73, 70, 0, 1, 255, 217]),
+};
+
 test("a technician creates a customer, adds a boiler, then replaces it by a heat pump", async ({
   page,
 }) => {
@@ -50,15 +73,15 @@ test("a technician creates a customer, adds a boiler, then replaces it by a heat
   await page.getByRole("link", { name: "Ajouter un appareil" }).click();
   await page.getByRole("button", { name: "Ajouter l'appareil" }).click();
   await expect(page.getByText("Choisissez le type d'appareil.")).toBeVisible();
-  await page.getByText("Chaudière", { exact: true }).click();
-  await page.getByText("Gaz", { exact: true }).click();
+  await chooseOption(page, "Type d'appareil", "Chaudière");
+  await chooseOption(page, "Combustible", "Gaz");
   await page.getByLabel("Marque").fill("Saunier Duval");
   await page.getByRole("button", { name: "Ajouter l'appareil" }).click();
   await expect(page.getByText("Chaudière gaz · Saunier Duval")).toBeVisible();
 
   await page.getByRole("button", { name: "Actions sur l'appareil" }).click();
   await page.getByRole("menuitem", { name: "Remplacer" }).click();
-  await page.getByText("PAC air/eau", { exact: true }).click();
+  await chooseOption(page, "Type d'appareil", "PAC air/eau");
   await page.getByLabel("Marque").fill("Atlantic");
   await page.getByLabel("Fluide frigorigène").fill("R32");
   await expect(page.getByLabel("Remplace")).toContainText("Chaudière gaz · Saunier Duval");
@@ -100,4 +123,57 @@ test("switching tabs does not wait for the server to confirm the session again",
   await expect(page.getByRole("heading", { name: "Bonjour Jean" })).toBeVisible();
 
   expect(sessionChecks).toHaveLength(0);
+});
+
+test.describe("plate reading", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route("**/api/auth/**", (route) =>
+      route.continue({
+        headers: { ...route.request().headers(), "cf-connecting-ip": "203.0.113.24" },
+      }),
+    );
+  });
+
+  test("the plate photo fills the empty fields and leaves the typed ones", async ({ page }) => {
+    await onboard(page, "plaque@example.fr");
+    await createCustomer(page);
+    await page.getByRole("link", { name: "Ajouter un appareil" }).click();
+    await page.getByLabel("Modèle").fill("Ego 2.0 Air 8 Hydro");
+
+    await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
+
+    await expect(page.getByText("5 champs lus sur la plaque")).toBeVisible();
+    await expect(page.getByText(/Le numéro de série est illisible/)).toBeVisible();
+    await expect(page.getByText("Lue en partie")).toBeVisible();
+    await expect(page.getByLabel("Type d'appareil", { exact: true })).toContainText(
+      "Poêle à granulés",
+    );
+    await expect(page.getByLabel("Combustible", { exact: true })).toContainText("Granulés");
+    await expect(page.getByLabel("Marque")).toHaveValue("MCZ");
+    await expect(page.getByLabel("Modèle")).toHaveValue("Ego 2.0 Air 8 Hydro");
+    await expect(page.getByLabel("Puissance (kW)")).toHaveValue("8");
+
+    await page.getByRole("button", { name: "Ajouter l'appareil" }).click();
+    await expect(page.getByText("Poêle à granulés · MCZ Ego 2.0 Air 8 Hydro")).toBeVisible();
+  });
+
+  test("a plate read past the daily limit pauses the reading and keeps the photo", async ({
+    page,
+  }) => {
+    await onboard(page, "plaque-limite@example.fr");
+    await createCustomer(page);
+    await page.route("**/api/plate-readings", (route) =>
+      route.fulfill({
+        status: 429,
+        json: { error: "plate_reading_limit_reached", traceId: "8c41d2e0ab12" },
+      }),
+    );
+    await page.getByRole("link", { name: "Ajouter un appareil" }).click();
+
+    await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
+
+    await expect(page.getByText("Lecture automatique en pause jusqu'à demain")).toBeVisible();
+    await expect(page.getByRole("img", { name: "Plaque signalétique" })).toBeVisible();
+    await expect(page.getByLabel("Marque")).toHaveValue("");
+  });
 });

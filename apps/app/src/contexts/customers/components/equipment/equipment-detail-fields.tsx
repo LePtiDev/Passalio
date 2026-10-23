@@ -21,7 +21,12 @@ export const IdentityFields = () => {
   return (
     <>
       <FieldRow>
-        <EquipmentTextField name="brand" label={text.brand} isOptional />
+        <EquipmentTextField
+          name="brand"
+          label={text.brand}
+          isOptional
+          placeholder={text.brandPlaceholder}
+        />
         <EquipmentTextField name="model" label={text.model} isOptional />
       </FieldRow>
       <FieldRow>
@@ -31,18 +36,19 @@ export const IdentityFields = () => {
           isOptional
           placeholder={text.serialNumberPlaceholder}
         />
-        {isHeatPumpKind(kind) ? (
-          <EquipmentTextField
-            name="powerKw"
-            label={text.power}
-            unit={text.powerUnit}
-            isOptional
-            inputMode="decimal"
-          />
-        ) : (
-          <EquipmentTextField name="room" label={text.room} isOptional />
-        )}
+        <EquipmentTextField
+          name="powerKw"
+          label={text.power}
+          unit={text.powerUnit}
+          isOptional
+          inputMode="decimal"
+        />
       </FieldRow>
+      {isHeatPumpKind(kind) ? null : (
+        <FieldRow>
+          <EquipmentTextField name="room" label={text.room} placeholder={text.roomPlaceholder} />
+        </FieldRow>
+      )}
     </>
   );
 };
@@ -92,7 +98,7 @@ const FlueTypeSelect = () => {
 export const FlueFields = () => (
   <Fieldset title={text.flueSection}>
     <FieldRow>
-      <FormField id="equipment-flueType" label={text.flueType} isOptional>
+      <FormField id="equipment-flueType" label={text.flueType}>
         <FlueTypeSelect />
       </FormField>
       <EquipmentTextField

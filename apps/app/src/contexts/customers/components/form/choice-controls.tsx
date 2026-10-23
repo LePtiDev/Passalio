@@ -89,32 +89,3 @@ export const SegmentedControl = <Value extends string>({
     </div>
   );
 };
-
-export const ChipGroup = <Value extends string>({
-  label,
-  choices,
-  value,
-  onChange,
-  className,
-}: ChoiceProps<Value>) => {
-  const name = useId();
-  return (
-    <div role="radiogroup" aria-label={label} className={cn("flex flex-wrap gap-2", className)}>
-      {choices.map((choice) => (
-        <ChoiceOption
-          key={choice.value}
-          name={name}
-          choice={choice}
-          isSelected={choice.value === value}
-          onSelect={onChange}
-          className={cn(
-            "inline-flex h-11 items-center rounded-[10px] border px-3.5 text-[15px] lg:h-8 lg:rounded-lg lg:px-3 lg:text-[13px]",
-            choice.value === value
-              ? "border-[#0E7C5A] bg-[#E6F4EE] font-semibold text-[#0E7C5A]"
-              : "border-[#D5DDE6] bg-white font-medium",
-          )}
-        />
-      ))}
-    </div>
-  );
-};
