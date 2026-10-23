@@ -132,7 +132,9 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Matrices API, suite : réponses conformes aux schémas zod et `trace_id` sur les succès, cas 400 par route, isolation vue par chaque rôle
 - [ ] À confirmer par Quentin : `members:read` pour les 4 rôles, « Membres et rôles » = `members:manage`, fin de l'onboarding = `organization:update`
 - [x] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection, clients, identité
-- [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
+- [x] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés, catalogue de toutes les requêtes
+- [ ] Compteurs de la prospection (onglets d'étape, départements, contacts) : lecture complète acceptée tant que la liste reste de quelques milliers de lignes, compteurs à prévoir au-delà
+- [ ] À décider : `updated_at` sur `document_number_blocks` (table écrite une seule fois)
 - [x] Sécurité transverse (cookies, limites de débit, Turnstile, fichiers envoyés, lien de mot de passe, sessions) et aucune donnée personnelle dans les logs
 - [ ] En-têtes de sécurité (CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`) promis par `SECURITY.md` mais pas encore posés, puis leurs tests
 - [ ] Vérifier le type d'un fichier envoyé sur son contenu, pas seulement sur l'en-tête déclaré
