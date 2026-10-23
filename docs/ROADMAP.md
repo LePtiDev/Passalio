@@ -44,6 +44,7 @@ Dernière mise à jour : 2026-10-23.
 | Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                 | ADR 0018                        |
 | Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                        | ADR 0019                        |
 | Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
+| Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                         | `CLAUDE.md`                     |
 
 ## Hors code (Quentin)
 
@@ -80,6 +81,7 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Liste des modifications refusées par le serveur, consultable depuis l'indicateur de synchronisation
 - [ ] Tester le démarrage sans réseau sur l'application installée (staging), service worker compris
 - [x] Écrans clients selon la maquette validée le 2026-10-22 (https://claude.ai/artifact/Tha55S1NCL2MsWPN3TxquD) : liste, fiche, nouveau client, nouvel appareil, remplacement
+- [ ] Champs obligatoires : remplacer « facultatif » par l'astérisque rouge sur les écrans existants (clients, onboarding, Commercial)
 - [ ] Import d'un fichier de clients (bouton « Importer un fichier » affiché « Bientôt »)
 - [ ] Modifier un lieu et un appareil depuis la fiche (le menu propose seulement Remplacer et Retirer)
 - [ ] Lecture de la plaque signalétique d'un appareil par photo (API Claude), champs à confirmer par le technicien, téléphone seulement
