@@ -1,0 +1,1 @@
+ALTER TABLE `equipments` ADD `installation_year` integer;

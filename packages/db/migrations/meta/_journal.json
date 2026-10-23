@@ -36,6 +36,13 @@
       "when": 1792712149041,
       "tag": "0004_customers",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1792713954170,
+      "tag": "0005_equipment_installation_year",
+      "breakpoints": true
     }
   ]
 }

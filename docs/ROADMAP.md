@@ -27,6 +27,7 @@ Dernière mise à jour : 2026-10-23.
 | Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau     | PR #20                          |
 | Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié               | PR #17                          |
 | Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                    | `apps/web`                      |
+| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro      | PR #21                          |
 
 ## Hors code (Quentin)
 
@@ -54,9 +55,12 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Réglages entreprise : modifier après l'onboarding les informations, métiers, logo et numérotation ; bloquer le changement du premier numéro dès la première attestation signée
 - [x] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
 - [x] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull` (clients, lieux, appareils, photos en attente d'envoi), ADR 0014
-- [ ] Indicateur de synchronisation et liste des modifications refusées, dans les écrans clients
+- [x] Indicateur de synchronisation dans les écrans clients
+- [ ] Liste des modifications refusées par le serveur, consultable depuis l'indicateur de synchronisation
 - [ ] Tester le démarrage sans réseau sur l'application installée (staging), service worker compris
-- [ ] Écrans clients selon la maquette validée le 2026-10-22 (https://claude.ai/artifact/Tha55S1NCL2MsWPN3TxquD) : liste, fiche, nouveau client, nouvel appareil, remplacement
+- [x] Écrans clients selon la maquette validée le 2026-10-22 (https://claude.ai/artifact/Tha55S1NCL2MsWPN3TxquD) : liste, fiche, nouveau client, nouvel appareil, remplacement
+- [ ] Import d'un fichier de clients (bouton « Importer un fichier » affiché « Bientôt »)
+- [ ] Modifier un lieu et un appareil depuis la fiche (le menu propose seulement Remplacer et Retirer)
 - [ ] Lecture de la plaque signalétique d'un appareil par photo (API Claude), champs à confirmer par le technicien, téléphone seulement
 - [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (configuration dans `packages/trades`)
 - [ ] Métier ramonage et entretien d'appareil dans `packages/trades` (bloqué par les documents réels)

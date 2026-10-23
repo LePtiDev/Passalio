@@ -15,8 +15,11 @@ export {
 } from "./equipment-catalog";
 export {
   BOILER_TYPES,
+  boilerDetails,
   detailsSchemaOf,
   FLUE_TYPES,
+  flueApplianceDetails,
+  heatPumpDetails,
   type BoilerDetails,
   type EquipmentDetails,
   type FlueApplianceDetails,

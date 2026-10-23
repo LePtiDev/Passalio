@@ -8,7 +8,7 @@ import {
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const TOAST_ICONS = {
-  success: <CircleCheckIcon className="size-4" />,
+  success: <CircleCheckIcon className="size-4 text-[#0E7C5A]" />,
   info: <InfoIcon className="size-4" />,
   warning: <TriangleAlertIcon className="size-4" />,
   error: <OctagonXIcon className="size-4" />,

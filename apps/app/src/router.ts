@@ -1,4 +1,12 @@
 import { createRouter } from "@tanstack/react-router";
+import {
+  customerRoute,
+  customersRoute,
+  editCustomerRoute,
+  newCustomerRoute,
+  newEquipmentRoute,
+  newSiteRoute,
+} from "./routes/customers";
 import { forgotPasswordRoute } from "./routes/forgot-password";
 import { homeRoute } from "./routes/home";
 import { invitationRoute } from "./routes/invitation";
@@ -30,7 +38,17 @@ const routeTree = rootRoute.addChildren([
   termsRoute,
   privacyRoute,
   legalNoticeRoute,
-  signedInRoute.addChildren([homeRoute, teamRoute, settingsRoute]),
+  signedInRoute.addChildren([
+    homeRoute,
+    teamRoute,
+    settingsRoute,
+    customersRoute,
+    newCustomerRoute,
+    customerRoute,
+    editCustomerRoute,
+    newSiteRoute,
+    newEquipmentRoute,
+  ]),
 ]);
 
 export const router = createRouter({ routeTree });

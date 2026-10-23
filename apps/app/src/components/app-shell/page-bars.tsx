@@ -5,13 +5,18 @@ import { fr } from "@/fr";
 
 export type BreadcrumbStep = {
   readonly label: string;
-  readonly to?: "/" | "/reglages" | "/equipe";
+  readonly to?: "/" | "/reglages" | "/equipe" | "/clients";
 };
 
-export const DesktopTopBar = ({ trail }: { readonly trail: readonly BreadcrumbStep[] }) => (
+type DesktopTopBarProps = {
+  readonly trail: readonly BreadcrumbStep[];
+  readonly children?: ReactNode;
+};
+
+export const DesktopTopBar = ({ trail, children }: DesktopTopBarProps) => (
   <nav
     aria-label={fr.shell.breadcrumb}
-    className="hidden h-11 shrink-0 items-center border-b border-[#E3E8EF] px-6 text-[13px] text-[#64748B] lg:flex"
+    className="hidden h-11 shrink-0 items-center justify-between border-b border-[#E3E8EF] px-6 text-[13px] text-[#64748B] lg:flex"
   >
     <ol className="flex items-center gap-2">
       {trail.map((step, index) => {
@@ -35,11 +40,12 @@ export const DesktopTopBar = ({ trail }: { readonly trail: readonly BreadcrumbSt
         );
       })}
     </ol>
+    {children}
   </nav>
 );
 
 type MobileTopBarProps = {
-  readonly backTo?: "/reglages";
+  readonly backTo?: "/reglages" | "/clients";
   readonly backLabel?: string;
   readonly children: ReactNode;
 };
