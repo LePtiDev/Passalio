@@ -82,6 +82,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 11      | Créer, annuler un passage hors ligne : Dexie et outbox ; membres récupérés par pages de 50, cache remplacé                                                                                                      | `scheduling/intervention-store.test.ts`, `scheduling/members-store.test.ts`   |
 | 11      | Pull des passages et documents, suppressions, modification locale en attente gardée ; refus de `create_intervention` et `sign_document`                                                                         | `lib/sync/planning-sync.test.ts`                                              |
 
+## Lecture de plaque (ADR 0022)
+
+| Famille | Ce qui est vérifié                                                                                      | Test                                                                              |
+| ------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 2       | Nettoyage de la réponse du modèle : liste fermée, bornes, fluide, propriété « jamais hors formulaire »  | `packages/shared/src/plate-reading.test.ts`                                       |
+| 4       | Statut, quota par jour de Paris, photo refusée, échec du modèle, rôles, impersonation, logs sans valeur | `customers/application/read-equipment-plate.test.ts`                              |
+| 4       | Format JSON imposé, consignes, `trace_id`, modèle de secours, réponse hors schéma                       | `customers/infrastructure/ai-plate-reader.test.ts`, `plate-reader-models.test.ts` |
+| 5–8, 10 | `POST /api/plate-readings` : 401, 422, 403, 429, isolation du quota, index, logs sans valeur lue        | `apps/api/test/plate-reading-routes.test.ts`, `test/matrices`                     |
+| Mesure  | Précision par modèle sur le jeu de photos annoté, valeurs inventées, jetons (hors `pnpm check`)         | `apps/api/eval/`, `pnpm --filter @passalio/api plate-reading:eval`                |
+
 ## Parcours de bout en bout
 
 | Espace          | Parcours                                                                                | Test                      |
@@ -112,6 +122,8 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | Clients         | Retirer un appareil, il reste dans l'historique                                         | à écrire                  |
 | Clients         | Ajouter une photo ; refus d'un fichier trop gros ou d'un mauvais type                   | à écrire                  |
 | Clients         | Archiver un client (secrétariat oui, technicien non)                                    | à écrire                  |
+| Planning        | Planning vide, erreurs du formulaire, ajouter un passage, l'ouvrir, l'annuler           | `planning.spec.ts`        |
+| Planning        | Un technicien ne voit que son planning ; filtrer les agendas de l'équipe                | à écrire                  |
 | Hors ligne      | Créer un client sans réseau, recharger, rétablir le réseau, client sur le serveur       | à écrire                  |
 | Hors ligne      | Indicateur : modifications en attente, puis synchronisé                                 | à écrire                  |
 | Hors ligne      | Modification refusée par le serveur, visible pour l'utilisateur                         | à écrire                  |
@@ -125,7 +137,7 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | Admin           | Le rôle Commercial ne voit que Commercial                                               | à écrire                  |
 | Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification         | à écrire                  |
 | Équipe Passalio | Changer un rôle, retirer un membre ; un super admin ne change pas son propre rôle       | à écrire                  |
-| Commercial      | Entreprises : onglets d'étape, filtres, recherche, pagination                           | à écrire                  |
+| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination | à écrire                  |
 | Commercial      | Créer, modifier, supprimer une entreprise prospectée                                    | à écrire                  |
 | Commercial      | Changer l'étape, ajouter une note, historique                                           | à écrire                  |
 | Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                          | à écrire                  |
@@ -133,4 +145,4 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | Site            | Liens de la landing, environnement staging ou production                                | `apps/web` (unitaire)     |
 | Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne           | à écrire                  |
 
-À ajouter avec leurs écrans : lecture de plaque, attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.
+À ajouter avec leurs écrans : lecture de plaque (écran), attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.

@@ -18,7 +18,6 @@ import { ChangeRoleDialog, type TeammateSummary } from "./change-role-dialog";
 import { InviteTeammateDialog } from "./invite-teammate-dialog";
 import { RemoveTeammateDialog } from "./remove-teammate-dialog";
 import { TeamInvitationRow } from "./team-invitation-row";
-import { TeamRolesCard } from "./team-roles-card";
 import { TeamSkeleton } from "./team-skeleton";
 import { TEAM_GRID_CLASS } from "./team-styles";
 import { TeammateRow } from "./teammate-row";
@@ -150,7 +149,6 @@ export const TeamScreen = ({ currentUserId }: { readonly currentUserId: string }
             </div>
           </section>
           <p className="text-[13px] text-[#64748B] lg:hidden">{teamFr.mobileHint}</p>
-          <TeamRolesCard />
         </>
       ) : null}
       <InviteTeammateDialog isOpen={dialog?.kind === "invite"} onOpenChange={changeInviteOpen} />

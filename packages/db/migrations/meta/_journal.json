@@ -92,6 +92,13 @@
       "when": 1792786168965,
       "tag": "0012_interventions_documents",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1792790508268,
+      "tag": "0013_plate_readings",
+      "breakpoints": true
     }
   ]
 }

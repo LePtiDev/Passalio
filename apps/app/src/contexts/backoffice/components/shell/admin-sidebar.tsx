@@ -24,9 +24,7 @@ const NavigationGroup = ({
   readonly items: readonly NavigationItem[];
 }) => (
   <div className="flex flex-col gap-0.5">
-    <span className="px-2.5 pb-1.5 text-xs font-semibold tracking-[0.04em] text-[#64748B] uppercase">
-      {title}
-    </span>
+    <span className="px-2.5 pb-0.5 text-[11px] leading-4 font-medium text-[#94A3B8]">{title}</span>
     {items.map((item) => (
       <SidebarLink key={item.label} item={item} />
     ))}
@@ -37,15 +35,11 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
   const signOut = useSignOut();
   return (
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-5 border-r border-[#E3E8EF] bg-[#F7F9FB] px-3 py-4 lg:flex">
-      <div className="flex flex-col gap-1 px-1.5">
-        <img
-          src={logo}
-          alt={fr.app.name}
-          width={101}
-          height={20}
-          className="h-5 w-auto self-start"
-        />
-        <span className="text-xs text-[#64748B]">{text.space}</span>
+      <div className="flex items-center gap-2 px-2.5">
+        <img src={logo} alt={fr.app.name} width={101} height={20} className="h-5 w-auto" />
+        <span className="rounded-md bg-[#E6F4EE] px-1.5 py-0.5 text-[11px] leading-4 font-semibold text-[#0B5B43]">
+          {text.badge}
+        </span>
       </div>
       <nav aria-label={text.navigation} className="flex flex-1 flex-col gap-5">
         <NavigationGroup title={text.commercial} items={COMMERCIAL_NAVIGATION} />
@@ -56,7 +50,7 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
           />
         ) : null}
       </nav>
-      <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-1.5 pt-3.5">
+      <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-2.5 pt-3.5">
         <InitialsAvatar name={admin.name} tone="mint" size="small" />
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="truncate text-[13px] font-semibold">{admin.name}</span>
