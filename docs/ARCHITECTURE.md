@@ -230,8 +230,8 @@ Règles :
 
 - Environnements : `local` (wrangler dev + D1 local), `staging`, `production`. Chacun a sa base D1, son bucket R2, ses clés Stripe/Resend/Sentry/PostHog.
 - Pas de pipeline CI pour l'instant. Déploiement depuis le poste :
-  - `pnpm release:staging` : `pnpm check` → migrations D1 staging → déploiement → upload des sourcemaps Sentry (pas encore branché, Sentry n'est pas installé).
-  - `pnpm release:prod` : même chose avec confirmation manuelle, et uniquement depuis `main` propre.
+  - `pnpm release:staging` : `pnpm check` → migrations D1 staging → déploiement de l'app et de l'API → build et déploiement du site (`apps/web`, Worker d'assets statiques `passalio-web-staging` sur staging.passalio.com, non indexé, liens vers app.staging.passalio.com) → upload des sourcemaps Sentry (pas encore branché, Sentry n'est pas installé).
+  - `pnpm release:prod` : même chose avec confirmation manuelle, et uniquement depuis `main` propre. Le site part sur `passalio-web` (passalio.com).
 - Lefthook : `oxfmt` et `oxlint` sur les fichiers modifiés au commit, `typecheck` et tests au push.
 - Données de démonstration : `pnpm db:seed:local` (données fictives uniquement).
 
