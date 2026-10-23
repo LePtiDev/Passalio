@@ -41,6 +41,7 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 - Toujours vérifier si un composant shadcn/ui existe avant d'en créer un. L'ajouter avec `pnpm dlx shadcn@latest add <composant>`.
 - Tout chargement affiche un skeleton (`Skeleton` de shadcn/ui) qui reproduit la forme du contenu final. Jamais de spinner seul sur un écran.
 - Chaque liste a un état vide utile (message + action principale).
+- Champs obligatoires : astérisque rouge après le libellé (`*`, couleur destructive). Jamais de mention « facultatif » : un champ sans astérisque est facultatif.
 - Chaque action a un retour visible : chargement, succès (toast), erreur avec le code `trace_id` court.
 - Mobile d'abord : zones tactiles de 48 px minimum, texte de base 16 px, utilisable d'une main.
 - Hors ligne : les écrans terrain lisent et écrivent dans Dexie, l'utilisateur voit ce qui reste à synchroniser.
