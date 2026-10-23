@@ -171,3 +171,44 @@ describe("acceptTeamInvitation", () => {
     expect(state.users.find(({ id }) => id === "user-admin")?.role).toBe("admin");
   });
 });
+
+describe("acceptTeamInvitation of a closed invitation", () => {
+  it.each(["canceled", "rejected"] as const)(
+    "refuses a %s invitation and gives no role",
+    async (status) => {
+      state.invitations.push(
+        inMemoryTeamInvitation({
+          id: "invitation-closed",
+          email: antho.email,
+          role: "admin",
+          inviterId: "user-quentin",
+          createdAt: SENT_AT,
+          expiresAt: EXPIRES_AT,
+          status,
+        }),
+      );
+      expect(await acceptTeamInvitation(dependencies())(antho, "invitation-closed")).toEqual({
+        isOk: false,
+        error: "invitation_not_found",
+      });
+      expect(state.users.find(({ id }) => id === antho.userId)?.role).toBeNull();
+      expect(state.auditEntries).toEqual([]);
+    },
+  );
+
+  it("accepts an invitation one millisecond before its expiry", async () => {
+    now = new Date(EXPIRES_AT.getTime() - 1);
+    expect(await acceptTeamInvitation(dependencies())(antho, "invitation-1")).toEqual({
+      isOk: true,
+      value: "sales",
+    });
+  });
+
+  it("refuses an invitation at its exact expiry time", async () => {
+    now = EXPIRES_AT;
+    expect(await acceptTeamInvitation(dependencies())(antho, "invitation-1")).toEqual({
+      isOk: false,
+      error: "invitation_expired",
+    });
+  });
+});

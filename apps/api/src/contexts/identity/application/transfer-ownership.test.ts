@@ -83,3 +83,27 @@ describe("transferOwnership", () => {
     expect(roleOf(memberIdOf("admin", "organization-b"))).toBe("admin");
   });
 });
+
+describe("transferOwnership without a current membership", () => {
+  it("answers not found when the owner is no longer a member, and changes no role", async () => {
+    state.members.splice(
+      state.members.findIndex(({ id }) => id === ownerId),
+      1,
+    );
+    expect(await run()(owner, { memberId: adminId })).toEqual({
+      isOk: false,
+      error: "member_not_found",
+    });
+    expect(roleOf(adminId)).toBe("admin");
+    expect(state.auditEntries).toEqual([]);
+  });
+
+  it("answers not found for an unknown member and logs nothing", async () => {
+    expect(await run()(owner, { memberId: "member-unknown" })).toEqual({
+      isOk: false,
+      error: "member_not_found",
+    });
+    expect(roleOf(ownerId)).toBe("owner");
+    expect(state.auditEntries).toEqual([]);
+  });
+});

@@ -106,3 +106,44 @@ describe("inviteTeammate", () => {
     ]);
   });
 });
+
+describe("inviteTeammate and other pending invitations", () => {
+  it("keeps the pending invitation of another address", async () => {
+    state.invitations.push(
+      inMemoryTeamInvitation({
+        id: "invitation-lea",
+        email: "lea@passalio.com",
+        role: "admin",
+        inviterId: superadmin.userId,
+        createdAt: new Date("2026-10-20T10:00:00Z"),
+      }),
+    );
+    await run()(superadmin, { email: "antho@passalio.com", role: "sales" });
+    expect(state.invitations.find(({ id }) => id === "invitation-lea")?.status).toBe("pending");
+  });
+
+  it("replaces the pending invitation even when the new address is written with other case", async () => {
+    state.invitations.push(
+      inMemoryTeamInvitation({
+        id: "invitation-old",
+        email: "antho@passalio.com",
+        role: "admin",
+        inviterId: superadmin.userId,
+        createdAt: new Date("2026-10-20T10:00:00Z"),
+      }),
+    );
+    await run()(superadmin, { email: "ANTHO@passalio.com ", role: "sales" });
+    expect(
+      state.invitations.filter(
+        ({ email, status }) => email === "antho@passalio.com" && status === "pending",
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("refuses the address of a superadmin, already in the team", async () => {
+    expect(
+      await run()(superadmin, { email: `${superadmin.userId}@passalio.com`, role: "admin" }),
+    ).toEqual({ isOk: false, error: "already_in_team" });
+    expect(state.invitations).toEqual([]);
+  });
+});

@@ -101,3 +101,54 @@ describe("resendInvitation", () => {
     expect(state.notifiedInvitations).toEqual([]);
   });
 });
+
+describe("resendInvitation of a closed invitation", () => {
+  it.each(["accepted", "rejected"] as const)(
+    "answers not found for an %s invitation and sends nothing",
+    async (status) => {
+      const expiresAt = new Date("2026-10-01T10:00:00Z");
+      state.invitations.push(
+        inMemoryInvitation({
+          id: "invitation-closed",
+          organizationId: "organization-a",
+          status,
+          expiresAt,
+        }),
+      );
+      expect(await run()(admin, { invitationId: "invitation-closed" })).toEqual({
+        isOk: false,
+        error: "invitation_not_found",
+      });
+      expect(state.invitations.find(({ id }) => id === "invitation-closed")).toMatchObject({
+        status,
+        expiresAt,
+      });
+      expect(state.notifiedInvitations).toEqual([]);
+      expect(state.auditEntries).toEqual([]);
+    },
+  );
+
+  it("leaves an invitation of another organization as it was", async () => {
+    await run()(admin, { invitationId: "invitation-b" });
+    expect(state.invitations.find(({ id }) => id === "invitation-b")?.expiresAt).toEqual(
+      new Date("2026-10-30T10:00:00Z"),
+    );
+    expect(state.notifiedInvitations).toEqual([]);
+    expect(state.auditEntries).toEqual([]);
+  });
+
+  it("gives 7 days from now, not from the old expiry, to an invitation still valid", async () => {
+    state.invitations.push(
+      inMemoryInvitation({
+        id: "invitation-valid",
+        organizationId: "organization-a",
+        expiresAt: new Date("2026-10-25T10:00:00Z"),
+      }),
+    );
+    expect(await run()(admin, { invitationId: "invitation-valid" })).toEqual({
+      isOk: true,
+      value: NEXT_WEEK,
+    });
+    expect(NEXT_WEEK.getTime() - NOW.getTime()).toBe(7 * 24 * 60 * 60 * 1000);
+  });
+});

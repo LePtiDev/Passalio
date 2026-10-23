@@ -98,3 +98,55 @@ describe("cancelInvitation", () => {
     });
   });
 });
+
+describe("cancelInvitation, other closed or refused cases", () => {
+  it("answers not found for a rejected invitation and leaves it rejected", async () => {
+    state.invitations.push(
+      inMemoryInvitation({
+        id: "invitation-rejected",
+        organizationId: "organization-a",
+        status: "rejected",
+      }),
+    );
+    expect(await run()(admin, { invitationId: "invitation-rejected" })).toEqual({
+      isOk: false,
+      error: "invitation_not_found",
+    });
+    expect(statusOf("invitation-rejected")).toBe("rejected");
+  });
+
+  it("cancels an expired invitation that is still pending", async () => {
+    state.invitations.push(
+      inMemoryInvitation({
+        id: "invitation-expired",
+        organizationId: "organization-a",
+        expiresAt: new Date("2026-10-01T10:00:00Z"),
+      }),
+    );
+    expect(await run()(admin, { invitationId: "invitation-expired" })).toEqual({
+      isOk: true,
+      value: undefined,
+    });
+    expect(statusOf("invitation-expired")).toBe("canceled");
+  });
+
+  it.each<OrganizationRole>(["secretary", "technician"])(
+    "keeps the invitation pending and logs nothing when a %s tries",
+    async (role) => {
+      await expect(
+        run()(organizationActorWith(role), { invitationId: "invitation-1" }),
+      ).rejects.toThrow(ForbiddenError);
+      expect(statusOf("invitation-1")).toBe("pending");
+      expect(state.auditEntries).toEqual([]);
+    },
+  );
+
+  it("keeps the invitation pending during an impersonation", async () => {
+    await expect(
+      run()(organizationActorWith("owner", { isImpersonating: true }), {
+        invitationId: "invitation-1",
+      }),
+    ).rejects.toThrow(ForbiddenError);
+    expect(statusOf("invitation-1")).toBe("pending");
+  });
+});
