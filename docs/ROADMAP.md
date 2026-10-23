@@ -29,6 +29,7 @@ Dernière mise à jour : 2026-10-23.
 | Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                    | `apps/web`                      |
 | Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro      | PR #21                          |
 | Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                     | ADR 0014, `docs/company.md`     |
+| Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                | PR #24                          |
 
 ## Hors code (Quentin)
 
