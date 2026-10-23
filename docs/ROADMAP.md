@@ -97,7 +97,8 @@ Dernière mise à jour : 2026-10-23.
 ## Site passalio.com
 
 - [x] Landing page, première version (maquette : https://claude.ai/artifact/VXkqPLKM7fxAL5f6rYrvVK)
-- [ ] Déployer le site sur passalio.com (Cloudflare), sur demande de Quentin
+- [x] Déployer le site sur staging.passalio.com et passalio.com, avec `release:*`
+- [ ] Rediriger www.passalio.com vers passalio.com
 - [ ] Landing : section prix, une fois le prix tranché, en hors taxes (ADR 0014)
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
