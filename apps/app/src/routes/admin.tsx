@@ -7,16 +7,19 @@ import {
   AccountScreen,
   AccountsScreen,
   AdminLayout,
+  canSeePlatform,
   JournalScreen,
   loadAdminAccess,
   OverviewScreen,
   type AccountFilter,
   type AccountTab,
+  type PlatformAdmin,
 } from "@/contexts/backoffice";
 import { ErrorState } from "@/components/error-state";
 import { FormSkeleton } from "@/components/page-skeleton";
 import { ApiRequestError } from "@/lib/api-client";
 import { createRememberedCheck } from "@/lib/remembered-check";
+import { textParam } from "@/lib/search-params";
 import { ADMIN_CODE_PATH, ADMIN_SECURITY_PATH, requireSession } from "@/lib/session";
 import { useRevalidateOnNavigation } from "@/lib/use-revalidate-on-navigation";
 import { rootRoute } from "./root";
@@ -68,20 +71,34 @@ export const adminShellRoute = createRoute({
   },
 });
 
+const COMMERCIAL_HOME = "/admin/entreprises";
+
+const requirePlatformArea = ({
+  context,
+}: {
+  readonly context: { readonly admin: PlatformAdmin };
+}) => {
+  if (!canSeePlatform(context.admin.role)) {
+    throw redirect({ to: COMMERCIAL_HOME });
+  }
+};
+
 export const adminOverviewRoute = createRoute({
   getParentRoute: () => adminShellRoute,
   path: "/",
+  beforeLoad: requirePlatformArea,
   component: OverviewScreen,
 });
 
 const accountsSearch = z.object({
   filtre: z.enum(ACCOUNT_FILTERS).optional(),
-  recherche: z.string().max(120).optional(),
+  recherche: textParam(z.string().max(120)).optional(),
 });
 
 export const adminAccountsRoute = createRoute({
   getParentRoute: () => adminShellRoute,
   path: "/comptes",
+  beforeLoad: requirePlatformArea,
   validateSearch: accountsSearch,
   component: function AdminAccountsRouteScreen() {
     const { filtre, recherche } = adminAccountsRoute.useSearch();
@@ -118,6 +135,7 @@ const accountSearch = z.object({ onglet: z.enum(ACCOUNT_TABS).optional() });
 export const adminAccountRoute = createRoute({
   getParentRoute: () => adminShellRoute,
   path: "/comptes/$accountId",
+  beforeLoad: requirePlatformArea,
   validateSearch: accountSearch,
   component: function AdminAccountRouteScreen() {
     const { accountId } = adminAccountRoute.useParams();
@@ -140,5 +158,6 @@ export const adminAccountRoute = createRoute({
 export const adminJournalRoute = createRoute({
   getParentRoute: () => adminShellRoute,
   path: "/journal",
+  beforeLoad: requirePlatformArea,
   component: JournalScreen,
 });

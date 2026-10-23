@@ -102,6 +102,10 @@ export const fr = {
       invalid_password: "Mot de passe incorrect.",
       terms_outdated: "Cette page n'est plus à jour. Rechargez-la, puis réessayez.",
       account_not_found: "Ce compte client n'existe plus.",
+      company_not_found: "Cette entreprise n'existe plus.",
+      contact_not_found: "Ce contact n'existe plus.",
+      owner_not_found: "Cette personne ne fait pas partie de l'équipe Passalio.",
+      contact_not_in_company: "Ce contact appartient à une autre entreprise.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
     },

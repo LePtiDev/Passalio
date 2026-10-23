@@ -32,6 +32,7 @@ export const newProspectCompany = (
   website: fields.website ?? null,
   activity: fields.activity ?? null,
   headcount: fields.headcount ?? null,
+  currentTool: fields.currentTool ?? null,
   foundedOn: null,
   registryStatus: null,
   notes: fields.notes ?? null,

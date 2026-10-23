@@ -37,6 +37,7 @@ Dernière mise à jour : 2026-10-23.
 | Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                        | `auth-routes.ts`                |
 | Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                    | `lib/session.ts`                |
 | Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage           | ADR 0017                        |
+| Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »   | `contexts/sales` (app)          |
 | Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                         | PR #36                          |
 
 ## Hors code (Quentin)
@@ -93,8 +94,8 @@ Dernière mise à jour : 2026-10-23.
 - [x] Espace admin, socle de sécurité : rôles plateforme, double authentification, accès réservé (ADR 0015)
 - [x] Espace admin, écrans selon la maquette validée le 2026-10-23 : vue d'ensemble, comptes clients, utilisation, personnel, journal, activation de la double authentification
 - [x] Commercial, données : tables, API `/api/admin/prospects`, rôle `sales`, commande `prospects:import` (ADR 0017)
-- [ ] Commercial, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/9s2qiEWDn6mQw2nS74eUyv) : Entreprises, Contacts, fiches, ordinateur et mobile ; espace admin réduit à Commercial pour le rôle `sales`
-- [ ] Commercial, écran Prospection : carte Leaflet (fond IGN), qualifier depuis la carte
+- [x] Commercial, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/9s2qiEWDn6mQw2nS74eUyv) : Entreprises, Contacts, fiches, ordinateur et mobile ; espace admin réduit à Commercial pour le rôle `sales`
+- [ ] Commercial, écran Prospection : carte Leaflet (fond IGN), qualifier depuis la carte ; mini-carte et bouton « Carte » sur la fiche entreprise
 - [ ] Importer les fiches en staging et en production, puis donner le rôle `sales` à Antho (sur demande de Quentin)
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)

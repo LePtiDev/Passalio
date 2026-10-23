@@ -71,6 +71,13 @@
       "when": 1792761927271,
       "tag": "0009_prospects",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1792765160229,
+      "tag": "0010_prospect_current_tool",
+      "breakpoints": true
     }
   ]
 }
