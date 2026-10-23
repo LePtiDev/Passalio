@@ -15,7 +15,7 @@ Le point fort confirmé : aucune « attestation d'entretien » vue chez les conc
 | [Ramonia](https://ramonia.pro/)            | 79 € (franchise de TVA) | 67 €/mois, 804 € payés d'un coup | impossible (un seul utilisateur) | 79               | non proposé      | non proposé      | 14 jours, sans carte, sans le vocal | 100/mois inclus, puis 0,10 €             |
 | [OpenFire](https://openfire.fr/nos-tarifs) | 30 € HT (1 utilisateur) | engagement 12 mois possible      | 35 € HT par utilisateur (2 à 30) | 30 HT            | 105 HT           | 175 HT           | aucun, démo avec un commercial      | dès 0,10 €, signature Yousign dès 1 €    |
 
-- Passalio et Ramonia sont en franchise de TVA : le prix affiché est le prix payé. Ramio et OpenFire affichent des prix HT (CGV de Ramio).
+- Passalio affiche ses prix hors taxes, comme Ramio et OpenFire (CGV de Ramio), et reste en franchise de TVA tant que le seuil n'est pas atteint (ADR 0014). Ramonia est en franchise de TVA : le prix affiché est le prix payé.
 - Ramonia : la secrétaire vocale ne fait pas partie de l'essai. 200 minutes par mois incluses, puis 0,25 €/min.
 - OpenFire : frais d'installation sur devis, en plus de l'abonnement.
 
