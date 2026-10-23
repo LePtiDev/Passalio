@@ -33,6 +33,7 @@ export const sessions = sqliteTable(
     activeOrganizationId: text("active_organization_id"),
     impersonatedBy: text("impersonated_by"),
     impersonationReason: text("impersonation_reason"),
+    twoFactorVerifiedAt: integer("two_factor_verified_at", { mode: "timestamp_ms" }),
     ...timestampColumns(),
   },
   (table) => [index("sessions_user_id_idx").on(table.userId)],

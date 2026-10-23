@@ -91,6 +91,24 @@ describe("admin space access", () => {
     expect(withCode.status).toBe(200);
   });
 
+  it("asks for the code when the admin signs in with an email link", async () => {
+    const email = "lien@passalio.com";
+    const { secret } = await enableTwoFactor(await platform.signIn(email));
+    await grantRole(email, "superadmin");
+    const linkCookie = await platform.signInWithMagicLink(email);
+    const withoutCode = await platform.request("/api/admin/me", {}, linkCookie);
+    expect(withoutCode.status).toBe(401);
+    expect(await errorOf(withoutCode)).toBe("two_factor_unverified");
+    const verified = await platform.request(
+      "/api/auth/two-factor/verify-totp",
+      json({ code: await totpCode(secret) }),
+      linkCookie,
+    );
+    expect(verified.status).toBe(200);
+    const withCode = await platform.request("/api/admin/me", {}, linkCookie);
+    expect(withCode.status).toBe(200);
+  });
+
   it("refuses a wrong code", async () => {
     const signedUp = await platform.signIn("mauvais-code@passalio.com");
     const enabled = await platform.request(

@@ -57,6 +57,13 @@
       "when": 1792750135987,
       "tag": "0007_activity_days",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1792750481213,
+      "tag": "0008_session_two_factor_verified",
+      "breakpoints": true
     }
   ]
 }
