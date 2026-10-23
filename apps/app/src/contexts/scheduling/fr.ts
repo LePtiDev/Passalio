@@ -110,7 +110,7 @@ export const schedulingFr = {
     confirmCancel: "Annuler le passage",
     keep: "Garder",
     cancelled: "Passage annulé.",
-    cancelFailed: "Le passage n’a pas pu être annulé. Réessayez.",
+    cancelFailed: "Le passage n'a pas pu être annulé. Réessayez.",
     notFoundTitle: "Ce passage n'existe plus",
     notFoundText: "Il a peut-être été annulé. Revenez au planning.",
   },

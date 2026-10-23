@@ -47,6 +47,7 @@ Dernière mise à jour : 2026-10-23.
 | Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
 | Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                         | `CLAUDE.md`                     |
 | Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois  | ADR 0021                        |
+| Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                              | `contexts/scheduling` (app)     |
 
 ## Hors code (Quentin)
 
@@ -91,7 +92,9 @@ Dernière mise à jour : 2026-10-23.
 - [x] Métier ramonage dans `packages/trades` : schéma du certificat version 1 et règles bloquantes tirées de `docs/regulatory/`
 - [ ] Métier entretien d'appareil dans `packages/trades` (bloqué par les documents réels)
 - [x] Passages et certificats, données : tables, synchronisation, numérotation par blocs de 20, certificat immuable (ADR 0021)
-- [ ] Planning et certificat, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, passage, certificat, récapitulatif et signatures, certificat signé, historique sur la fiche
+- [x] Planning, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, fiche passage
+- [ ] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé, historique sur la fiche client
+- [ ] Planning : modifier un passage (date, heure, technicien), choisir sa durée, le marquer terminé sans certificat
 - [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
 - [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC

@@ -49,6 +49,9 @@ const MobileDay = ({ model }: { readonly model: PlanningModel }) => {
             : text.daySummary(model.visits.length, model.totalCents)
         }
       />
+      {model.isTeam && model.visits.length === 0 ? (
+        <EmptyPlanning title={text.emptyTitle} canPlan={model.canPlan} day={model.day} isInline />
+      ) : null}
       {model.isTeam ? (
         <TeamRows
           technicians={model.shownTechnicians}

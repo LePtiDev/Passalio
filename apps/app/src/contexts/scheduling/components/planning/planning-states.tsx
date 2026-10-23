@@ -70,12 +70,21 @@ export const EmptyPlanning = ({
   title,
   canPlan,
   day,
+  isInline = false,
 }: {
   readonly title: string;
   readonly canPlan: boolean;
   readonly day: string;
+  readonly isInline?: boolean;
 }) => (
-  <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex justify-center px-4">
+  <div
+    className={cn(
+      "flex justify-center px-4",
+      isInline
+        ? "border-b border-[#EEF2F6] bg-white py-4"
+        : "pointer-events-none absolute inset-x-0 top-16 z-30",
+    )}
+  >
     <div className="pointer-events-auto flex max-w-[340px] flex-col items-center gap-2 rounded-xl border border-[#E3E8EF] bg-white px-5 py-5 text-center shadow-[0_8px_24px_rgba(15,42,68,0.08)]">
       <span
         aria-hidden="true"
