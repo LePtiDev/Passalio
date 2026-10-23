@@ -234,5 +234,26 @@ for (const viewport of VIEWPORTS) {
       await page.goto("/connexion?retour=%2Fclients");
       await expect(page).toHaveURL(`${APP_URL}/clients`);
     });
+
+    test("a return address to an external site is refused when signed in", async ({ page }) => {
+      const owner = await signUpAndOnboardOwner(page, { account: { firstName: "Nora" } });
+
+      await page.goto(`/connexion?retour=${encodeURIComponent("//evil.example/piege")}`);
+      await expectHomeOf(page, owner.firstName);
+
+      await page.goto(`/connexion?retour=${encodeURIComponent("https://evil.example/piege")}`);
+      await expectHomeOf(page, owner.firstName);
+    });
+
+    test("a return address to an external site is ignored after signing in", async ({ page }) => {
+      const owner = await signUpAndOnboardOwner(page, { account: { firstName: "Oscar" } });
+      await page.context().clearCookies();
+
+      await page.goto(`/connexion?retour=${encodeURIComponent("//evil.example/piege")}`);
+      await expectSignInScreen(page);
+      await page.getByLabel("Adresse email").fill(owner.email);
+      expect(await submitSignIn(page, owner.password)).toBe(200);
+      await expectHomeOf(page, owner.firstName);
+    });
   });
 }
