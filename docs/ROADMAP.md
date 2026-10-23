@@ -28,9 +28,14 @@ Dernière mise à jour : 2026-10-23.
 | Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié               | PR #17                          |
 | Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                    | `apps/web`                      |
 | Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro      | PR #21                          |
+| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                     | ADR 0014, `docs/company.md`     |
 
 ## Hors code (Quentin)
 
+- [ ] Relire les contrats de travail de Quentin et d'Antho (exclusivité, non-concurrence, propriété intellectuelle) avant de créer la SAS
+- [ ] Créer la SAS : statuts, pacte d'associés, compte bancaire, annonce légale, immatriculation (`docs/company.md`)
+- [ ] Céder le code à la SAS, déposer la marque Passalio à l'INPI au nom de la SAS, transférer domaines, Cloudflare, Stripe et Resend
+- [ ] Choisir l'outil de comptabilité relié à Stripe et compatible avec la facture électronique (devis à comparer)
 - [ ] Récupérer un vrai certificat de ramonage et une vraie attestation d'entretien d'appareil remplis, pour les comparer à `docs/regulatory/`
 - [ ] Trancher les points ouverts des fiches `docs/regulatory/` (lectures « Non vérifié sur texte officiel »), au besoin avec un juriste ou une fédération
 - [x] Tableau de parité des fonctionnalités : Ramio, Ramonia, OpenFire
@@ -39,7 +44,7 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Donner les informations de l'éditeur (raison sociale, SIREN, adresse, TVA, prix HT ou TTC, email, téléphone, directeur de la publication, ville du tribunal) et la date de mise en ligne, à reporter dans `apps/app/src/legal/legal-fr.ts`
 - [ ] Faire relire les conditions et la politique de confidentialité par un juriste avant le premier client payant (responsabilité, tribunal, sous-traitance, durées)
 - [ ] Désigner un médiateur de la consommation avant l'ouverture de l'espace particulier
-- [ ] Vérifier la marque Passalio (INPI, EUIPO), réserver passalio.fr et passalio.com
+- [ ] Vérifier la marque Passalio (INPI, EUIPO), dépôt au nom de la SAS, réserver passalio.fr et passalio.com
 - [ ] Choisir l'hébergement du site et de l'application
 - [ ] Lister 10 à 15 ramoneurs indépendants à interroger
 
@@ -68,7 +73,7 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Planning simple : interventions par technicien et par jour
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
-- [ ] Abonnement : Stripe Billing, 29,99 €/mois et 299,90 €/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
+- [ ] Abonnement : Stripe Billing, 29,99 € HT/mois et 299,90 € HT/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
 - [ ] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
 - [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié
 - [ ] Vérification des mots de passe divulgués (ADR 0012)
@@ -80,7 +85,7 @@ Dernière mise à jour : 2026-10-23.
 
 - [x] Landing page, première version (maquette : https://claude.ai/artifact/VXkqPLKM7fxAL5f6rYrvVK)
 - [ ] Déployer le site sur passalio.com (Cloudflare), sur demande de Quentin
-- [ ] Landing : section prix, une fois le prix tranché
+- [ ] Landing : section prix, une fois le prix tranché, en hors taxes (ADR 0014)
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
 - [ ] Pages par métier et pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement
