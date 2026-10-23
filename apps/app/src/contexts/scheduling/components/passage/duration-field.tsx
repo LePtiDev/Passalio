@@ -11,7 +11,7 @@ import {
 import type { VisitTypeRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import { formatDuration, schedulingFr } from "../../fr";
-import { DURATION_CHOICES, usualMinutesOf } from "../../visit-types";
+import { DURATION_CHOICES, usualDurationOf } from "../../visit-types";
 
 const text = schedulingFr.form;
 
@@ -28,7 +28,7 @@ const DurationHint = ({
   readonly chosen: readonly VisitTypeRecord[];
   readonly onReset: () => void;
 }) => {
-  const usual = usualMinutesOf(chosen);
+  const usual = usualDurationOf(chosen);
   if (chosen.length === 0 || usual === minutes) {
     return (
       <p id={HINT_ID} className={HINT_TEXT_CLASS}>
@@ -60,7 +60,7 @@ export const DurationField = ({
   readonly onChange: (minutes: number) => void;
 }) => {
   const choose = useCallback((value: string) => onChange(Number(value)), [onChange]);
-  const reset = useCallback(() => onChange(usualMinutesOf(chosen)), [onChange, chosen]);
+  const reset = useCallback(() => onChange(usualDurationOf(chosen)), [onChange, chosen]);
   return (
     <FormField id={FIELD_ID} label={text.duration} isRequired>
       <Select value={String(minutes)} onValueChange={choose}>

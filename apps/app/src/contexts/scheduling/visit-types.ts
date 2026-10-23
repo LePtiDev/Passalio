@@ -49,6 +49,9 @@ export const chosenVisitTypes = (
 export const usualMinutesOf = (chosen: readonly VisitTypeRecord[]) =>
   chosen.reduce((total, { minutes }) => total + minutes, 0);
 
+export const usualDurationOf = (chosen: readonly VisitTypeRecord[]) =>
+  Math.min(usualMinutesOf(chosen), MAX_VISIT_DURATION_MINUTES);
+
 export const toggledVisitType = (types: readonly TradeId[], type: TradeId): TradeId[] =>
   types.includes(type)
     ? types.filter((chosen) => chosen !== type)

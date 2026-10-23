@@ -1,9 +1,9 @@
-import { isVisitType, MAX_VISIT_DURATION_MINUTES, type TradeId } from "@passalio/trades";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { isVisitType, type TradeId } from "@passalio/trades";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWatch, type UseFormReturn } from "react-hook-form";
 import type { EquipmentRecord } from "@/lib/db/local-records";
 import { DEFAULT_DURATION_MINUTES, type VisitFormValues } from "../visit-form-schema";
-import { chosenVisitTypes, suggestedVisitTypes, usualMinutesOf } from "../visit-types";
+import { chosenVisitTypes, suggestedVisitTypes, usualDurationOf } from "../visit-types";
 import { useOfferedVisitTypes } from "./use-visit-types";
 
 export const useVisitTypeChoice = (
@@ -21,9 +21,9 @@ export const useVisitTypeChoice = (
   const apply = useCallback(
     (types: TradeId[]) => {
       setValue("visitTypes", types, { shouldValidate: isSubmitted });
-      const usual = usualMinutesOf(chosenVisitTypes(offered ?? [], types));
+      const usual = usualDurationOf(chosenVisitTypes(offered ?? [], types));
       if (usual > 0) {
-        setValue("durationMinutes", Math.min(usual, MAX_VISIT_DURATION_MINUTES));
+        setValue("durationMinutes", usual);
       }
     },
     [setValue, isSubmitted, offered],
@@ -35,8 +35,10 @@ export const useVisitTypeChoice = (
       ? null
       : suggestedVisitTypes(offered, kinds).join();
 
+  const appliedSuggestion = useRef<string | null>(null);
   useEffect(() => {
-    if (suggestion !== null && !isChosenByHand) {
+    if (suggestion !== null && !isChosenByHand && suggestion !== appliedSuggestion.current) {
+      appliedSuggestion.current = suggestion;
       apply(suggestion.split(",").filter(isVisitType));
     }
   }, [suggestion, isChosenByHand, apply]);
