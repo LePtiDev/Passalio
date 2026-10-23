@@ -45,6 +45,7 @@ Dernière mise à jour : 2026-10-23.
 | Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                        | ADR 0019                        |
 | Serveur MCP : page d'autorisation jamais servie depuis un ancien cache, nom et icône Passalio dans Claude, `favicon.ico`                 | `service-worker-routes.ts`      |
 | Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
+| Filtres en cascade avec recherche (sous-menus sur ordinateur, panneau du bas sur mobile), coche à droite dans tous les menus             | `components/list` (app)         |
 | Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                         | `CLAUDE.md`                     |
 | Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois  | ADR 0021                        |
 
