@@ -1,0 +1,19 @@
+---
+interface Props {
+  href: string;
+  variant?: "primary" | "outline";
+}
+
+const { href, variant = "primary" } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    "inline-flex min-h-12 items-center justify-center rounded-xl px-5.5 text-base font-bold",
+    variant === "primary" && "bg-navy text-white hover:bg-navy-hover",
+    variant === "outline" && "border border-input bg-white text-navy hover:border-navy",
+  ]}
+>
+  <slot />
+</a>

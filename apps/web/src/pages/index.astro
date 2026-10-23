@@ -1,15 +1,29 @@
 ---
+import DocumentsSection from "../components/documents-section.astro";
+import FaqSection from "../components/faq-section.astro";
+import FinalCallSection from "../components/final-call-section.astro";
+import HeroSection from "../components/hero-section.astro";
+import PainsSection from "../components/pains-section.astro";
+import PassageSection from "../components/passage-section.astro";
+import ReassuranceSection from "../components/reassurance-section.astro";
+import SiteFooter from "../components/site-footer.astro";
+import SiteHeader from "../components/site-header.astro";
+import TeamSection from "../components/team-section.astro";
+import { fr } from "../fr";
 import BaseLayout from "../layouts/base-layout.astro";
 ---
 
-<BaseLayout
-  title="Passalio, logiciel pour ramoneurs"
-  description="Attestations de ramonage signées sur place, envoyées au client, relances automatiques."
->
-  <main class="mx-auto max-w-3xl p-6">
-    <h1 class="text-3xl font-semibold">Logiciel pour ramoneurs</h1>
-    <p class="mt-4">
-      Attestations signées sur place, PDF envoyé au client, relances automatiques à l'échéance.
-    </p>
+<BaseLayout title={fr.meta.title} description={fr.meta.description}>
+  <SiteHeader />
+  <main>
+    <HeroSection />
+    <PainsSection />
+    <PassageSection />
+    <DocumentsSection />
+    <TeamSection />
+    <ReassuranceSection />
+    <FaqSection />
+    <FinalCallSection />
   </main>
+  <SiteFooter />
 </BaseLayout>

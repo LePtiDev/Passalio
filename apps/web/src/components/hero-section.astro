@@ -1,0 +1,28 @@
+---
+import { fr } from "../fr";
+import { appUrl } from "../links";
+import ButtonLink from "./button-link.astro";
+import PhonePreview from "./phone-preview.astro";
+---
+
+<section id="haut" class="py-[clamp(40px,7vw,96px)] pb-[clamp(64px,7vw,104px)]">
+  <div class="mx-auto flex max-w-290 flex-wrap items-center gap-[clamp(48px,6vw,80px)] px-5">
+    <div class="flex min-w-0 flex-[3_1_460px] flex-col gap-6">
+      <p class="text-[13px] font-bold tracking-[0.06em] text-validated uppercase">
+        {fr.hero.eyebrow}
+      </p>
+      <h1 class="text-[clamp(40px,6.4vw,72px)] leading-[1.04] font-extrabold tracking-[-0.03em]">
+        {fr.hero.title}
+      </h1>
+      <p class="max-w-[34em] text-[clamp(17px,1.6vw,19px)] text-slate-text">{fr.hero.lead}</p>
+      <div class="flex flex-wrap gap-3">
+        <ButtonLink href={appUrl("signUp")}>{fr.hero.primary}</ButtonLink>
+        <ButtonLink href="#passage" variant="outline">{fr.hero.secondary}</ButtonLink>
+      </div>
+      <p class="text-sm text-slate-text">{fr.hero.note}</p>
+    </div>
+    <div class="flex min-w-0 flex-[2_1_340px] justify-center">
+      <PhonePreview />
+    </div>
+  </div>
+</section>
