@@ -9,8 +9,6 @@ import {
   siteFields,
 } from "./customer-schemas";
 
-export const SYNC_PUSH_MAX_MUTATIONS = 50;
-
 export const customerMutation = z.discriminatedUnion("type", [
   z.object({ type: z.literal("create_customer"), customerId: z.uuid(), customer: customerFields }),
   z.object({ type: z.literal("update_customer"), customerId: z.uuid(), changes: customerChanges }),
@@ -42,20 +40,3 @@ export const customerMutation = z.discriminatedUnion("type", [
 ]);
 
 export type CustomerMutation = z.infer<typeof customerMutation>;
-
-export const syncPushBody = z.object({
-  mutations: z
-    .array(z.object({ id: z.uuid(), mutation: customerMutation }))
-    .min(1)
-    .max(SYNC_PUSH_MAX_MUTATIONS),
-});
-
-export type SyncPushBody = z.infer<typeof syncPushBody>;
-
-export const syncPushResult = z.object({
-  id: z.string(),
-  status: z.enum(["applied", "rejected"]),
-  error: z.string().optional(),
-});
-
-export type SyncPushResult = z.infer<typeof syncPushResult>;

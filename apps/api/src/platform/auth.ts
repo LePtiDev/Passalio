@@ -88,6 +88,9 @@ export const createAuth = ({
     trustedOrigins: [appUrl],
     telemetry: { enabled: false },
     database: drizzleAdapter(database, { provider: "sqlite", schema, usePlural: true }),
+    verification: {
+      storeIdentifier: { default: "plain", overrides: { "reset-password:": "hashed" } },
+    },
     emailAndPassword: {
       enabled: true,
       minPasswordLength: MIN_PASSWORD_LENGTH,

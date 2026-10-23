@@ -15,6 +15,12 @@ export const createD1CustomerRepository = (database: Database): CustomerReposito
       .from(customers)
       .where(eq(customers.id, id))
       .get()) !== undefined,
+  existsInOrganization: async (organizationId, id) =>
+    (await database
+      .select({ id: customers.id })
+      .from(customers)
+      .where(and(eq(customers.organizationId, organizationId), eq(customers.id, id)))
+      .get()) !== undefined,
   create: async (customer, site) => {
     await (site === undefined
       ? database.insert(customers).values(customer)

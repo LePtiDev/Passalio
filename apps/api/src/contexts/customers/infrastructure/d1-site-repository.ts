@@ -12,6 +12,12 @@ export const createD1SiteRepository = (database: Database): SiteRepository => ({
   exists: async (id) =>
     (await database.select({ id: sites.id }).from(sites).where(eq(sites.id, id)).get()) !==
     undefined,
+  existsInOrganization: async (organizationId, id) =>
+    (await database
+      .select({ id: sites.id })
+      .from(sites)
+      .where(and(eq(sites.organizationId, organizationId), eq(sites.id, id)))
+      .get()) !== undefined,
   create: async (site) => {
     await database.insert(sites).values(site);
   },

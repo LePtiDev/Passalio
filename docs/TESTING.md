@@ -57,6 +57,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 17  | Régression visuelle           | Chaque état de chaque écran comparé à sa capture de référence                                                       | Chaque état ; mise à jour = accord de Quentin        |
 | 18  | Efficacité                    | Couverture (seuils qui ne baissent jamais), tests de mutation 80 % sur `packages/shared` et `domain/`               | Chaque semaine                                       |
 
+## Passages et certificats (ADR 0021)
+
+| Famille      | Ce qui est vérifié                                                                                                | Test                                                                   |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 2            | Règles du certificat de ramonage (vacuité, ramonage partiel, gaz étanche, conseils, capital, signature), échéance | `packages/trades/src/chimney-sweeping/*.test.ts`                       |
+| 2            | Qui gère quel passage, équipements du lieu, passage clos ; cible de signature, annulation, dates de ramonage      | `scheduling/domain/*.test.ts`, `compliance/domain/*.test.ts`           |
+| 4            | Créer, modifier, terminer, annuler un passage ; réserver des numéros ; signer ; corriger ; synchroniser           | `scheduling/application/*.test.ts`, `compliance/application/*.test.ts` |
+| 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
+| 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
+
 ## Parcours de bout en bout
 
 | Espace          | Parcours                                                                                | Test                      |

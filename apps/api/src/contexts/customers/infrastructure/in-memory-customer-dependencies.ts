@@ -59,6 +59,10 @@ export const createInMemoryCustomerDependencies = (
   return {
     customers: {
       exists: async (id) => state.customers.some((customer) => customer.id === id),
+      existsInOrganization: async (organizationId, id) =>
+        state.customers.some(
+          (customer) => customer.organizationId === organizationId && customer.id === id,
+        ),
       create: async (customer, site) => {
         state.customers.push(customer);
         if (site !== undefined) {
@@ -129,6 +133,8 @@ export const createInMemoryCustomerDependencies = (
     },
     sites: {
       exists: async (id) => state.sites.some((site) => site.id === id),
+      existsInOrganization: async (organizationId, id) =>
+        state.sites.some((site) => site.organizationId === organizationId && site.id === id),
       create: async (site) => {
         state.sites.push(site);
       },
@@ -142,6 +148,10 @@ export const createInMemoryCustomerDependencies = (
     },
     equipments: {
       exists: async (id) => state.equipments.some((equipment) => equipment.id === id),
+      existsInOrganization: async (organizationId, id) =>
+        state.equipments.some(
+          (equipment) => equipment.organizationId === organizationId && equipment.id === id,
+        ),
       create: async (equipment, replacement) => {
         state.equipments.push(equipment);
         if (replacement !== undefined) {

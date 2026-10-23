@@ -19,6 +19,14 @@ type Stage = Promise<Result<void, ApiError>>;
 
 const PHOTO_ALREADY_UPLOADED = "already_exists";
 
+const UPLOAD_FAILURES_TO_RETRY: ReadonlySet<string> = new Set([
+  "network",
+  "unauthenticated",
+  "impersonation_read_only",
+  "internal",
+  "invalid_response",
+]);
+
 const pushOutbox = async (database: LocalDatabase, api: SyncApi): Stage => {
   const entries: OutboxEntry[] = await database.outbox
     .orderBy("seq")
@@ -47,7 +55,7 @@ const uploadOne = async (database: LocalDatabase, api: SyncApi, photo: PendingPh
     await database.pendingPhotos.delete(photo.id);
     return ok(undefined);
   }
-  if (uploaded.error.code === "network") {
+  if (UPLOAD_FAILURES_TO_RETRY.has(uploaded.error.code)) {
     return uploaded;
   }
   await database.transaction(
