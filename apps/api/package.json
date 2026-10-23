@@ -7,7 +7,8 @@
     "typecheck": "tsc && tsc -p tsconfig.scripts.json && tsc -p tsconfig.test.json",
     "test": "vitest run --passWithNoTests",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "release": "node scripts/release.ts"
+    "release": "node scripts/release.ts",
+    "platform:role": "node scripts/platform-role.ts"
   },
   "dependencies": {
     "@passalio/db": "workspace:*",

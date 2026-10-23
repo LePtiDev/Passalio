@@ -16,7 +16,9 @@
     "db:migrate:local": "pnpm --filter @passalio/api db:migrate:local",
     "release:staging": "pnpm --filter @passalio/api release staging",
     "release:prod": "pnpm --filter @passalio/api release production",
-    "test:e2e": "pnpm --filter @passalio/app test:e2e"
+    "test:e2e": "pnpm --filter @passalio/app test:e2e",
+    "platform:grant": "pnpm --filter @passalio/api platform:role grant",
+    "platform:revoke": "pnpm --filter @passalio/api platform:role revoke"
   },
   "devDependencies": {
     "lefthook": "^2.2.2",

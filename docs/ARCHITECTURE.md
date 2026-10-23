@@ -127,7 +127,9 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 ### Rôles plateforme (équipe interne)
 
 - `superadmin` : tout le backoffice.
-- `support` : lecture des comptes et impersonation en lecture seule.
+- `support` : tout le backoffice sauf bloquer un compte.
+
+Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|support>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Voir ADR 0015.
 
 Un seul propriétaire par entreprise. Il peut transférer ce rôle à un administrateur, qui devient propriétaire pendant que l'ancien devient administrateur. Personne ne peut inviter, nommer ou retirer un propriétaire. Une même personne peut être membre de plusieurs entreprises, avec un rôle par entreprise.
 

@@ -17,6 +17,9 @@ const ALLOWED_AUTH_PATHS: ReadonlySet<string> = new Set([
   "/revoke-other-sessions",
   "/organization/set-active",
   "/organization/list",
+  "/two-factor/enable",
+  "/two-factor/verify-totp",
+  "/two-factor/verify-backup-code",
 ]);
 
 const ALLOWED_AUTH_PATH_PREFIXES: readonly string[] = ["/reset-password/"];

@@ -71,6 +71,16 @@ export {
   type TeamSize,
 } from "./organization-profile";
 export { isReadPermission, PERMISSIONS, type Permission } from "./permissions";
+export { assertPlatformCan, canPlatform } from "./platform-authorization";
+export {
+  isPlatformRole,
+  PLATFORM_PERMISSIONS,
+  PLATFORM_ROLE_PERMISSIONS,
+  PLATFORM_ROLES,
+  type PlatformActor,
+  type PlatformPermission,
+  type PlatformRole,
+} from "./platform-permissions";
 export { TERMS_VERSION } from "./terms";
 export { err, ok, type Err, type Ok, type Result } from "./result";
 export {

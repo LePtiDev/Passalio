@@ -6,29 +6,30 @@ Dernière mise à jour : 2026-10-23.
 
 ## Fait
 
-| Quoi                                                                                                    | Où                              |
-| ------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                           | `CLAUDE.md`, `docs/`            |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`              | PR #1                           |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                 | PR #2                           |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                 | hors dépôt                      |
-| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                  | `docs/competitor-parity.md`     |
-| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                   | `docs/competitor-parity.md`     |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste              | PR #5                           |
-| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                    | `docs/regulatory/`              |
-| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                     | `CLAUDE.md`, skill `new-screen` |
-| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)               | `docs/adr/`                     |
-| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base          | PR #13                          |
-| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe         | PR #14                          |
-| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas          | PR #15                          |
-| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com              | PR #16                          |
-| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation | PR #18                          |
-| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR #19                          |
-| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau     | PR #20                          |
-| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié               | PR #17                          |
-| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                    | `apps/web`                      |
-| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro      | PR #21                          |
-| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                     | ADR 0014, `docs/company.md`     |
+| Quoi                                                                                                     | Où                              |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                            | `CLAUDE.md`, `docs/`            |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`               | PR #1                           |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                  | PR #2                           |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                  | hors dépôt                      |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                   | `docs/competitor-parity.md`     |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                    | `docs/competitor-parity.md`     |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste               | PR #5                           |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                     | `docs/regulatory/`              |
+| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                      | `CLAUDE.md`, skill `new-screen` |
+| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)                | `docs/adr/`                     |
+| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base           | PR #13                          |
+| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe          | PR #14                          |
+| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas           | PR #15                          |
+| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com               | PR #16                          |
+| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation  | PR #18                          |
+| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation   | PR #19                          |
+| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau      | PR #20                          |
+| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié                | PR #17                          |
+| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                     | `apps/web`                      |
+| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro       | PR #21                          |
+| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                      | ADR 0014, `docs/company.md`     |
+| Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin` | ADR 0015                        |
 
 ## Hors code (Quentin)
 
@@ -79,7 +80,11 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Vérification des mots de passe divulgués (ADR 0012)
 - [ ] Observabilité : Sentry navigateur et API, PostHog UE avec accord préalable de l'utilisateur (bannière), sourcemaps dans `release`
 - [ ] Import CSV et export des données (export CSV et PDF promis par les conditions, article 11), suppression des données 90 jours après la fin de l'abonnement
-- [ ] Backoffice minimal avec impersonation, sauvegardes externes chiffrées (ADR 0008)
+- [x] Espace admin, socle de sécurité : rôles plateforme, double authentification, accès réservé (ADR 0015)
+- [ ] Espace admin, écrans selon la maquette validée le 2026-10-23 : vue d'ensemble, comptes clients, utilisation, personnel, journal, activation de la double authentification
+- [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
+- [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
+- [ ] Sauvegardes externes chiffrées (ADR 0008)
 
 ## Site passalio.com
 
