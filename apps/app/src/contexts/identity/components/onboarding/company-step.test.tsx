@@ -193,6 +193,16 @@ describe("CompanyStep", () => {
     expect(screen.getByLabelText(text.nameLabel)).toHaveFocus();
   });
 
+  it("shows the short trace id when the directory search fails", async () => {
+    installCompany({ [SEARCH_ROUTE]: errorReply("internal", TRACE_ID) });
+    const { user } = renderCompany();
+
+    await user.type(await screen.findByLabelText(text.searchLabel), "dupont");
+
+    expect(await screen.findByText(text.searchUnavailable)).toBeVisible();
+    expect(screen.getByText(fr.errors.code(SHORT_TRACE_ID))).toBeVisible();
+  });
+
   it("does not search the directory before three characters", async () => {
     const api = installCompany({ [SEARCH_ROUTE]: jsonReply({ companies: [DUPONT] }) });
     const { user } = renderCompany();
