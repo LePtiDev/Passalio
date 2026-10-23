@@ -1,10 +1,8 @@
-import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
 import { apiErrorOf, unwrap } from "@/lib/api-client";
 import { backofficeApi, type AccountFilter } from "../backoffice-api";
 
 const ROOT_KEY = ["backoffice"] as const;
-
-type PageContext = { readonly pageParam: string | null };
 
 const MAX_RETRIES = 3;
 
@@ -17,13 +15,18 @@ export const useOverview = () =>
     queryFn: async () => unwrap(await backofficeApi.fetchOverview()),
   });
 
-export const useAccounts = (filter: AccountFilter, search: string) =>
-  useInfiniteQuery({
-    queryKey: [...ROOT_KEY, "accounts", filter, search],
-    queryFn: async ({ pageParam }: PageContext) =>
-      unwrap(await backofficeApi.fetchAccounts(filter, search, pageParam)),
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+export const useAccountsPage = (
+  filter: AccountFilter,
+  search: string,
+  cursor: string | null,
+  limit: number | null,
+) =>
+  useQuery({
+    queryKey: [...ROOT_KEY, "accounts", filter, search, cursor, limit],
+    queryFn:
+      limit === null
+        ? skipToken
+        : async () => unwrap(await backofficeApi.fetchAccounts(filter, search, cursor, limit)),
     placeholderData: keepPreviousData,
   });
 
@@ -46,15 +49,21 @@ export const useAccountUsage = (accountId: string) =>
     queryFn: async () => unwrap(await backofficeApi.fetchAccountUsage(accountId)),
   });
 
-export const useJournal = (accountId: string | null) =>
-  useInfiniteQuery({
-    queryKey: [...ROOT_KEY, "journal", accountId],
-    queryFn: async ({ pageParam }: PageContext) =>
-      unwrap(
-        await (accountId === null
-          ? backofficeApi.fetchJournal(pageParam)
-          : backofficeApi.fetchAccountJournal(accountId, pageParam)),
-      ),
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+const fetchJournalPage = (accountId: string | null, cursor: string | null, limit: number) =>
+  accountId === null
+    ? backofficeApi.fetchJournal(cursor, limit)
+    : backofficeApi.fetchAccountJournal(accountId, cursor, limit);
+
+export const useJournalPage = (
+  accountId: string | null,
+  cursor: string | null,
+  limit: number | null,
+) =>
+  useQuery({
+    queryKey: [...ROOT_KEY, "journal", accountId, cursor, limit],
+    queryFn:
+      limit === null
+        ? skipToken
+        : async () => unwrap(await fetchJournalPage(accountId, cursor, limit)),
+    placeholderData: keepPreviousData,
   });

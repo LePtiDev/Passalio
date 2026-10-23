@@ -40,6 +40,7 @@ Dernière mise à jour : 2026-10-23.
 | Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »   | `contexts/sales` (app)          |
 | Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                         | PR #36                          |
 | Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche              | `components/prospection` (app)  |
+| Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement          | `components/pagination.tsx`     |
 
 ## Hors code (Quentin)
 

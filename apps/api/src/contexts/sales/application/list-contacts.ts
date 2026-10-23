@@ -15,6 +15,7 @@ export type ListContactsInput = {
   readonly department?: string | undefined;
   readonly query?: string | undefined;
   readonly cursor?: string | undefined;
+  readonly limit?: number | undefined;
 };
 
 export const listContacts =
@@ -22,17 +23,18 @@ export const listContacts =
   async (actor: PlatformActor, input: ListContactsInput): Promise<ProspectContactsPageResponse> => {
     assertPlatformCan(actor, "prospects:read");
     const query = input.query?.trim();
+    const limit = input.limit ?? CONTACTS_PAGE_SIZE;
     const [rows, counts] = await Promise.all([
       contacts.list({
         filter: input.filter,
         department: input.department,
         query: query === "" ? undefined : query,
         after: decodeNameCursor(input.cursor),
-        limit: CONTACTS_PAGE_SIZE + 1,
+        limit: limit + 1,
       }),
       contacts.counts(input.department),
     ]);
-    const { visible, nextCursor } = pageOf(rows, CONTACTS_PAGE_SIZE);
+    const { visible, nextCursor } = pageOf(rows, limit);
     return {
       contacts: visible.map((row) => ({
         id: row.id,

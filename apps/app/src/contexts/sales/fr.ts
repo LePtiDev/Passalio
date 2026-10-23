@@ -60,8 +60,6 @@ export const salesFr = {
     anyStage: "Toutes les étapes",
     removeFilter: (label: string) => `Retirer le filtre ${label}`,
     clearFilters: "Effacer",
-    loadMore: "Afficher plus",
-    shown: (shown: number, total: number) => `${shown} sur ${total}`,
     clearSearch: "Effacer la recherche",
     showAll: "Tout afficher",
     tabsLabel: "Étapes",

@@ -2,15 +2,17 @@ import { Link } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { DesktopTopBar, MobileTopBar, PageContent } from "@/components/app-shell/page-bars";
+import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLocalSession } from "@/lib/db/local-database-context";
 import { runSync } from "@/lib/sync/sync-scheduler";
-import { cn } from "@/lib/utils";
+import { useFittingRows } from "@/lib/use-fitting-rows";
+import { usePageNumber } from "@/lib/use-page-number";
 import { customersFr } from "../../fr";
 import { useCustomerList, type CustomerFilter } from "../../hooks/use-customer-list";
 import { useSyncIndicator } from "../../hooks/use-sync-indicator";
-import { CARD_CLASS, PRIMARY_BUTTON_CLASS, SECONDARY_BUTTON_CLASS } from "../customer-styles";
+import { CARD_CLASS, PRIMARY_BUTTON_CLASS } from "../customer-styles";
 import { MobileSyncLine, OfflineBanner, SyncPill } from "../sync-indicator";
 import { CustomerListToolbar } from "./customer-list-toolbar";
 import {
@@ -23,7 +25,7 @@ import { CustomerListHeader, CustomerRow } from "./customer-row";
 
 const text = customersFr.list;
 
-const PAGE_SIZE = 50;
+const CUSTOMER_ROW_HEIGHTS = { mobile: 73, desktop: 61 } as const;
 
 const TRAIL = [{ label: text.title }];
 
@@ -41,42 +43,43 @@ const subtitleOf = (list: ListState | undefined, hasFailed: boolean) => {
 const ListBody = ({
   list,
   query,
-  visibleCount,
-  onShowMore,
+  pageSize,
   onClear,
 }: {
   readonly list: ListState;
   readonly query: string;
-  readonly visibleCount: number;
-  readonly onShowMore: () => void;
+  readonly pageSize: number;
   readonly onClear: () => void;
 }) => {
+  const pages = usePageNumber(`${query}:${pageSize}`);
+  const lastPage = Math.max(0, Math.ceil(list.rows.length / pageSize) - 1);
+  const page = Math.min(pages.page, lastPage);
   if (list.customerCount === 0) {
     return <CustomerListEmpty />;
   }
   if (list.rows.length === 0 && query.trim() !== "") {
     return <CustomerSearchEmpty query={query.trim()} onClear={onClear} />;
   }
+  const visible = list.rows.slice(page * pageSize, (page + 1) * pageSize);
   return (
-    <>
-      <div className={CARD_CLASS}>
-        <CustomerListHeader />
-        <ul>
-          {list.rows.slice(0, visibleCount).map((row) => (
-            <CustomerRow key={row.customer.id} row={row} />
-          ))}
-        </ul>
-      </div>
-      {list.rows.length > visibleCount ? (
-        <Button
-          variant="outline"
-          className={cn(SECONDARY_BUTTON_CLASS, "lg:self-center")}
-          onClick={onShowMore}
-        >
-          {text.showMore}
-        </Button>
-      ) : null}
-    </>
+    <div className={CARD_CLASS}>
+      <CustomerListHeader />
+      <ul>
+        {visible.map((row) => (
+          <CustomerRow key={row.customer.id} row={row} />
+        ))}
+      </ul>
+      <Pagination
+        page={page}
+        pageSize={pageSize}
+        shown={visible.length}
+        total={list.rows.length}
+        hasNext={(page + 1) * pageSize < list.rows.length}
+        isLoading={false}
+        onPrevious={pages.goPrevious}
+        onNext={pages.goNext}
+      />
+    </div>
   );
 };
 
@@ -85,10 +88,9 @@ export const CustomerListScreen = () => {
   const sync = useSyncIndicator();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<CustomerFilter>("all");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const { measureList, pageSize } = useFittingRows(CUSTOMER_ROW_HEIGHTS);
   const list = useCustomerList(query, filter);
   const clear = useCallback(() => setQuery(""), []);
-  const showMore = useCallback(() => setVisibleCount((count) => count + PAGE_SIZE), []);
   const retry = useCallback(() => {
     void runSync(database);
   }, [database]);
@@ -159,17 +161,13 @@ export const CustomerListScreen = () => {
             onFilterChange={setFilter}
           />
         )}
-        {hasFailed ? <CustomerListError error={sync.error} onRetry={retry} /> : null}
-        {isLoading ? <CustomerListSkeleton /> : null}
-        {!isLoading && !hasFailed && list !== undefined ? (
-          <ListBody
-            list={list}
-            query={query}
-            visibleCount={visibleCount}
-            onShowMore={showMore}
-            onClear={clear}
-          />
-        ) : null}
+        <div ref={measureList} className="flex flex-col gap-4 lg:gap-5">
+          {hasFailed ? <CustomerListError error={sync.error} onRetry={retry} /> : null}
+          {isLoading || pageSize === null ? <CustomerListSkeleton /> : null}
+          {!isLoading && !hasFailed && list !== undefined && pageSize !== null ? (
+            <ListBody key={filter} list={list} query={query} pageSize={pageSize} onClear={clear} />
+          ) : null}
+        </div>
       </PageContent>
     </>
   );

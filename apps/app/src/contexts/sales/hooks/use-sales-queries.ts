@@ -38,6 +38,20 @@ export const useCompanies = (scope: CompanyListScope) =>
     placeholderData: keepPreviousData,
   });
 
+export const useCompaniesPage = (
+  scope: CompanyListScope,
+  cursor: string | null,
+  limit: number | null,
+) =>
+  useQuery({
+    queryKey: [...SALES_KEY, "companies", scope, cursor, limit],
+    queryFn:
+      limit === null
+        ? skipToken
+        : async () => unwrap(await salesApi.fetchCompanies(scope, cursor, limit)),
+    placeholderData: keepPreviousData,
+  });
+
 export const useCompanyFile = (companyId: string | null) =>
   useQuery({
     queryKey: [...SALES_KEY, "company", companyId],
@@ -46,13 +60,17 @@ export const useCompanyFile = (companyId: string | null) =>
     retry: retryUnlessMissing,
   });
 
-export const useContacts = (scope: ContactListScope) =>
-  useInfiniteQuery({
-    queryKey: [...SALES_KEY, "contacts", scope],
-    queryFn: async ({ pageParam }: PageContext) =>
-      unwrap(await salesApi.fetchContacts(scope, pageParam)),
-    initialPageParam: null,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+export const useContactsPage = (
+  scope: ContactListScope,
+  cursor: string | null,
+  limit: number | null,
+) =>
+  useQuery({
+    queryKey: [...SALES_KEY, "contacts", scope, cursor, limit],
+    queryFn:
+      limit === null
+        ? skipToken
+        : async () => unwrap(await salesApi.fetchContacts(scope, cursor, limit)),
     placeholderData: keepPreviousData,
   });
 

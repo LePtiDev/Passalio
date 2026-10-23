@@ -99,6 +99,15 @@ describe("admin read routes", () => {
     expect(usage.people).toHaveLength(1);
   });
 
+  it("cuts the lists to the requested page size", async () => {
+    const first = await adminGet("/accounts?limit=5", accountsPageResponse);
+    expect(first.accounts).toHaveLength(2);
+    const journal = await adminGet("/journal?limit=5", journalPageResponse);
+    expect(journal.entries.length).toBeLessThanOrEqual(5);
+    const tooSmall = await platform.request("/api/admin/accounts?limit=2", {}, admin);
+    expect(tooSmall.status).toBe(400);
+  });
+
   it("answers not found for an unknown account", async () => {
     const response = await platform.request(
       "/api/admin/accounts/0199a3b4-0000-7000-8000-000000000000",

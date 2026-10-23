@@ -24,32 +24,37 @@ export const toJournalEntry = (row: JournalRow): JournalEntryResponse => ({
   data: row.data,
 });
 
+export type JournalPageInput = {
+  readonly cursor?: string | undefined;
+  readonly limit?: number | undefined;
+};
+
 const journalPage =
   ({ readModel }: BackofficeDependencies) =>
-  async (scope: JournalScope, cursor: string | undefined): Promise<JournalPageResponse> => {
-    const rows = await readModel.journal(scope, decodeJournalCursor(cursor), JOURNAL_PAGE_SIZE + 1);
-    const visible = rows.slice(0, JOURNAL_PAGE_SIZE);
+  async (scope: JournalScope, page: JournalPageInput): Promise<JournalPageResponse> => {
+    const limit = page.limit ?? JOURNAL_PAGE_SIZE;
+    const rows = await readModel.journal(scope, decodeJournalCursor(page.cursor), limit + 1);
+    const visible = rows.slice(0, limit);
     const last = visible.at(-1);
     return {
       entries: visible.map(toJournalEntry),
-      nextCursor:
-        rows.length > JOURNAL_PAGE_SIZE && last !== undefined ? encodeJournalCursor(last) : null,
+      nextCursor: rows.length > limit && last !== undefined ? encodeJournalCursor(last) : null,
     };
   };
 
 export const listPlatformJournal =
   (dependencies: BackofficeDependencies) =>
-  async (actor: PlatformActor, cursor: string | undefined): Promise<JournalPageResponse> => {
+  async (actor: PlatformActor, page: JournalPageInput): Promise<JournalPageResponse> => {
     assertPlatformCan(actor, "platform:read");
-    return journalPage(dependencies)({ actions: PLATFORM_JOURNAL_ACTIONS }, cursor);
+    return journalPage(dependencies)({ actions: PLATFORM_JOURNAL_ACTIONS }, page);
   };
 
 export const listAccountJournal =
   (dependencies: BackofficeDependencies) =>
   async (
     actor: PlatformActor,
-    input: { readonly organizationId: string; readonly cursor?: string | undefined },
+    input: JournalPageInput & { readonly organizationId: string },
   ): Promise<JournalPageResponse> => {
     assertPlatformCan(actor, "platform:read");
-    return journalPage(dependencies)({ organizationId: input.organizationId }, input.cursor);
+    return journalPage(dependencies)({ organizationId: input.organizationId }, input);
   };

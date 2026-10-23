@@ -21,11 +21,11 @@ export const backofficeRoutes = new Hono<PlatformEnv>()
     ),
   )
   .get("/accounts", validateQuery(listAccountsQuery), async (context) => {
-    const { filter, q, cursor } = context.req.valid("query");
+    const { filter, q, cursor, limit } = context.req.valid("query");
     return context.json(
       await listAccounts(createBackofficeDependencies(context.var.database))(
         context.get("platformActor"),
-        { filter, query: q, cursor },
+        { filter, query: q, cursor, limit },
       ),
     );
   })
@@ -72,7 +72,7 @@ export const backofficeRoutes = new Hono<PlatformEnv>()
     context.json(
       await listPlatformJournal(createBackofficeDependencies(context.var.database))(
         context.get("platformActor"),
-        context.req.valid("query").cursor,
+        context.req.valid("query"),
       ),
     ),
   );

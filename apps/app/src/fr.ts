@@ -64,6 +64,14 @@ export const fr = {
     trialTitle: "Essai gratuit en cours",
     trialText: "Puis 29,99 € par mois, utilisateurs illimités, sans engagement.",
   },
+  pagination: {
+    label: "Pagination",
+    range: (first: number, last: number, total: number | null) =>
+      total === null ? `${first}–${last}` : `${first}–${last} sur ${total}`,
+    page: (page: number, pages: number) => `Page ${page} sur ${pages}`,
+    previous: "Page précédente",
+    next: "Page suivante",
+  },
   settings: {
     title: "Réglages",
     signedInAs: "Connecté en tant que",

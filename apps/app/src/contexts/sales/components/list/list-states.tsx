@@ -1,9 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ADMIN_CARD_CLASS, ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
-import { salesFr } from "../../fr";
+import { ADMIN_CARD_CLASS } from "@/contexts/backoffice";
 
 const ROWS = [
   { key: "a", width: "w-44" },
@@ -58,20 +56,4 @@ export const EmptyFrame = ({ icon: Icon, title, description, children }: EmptyFr
     </span>
     <span className="flex flex-wrap gap-2">{children}</span>
   </div>
-);
-
-type LoadMoreProps = {
-  readonly isLoading: boolean;
-  readonly onLoadMore: () => void;
-};
-
-export const LoadMore = ({ isLoading, onLoadMore }: LoadMoreProps) => (
-  <Button
-    variant="outline"
-    className={`${ADMIN_SECONDARY_BUTTON_CLASS} self-center`}
-    disabled={isLoading}
-    onClick={onLoadMore}
-  >
-    {salesFr.list.loadMore}
-  </Button>
 );
