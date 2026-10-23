@@ -89,6 +89,24 @@ describe("TeamScreen", () => {
     );
   });
 
+  it("shows a skeleton instead of an incomplete subtitle while the company name loads", async () => {
+    const organization = heldReply(organizationReply({ name: "Ramonage Dupont" }));
+    installFakeApi({
+      ...baseRoutes(),
+      [ORGANIZATION_ROUTE]: organization.reply,
+      [MEMBERS_ROUTE]: membersReply(teamSeenBy("owner")),
+    });
+
+    renderTeam();
+
+    await membersList();
+    expect(screen.queryByText(text.subtitle(""))).not.toBeInTheDocument();
+
+    organization.release();
+
+    expect(await screen.findByText(text.subtitle("Ramonage Dupont"))).toBeVisible();
+  });
+
   it("invites a first person from the empty team", async () => {
     installFakeApi({ ...baseRoutes(), [MEMBERS_ROUTE]: membersReply(aloneAs("owner")) });
 
