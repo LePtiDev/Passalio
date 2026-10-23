@@ -69,6 +69,7 @@ export const equipmentRecord = z.object({
   status: z.enum(EQUIPMENT_STATUSES),
   isInstalledByUs: z.boolean(),
   commissionedOn: nullableText,
+  installationYear: z.number().nullable(),
   removedOn: nullableText,
   replacedByEquipmentId: nullableText,
   lastSweepingOn: nullableText,

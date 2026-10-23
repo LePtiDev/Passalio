@@ -60,6 +60,7 @@ export type Equipment = Synced & {
   readonly status: EquipmentStatus;
   readonly isInstalledByUs: boolean;
   readonly commissionedOn: string | null;
+  readonly installationYear: number | null;
   readonly removedOn: string | null;
   readonly replacedByEquipmentId: string | null;
   readonly lastSweepingOn: string | null;

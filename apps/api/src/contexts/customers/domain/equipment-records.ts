@@ -36,6 +36,7 @@ export const newEquipment = (
     status: "active",
     isInstalledByUs: fields.isInstalledByUs ?? false,
     commissionedOn: fields.commissionedOn ?? null,
+    installationYear: fields.installationYear ?? null,
     removedOn: null,
     replacedByEquipmentId: null,
     lastSweepingOn: fields.lastSweepingOn ?? null,

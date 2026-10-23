@@ -9,6 +9,8 @@ const ICON_CLASS = "size-[15px] text-[#94A3B8] group-data-[status=active]:text-[
 
 const EXACT = { exact: true } as const;
 
+const PREFIX = { exact: false } as const;
+
 export const SidebarLink = ({ item }: { readonly item: NavigationItem }) => {
   const Icon = item.icon;
   if (item.to === null) {
@@ -26,7 +28,7 @@ export const SidebarLink = ({ item }: { readonly item: NavigationItem }) => {
     );
   }
   return (
-    <Link to={item.to} activeOptions={EXACT} className={LINK_CLASS}>
+    <Link to={item.to} activeOptions={item.to === "/" ? EXACT : PREFIX} className={LINK_CLASS}>
       <Icon aria-hidden="true" className={ICON_CLASS} strokeWidth={1.8} />
       {item.label}
     </Link>

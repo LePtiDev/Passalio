@@ -26,6 +26,7 @@ export const equipments = sqliteTable(
     status: text("status", { enum: EQUIPMENT_STATUSES }).notNull(),
     isInstalledByUs: integer("is_installed_by_us", { mode: "boolean" }).notNull(),
     commissionedOn: text("commissioned_on"),
+    installationYear: integer("installation_year"),
     removedOn: text("removed_on"),
     replacedByEquipmentId: text("replaced_by_equipment_id"),
     lastSweepingOn: text("last_sweeping_on"),

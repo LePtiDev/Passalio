@@ -88,6 +88,7 @@ export const equipmentFields = z.object({
   details: z.record(z.string(), z.unknown()).optional(),
   isInstalledByUs: z.boolean().optional(),
   commissionedOn: calendarDate,
+  installationYear: z.int().min(1900).max(2100).nullable().optional(),
   lastSweepingOn: calendarDate,
   lastServiceOn: calendarDate,
   notes: optionalText(NOTES_MAX_LENGTH),
