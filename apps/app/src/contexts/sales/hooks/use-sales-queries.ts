@@ -1,4 +1,4 @@
-import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, skipToken, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { apiErrorOf, unwrap } from "@/lib/api-client";
 import { salesApi, type CompanyListScope, type ContactListScope } from "../sales-api";
 
@@ -21,6 +21,13 @@ export const useProspectFilters = () =>
     queryFn: async () => unwrap(await salesApi.fetchFilters()),
   });
 
+export const useProspectMap = (department: string | null) =>
+  useQuery({
+    queryKey: [...SALES_KEY, "map", department],
+    queryFn: async () => unwrap(await salesApi.fetchMap(department)),
+    placeholderData: keepPreviousData,
+  });
+
 export const useCompanies = (scope: CompanyListScope) =>
   useInfiniteQuery({
     queryKey: [...SALES_KEY, "companies", scope],
@@ -31,10 +38,11 @@ export const useCompanies = (scope: CompanyListScope) =>
     placeholderData: keepPreviousData,
   });
 
-export const useCompanyFile = (companyId: string) =>
+export const useCompanyFile = (companyId: string | null) =>
   useQuery({
     queryKey: [...SALES_KEY, "company", companyId],
-    queryFn: async () => unwrap(await salesApi.fetchCompany(companyId)),
+    queryFn:
+      companyId === null ? skipToken : async () => unwrap(await salesApi.fetchCompany(companyId)),
     retry: retryUnlessMissing,
   });
 

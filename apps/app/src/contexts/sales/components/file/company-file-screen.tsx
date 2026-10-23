@@ -2,14 +2,17 @@ import type { ProspectCompanyFileResponse } from "@passalio/shared";
 import { useCallback, useMemo, useState } from "react";
 import { ErrorState } from "@/components/error-state";
 import { AdminPage, useNow, type AdminTrailStep } from "@/contexts/backoffice";
+import { DESKTOP_QUERY, useMediaQuery } from "@/lib/use-media-query";
 import { salesFr } from "../../fr";
 import { isMissingRecord, useCompanyFile } from "../../hooks/use-sales-queries";
 import { ContactFormDialog } from "../forms/contact-form-dialog";
 import { CompanyFormDialog } from "../forms/company-form-dialog";
 import { SECTION_TITLE_CLASS } from "../sales-styles";
+import { callablePhoneOf } from "./company-facts";
 import { CompanyContacts } from "./company-contacts";
 import { CompanyFileHeader } from "./company-file-header";
 import { CompanyAddress, CompanyInformation } from "./company-information";
+import { CompanyMapCard } from "./company-map-card";
 import { FileSkeleton, RecordNotFound } from "./file-states";
 import { HistoryCard } from "./history-card";
 
@@ -17,18 +20,13 @@ const text = salesFr.file;
 
 const BACK = { to: "/admin/entreprises", label: text.back } as const;
 
-const callablePhoneOf = ({ company, contacts }: ProspectCompanyFileResponse) =>
-  company.phone ??
-  contacts.find((contact) => contact.isMain)?.phone ??
-  contacts.map((contact) => contact.phone ?? contact.mobile).find((phone) => phone !== null) ??
-  null;
-
 const CompanyFile = ({ file }: { readonly file: ProspectCompanyFileResponse }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const edit = useCallback(() => setIsEditing(true), []);
   const addContact = useCallback(() => setIsAddingContact(true), []);
   const now = useNow();
+  const isDesktop = useMediaQuery(DESKTOP_QUERY);
   const { company, contacts, events } = file;
   const phone = callablePhoneOf(file);
   return (
@@ -53,7 +51,7 @@ const CompanyFile = ({ file }: { readonly file: ProspectCompanyFileResponse }) =
           <div className="hidden lg:block">
             <CompanyInformation company={company} phone={phone} />
           </div>
-          <CompanyAddress company={company} />
+          {isDesktop ? <CompanyMapCard company={company} /> : <CompanyAddress company={company} />}
         </div>
       </div>
       <CompanyFormDialog company={company} isOpen={isEditing} onOpenChange={setIsEditing} />

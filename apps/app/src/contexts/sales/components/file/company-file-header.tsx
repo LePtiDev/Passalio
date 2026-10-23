@@ -1,11 +1,12 @@
 import type { ProspectCompanyResponse } from "@passalio/shared";
-import { ChevronDown, Pencil, SquareCheckBig } from "lucide-react";
+import { ChevronDown, MapPin, Pencil, SquareCheckBig } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { shortDayLabel } from "../../date-labels";
 import { salesFr } from "../../fr";
 import { NEUTRAL_BADGE_CLASS } from "../sales-styles";
 import { StageDot, StageLabel } from "../stage-label";
-import { CallLink, CallTile, SECONDARY_ACTION_CLASS, TileButton } from "./file-actions";
+import { ProspectionLink } from "./company-map-card";
+import { CallLink, CallTile, SECONDARY_ACTION_CLASS, TILE_CLASS, TileButton } from "./file-actions";
 import { StageMenu } from "./stage-menu";
 
 const text = salesFr.file;
@@ -72,8 +73,12 @@ export const CompanyFileHeader = ({ company, phone, now, onEdit }: CompanyFileHe
             ))}
         </span>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         <CallTile phone={phone} />
+        <ProspectionLink company={company} className={TILE_CLASS}>
+          <MapPin aria-hidden="true" className="size-5 text-[#0E7C5A]" strokeWidth={1.8} />
+          {salesFr.prospection.mapTile}
+        </ProspectionLink>
         <StageMenu companyId={company.id} name={company.name} stage={company.stage} align="start">
           <TileButton icon={SquareCheckBig} label={text.stage} aria-label={text.stageLabel} />
         </StageMenu>

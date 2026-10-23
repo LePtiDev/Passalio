@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { departmentLabel } from "./department-names";
+import { departmentLabel, departmentName } from "./department-names";
 
 describe("departmentLabel", () => {
   it("names a known department with its code", () => {
@@ -9,5 +9,12 @@ describe("departmentLabel", () => {
 
   it("falls back to the code for an unknown department", () => {
     expect(departmentLabel("99")).toBe("99");
+  });
+});
+
+describe("departmentName", () => {
+  it("names a department without its code", () => {
+    expect(departmentName("94")).toBe("Val-de-Marne");
+    expect(departmentName("99")).toBe("99");
   });
 });

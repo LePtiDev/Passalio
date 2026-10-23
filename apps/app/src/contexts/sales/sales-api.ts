@@ -5,9 +5,11 @@ import {
   prospectContactResponse,
   prospectContactsPageResponse,
   prospectFiltersResponse,
+  prospectMapResponse,
   type ContactFilter,
   type ProspectCompanyChanges,
   type ProspectCompanyFields,
+  type ProspectMapResponse,
   type ProspectContactChanges,
   type ProspectContactFields,
   type ProspectNote,
@@ -29,6 +31,8 @@ export type CompanyListScope = {
   readonly search: string;
 };
 
+export type ProspectPin = ProspectMapResponse["pins"][number];
+
 export type ContactListScope = {
   readonly filter: ContactFilter;
   readonly department: string | null;
@@ -48,6 +52,8 @@ const query = (entries: Readonly<Record<string, string | null>>) => {
 
 export const salesApi = {
   fetchFilters: () => apiRequest(`${BASE}/filters`, prospectFiltersResponse),
+  fetchMap: (department: string | null) =>
+    apiRequest(`${BASE}/map${query({ department })}`, prospectMapResponse),
   fetchCompanies: (scope: CompanyListScope, cursor: string | null) =>
     apiRequest(
       `${BASE}/companies${query({

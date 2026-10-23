@@ -19,6 +19,7 @@ import {
   adminCompaniesRoute,
   adminCompanyRoute,
   adminContactRoute,
+  adminProspectionRoute,
   adminContactsRoute,
 } from "./routes/admin-commercial";
 import { adminCodeRoute, adminSecurityRoute } from "./routes/admin-security";
@@ -67,6 +68,7 @@ const routeTree = rootRoute.addChildren([
       adminCompanyRoute,
       adminContactsRoute,
       adminContactRoute,
+      adminProspectionRoute,
     ]),
   ]),
   signedInRoute.addChildren([

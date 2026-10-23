@@ -7,8 +7,11 @@ import {
   CompanyFileScreen,
   ContactFileScreen,
   ContactsScreen,
+  PROSPECTION_TABS,
+  ProspectionScreen,
   type CompanyListScope,
   type ContactListScope,
+  type ProspectionScope,
 } from "@/contexts/sales";
 import { textParam } from "@/lib/search-params";
 import { adminShellRoute } from "./admin";
@@ -115,5 +118,50 @@ export const adminContactRoute = createRoute({
   component: function AdminContactRouteScreen() {
     const { contactId } = adminContactRoute.useParams();
     return <ContactFileScreen contactId={contactId} />;
+  },
+});
+
+const prospectionSearch = z.object({
+  etape: z.enum(PROSPECTION_TABS).optional(),
+  departement: department,
+  recherche: search,
+  entreprise: z.uuid().optional().catch(undefined),
+});
+
+export const adminProspectionRoute = createRoute({
+  getParentRoute: () => adminShellRoute,
+  path: "/prospection",
+  validateSearch: prospectionSearch,
+  component: function AdminProspectionRouteScreen() {
+    const { etape, departement, recherche, entreprise } = adminProspectionRoute.useSearch();
+    const navigate = adminProspectionRoute.useNavigate();
+    const scope = useMemo<ProspectionScope>(
+      () => ({
+        tab: etape ?? "to_qualify",
+        department: departement ?? null,
+        search: recherche ?? "",
+        companyId: entreprise ?? null,
+      }),
+      [etape, departement, recherche, entreprise],
+    );
+    const changeScope = useCallback(
+      (changes: Partial<ProspectionScope>) =>
+        void navigate({
+          search: (previous) => ({
+            ...previous,
+            ...("tab" in changes
+              ? { etape: changes.tab === "to_qualify" ? undefined : changes.tab }
+              : {}),
+            ...("department" in changes
+              ? { departement: emptyAsUndefined(changes.department) }
+              : {}),
+            ...("search" in changes ? { recherche: emptyAsUndefined(changes.search) } : {}),
+            ...("companyId" in changes ? { entreprise: emptyAsUndefined(changes.companyId) } : {}),
+          }),
+          replace: true,
+        }),
+      [navigate],
+    );
+    return <ProspectionScreen scope={scope} onScopeChange={changeScope} />;
   },
 });

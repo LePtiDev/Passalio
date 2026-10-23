@@ -7,7 +7,7 @@ const text = backofficeFr.shell;
 export const COMMERCIAL_NAVIGATION: readonly NavigationItem[] = [
   { label: text.companies, icon: Building2, to: "/admin/entreprises" },
   { label: text.contacts, icon: Users, to: "/admin/contacts" },
-  { label: text.prospection, icon: MapPin, to: null },
+  { label: text.prospection, icon: MapPin, to: "/admin/prospection" },
 ];
 
 export const PLATFORM_NAVIGATION: readonly NavigationItem[] = [
@@ -21,7 +21,7 @@ export const ADMIN_MOBILE_NAVIGATION: readonly NavigationItem[] = [
     label: text.commercial,
     icon: Building2,
     to: "/admin/entreprises",
-    activeFor: ["/admin/entreprises", "/admin/contacts"],
+    activeFor: ["/admin/entreprises", "/admin/contacts", "/admin/prospection"],
   },
   { label: text.overviewShort, icon: LayoutGrid, to: "/admin", isExact: true },
   { label: text.accountsShort, icon: Briefcase, to: "/admin/comptes" },

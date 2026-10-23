@@ -5,7 +5,12 @@ import { fr } from "@/fr";
 import { cn } from "@/lib/utils";
 import { backofficeFr } from "../../fr";
 
-type AdminPath = "/admin" | "/admin/comptes" | "/admin/entreprises" | "/admin/contacts";
+type AdminPath =
+  | "/admin"
+  | "/admin/comptes"
+  | "/admin/entreprises"
+  | "/admin/contacts"
+  | "/admin/prospection";
 
 export type AdminTrailStep = {
   readonly label: string;
@@ -14,9 +19,12 @@ export type AdminTrailStep = {
 
 type AdminSection = "platform" | "commercial";
 
+type AdminLayout = "page" | "map";
+
 type AdminPageProps = {
   readonly trail: readonly AdminTrailStep[];
   readonly section?: AdminSection;
+  readonly layout?: AdminLayout;
   readonly mobileTitle: string;
   readonly mobileSubtitle?: string | undefined;
   readonly mobileBack?: { readonly to: AdminPath; readonly label: string };
@@ -32,6 +40,7 @@ const SECTION_STEPS: Readonly<Record<AdminSection, AdminTrailStep>> = {
 export const AdminPage = ({
   trail,
   section = "platform",
+  layout = "page",
   mobileTitle,
   mobileSubtitle,
   mobileBack,
@@ -68,7 +77,13 @@ export const AdminPage = ({
           })}
         </ol>
       </nav>
-      <header className="sticky top-0 z-10 flex min-h-16 items-center gap-2 border-b border-[#E3E8EF] bg-white px-4 py-2 lg:hidden">
+      <header
+        className={
+          layout === "map"
+            ? "sr-only lg:hidden"
+            : "sticky top-0 z-10 flex min-h-16 items-center gap-2 border-b border-[#E3E8EF] bg-white px-4 py-2 lg:hidden"
+        }
+      >
         {mobileBack === undefined ? null : (
           <Link
             to={mobileBack.to}
@@ -90,6 +105,7 @@ export const AdminPage = ({
         className={cn(
           "flex w-full min-w-0 flex-col gap-4 p-4 lg:gap-5 lg:p-6",
           section === "commercial" && "flex-1 bg-white leading-[1.26]",
+          layout === "map" && "p-0",
         )}
       >
         {children}

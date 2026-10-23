@@ -102,6 +102,8 @@ const DEPARTMENT_NAMES: ReadonlyMap<string, string> = new Map([
   ["976", "Mayotte"],
 ]);
 
+export const departmentName = (code: string): string => DEPARTMENT_NAMES.get(code) ?? code;
+
 export const departmentLabel = (code: string): string => {
   const name = DEPARTMENT_NAMES.get(code);
   return name === undefined ? code : `${name} (${code})`;
