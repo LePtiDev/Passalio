@@ -1,4 +1,4 @@
-export const PLATFORM_ROLES = ["superadmin", "support"] as const;
+export const PLATFORM_ROLES = ["superadmin", "support", "sales"] as const;
 
 export type PlatformRole = (typeof PLATFORM_ROLES)[number];
 
@@ -12,6 +12,8 @@ export const PLATFORM_PERMISSIONS = [
   "access:manage",
   "accounts:impersonate",
   "billing:gift",
+  "prospects:read",
+  "prospects:write",
 ] as const;
 
 export type PlatformPermission = (typeof PLATFORM_PERMISSIONS)[number];
@@ -26,7 +28,10 @@ export const PLATFORM_ROLE_PERMISSIONS: Readonly<
     "access:manage",
     "accounts:impersonate",
     "billing:gift",
+    "prospects:read",
+    "prospects:write",
   ]),
+  sales: new Set(["prospects:read", "prospects:write"]),
 };
 
 export type PlatformActor = {

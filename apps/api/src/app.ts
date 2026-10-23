@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { backofficeRoutes } from "./contexts/backoffice";
 import { customerRoutes, equipmentRoutes } from "./contexts/customers";
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
+import { prospectCompanyRoutes, prospectContactRoutes } from "./contexts/sales";
 import { syncRoutes } from "./contexts/sync";
 import type { AppEnv } from "./env";
 import { authRoutes } from "./platform/auth-routes";
@@ -16,6 +17,8 @@ const apiRoutes = new Hono<AppEnv>()
   .use(requestServicesMiddleware)
   .use(impersonationGuardMiddleware)
   .route("/auth", authRoutes)
+  .route("/admin/prospects", prospectCompanyRoutes)
+  .route("/admin/prospects", prospectContactRoutes)
   .route("/admin", backofficeRoutes)
   .route("/", identityRoutes.userRoutes)
   .route("/", organizationRoutes.companySearchRoutes)

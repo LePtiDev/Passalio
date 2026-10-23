@@ -30,21 +30,24 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 2. Glossaire métier
 
-| Terme              | Code              | Définition                                                                  |
-| ------------------ | ----------------- | --------------------------------------------------------------------------- |
-| Entreprise         | `Organization`    | Le client payant (l'artisan et son équipe)                                  |
-| Membre             | `Member`          | Utilisateur rattaché à une entreprise avec un rôle                          |
-| Client             | `Customer`        | Particulier ou entreprise chez qui l'artisan intervient                     |
-| Lieu               | `Site`            | Adresse d'intervention d'un client                                          |
-| Équipement         | `Equipment`       | Appareil ou conduit entretenu                                               |
-| Métier             | `Trade`           | Configuration d'une activité (ramonage, PAC…)                               |
-| Intervention       | `Intervention`    | Passage planifié ou réalisé                                                 |
-| Tournée            | `Route`           | Suite ordonnée des interventions d'un technicien sur une journée            |
-| Attestation        | `Document`        | Document réglementaire signé, immuable                                      |
-| Échéance           | `DueDate`         | Date du prochain entretien obligatoire                                      |
-| Relance            | `Reminder`        | Message envoyé au client à l'approche de l'échéance                         |
-| Espace particulier | `CustomerAccount` | Compte Passalio d'un particulier, commun à tous ses prestataires (ADR 0013) |
-| Lien client        | `CustomerLink`    | Lien consenti entre un espace particulier et une fiche client               |
+| Terme                 | Code              | Définition                                                                                   |
+| --------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
+| Entreprise            | `Organization`    | Le client payant (l'artisan et son équipe)                                                   |
+| Membre                | `Member`          | Utilisateur rattaché à une entreprise avec un rôle                                           |
+| Client                | `Customer`        | Particulier ou entreprise chez qui l'artisan intervient                                      |
+| Lieu                  | `Site`            | Adresse d'intervention d'un client                                                           |
+| Équipement            | `Equipment`       | Appareil ou conduit entretenu                                                                |
+| Métier                | `Trade`           | Configuration d'une activité (ramonage, PAC…)                                                |
+| Intervention          | `Intervention`    | Passage planifié ou réalisé                                                                  |
+| Tournée               | `Route`           | Suite ordonnée des interventions d'un technicien sur une journée                             |
+| Attestation           | `Document`        | Document réglementaire signé, immuable                                                       |
+| Échéance              | `DueDate`         | Date du prochain entretien obligatoire                                                       |
+| Relance               | `Reminder`        | Message envoyé au client à l'approche de l'échéance                                          |
+| Espace particulier    | `CustomerAccount` | Compte Passalio d'un particulier, commun à tous ses prestataires (ADR 0013)                  |
+| Lien client           | `CustomerLink`    | Lien consenti entre un espace particulier et une fiche client                                |
+| Entreprise prospectée | `ProspectCompany` | Ramoneur que l'équipe Passalio démarche (contexte `sales`)                                   |
+| Contact               | `ProspectContact` | Personne d'une entreprise prospectée                                                         |
+| Étape                 | `ProspectStage`   | Où en est la prospection : à qualifier, qualifiée, intéressée, démo, cliente, pas intéressée |
 
 ## 3. Contextes métier (DDD léger)
 
@@ -57,6 +60,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | `engagement` | Échéances, relances, envois email/SMS                                |
 | `billing`    | Abonnement Stripe, état du compte                                    |
 | `backoffice` | Outils internes : support, impersonation, métriques                  |
+| `sales`      | Prospection de Passalio : entreprises, contacts, étapes, historique  |
 | `sync`       | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
@@ -128,6 +132,7 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 
 - `superadmin` : tout le backoffice.
 - `support` : tout le backoffice sauf bloquer un compte.
+- `sales` : seulement la prospection (Commercial), pas les comptes clients (ADR 0017).
 
 Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|support>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Lecture des comptes clients : `GET /api/admin/overview`, `/accounts`, `/accounts/:id` (et `/members`, `/usage`, `/journal`), `/journal`, réponses décrites par les schémas zod de `packages/shared/src/backoffice-responses.ts`. L'utilisation se mesure en jours d'utilisation par personne (`activity_days`). Voir ADR 0015.
 
@@ -167,6 +172,13 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 - Écrans (terrain, hors ligne) : `/clients` (liste, recherche par nom, ville ou téléphone, filtres d'échéance), `/clients/nouveau`, `/clients/:customerId` (fiche), `/clients/:customerId/modifier`, `/clients/:customerId/lieux/nouveau`, `/clients/:customerId/appareils/nouveau?lieu=&remplace=`. Ils lisent et écrivent uniquement dans Dexie. Les types d'appareil proposés suivent les métiers de l'entreprise. Photos et lecture de plaque : téléphone seulement. L'adresse est complétée par la Base Adresse Nationale (`data.geopf.fr`), saisie manuelle possible hors ligne.
 
+### Prospection (contexte `sales`, ADR 0017)
+
+- Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
+- Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `support`, `sales`).
+- Routes sous `/api/admin/prospects` : `GET /filters` (départements, personnes de l'équipe), `GET /map?department=&stage=`, `GET` et `POST /companies` (`stage`, `department`, `owner`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /companies/:companyId`, `POST /companies/:companyId/stage`, `/notes`, `/contacts`, `GET /contacts` (`filter=all|leaders|no_phone`, `department`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /contacts/:contactId`. Réponses décrites par `packages/shared/src/prospect-responses.ts`.
+- Import : `pnpm prospects:import --env <local|staging|production> --file <csv>` (géocodage IGN, relançable sans perdre étapes et notes).
+
 ### Hors ligne et synchronisation (ADR 0003 et 0014)
 
 - Base locale Dexie par entreprise (`passalio-{organization_id}`, `apps/app/src/lib/db/`) : `customers`, `sites`, `equipments`, `photos`, plus `outbox` (modifications en attente), `pendingPhotos` (photos à envoyer), `rejections` (modifications refusées) et `syncState` (curseur, dernière synchronisation). Supprimée à la déconnexion.
@@ -199,23 +211,26 @@ Voir `docs/SECURITY.md` pour la protection et les sauvegardes.
 
 D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, un index inutile l'augmente à chaque écriture.
 
-| Table              | Index                                                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| `customers`        | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                 |
-| `sites`            | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                 |
-| `equipments`       | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                 |
-| `equipment_photos` | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                |
-| `interventions`    | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                               |
-| `documents`        | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)` |
-| `reminders`        | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                |
-| `notifications`    | `(organization_id, created_at)`                                                                                   |
-| `audit_logs`       | `(organization_id, created_at)`                                                                                   |
-| `members`          | `(user_id)`, `(organization_id, user_id)` unique                                                                  |
-| `invitations`      | `(organization_id, status)`, `(email)`                                                                            |
-| `sessions`         | `(token)` unique, `(user_id)`                                                                                     |
-| `accounts`         | `(user_id)`                                                                                                       |
-| `verifications`    | `(identifier)`                                                                                                    |
-| `rate_limits`      | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                              |
+| Table                | Index                                                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `customers`          | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                               |
+| `sites`              | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                               |
+| `equipments`         | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                               |
+| `equipment_photos`   | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                              |
+| `interventions`      | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                                             |
+| `documents`          | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)`               |
+| `reminders`          | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                              |
+| `notifications`      | `(organization_id, created_at)`                                                                                                 |
+| `audit_logs`         | `(organization_id, created_at)`                                                                                                 |
+| `members`            | `(user_id)`, `(organization_id, user_id)` unique                                                                                |
+| `invitations`        | `(organization_id, status)`, `(email)`                                                                                          |
+| `sessions`           | `(token)` unique, `(user_id)`                                                                                                   |
+| `accounts`           | `(user_id)`                                                                                                                     |
+| `verifications`      | `(identifier)`                                                                                                                  |
+| `rate_limits`        | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                            |
+| `prospect_companies` | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)` |
+| `prospect_contacts`  | `(company_id)`, `(search_name)`                                                                                                 |
+| `prospect_events`    | `(company_id, created_at)`, `(contact_id, created_at)`                                                                          |
 
 Règles :
 

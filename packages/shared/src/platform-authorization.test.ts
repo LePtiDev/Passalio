@@ -19,6 +19,11 @@ describe("canPlatform", () => {
     ["support", "accounts:impersonate", true],
     ["support", "access:manage", true],
     ["support", "accounts:block", false],
+    ["support", "prospects:write", true],
+    ["sales", "prospects:read", true],
+    ["sales", "prospects:write", true],
+    ["sales", "platform:read", false],
+    ["sales", "accounts:impersonate", false],
   ])("%s on %s is %s", (role, permission, expected) => {
     expect(canPlatform(actorWith(role), permission)).toBe(expected);
   });
@@ -34,6 +39,7 @@ describe("isPlatformRole", () => {
   it.each([
     ["superadmin", true],
     ["support", true],
+    ["sales", true],
     ["user", false],
     [null, false],
     [undefined, false],

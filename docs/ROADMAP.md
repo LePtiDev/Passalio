@@ -36,6 +36,7 @@ Dernière mise à jour : 2026-10-23.
 | E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                | ADR 0016                        |
 | Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                        | `auth-routes.ts`                |
 | Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                    | `lib/session.ts`                |
+| Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage           | ADR 0017                        |
 
 ## Hors code (Quentin)
 
@@ -90,6 +91,10 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Import CSV et export des données (export CSV et PDF promis par les conditions, article 11), suppression des données 90 jours après la fin de l'abonnement
 - [x] Espace admin, socle de sécurité : rôles plateforme, double authentification, accès réservé (ADR 0015)
 - [x] Espace admin, écrans selon la maquette validée le 2026-10-23 : vue d'ensemble, comptes clients, utilisation, personnel, journal, activation de la double authentification
+- [x] Commercial, données : tables, API `/api/admin/prospects`, rôle `sales`, commande `prospects:import` (ADR 0017)
+- [ ] Commercial, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/9s2qiEWDn6mQw2nS74eUyv) : Entreprises, Contacts, fiches, ordinateur et mobile ; espace admin réduit à Commercial pour le rôle `sales`
+- [ ] Commercial, écran Prospection : carte Leaflet (fond IGN), qualifier depuis la carte
+- [ ] Importer les fiches en staging et en production, puis donner le rôle `sales` à Antho (sur demande de Quentin)
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)
