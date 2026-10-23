@@ -21,6 +21,7 @@ export type NavigationItem = {
     | "/equipe"
     | "/reglages"
     | "/clients"
+    | "/planning"
     | "/admin"
     | "/admin/comptes"
     | "/admin/journal"
@@ -37,7 +38,12 @@ const text = fr.shell;
 
 export const MAIN_NAVIGATION: readonly NavigationItem[] = [
   { label: text.dashboard, icon: LayoutDashboard, to: "/", isExact: true },
-  { label: text.schedule, icon: CalendarDays, to: null },
+  {
+    label: text.schedule,
+    icon: CalendarDays,
+    to: "/planning",
+    activeFor: ["/planning", "/passages"],
+  },
   { label: text.customers, icon: Users, to: "/clients" },
   { label: text.documents, icon: FileCheck2, to: null },
   { label: text.reminders, icon: BellRing, to: null },
@@ -51,7 +57,12 @@ export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
 
 export const MOBILE_NAVIGATION: readonly NavigationItem[] = [
   { label: text.home, icon: House, to: "/", isExact: true },
-  { label: text.schedule, icon: CalendarDays, to: null },
+  {
+    label: text.schedule,
+    icon: CalendarDays,
+    to: "/planning",
+    activeFor: ["/planning", "/passages"],
+  },
   { label: text.customers, icon: Users, to: "/clients" },
   { label: text.settings, icon: Settings, to: "/reglages", activeFor: ["/reglages", "/equipe"] },
 ];

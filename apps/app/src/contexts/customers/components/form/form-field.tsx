@@ -7,6 +7,7 @@ type FormFieldProps = {
   readonly id: string;
   readonly label: string;
   readonly isOptional?: boolean | undefined;
+  readonly isRequired?: boolean | undefined;
   readonly error?: string | undefined;
   readonly hint?: string | undefined;
   readonly labelAside?: ReactNode;
@@ -26,6 +27,7 @@ export const FormField = ({
   id,
   label,
   isOptional,
+  isRequired,
   error,
   hint,
   labelAside,
@@ -35,6 +37,11 @@ export const FormField = ({
     <span className="flex items-center justify-between gap-2">
       <Label htmlFor={id} className={LABEL_CLASS}>
         {label}
+        {isRequired === true ? (
+          <span aria-hidden="true" className="text-destructive">
+            *
+          </span>
+        ) : null}
         {isOptional === true ? (
           <span className="font-normal text-[#64748B]">{customersFr.form.optional}</span>
         ) : null}

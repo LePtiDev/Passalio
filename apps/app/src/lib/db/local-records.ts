@@ -2,17 +2,17 @@ import {
   BUILDING_TYPES,
   CIVILITIES,
   CUSTOMER_KINDS,
-  customerMutation,
   ENERGIES,
   EQUIPMENT_KINDS,
   EQUIPMENT_PHOTO_KINDS,
   EQUIPMENT_STATUSES,
+  syncMutation,
 } from "@passalio/shared";
 import * as z from "zod";
 
-const nullableText = z.string().nullable();
+export const nullableText = z.string().nullable();
 
-const synced = {
+export const synced = {
   id: z.string(),
   organizationId: z.string(),
   createdAt: z.string(),
@@ -95,12 +95,14 @@ export type PhotoRecord = z.infer<typeof photoRecord>;
 export const outboxEntry = z.object({
   seq: z.number().optional(),
   id: z.string(),
-  mutation: customerMutation,
+  mutation: syncMutation,
   entityIds: z.array(z.string()),
   createdAt: z.string(),
 });
 
 export type OutboxEntry = z.infer<typeof outboxEntry>;
+
+export type { DocumentRecord, InterventionRecord, MemberRecord } from "./planning-records";
 
 export type PendingPhoto = {
   readonly id: string;
