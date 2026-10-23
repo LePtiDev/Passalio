@@ -63,6 +63,17 @@ describe("schema rules of docs/ARCHITECTURE.md and docs/SECURITY.md", () => {
     ).toBe(true);
   });
 
+  it.each(ORGANIZATION_DATA_TABLES)(
+    "%s has the required id, created_at and updated_at columns",
+    (table) => {
+      expect({
+        id: columnOf(shapes, table, "id")?.pk,
+        createdAt: columnOf(shapes, table, "created_at")?.notnull,
+        updatedAt: columnOf(shapes, table, "updated_at")?.notnull,
+      }).toEqual({ id: 1, createdAt: 1, updatedAt: 1 });
+    },
+  );
+
   it.each(PASSALIO_TABLES)("%s holds no organization_id, as it is Passalio data", (table) => {
     expect(shapeOf(shapes, table)).toBeDefined();
     expect(columnOf(shapes, table, "organization_id")).toBeUndefined();
