@@ -43,6 +43,7 @@ Dernière mise à jour : 2026-10-23.
 | Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement                 | `components/pagination.tsx`     |
 | Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                 | ADR 0018                        |
 | Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                        | ADR 0019                        |
+| Serveur MCP : page d'autorisation jamais servie depuis un ancien cache, nom et icône Passalio dans Claude, `favicon.ico`                 | `service-worker-routes.ts`      |
 | Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
 | Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                         | `CLAUDE.md`                     |
 

@@ -246,6 +246,19 @@ describe("tools", () => {
   });
 });
 
+describe("identity", () => {
+  it("presents itself as Passalio with its icon", async () => {
+    const { access_token: accessToken } = await connectClaude(platform, admin, "read");
+    const { serverInfo } = await mcpClientFor(platform, accessToken).initialize();
+    expect(serverInfo.title).toBe("Passalio");
+    expect(serverInfo.icons).toContainEqual({
+      src: `${APP_URL}/icon-192.png`,
+      mimeType: "image/png",
+      sizes: ["192x192"],
+    });
+  });
+});
+
 describe("rate limit", () => {
   it("counts calls per person and per minute", async () => {
     const database = createDatabase(platform.env.DB);

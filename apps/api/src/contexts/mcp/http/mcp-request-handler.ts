@@ -40,6 +40,7 @@ export const handleMcpRequest = async (
       logger,
     },
     access,
+    context.env.APP_URL,
   );
   const transport = new WebStandardStreamableHTTPServerTransport({ enableJsonResponse: true });
   await server.connect(transport);
