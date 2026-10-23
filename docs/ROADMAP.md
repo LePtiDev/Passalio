@@ -123,7 +123,9 @@ Dernière mise à jour : 2026-10-23.
 
 - [x] Règles, garde-fou `test:guard`, lint des tests, agents, skill `fix-bug`
 - [ ] Synchronisation : rejouer une modification ou un retrait après archivage, doublons dans un même lot (comportement à décider)
-- [ ] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
+- [x] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
+- [ ] Matrices API, suite : réponses conformes aux schémas zod et `trace_id` sur les succès, cas 400 par route, isolation vue par chaque rôle
+- [ ] À confirmer par Quentin : `members:read` pour les 4 rôles, « Membres et rôles » = `members:manage`, fin de l'onboarding = `organization:update`
 - [x] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection, clients, identité
 - [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
 - [x] Sécurité transverse (cookies, limites de débit, Turnstile, fichiers envoyés, lien de mot de passe, sessions) et aucune donnée personnelle dans les logs
