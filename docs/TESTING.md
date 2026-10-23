@@ -110,7 +110,7 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | Admin           | Le rôle Commercial ne voit que Commercial                                               | à écrire                  |
 | Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification         | à écrire                  |
 | Équipe Passalio | Changer un rôle, retirer un membre ; un super admin ne change pas son propre rôle       | à écrire                  |
-| Commercial      | Entreprises : onglets d'étape, filtres, recherche, pagination                           | à écrire                  |
+| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination | à écrire                  |
 | Commercial      | Créer, modifier, supprimer une entreprise prospectée                                    | à écrire                  |
 | Commercial      | Changer l'étape, ajouter une note, historique                                           | à écrire                  |
 | Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                          | à écrire                  |
