@@ -164,4 +164,18 @@ describe("applyCustomerMutation", () => {
       }),
     ).toEqual({ isOk: false, error: "site_not_found" });
   });
+
+  it("accepts a replayed customer creation even after the customer was archived", async () => {
+    const creation = {
+      type: "create_customer",
+      customerId: "customer-new",
+      customer: { kind: "individual", lastName: "Martin" },
+    } as const;
+    await run()(technician, creation);
+    await run()(organizationActorWith("secretary"), {
+      type: "archive_customer",
+      customerId: "customer-new",
+    });
+    expect(await run()(technician, creation)).toEqual({ isOk: true, value: undefined });
+  });
 });
