@@ -19,8 +19,8 @@ Quentin veut brancher Claude sur les données de production pour les consulter e
 - 60 appels par minute et par personne (table `rate_limits`), 429 au-delà.
 - Journal : `mcp.authorized` à chaque consentement, `mcp.<outil>` à chaque écriture, `mcp.revoked` à chaque retrait. Les logs gardent le nom de l'outil, la durée et l'erreur, jamais les arguments.
 - Retrait : `pnpm mcp:revoke --env <local|staging|production> --email <email>` supprime grants et jetons de la personne. Retirer le rôle plateforme suffit aussi à bloquer les appels.
-- Interrupteur `MCP_ENABLED` par environnement (désactivé en staging et en production tant que les KV ne sont pas créés) : sans lui, toutes les routes MCP répondent 404.
+- Interrupteur `MCP_ENABLED` par environnement (activé partout depuis le 2026-10-23, KV `passalio-oauth-staging` et `passalio-oauth-production`) : sans lui, toutes les routes MCP répondent 404.
 
 ## Conséquences
 
-Il faut créer un KV par environnement avant d'activer le serveur, ce que le jeton Cloudflare actuel ne permet pas encore. L'import en lot de fiches par Claude fera l'objet d'un outil à part, avec simulation préalable. Le drapeau de compatibilité `global_fetch_strictly_public` est activé pour lire les documents de métadonnées des clients OAuth.
+Le jeton Cloudflare de déploiement a besoin du droit « Workers KV Storage : Modifier ». L'import en lot de fiches par Claude fera l'objet d'un outil à part, avec simulation préalable. Le drapeau de compatibilité `global_fetch_strictly_public` est activé pour lire les documents de métadonnées des clients OAuth.

@@ -67,12 +67,13 @@
           "jurisdiction": "eu"
         }
       ],
+      "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "bbbe46e3e4874f3a952718a7bd5fbb28" }],
       "vars": {
         "BETTER_AUTH_URL": "https://app.staging.passalio.com",
         "APP_URL": "https://app.staging.passalio.com",
         "EMAIL_DELIVERY": "resend",
         "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
-        "MCP_ENABLED": "false"
+        "MCP_ENABLED": "true"
       }
     },
     "production": {
@@ -106,12 +107,13 @@
           "jurisdiction": "eu"
         }
       ],
+      "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "415d7c9002324c059c8743aacbfc569c" }],
       "vars": {
         "BETTER_AUTH_URL": "https://app.passalio.com",
         "APP_URL": "https://app.passalio.com",
         "EMAIL_DELIVERY": "resend",
         "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
-        "MCP_ENABLED": "false"
+        "MCP_ENABLED": "true"
       }
     }
   }
