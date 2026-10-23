@@ -28,6 +28,7 @@ Dernière mise à jour : 2026-10-23.
 | Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié               | PR #17                          |
 | Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                    | `apps/web`                      |
 | Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro      | PR #21                          |
+| Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                | PR #23                          |
 
 ## Hors code (Quentin)
 
