@@ -37,7 +37,7 @@ Dernière mise à jour : 2026-10-23.
 | Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                        | `auth-routes.ts`                |
 | Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                    | `lib/session.ts`                |
 | Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage           | ADR 0017                        |
-| Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                         | PR #35                          |
+| Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                         | PR #36                          |
 
 ## Hors code (Quentin)
 
