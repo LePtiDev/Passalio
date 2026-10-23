@@ -6,6 +6,7 @@ import type { BackofficeReadModel, JournalCursor, JournalScope } from "../domain
 
 const actors = alias(users, "actors");
 const impersonators = alias(users, "impersonators");
+const targetUsers = alias(users, "target_users");
 
 const scopeCondition = (scope: JournalScope) =>
   "organizationId" in scope
@@ -33,12 +34,17 @@ export const createD1JournalReadModel = (
         organizationName: organizations.name,
         actorName: actors.name,
         impersonatorName: impersonators.name,
+        targetName: targetUsers.name,
         data: auditLogs.data,
       })
       .from(auditLogs)
       .leftJoin(organizations, eq(organizations.id, auditLogs.organizationId))
       .leftJoin(actors, eq(actors.id, auditLogs.actorUserId))
       .leftJoin(impersonators, eq(impersonators.id, auditLogs.impersonatorUserId))
+      .leftJoin(
+        targetUsers,
+        and(eq(auditLogs.targetType, "user"), eq(targetUsers.id, auditLogs.targetId)),
+      )
       .where(and(scopeCondition(scope), beforeCondition(before)))
       .orderBy(desc(auditLogs.createdAt), desc(auditLogs.id))
       .limit(limit),

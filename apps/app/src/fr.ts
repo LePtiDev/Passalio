@@ -96,6 +96,11 @@ export const fr = {
       weak_password: "Le mot de passe doit faire au moins 12 caractères.",
       invalid_reset_token: "Ce lien n'est plus valable. Demandez-en un nouveau.",
       captcha_failed: "La vérification anti-robot a échoué. Réessayez.",
+      invalid_two_factor_code: "Code incorrect. Vérifiez l'heure de votre téléphone et réessayez.",
+      two_factor_expired: "La vérification a expiré. Reconnectez-vous.",
+      two_factor_too_many_attempts: "Trop d'essais. Reconnectez-vous dans quelques minutes.",
+      invalid_password: "Mot de passe incorrect.",
+      account_not_found: "Ce compte client n'existe plus.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
     },

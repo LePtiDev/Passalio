@@ -10,6 +10,12 @@ const AUTH_ERROR_CODES: ReadonlyMap<string, string> = new Map([
   ["INVALID_TOKEN", "invalid_reset_token"],
   ["VERIFICATION_FAILED", "captcha_failed"],
   ["MISSING_RESPONSE", "captcha_failed"],
+  ["INVALID_CODE", "invalid_two_factor_code"],
+  ["INVALID_BACKUP_CODE", "invalid_two_factor_code"],
+  ["INVALID_TWO_FACTOR_COOKIE", "two_factor_expired"],
+  ["TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE", "two_factor_too_many_attempts"],
+  ["ACCOUNT_TEMPORARILY_LOCKED", "two_factor_too_many_attempts"],
+  ["INVALID_PASSWORD", "invalid_password"],
 ]);
 
 export type AuthClientError = {

@@ -118,6 +118,19 @@ describe("admin read routes", () => {
     expect(journal.entries.length).toBeGreaterThanOrEqual(2);
   });
 
+  it("names the person targeted by a journal entry", async () => {
+    await platform.env.DB.prepare(
+      "INSERT INTO audit_logs (id, action, target_type, target_id, data, trace_id, created_at) SELECT ?, 'platform.role_granted', 'user', id, ?, 'trace', ? FROM users WHERE email = ?",
+    )
+      .bind("journal-target", JSON.stringify({ role: "support" }), Date.now(), "jean@dupont.fr")
+      .run();
+    const journal = await adminGet("/journal", journalPageResponse);
+    expect(journal.entries.find(({ id }) => id === "journal-target")).toMatchObject({
+      action: "platform.role_granted",
+      targetName: "jean",
+    });
+  });
+
   it("keeps the routes closed to regular users", async () => {
     const cookie = await platform.signIn("jean@dupont.fr");
     const response = await platform.request("/api/admin/accounts", {}, cookie);

@@ -16,6 +16,7 @@ export {
   type AccountUsageResponse,
   type JournalEntryResponse,
   type JournalPageResponse,
+  type MonthlyActivityResponse,
   type OverviewResponse,
   type UsageTrendResponse,
 } from "./backoffice-responses";

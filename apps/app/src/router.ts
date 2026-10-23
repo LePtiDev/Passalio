@@ -7,6 +7,15 @@ import {
   newEquipmentRoute,
   newSiteRoute,
 } from "./routes/customers";
+import {
+  adminAccountRoute,
+  adminAccountsRoute,
+  adminJournalRoute,
+  adminOverviewRoute,
+  adminRootRoute,
+  adminShellRoute,
+} from "./routes/admin";
+import { adminCodeRoute, adminSecurityRoute } from "./routes/admin-security";
 import { forgotPasswordRoute } from "./routes/forgot-password";
 import { homeRoute } from "./routes/home";
 import { invitationRoute } from "./routes/invitation";
@@ -21,12 +30,14 @@ import { resetPasswordRoute } from "./routes/reset-password";
 import { settingsRoute } from "./routes/settings";
 import { rootRoute } from "./routes/root";
 import { signInRoute } from "./routes/sign-in";
+import { signInCodeRoute } from "./routes/sign-in-code";
 import { signUpRoute } from "./routes/sign-up";
 import { signedInRoute } from "./routes/signed-in-layout";
 import { teamRoute } from "./routes/team";
 
 const routeTree = rootRoute.addChildren([
   signInRoute,
+  signInCodeRoute,
   signUpRoute,
   forgotPasswordRoute,
   resetPasswordRoute,
@@ -38,6 +49,16 @@ const routeTree = rootRoute.addChildren([
   termsRoute,
   privacyRoute,
   legalNoticeRoute,
+  adminRootRoute.addChildren([
+    adminCodeRoute,
+    adminSecurityRoute,
+    adminShellRoute.addChildren([
+      adminOverviewRoute,
+      adminAccountsRoute,
+      adminAccountRoute,
+      adminJournalRoute,
+    ]),
+  ]),
   signedInRoute.addChildren([
     homeRoute,
     teamRoute,

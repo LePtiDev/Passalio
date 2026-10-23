@@ -13,7 +13,7 @@ const selectPathname = (state: { readonly location: { readonly pathname: string 
 
 const isActive = (item: NavigationItem, pathname: string) =>
   (item.activeFor ?? [item.to]).some((path) =>
-    path === "/" ? pathname === "/" : path !== null && pathname.startsWith(path),
+    item.isExact === true ? pathname === path : path !== null && pathname.startsWith(path),
   );
 
 const Tab = ({ item, pathname }: { readonly item: NavigationItem; readonly pathname: string }) => {
@@ -39,14 +39,22 @@ const Tab = ({ item, pathname }: { readonly item: NavigationItem; readonly pathn
   );
 };
 
-export const MobileTabBar = () => {
+type MobileTabBarProps = {
+  readonly items?: readonly NavigationItem[];
+  readonly label?: string;
+};
+
+export const MobileTabBar = ({
+  items = MOBILE_NAVIGATION,
+  label = fr.shell.mainNavigation,
+}: MobileTabBarProps) => {
   const pathname = useRouterState({ select: selectPathname });
   return (
     <nav
-      aria-label={fr.shell.mainNavigation}
+      aria-label={label}
       className="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-[#E3E8EF] bg-white px-2 pt-1.5 pb-[max(14px,env(safe-area-inset-bottom))] lg:hidden"
     >
-      {MOBILE_NAVIGATION.map((item) => (
+      {items.map((item) => (
         <Tab key={item.label} item={item} pathname={pathname} />
       ))}
     </nav>

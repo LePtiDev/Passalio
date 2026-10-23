@@ -16,14 +16,23 @@ import { fr } from "@/fr";
 export type NavigationItem = {
   readonly label: string;
   readonly icon: LucideIcon;
-  readonly to: "/" | "/equipe" | "/reglages" | "/clients" | null;
+  readonly to:
+    | "/"
+    | "/equipe"
+    | "/reglages"
+    | "/clients"
+    | "/admin"
+    | "/admin/comptes"
+    | "/admin/journal"
+    | null;
   readonly activeFor?: readonly string[];
+  readonly isExact?: boolean;
 };
 
 const text = fr.shell;
 
 export const MAIN_NAVIGATION: readonly NavigationItem[] = [
-  { label: text.dashboard, icon: LayoutDashboard, to: "/" },
+  { label: text.dashboard, icon: LayoutDashboard, to: "/", isExact: true },
   { label: text.schedule, icon: CalendarDays, to: null },
   { label: text.customers, icon: Users, to: "/clients" },
   { label: text.documents, icon: FileCheck2, to: null },
@@ -37,7 +46,7 @@ export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
 ];
 
 export const MOBILE_NAVIGATION: readonly NavigationItem[] = [
-  { label: text.home, icon: House, to: "/" },
+  { label: text.home, icon: House, to: "/", isExact: true },
   { label: text.schedule, icon: CalendarDays, to: null },
   { label: text.customers, icon: Users, to: "/clients" },
   { label: text.settings, icon: Settings, to: "/reglages", activeFor: ["/reglages", "/equipe"] },

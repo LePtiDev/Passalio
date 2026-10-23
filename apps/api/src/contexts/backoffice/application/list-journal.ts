@@ -20,6 +20,7 @@ export const toJournalEntry = (row: JournalRow): JournalEntryResponse => ({
       : { id: row.organizationId, name: row.organizationName },
   actorName: row.actorName,
   impersonatorName: row.impersonatorName,
+  targetName: row.targetName,
   data: row.data,
 });
 

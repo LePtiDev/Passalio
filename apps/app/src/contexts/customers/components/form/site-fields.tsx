@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { BUILDING_TYPE_LABELS, customersFr } from "../../fr";
 import { useAddressSearch, type AddressSuggestion } from "../../hooks/use-address-search";
-import { useDebouncedValue } from "../../hooks/use-debounced-value";
+import { useDebouncedValue } from "@/lib/use-debounced-value";
 import { FIELD_CLASS } from "../customer-styles";
 import { AddressSuggestions } from "./address-suggestions";
 import { SegmentedControl } from "./choice-controls";
