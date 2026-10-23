@@ -92,4 +92,9 @@ export const PROSPECT_CONTACT_QUERIES: readonly CatalogedQuery[] = [
     query: "audit a deleted prospect company",
     run: (r, s) => r.salesAudit.companyDeleted(s.salesperson.id, s.company.id),
   },
+  {
+    method: "prospectContacts.counts",
+    query: "contact tabs of all departments",
+    run: (r) => r.prospectContacts.counts(undefined),
+  },
 ];
