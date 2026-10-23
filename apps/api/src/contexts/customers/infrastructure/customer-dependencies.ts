@@ -1,5 +1,6 @@
 import type { Database } from "../../../platform/database";
 import type { CustomerDependencies } from "../domain/customer-ports";
+import { createD1ChangeFeed } from "./d1-change-feed";
 import { createD1CustomerRepository } from "./d1-customer-repository";
 import { createD1EquipmentRepository } from "./d1-equipment-repository";
 import { createD1OrganizationTrades } from "./d1-organization-trades";
@@ -22,5 +23,6 @@ export const createCustomerDependencies = ({
   photos: createD1PhotoRepository(database),
   photoStorage: createR2PhotoStorage(files),
   organizationTrades: createD1OrganizationTrades(database),
+  changes: createD1ChangeFeed(database),
   now: () => new Date(),
 });

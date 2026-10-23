@@ -1,7 +1,6 @@
-import { assertCan, err, ok, type Actor, type Result } from "@passalio/shared";
+import { assertCan, err, ok, type Actor, type Result, type SiteChanges } from "@passalio/shared";
 import type { CustomerError } from "../domain/customer-error";
 import type { CustomerDependencies } from "../domain/customer-ports";
-import type { SiteChanges } from "../domain/customer-schemas";
 
 export type UpdateSiteInput = {
   readonly siteId: string;

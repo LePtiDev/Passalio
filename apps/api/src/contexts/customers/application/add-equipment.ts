@@ -1,9 +1,16 @@
-import { assertCan, err, newId, ok, type Actor, type Result } from "@passalio/shared";
+import {
+  assertCan,
+  err,
+  newId,
+  ok,
+  type Actor,
+  type Result,
+  type EquipmentFields,
+  calendarDateOf,
+} from "@passalio/shared";
 import type { CustomerError } from "../domain/customer-error";
 import type { Equipment } from "../domain/customer-models";
 import type { CustomerDependencies } from "../domain/customer-ports";
-import { calendarDateOf } from "../domain/customer-rules";
-import type { EquipmentFields } from "../domain/customer-schemas";
 import { newEquipment } from "../domain/equipment-records";
 import { checkReplaceable } from "../domain/equipment-rules";
 

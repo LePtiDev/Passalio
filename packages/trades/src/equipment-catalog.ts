@@ -1,22 +1,7 @@
+import { ENERGIES, EQUIPMENT_KINDS, type Energy, type EquipmentKind } from "@passalio/shared";
 import type { TradeId } from "./trade-ids";
 
-export const EQUIPMENT_KINDS = [
-  "open_fireplace",
-  "insert",
-  "log_stove",
-  "pellet_stove",
-  "boiler",
-  "solid_fuel_cooker",
-  "air_to_water_heat_pump",
-  "air_to_air_heat_pump",
-  "air_conditioner",
-] as const;
-
-export type EquipmentKind = (typeof EQUIPMENT_KINDS)[number];
-
-export const ENERGIES = ["wood_logs", "pellets", "gas", "oil", "coal", "electricity"] as const;
-
-export type Energy = (typeof ENERGIES)[number];
+export { ENERGIES, EQUIPMENT_KINDS, type Energy, type EquipmentKind };
 
 export const EQUIPMENT_FAMILIES = ["flue_appliance", "boiler", "heat_pump"] as const;
 

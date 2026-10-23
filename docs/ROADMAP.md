@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-22.
+Dernière mise à jour : 2026-10-23.
 
 ## Fait
 
@@ -24,6 +24,7 @@ Dernière mise à jour : 2026-10-22.
 | Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com              | PR #16                          |
 | Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation | PR #18                          |
 | Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR #19                          |
+| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau     | PR fiches clients 2             |
 
 ## Hors code (Quentin)
 
@@ -50,7 +51,9 @@ Dernière mise à jour : 2026-10-22.
 - [ ] Premiers pas : QR code d'installation de l'app sur le téléphone, une fois l'app installable publiée
 - [ ] Réglages entreprise : modifier après l'onboarding les informations, métiers, logo et numérotation ; bloquer le changement du premier numéro dès la première attestation signée
 - [x] Clients, lieux, équipements : tables D1 avec index, use cases, routes, tests d'isolation
-- [ ] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull`, indicateur de synchronisation (clients, lieux, appareils, photos en attente d'envoi)
+- [x] Hors ligne : Dexie, outbox, `/sync/push` et `/sync/pull` (clients, lieux, appareils, photos en attente d'envoi), ADR 0014
+- [ ] Indicateur de synchronisation et liste des modifications refusées, dans les écrans clients
+- [ ] Tester le démarrage sans réseau sur l'application installée (staging), service worker compris
 - [ ] Écrans clients selon la maquette validée le 2026-10-22 (https://claude.ai/artifact/Tha55S1NCL2MsWPN3TxquD) : liste, fiche, nouveau client, nouvel appareil, remplacement
 - [ ] Lecture de la plaque signalétique d'un appareil par photo (API Claude), champs à confirmer par le technicien, téléphone seulement
 - [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (configuration dans `packages/trades`)

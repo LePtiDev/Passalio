@@ -1,9 +1,16 @@
-import { err, ok, type Result } from "@passalio/shared";
+import {
+  err,
+  ok,
+  type Result,
+  type CustomerChanges,
+  type CustomerFields,
+  type SiteFields,
+  searchNameOf,
+} from "@passalio/shared";
+import { checkCustomerName } from "./customer-rules";
 import type { CustomerError } from "./customer-error";
 import type { Customer, Site } from "./customer-models";
-import { checkCustomerName, searchNameOf } from "./customer-rules";
 import { withChanges, type Changes } from "./record-changes";
-import type { CustomerChanges, CustomerFields, SiteFields } from "./customer-schemas";
 
 export type RecordContext = {
   readonly id: string;
