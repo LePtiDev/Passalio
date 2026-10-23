@@ -1,5 +1,7 @@
-import { assertCan, type Actor } from "@passalio/shared";
+import { assertCan, changePageOf, SYNC_PAGE_SIZE, type Actor } from "@passalio/shared";
 import type { ChangeCursor, ChangeFeed, CustomerDependencies } from "../domain/customer-ports";
+
+export { SYNC_PAGE_SIZE } from "@passalio/shared";
 
 export const CUSTOMER_SYNC_TABLES = ["customers", "sites", "equipments", "photos"] as const;
 
@@ -7,29 +9,13 @@ export type CustomerSyncTable = (typeof CUSTOMER_SYNC_TABLES)[number];
 
 export type CustomerSyncCursors = Partial<Record<CustomerSyncTable, ChangeCursor>>;
 
-export const SYNC_PAGE_SIZE = 200;
-
-const pageOf = async <T extends { readonly id: string; readonly updatedAt: Date }>(
-  rows: Promise<readonly T[]>,
-  current: ChangeCursor | undefined,
-) => {
-  const fetched = await rows;
-  const visible = fetched.slice(0, SYNC_PAGE_SIZE);
-  const last = visible.at(-1);
-  return {
-    rows: visible,
-    cursor: last === undefined ? current : { updatedAt: last.updatedAt, id: last.id },
-    hasMore: fetched.length > SYNC_PAGE_SIZE,
-  };
-};
-
 const changesOf = (feed: ChangeFeed, organizationId: string, cursors: CustomerSyncCursors) => {
   const limit = SYNC_PAGE_SIZE + 1;
   return Promise.all([
-    pageOf(feed.customers(organizationId, cursors.customers, limit), cursors.customers),
-    pageOf(feed.sites(organizationId, cursors.sites, limit), cursors.sites),
-    pageOf(feed.equipments(organizationId, cursors.equipments, limit), cursors.equipments),
-    pageOf(feed.photos(organizationId, cursors.photos, limit), cursors.photos),
+    changePageOf(feed.customers(organizationId, cursors.customers, limit), cursors.customers),
+    changePageOf(feed.sites(organizationId, cursors.sites, limit), cursors.sites),
+    changePageOf(feed.equipments(organizationId, cursors.equipments, limit), cursors.equipments),
+    changePageOf(feed.photos(organizationId, cursors.photos, limit), cursors.photos),
   ]);
 };
 

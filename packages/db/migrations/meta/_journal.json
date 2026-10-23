@@ -85,6 +85,13 @@
       "when": 1792766906084,
       "tag": "0011_platform_team",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1792786168965,
+      "tag": "0012_interventions_documents",
+      "breakpoints": true
     }
   ]
 }
