@@ -63,6 +63,19 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 - Chaque requête, job de file et cron porte un `trace_id`. Le propager à Sentry, PostHog, aux logs et aux messages de queue.
 - Logs uniquement via le logger structuré (`logger.info({ event, ... })`), jamais `console.log` direct.
 
+## Tests
+
+Stratégie dans l'ADR 0020, inventaire dans `docs/TESTING.md`.
+
+- Un test est une exigence. Ne jamais modifier ni supprimer un test existant (ni une capture de référence) sans l'accord écrit de Quentin. Seule exception : l'exigence qu'il vérifie a changé à la demande de Quentin.
+- Dans les deux cas, le commit porte la ligne `Test-Change-Approved: <lien vers le message de Quentin>`. `pnpm test:guard` refuse sinon.
+- Ne jamais changer un test pour le faire passer. Un test rouge signale un code faux, ou une exigence changée (règle ci-dessus).
+- Un bug : d'abord un commit `test: reproduce …` avec le test qui échoue (sortie copiée dans la PR), puis un commit `fix: …` qui le fait passer. Skill `fix-bug`.
+- Jamais de `.only`, `.skip`, `.todo`, `fixme`, d'`expect` conditionnel ni de test sans assertion.
+- Toute nouvelle route, permission, requête fréquente ou écran arrive avec ses tests et ses lignes dans `docs/TESTING.md`. Agent `test-writer` pour les écrire, agent `test-reviewer` pour relire.
+- Un test instable est un bug : le reproduire et le corriger, ne pas relancer jusqu'à ce qu'il passe.
+- Avant de fusionner une PR qui touche l'application : `pnpm test:e2e` en plus de `pnpm check`.
+
 ## Outils
 
 - Lint : Oxlint. Format : Oxfmt. Types : `tsc --noEmit`. Tests : Vitest, Playwright.
@@ -74,12 +87,14 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 - Avant de coder un écran : maquette (artifact Design ou captures) de chaque état, mobile et ordinateur, puis attendre ma validation visuelle. Aucun écran ne se code ni ne se fusionne sans maquette validée.
 - Après avoir codé un écran : me montrer les captures mobile et ordinateur de chaque état (vide, chargement, erreur, succès) avant de fusionner.
 - Utiliser les skills de `.claude/skills/` quand elles s'appliquent.
-- Tests écrits avec le code. Tout bug corrigé reçoit un test qui le reproduit.
+- Tests écrits avec le code, selon la section « Tests ».
 - Ne jamais lancer de déploiement sans que je le demande explicitement.
 
 ## Définition de « terminé »
 
-- `pnpm check` passe (format, lint, types, tests).
+- `pnpm check` passe (format, lint, types, garde-fou des tests, tests).
+- `pnpm test:e2e` passe si l'application a changé.
+- Aucun test existant modifié sans `Test-Change-Approved`.
 - Fonctionne hors ligne si c'est un écran terrain.
 - Skeletons, état vide et erreurs gérés.
 - Écran conforme à la maquette que j'ai validée, captures montrées.
@@ -90,6 +105,6 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 
 ## Commandes
 
-- `pnpm dev` · `pnpm check` · `pnpm fmt` · `pnpm lint` · `pnpm typecheck` · `pnpm test`
+- `pnpm dev` · `pnpm check` · `pnpm fmt` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:guard` · `pnpm test:e2e`
 - `pnpm db:generate` · `pnpm db:migrate:local`
 - Déploiement (uniquement sur demande) : `pnpm release:staging` · `pnpm release:prod`
