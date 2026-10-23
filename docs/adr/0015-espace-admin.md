@@ -16,6 +16,10 @@ L'équipe Passalio (Quentin, puis Antho) doit voir les comptes clients, leur cr�
 - Les routes `/api/admin/*` passent par `requirePlatformActor` : pas de rôle plateforme, compte bloqué ou session d'impersonation → 404, pour ne pas révéler l'espace ; rôle sans double authentification → 403 `two_factor_required` ; session de plus de 12 heures → 401 `admin_session_expired`, il faut se reconnecter.
 - « Se connecter à la place » d'un client reste en lecture seule, 30 minutes, avec motif, et visible par le propriétaire du compte (section 6 de `docs/ARCHITECTURE.md`).
 
+- Utilisation d'un compte client : la table `activity_days` garde une ligne par personne et par jour d'utilisation (heure de Paris), écrite à la connexion et au renouvellement quotidien de la session, jamais pendant une impersonation. Aucun détail des actions. « Connexions » dans l'admin = jours d'utilisation. Une entreprise est « en baisse » si ses 30 derniers jours comptent au moins 20 % de jours d'utilisation de moins que les 30 précédents, avec au moins 5 jours avant.
+- Tant que Stripe n'est pas branché, une entreprise est « en essai » pendant 14 jours après sa création.
+- Les requêtes de l'admin parcourent la table `organizations` sans index de tri ni de recherche : elles sont rares et la table reste petite (une ligne par entreprise cliente). `activity_days` est indexée par personne et par jour, `audit_logs` par action et date.
+
 ## Conséquences
 
 Il faut accès à Cloudflare pour nommer un admin : c'est voulu. Antho devra activer sa double authentification avant d'entrer. L'écran d'activation demande le mot de passe en plus du code, parce que Better Auth l'exige pour activer la double authentification.
