@@ -1,4 +1,4 @@
-const DEPARTMENT_NAMES: ReadonlyMap<string, string> = new Map([
+export const DEPARTMENT_NAMES: ReadonlyMap<string, string> = new Map([
   ["01", "Ain"],
   ["02", "Aisne"],
   ["03", "Allier"],
@@ -101,6 +101,8 @@ const DEPARTMENT_NAMES: ReadonlyMap<string, string> = new Map([
   ["974", "La Réunion"],
   ["976", "Mayotte"],
 ]);
+
+export const departmentName = (code: string): string => DEPARTMENT_NAMES.get(code) ?? code;
 
 export const departmentLabel = (code: string): string => {
   const name = DEPARTMENT_NAMES.get(code);

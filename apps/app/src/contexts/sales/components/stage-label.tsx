@@ -1,14 +1,15 @@
 import type { ProspectStage } from "@passalio/shared";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../fr";
+import { STAGE_COLORS } from "./stage-colors";
 
-const DOT_CLASS: Readonly<Record<ProspectStage, string>> = {
-  to_qualify: "bg-[#94A3B8]",
-  qualified: "bg-[#0F2A44]",
-  interested: "bg-[#0E7C5A]",
-  demo_planned: "bg-[#B45309]",
-  customer: "bg-[#2563EB]",
-  not_interested: "bg-[#B42318]",
+const DOT_STYLES: Readonly<Record<ProspectStage, { readonly backgroundColor: string }>> = {
+  to_qualify: { backgroundColor: STAGE_COLORS.to_qualify },
+  qualified: { backgroundColor: STAGE_COLORS.qualified },
+  interested: { backgroundColor: STAGE_COLORS.interested },
+  demo_planned: { backgroundColor: STAGE_COLORS.demo_planned },
+  customer: { backgroundColor: STAGE_COLORS.customer },
+  not_interested: { backgroundColor: STAGE_COLORS.not_interested },
 };
 
 export const StageDot = ({
@@ -20,7 +21,8 @@ export const StageDot = ({
 }) => (
   <span
     aria-hidden="true"
-    className={cn("size-2 shrink-0 rounded-full", DOT_CLASS[stage], className)}
+    style={DOT_STYLES[stage]}
+    className={cn("size-2 shrink-0 rounded-full", className)}
   />
 );
 

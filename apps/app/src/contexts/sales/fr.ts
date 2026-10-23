@@ -1,4 +1,5 @@
 import type { ContactFilter, ProspectStage } from "@passalio/shared";
+import { prospectionFr } from "./fr-prospection";
 
 const plural = (count: number, one: string, many: string) => `${count} ${count <= 1 ? one : many}`;
 
@@ -256,6 +257,7 @@ export const salesFr = {
       company: "Choisissez une entreprise.",
     },
   },
+  prospection: prospectionFr,
   shell: {
     navigation: "Navigation commercial",
   },

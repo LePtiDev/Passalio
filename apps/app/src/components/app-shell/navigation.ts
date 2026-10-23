@@ -26,6 +26,7 @@ export type NavigationItem = {
     | "/admin/journal"
     | "/admin/entreprises"
     | "/admin/contacts"
+    | "/admin/prospection"
     | null;
   readonly activeFor?: readonly string[];
   readonly isExact?: boolean;
