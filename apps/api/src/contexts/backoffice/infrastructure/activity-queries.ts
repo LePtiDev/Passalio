@@ -17,10 +17,10 @@ export const usageByOrganization = (database: Database, window: ActivityWindow) 
       recent: recentDays(window).as("recent"),
       previous: previousDays(window).as("previous"),
     })
-    .from(members)
-    .innerJoin(
-      activityDays,
-      and(eq(activityDays.userId, members.userId), gte(activityDays.day, window.previousStart)),
+    .from(activityDays)
+    .crossJoin(members)
+    .where(
+      and(eq(members.userId, activityDays.userId), gte(activityDays.day, window.previousStart)),
     )
     .groupBy(members.organizationId)
     .as("usage");
