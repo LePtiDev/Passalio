@@ -31,7 +31,12 @@ export const createD1NumberBlockRepository = (database: Database): NumberBlockRe
     const block = await database
       .select()
       .from(documentNumberBlocks)
-      .where(eq(documentNumberBlocks.id, id))
+      .where(
+        and(
+          eq(documentNumberBlocks.organizationId, organizationId),
+          eq(documentNumberBlocks.id, id),
+        ),
+      )
       .get();
     if (block === undefined) {
       throw new Error("number_block_not_reserved");
