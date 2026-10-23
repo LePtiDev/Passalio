@@ -35,7 +35,7 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
   const signOut = useSignOut();
   return (
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-5 border-r border-[#E3E8EF] bg-[#F7F9FB] px-3 py-4 lg:flex">
-      <div className="flex items-center gap-2 px-1.5">
+      <div className="flex items-center gap-2 px-2.5">
         <img src={logo} alt={fr.app.name} width={101} height={20} className="h-5 w-auto" />
         <span className="rounded-md bg-[#E6F4EE] px-1.5 py-0.5 text-[11px] leading-4 font-semibold text-[#0B5B43]">
           {text.badge}
@@ -50,7 +50,7 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
           />
         ) : null}
       </nav>
-      <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-1.5 pt-3.5">
+      <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-2.5 pt-3.5">
         <InitialsAvatar name={admin.name} tone="mint" size="small" />
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="truncate text-[13px] font-semibold">{admin.name}</span>
