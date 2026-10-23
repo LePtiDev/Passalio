@@ -49,6 +49,7 @@ export const prospectCompanyResponse = z.object({
   website: z.string().nullable(),
   activity: z.string().nullable(),
   headcount: z.string().nullable(),
+  currentTool: z.string().nullable(),
   foundedOn: z.string().nullable(),
   registryStatus: z.string().nullable(),
   notes: z.string().nullable(),
@@ -138,6 +139,7 @@ export const prospectMapResponse = z.object({
 export const prospectFiltersResponse = z.object({
   departments: z.array(z.object({ code: z.string(), count: z.number() })),
   owners: z.array(person),
+  totals: z.object({ companies: z.number(), contacts: z.number() }),
 });
 
 export type ProspectCompaniesPageResponse = z.infer<typeof prospectCompaniesPageResponse>;

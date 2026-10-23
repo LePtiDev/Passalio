@@ -15,6 +15,12 @@ import {
   adminRootRoute,
   adminShellRoute,
 } from "./routes/admin";
+import {
+  adminCompaniesRoute,
+  adminCompanyRoute,
+  adminContactRoute,
+  adminContactsRoute,
+} from "./routes/admin-commercial";
 import { adminCodeRoute, adminSecurityRoute } from "./routes/admin-security";
 import { forgotPasswordRoute } from "./routes/forgot-password";
 import { homeRoute } from "./routes/home";
@@ -57,6 +63,10 @@ const routeTree = rootRoute.addChildren([
       adminAccountsRoute,
       adminAccountRoute,
       adminJournalRoute,
+      adminCompaniesRoute,
+      adminCompanyRoute,
+      adminContactsRoute,
+      adminContactRoute,
     ]),
   ]),
   signedInRoute.addChildren([

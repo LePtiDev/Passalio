@@ -25,6 +25,7 @@ export const prospectCompanies = sqliteTable(
     website: text("website"),
     activity: text("activity"),
     headcount: text("headcount"),
+    currentTool: text("current_tool"),
     foundedOn: text("founded_on"),
     registryStatus: text("registry_status"),
     notes: text("notes"),

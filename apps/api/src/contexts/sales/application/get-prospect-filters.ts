@@ -6,9 +6,20 @@ import {
 import type { SalesDependencies } from "../domain/prospect-ports";
 
 export const getProspectFilters =
-  ({ companies, people }: Pick<SalesDependencies, "companies" | "people">) =>
+  ({ companies, contacts, people }: Pick<SalesDependencies, "companies" | "contacts" | "people">) =>
   async (actor: PlatformActor): Promise<ProspectFiltersResponse> => {
     assertPlatformCan(actor, "prospects:read");
-    const [departments, owners] = await Promise.all([companies.departments(), people.owners()]);
-    return { departments: [...departments], owners: [...owners] };
+    const [departments, owners, contactCounts] = await Promise.all([
+      companies.departments(),
+      people.owners(),
+      contacts.counts(undefined),
+    ]);
+    return {
+      departments: [...departments],
+      owners: [...owners],
+      totals: {
+        companies: departments.reduce((total, { count }) => total + count, 0),
+        contacts: contactCounts.all,
+      },
+    };
   };
