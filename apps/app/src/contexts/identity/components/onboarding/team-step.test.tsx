@@ -105,6 +105,23 @@ describe("TeamStep", () => {
     expect(api.requestsTo(COMPLETION_ROUTE)).toHaveLength(1);
   });
 
+  it("shows the short trace id of a refused invitation", async () => {
+    installTeamStep({
+      [INVITE_ROUTE]: (request) =>
+        JSON.stringify(request.body).includes("luc@")
+          ? jsonReply({ id: "invitation-1" })
+          : errorReply("already_member", TRACE_ID, 409),
+    });
+    const { user } = renderTeamStep();
+
+    await user.type(await screen.findByLabelText(text.emailLabel(1)), "luc@exemple.fr");
+    await user.type(screen.getByLabelText(text.emailLabel(2)), "claire@exemple.fr");
+    await user.click(screen.getByRole("button", { name: text.send(2) }));
+
+    expect(await screen.findByText(text.partlySent(1, 1))).toBeVisible();
+    expect(screen.getByText(fr.errors.code(SHORT_TRACE_ID))).toBeVisible();
+  });
+
   it("finishes later without sending any invitation", async () => {
     const api = installTeamStep();
     const { user, router } = renderTeamStep();
