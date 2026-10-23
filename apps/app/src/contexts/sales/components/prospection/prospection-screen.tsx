@@ -1,15 +1,20 @@
 import { useCallback, useMemo } from "react";
 import { ErrorState } from "@/components/error-state";
 import { AdminHeading, AdminPage, type AdminTrailStep } from "@/contexts/backoffice";
+import { CursorPagination } from "@/components/pagination";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { usePagedList } from "@/lib/use-paged-list";
 import { departmentLocative } from "../../department-locatives";
 import { departmentLabel, departmentName } from "../../department-names";
 import { salesFr } from "../../fr";
-import { useCompanies, useProspectFilters, useProspectMap } from "../../hooks/use-sales-queries";
+import {
+  useCompaniesPage,
+  useProspectFilters,
+  useProspectMap,
+} from "../../hooks/use-sales-queries";
 import { departmentOptions } from "../companies/company-list-filters";
 import type { FilterGroup } from "../list/list-filters";
 import { ListTabs } from "../list/list-tabs";
-import { LoadMore } from "../list/list-states";
 import { ListToolbar } from "../list/list-toolbar";
 import { ProspectMap } from "../map/prospect-map";
 import { LeadCard, LeadCardSkeleton } from "./lead-card";
@@ -30,6 +35,8 @@ const text = salesFr.prospection;
 
 const SEARCH_DELAY_MS = 300;
 
+const LEAD_ROW_HEIGHTS = { mobile: 55, desktop: 55 } as const;
+
 const TRAIL: readonly AdminTrailStep[] = [{ label: text.title }];
 
 type ProspectionScreenProps = {
@@ -43,25 +50,22 @@ export const ProspectionScreen = ({ scope, onScopeChange }: ProspectionScreenPro
     () => ({ stage: scope.tab, department: scope.department, owner: null, search }),
     [scope.tab, scope.department, search],
   );
-  const companies = useCompanies(listScope);
+  const { measureList, ...paging } = usePagedList(JSON.stringify(listScope), LEAD_ROW_HEIGHTS);
+  const companies = useCompaniesPage(listScope, paging.cursor, paging.pageSize);
   const map = useProspectMap(scope.department);
   const filters = useProspectFilters();
-  const rows = useMemo(
-    () => companies.data?.pages.flatMap((page) => page.companies) ?? [],
-    [companies.data],
-  );
+  const rows = useMemo(() => companies.data?.companies ?? [], [companies.data]);
   const pins = useMemo(() => pinsMatching(map.data?.pins ?? [], search), [map.data, search]);
   const selectedId = scope.companyId ?? rows[0]?.id ?? null;
-  const counts = companies.data?.pages[0]?.counts ?? null;
+  const counts = companies.data?.counts ?? null;
   const count = counts === null ? null : counts[scope.tab];
 
-  const { refetch: refetchCompanies, fetchNextPage } = companies;
+  const { refetch: refetchCompanies } = companies;
   const { refetch: refetchMap } = map;
   const retry = useCallback(() => {
     void refetchCompanies();
     void refetchMap();
   }, [refetchCompanies, refetchMap]);
-  const loadMore = useCallback(() => void fetchNextPage(), [fetchNextPage]);
   const select = useCallback((companyId: string) => onScopeChange({ companyId }), [onScopeChange]);
   const selectNext = useCallback(
     (companyId: string) =>
@@ -141,14 +145,19 @@ export const ProspectionScreen = ({ scope, onScopeChange }: ProspectionScreenPro
       </div>
       {error === null ? (
         <div className="grid items-stretch gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
-          <div className="hidden min-w-0 flex-col gap-3 self-start lg:flex">
+          <div ref={measureList} className="hidden min-w-0 flex-col gap-3 self-start lg:flex">
             {companies.isPending ? <LeadListSkeleton /> : null}
             {isEmpty ? <ProspectionEmpty {...emptyProps} /> : null}
             {rows.length > 0 ? (
-              <LeadList companies={rows} selectedId={selectedId} onSelect={select} />
-            ) : null}
-            {companies.hasNextPage ? (
-              <LoadMore isLoading={companies.isFetchingNextPage} onLoadMore={loadMore} />
+              <LeadList companies={rows} selectedId={selectedId} onSelect={select}>
+                <CursorPagination
+                  paging={paging}
+                  nextCursor={companies.data?.nextCursor ?? null}
+                  shown={rows.length}
+                  total={search === "" ? count : null}
+                  isLoading={companies.isPlaceholderData}
+                />
+              </LeadList>
             ) : null}
           </div>
           <ProspectMap

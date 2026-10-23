@@ -53,10 +53,13 @@ const memberRoutes = new Hono<ActorEnv>()
   .use(requireActor)
   .get("/me", (context) => context.json({ actor: context.get("actor") }))
   .get("/members", validateQuery(listMembersQuery), async (context) => {
-    const { cursor } = context.req.valid("query");
+    const { cursor, limit } = context.req.valid("query");
     const page = await listMembers(identityDependencies(context.var, context.env))(
       context.get("actor"),
-      cursor === undefined ? {} : { afterId: cursor },
+      {
+        ...(cursor === undefined ? {} : { afterId: cursor }),
+        ...(limit === undefined ? {} : { limit }),
+      },
     );
     return context.json(page);
   })

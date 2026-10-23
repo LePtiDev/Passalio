@@ -1,10 +1,11 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { ErrorState } from "@/components/error-state";
-import { Button } from "@/components/ui/button";
+import { CursorPagination } from "@/components/pagination";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { usePagedList } from "@/lib/use-paged-list";
 import type { AccountFilter } from "../../backoffice-api";
 import { backofficeFr } from "../../fr";
-import { useAccounts } from "../../hooks/use-backoffice-queries";
+import { useAccountsPage } from "../../hooks/use-backoffice-queries";
 import { useNow } from "../../hooks/use-now";
 import { ADMIN_CARD_CLASS, ADMIN_TABLE_HEADER_CLASS } from "../admin-styles";
 import { AdminHeading, AdminPage, type AdminTrailStep } from "../shell/admin-page";
@@ -15,6 +16,8 @@ import { AccountsToolbar } from "./accounts-toolbar";
 const text = backofficeFr.accounts;
 
 const SEARCH_DELAY_MS = 300;
+
+const ACCOUNT_ROW_HEIGHTS = { mobile: 73, desktop: 59 } as const;
 
 const TRAIL: readonly AdminTrailStep[] = [{ label: text.title }];
 
@@ -43,18 +46,17 @@ export const AccountsScreen = ({
   onSearchChange,
 }: AccountsScreenProps) => {
   const debouncedSearch = useDebouncedValue(search.trim(), SEARCH_DELAY_MS);
-  const accounts = useAccounts(filter, debouncedSearch);
-  const { refetch, fetchNextPage } = accounts;
+  const { measureList, ...paging } = usePagedList(
+    `${filter}:${debouncedSearch}`,
+    ACCOUNT_ROW_HEIGHTS,
+  );
+  const accounts = useAccountsPage(filter, debouncedSearch, paging.cursor, paging.pageSize);
+  const { refetch } = accounts;
   const retry = useCallback(() => void refetch(), [refetch]);
-  const loadMore = useCallback(() => void fetchNextPage(), [fetchNextPage]);
   const clearSearch = useCallback(() => onSearchChange(""), [onSearchChange]);
   const showAll = useCallback(() => onFilterChange("all"), [onFilterChange]);
-  const rows = useMemo(
-    () => accounts.data?.pages.flatMap((page) => page.accounts) ?? [],
-    [accounts.data],
-  );
-  const counts = accounts.data?.pages[0]?.counts ?? null;
-  const total = counts === null ? 0 : counts[filter];
+  const rows = accounts.data?.accounts ?? [];
+  const counts = accounts.data?.counts ?? null;
   const now = useNow();
 
   return (
@@ -74,18 +76,18 @@ export const AccountsScreen = ({
         onSearchChange={onSearchChange}
         onFilterChange={onFilterChange}
       />
-      {accounts.isPending ? <AccountsSkeleton /> : null}
-      {accounts.isError ? <ErrorState error={accounts.error} onRetry={retry} /> : null}
-      {accounts.isSuccess && rows.length === 0 ? (
-        <AccountsEmpty
-          search={debouncedSearch}
-          filter={filter}
-          onClearSearch={clearSearch}
-          onShowAll={showAll}
-        />
-      ) : null}
-      {accounts.isSuccess && rows.length > 0 ? (
-        <div className="flex flex-col gap-3">
+      <div ref={measureList} className="flex flex-col gap-4 lg:gap-5">
+        {accounts.isPending ? <AccountsSkeleton /> : null}
+        {accounts.isError ? <ErrorState error={accounts.error} onRetry={retry} /> : null}
+        {accounts.isSuccess && rows.length === 0 ? (
+          <AccountsEmpty
+            search={debouncedSearch}
+            filter={filter}
+            onClearSearch={clearSearch}
+            onShowAll={showAll}
+          />
+        ) : null}
+        {accounts.isSuccess && rows.length > 0 ? (
           <div className={ADMIN_CARD_CLASS}>
             <AccountsHeader />
             <ul>
@@ -93,22 +95,16 @@ export const AccountsScreen = ({
                 <AccountRow key={account.id} account={account} now={now} />
               ))}
             </ul>
+            <CursorPagination
+              paging={paging}
+              nextCursor={accounts.data?.nextCursor ?? null}
+              shown={rows.length}
+              total={debouncedSearch === "" && counts !== null ? counts[filter] : null}
+              isLoading={accounts.isPlaceholderData}
+            />
           </div>
-          {accounts.hasNextPage ? (
-            <p className="flex items-center gap-1.5 text-[13px] text-[#64748B]">
-              {text.shown(rows.length, total)} ·
-              <Button
-                variant="link"
-                className="h-12 px-0 text-[13px] font-semibold text-[#0E7C5A] lg:h-auto"
-                disabled={accounts.isFetchingNextPage}
-                onClick={loadMore}
-              >
-                {text.loadMore}
-              </Button>
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </AdminPage>
   );
 };

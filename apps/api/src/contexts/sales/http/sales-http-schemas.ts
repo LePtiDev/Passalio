@@ -7,6 +7,7 @@ export const contactParams = z.object({ contactId: z.uuid() });
 const department = z.string().regex(DEPARTMENT_PATTERN).optional();
 const search = z.string().trim().max(120).optional();
 const cursor = z.string().max(300).optional();
+const limit = z.coerce.number().int().min(5).max(50).optional();
 
 export const listCompaniesQuery = z.object({
   stage: z.enum(PROSPECT_STAGES).optional(),
@@ -14,6 +15,7 @@ export const listCompaniesQuery = z.object({
   owner: z.string().min(1).max(100).optional(),
   q: search,
   cursor,
+  limit,
 });
 
 export const listContactsQuery = z.object({
@@ -21,6 +23,7 @@ export const listContactsQuery = z.object({
   department,
   q: search,
   cursor,
+  limit,
 });
 
 export const mapQuery = z.object({ department, stage: z.enum(PROSPECT_STAGES).optional() });

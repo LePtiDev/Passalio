@@ -10,6 +10,7 @@ export type ListAccountsInput = {
   readonly filter: AccountFilter;
   readonly query?: string | undefined;
   readonly cursor?: string | undefined;
+  readonly limit?: number | undefined;
 };
 
 export const listAccounts =
@@ -18,21 +19,21 @@ export const listAccounts =
     assertPlatformCan(actor, "platform:read");
     const window = activityWindow(now());
     const query = input.query?.trim();
+    const limit = input.limit ?? ACCOUNTS_PAGE_SIZE;
     const [rows, counts] = await Promise.all([
       readModel.listAccounts(window, {
         filter: input.filter,
         query: query === "" ? undefined : query,
         after: decodeAccountCursor(input.cursor),
-        limit: ACCOUNTS_PAGE_SIZE + 1,
+        limit: limit + 1,
       }),
       readModel.countAccounts(window),
     ]);
-    const visible = rows.slice(0, ACCOUNTS_PAGE_SIZE);
+    const visible = rows.slice(0, limit);
     const last = visible.at(-1);
     return {
       accounts: await summarizeAccounts(readModel, window, visible),
       counts,
-      nextCursor:
-        rows.length > ACCOUNTS_PAGE_SIZE && last !== undefined ? encodeAccountCursor(last) : null,
+      nextCursor: rows.length > limit && last !== undefined ? encodeAccountCursor(last) : null,
     };
   };

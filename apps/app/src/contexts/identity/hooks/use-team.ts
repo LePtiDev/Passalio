@@ -1,5 +1,12 @@
 import type { OrganizationRole } from "@passalio/shared";
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  skipToken,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 import { unwrap, type ApiResult } from "@/lib/api-client";
 import { identityFr, ROLE_LABELS } from "../fr";
@@ -19,6 +26,16 @@ export const useTeam = () =>
       unwrap(await identityApi.fetchMembers(pageParam)),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+export const useTeamPage = (cursor: string | null, limit: number | null) =>
+  useQuery({
+    queryKey: [...TEAM_QUERY_KEY, "page", cursor, limit],
+    queryFn:
+      limit === null
+        ? skipToken
+        : async () => unwrap(await identityApi.fetchMembers(cursor, limit)),
+    placeholderData: keepPreviousData,
   });
 
 export const useTeamMutation = <Input>(

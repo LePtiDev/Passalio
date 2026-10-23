@@ -10,15 +10,17 @@ import {
   AdminPage,
   type AdminTrailStep,
 } from "@/contexts/backoffice";
+import { CursorPagination } from "@/components/pagination";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { usePagedList } from "@/lib/use-paged-list";
 import { cn } from "@/lib/utils";
 import { departmentLabel } from "../../department-names";
 import { salesFr } from "../../fr";
-import { useCompanies, useProspectFilters } from "../../hooks/use-sales-queries";
+import { useCompaniesPage, useProspectFilters } from "../../hooks/use-sales-queries";
 import type { CompanyListScope } from "../../sales-api";
 import { CompanyFormDialog } from "../forms/company-form-dialog";
 import { ListTabs } from "../list/list-tabs";
-import { ListSkeleton, LoadMore } from "../list/list-states";
+import { ListSkeleton } from "../list/list-states";
 import { ListToolbar } from "../list/list-toolbar";
 import { LIST_HEADER_CLASS } from "../sales-styles";
 import {
@@ -32,6 +34,8 @@ import { CompaniesEmpty } from "./companies-states";
 const text = salesFr.companies;
 
 const SEARCH_DELAY_MS = 300;
+
+const COMPANY_ROW_HEIGHTS = { mobile: 73, desktop: 55 } as const;
 
 const TRAIL: readonly AdminTrailStep[] = [{ label: text.title }];
 
@@ -64,12 +68,15 @@ export const CompaniesScreen = ({ scope, onScopeChange }: CompaniesScreenProps) 
     () => ({ ...scope, search: debouncedSearch }),
     [scope, debouncedSearch],
   );
-  const companies = useCompanies(debouncedScope);
+  const { measureList, ...paging } = usePagedList(
+    JSON.stringify(debouncedScope),
+    COMPANY_ROW_HEIGHTS,
+  );
+  const companies = useCompaniesPage(debouncedScope, paging.cursor, paging.pageSize);
   const filters = useProspectFilters();
   const groups = useCompanyFilterGroups(scope, filters.data, onScopeChange);
-  const { refetch, fetchNextPage } = companies;
+  const { refetch } = companies;
   const retry = useCallback(() => void refetch(), [refetch]);
-  const loadMore = useCallback(() => void fetchNextPage(), [fetchNextPage]);
   const selectTab = useCallback(
     (tab: StageTab) => onScopeChange({ stage: stageOfTab(tab) }),
     [onScopeChange],
@@ -89,11 +96,8 @@ export const CompaniesScreen = ({ scope, onScopeChange }: CompaniesScreenProps) 
     ),
     [openCreate],
   );
-  const rows = useMemo(
-    () => companies.data?.pages.flatMap((page) => page.companies) ?? [],
-    [companies.data],
-  );
-  const counts = companies.data?.pages[0]?.counts ?? null;
+  const rows = companies.data?.companies ?? [];
+  const counts = companies.data?.counts ?? null;
   const totals = filters.data?.totals ?? null;
   const shownCount = counts === null ? null : counts[scope.stage ?? "all"];
   const department = scope.department === null ? null : departmentLabel(scope.department);
@@ -134,31 +138,37 @@ export const CompaniesScreen = ({ scope, onScopeChange }: CompaniesScreenProps) 
           onSelect={selectTab}
         />
       </ListToolbar>
-      {companies.isPending ? <ListSkeleton /> : null}
-      {companies.isError ? <ErrorState error={companies.error} onRetry={retry} /> : null}
-      {companies.isSuccess && rows.length === 0 ? (
-        <CompaniesEmpty
-          scope={debouncedScope}
-          onClearSearch={clearSearch}
-          onClearFilters={clearFilters}
-          onCreate={openCreate}
-        />
-      ) : null}
-      {companies.isSuccess && rows.length > 0 ? (
-        <>
-          <div className={ADMIN_CARD_CLASS}>
-            <CompaniesHeader />
-            <ul>
-              {rows.map((company) => (
-                <CompanyRow key={company.id} company={company} />
-              ))}
-            </ul>
-          </div>
-          {companies.hasNextPage ? (
-            <LoadMore isLoading={companies.isFetchingNextPage} onLoadMore={loadMore} />
-          ) : null}
-        </>
-      ) : null}
+      <div ref={measureList} className="flex flex-col gap-4 lg:gap-5">
+        {companies.isPending ? <ListSkeleton /> : null}
+        {companies.isError ? <ErrorState error={companies.error} onRetry={retry} /> : null}
+        {companies.isSuccess && rows.length === 0 ? (
+          <CompaniesEmpty
+            scope={debouncedScope}
+            onClearSearch={clearSearch}
+            onClearFilters={clearFilters}
+            onCreate={openCreate}
+          />
+        ) : null}
+        {companies.isSuccess && rows.length > 0 ? (
+          <>
+            <div className={ADMIN_CARD_CLASS}>
+              <CompaniesHeader />
+              <ul>
+                {rows.map((company) => (
+                  <CompanyRow key={company.id} company={company} />
+                ))}
+              </ul>
+              <CursorPagination
+                paging={paging}
+                nextCursor={companies.data?.nextCursor ?? null}
+                shown={rows.length}
+                total={debouncedScope.search === "" ? shownCount : null}
+                isLoading={companies.isPlaceholderData}
+              />
+            </div>
+          </>
+        ) : null}
+      </div>
       <CompanyFormDialog company={null} isOpen={isCreating} onOpenChange={setIsCreating} />
     </AdminPage>
   );
