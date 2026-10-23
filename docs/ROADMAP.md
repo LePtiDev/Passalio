@@ -33,6 +33,7 @@ Dernière mise à jour : 2026-10-23.
 | Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin`                          | ADR 0015                        |
 | Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux                                | ADR 0015                        |
 | Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification | ADR 0015                        |
+| Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage           | ADR 0016                        |
 
 ## Hors code (Quentin)
 
@@ -85,6 +86,10 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Import CSV et export des données (export CSV et PDF promis par les conditions, article 11), suppression des données 90 jours après la fin de l'abonnement
 - [x] Espace admin, socle de sécurité : rôles plateforme, double authentification, accès réservé (ADR 0015)
 - [x] Espace admin, écrans selon la maquette validée le 2026-10-23 : vue d'ensemble, comptes clients, utilisation, personnel, journal, activation de la double authentification
+- [x] Commercial, données : tables, API `/api/admin/prospects`, rôle `sales`, commande `prospects:import` (ADR 0016)
+- [ ] Commercial, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/9s2qiEWDn6mQw2nS74eUyv) : Entreprises, Contacts, fiches, ordinateur et mobile ; espace admin réduit à Commercial pour le rôle `sales`
+- [ ] Commercial, écran Prospection : carte Leaflet (fond IGN), qualifier depuis la carte
+- [ ] Importer les fiches en staging et en production, puis donner le rôle `sales` à Antho (sur demande de Quentin)
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)

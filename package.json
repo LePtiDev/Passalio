@@ -18,7 +18,8 @@
     "release:prod": "pnpm --filter @passalio/api release production",
     "test:e2e": "pnpm --filter @passalio/app test:e2e",
     "platform:grant": "pnpm --filter @passalio/api platform:role grant",
-    "platform:revoke": "pnpm --filter @passalio/api platform:role revoke"
+    "platform:revoke": "pnpm --filter @passalio/api platform:role revoke",
+    "prospects:import": "pnpm --filter @passalio/api prospects:import"
   },
   "devDependencies": {
     "lefthook": "^2.2.2",

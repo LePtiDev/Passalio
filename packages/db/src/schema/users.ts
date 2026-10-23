@@ -1,7 +1,7 @@
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { idColumn, timestampColumns } from "../columns";
 
-export const USER_ROLES = ["user", "superadmin", "support"] as const;
+export const USER_ROLES = ["user", "superadmin", "support", "sales"] as const;
 
 export const users = sqliteTable("users", {
   id: idColumn(),

@@ -64,6 +64,13 @@
       "when": 1792750481213,
       "tag": "0008_session_two_factor_verified",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1792761927271,
+      "tag": "0009_prospects",
+      "breakpoints": true
     }
   ]
 }
