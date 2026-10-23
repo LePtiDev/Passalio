@@ -1,0 +1,16 @@
+---
+import { fr } from "../fr";
+---
+
+<section class="bg-mist py-[clamp(56px,8vw,96px)]">
+  <ul class="mx-auto grid max-w-290 grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-8 px-5">
+    {
+      fr.reassurance.map((item) => (
+        <li class="flex flex-col gap-2">
+          <h2 class="text-xl font-bold">{item.title}</h2>
+          <p class="text-slate-text">{item.text}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

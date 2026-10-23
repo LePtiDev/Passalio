@@ -26,6 +26,7 @@ Dernière mise à jour : 2026-10-23.
 | Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation  | PR #19                          |
 | Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau     | PR #20                          |
 | Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié               | PR #17                          |
+| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                    | `apps/web`                      |
 | Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro      | PR #21                          |
 
 ## Hors code (Quentin)
@@ -74,6 +75,15 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Observabilité : Sentry navigateur et API, PostHog UE avec accord préalable de l'utilisateur (bannière), sourcemaps dans `release`
 - [ ] Import CSV et export des données (export CSV et PDF promis par les conditions, article 11), suppression des données 90 jours après la fin de l'abonnement
 - [ ] Backoffice minimal avec impersonation, sauvegardes externes chiffrées (ADR 0008)
+
+## Site passalio.com
+
+- [x] Landing page, première version (maquette : https://claude.ai/artifact/VXkqPLKM7fxAL5f6rYrvVK)
+- [ ] Déployer le site sur passalio.com (Cloudflare), sur demande de Quentin
+- [ ] Landing : section prix, une fois le prix tranché
+- [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
+- [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
+- [ ] Pages par métier et pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement
 
 Avant le premier client payant : informations de l'éditeur dans les pages légales, relecture juridique, SPF/DKIM/DMARC.
 

@@ -1,0 +1,21 @@
+---
+import { fr } from "../fr";
+import { appUrl } from "../links";
+import ButtonLink from "./button-link.astro";
+---
+
+<section class="pb-[clamp(56px,8vw,104px)]">
+  <div class="mx-auto max-w-290 px-5">
+    <div
+      class="flex flex-wrap items-center justify-between gap-6 rounded-3xl bg-mist p-[clamp(32px,6vw,64px)]"
+    >
+      <div class="flex min-w-0 flex-[1_1_420px] flex-col gap-2.5">
+        <h2 class="text-[clamp(26px,3.4vw,36px)] leading-[1.15] font-extrabold tracking-[-0.02em]">
+          {fr.finalCall.title}
+        </h2>
+        <p class="text-[clamp(17px,1.6vw,19px)] text-slate-text">{fr.finalCall.lead}</p>
+      </div>
+      <ButtonLink href={appUrl("signUp")}>{fr.finalCall.action}</ButtonLink>
+    </div>
+  </div>
+</section>

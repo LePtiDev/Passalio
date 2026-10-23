@@ -1,0 +1,22 @@
+---
+import { fr } from "../fr";
+import SectionHeading from "./section-heading.astro";
+---
+
+<section class="bg-mist py-[clamp(56px,8vw,104px)]">
+  <div class="mx-auto flex max-w-290 flex-col gap-10 px-5">
+    <SectionHeading title={fr.pains.title} lead={fr.pains.lead} />
+    <ul class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+      {
+        fr.pains.items.map((item) => (
+          <li class="flex flex-col gap-2.5 rounded-2xl border border-line bg-white p-6">
+            <p class="text-[13px] font-bold tracking-[0.06em] text-validated uppercase">
+              {item.moment}
+            </p>
+            <p class="text-[17px]">{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
