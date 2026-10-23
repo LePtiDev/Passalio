@@ -46,6 +46,7 @@ export const ListToolbar = ({
             groups={groups}
             activeCount={filters.length}
             desktopActiveCount={desktopCount}
+            onClear={clear}
           />
         </div>
         <FilterChips filters={filters} onClear={clear} />
