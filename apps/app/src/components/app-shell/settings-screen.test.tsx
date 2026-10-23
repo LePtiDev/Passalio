@@ -3,7 +3,7 @@ import { Dexie } from "dexie";
 import { describe, expect, it, vi } from "vitest";
 import { fr } from "@/fr";
 import { serverCustomerRecord } from "@/lib/sync/sync-test-records";
-import { installFakeApi, jsonReply } from "@/test-support/fake-api";
+import { heldReply, installFakeApi, jsonReply } from "@/test-support/fake-api";
 import { SIGN_OUT_ROUTE, signedInRoutes } from "@/test-support/identity-replies";
 import { renderScreen } from "@/test-support/render-screen";
 import { pulledChangesReply, SYNC_PULL_ROUTE } from "@/test-support/sync-replies";
@@ -60,5 +60,20 @@ describe("SettingsScreen", () => {
     await waitFor(() => expect(router.state.location.pathname).toBe("/connexion"));
     expect(api.requestsTo(SIGN_OUT_ROUTE)).toHaveLength(1);
     expect(await Dexie.exists(database.name)).toBe(false);
+  });
+
+  it("shows a pending state and blocks a second click while signing out", async () => {
+    const signOut = heldReply(jsonReply({ success: true }));
+    const api = installFakeApi({ ...signedInRoutes("owner"), [SIGN_OUT_ROUTE]: signOut.reply });
+
+    const { user, router } = renderSettings();
+
+    const button = await screen.findByRole("button", { name: fr.app.signOut });
+    await user.click(button);
+
+    await waitFor(() => expect(button).toBeDisabled());
+    signOut.release();
+    await waitFor(() => expect(router.state.location.pathname).toBe("/connexion"));
+    expect(api.requestsTo(SIGN_OUT_ROUTE)).toHaveLength(1);
   });
 });
