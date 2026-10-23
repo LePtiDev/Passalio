@@ -18,7 +18,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | Asynchrone                       | Cron Triggers, Cloudflare Queues                            |
 | Auth et rôles                    | Better Auth (plugins organization et admin)                 |
 | Paiement                         | Stripe Billing                                              |
-| Emails                           | Resend + React Email                                        |
+| Emails                           | Resend, gabarits HTML (ADR 0016)                            |
 | SMS (option, plus tard)          | Octopush ou SMSFactor                                       |
 | Itinéraire                       | OpenRouteService                                            |
 | IA                               | API Claude (modèle léger) ou Workers AI                     |
@@ -96,7 +96,7 @@ packages/
 ├── shared/                   # Shared kernel
 ├── trades/                   # Un dossier par métier
 ├── pdf/                      # Rendu des attestations
-└── emails/                   # Modèles React Email
+└── emails/                   # Gabarits d'e-mail HTML et texte (ADR 0016)
 docs/
 ├── ARCHITECTURE.md
 ├── SECURITY.md
@@ -150,7 +150,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Pages légales publiques : `/conditions` (conditions générales et accord de sous-traitance RGPD), `/confidentialite`, `/mentions-legales`. Textes dans `apps/app/src/legal/`, informations de l'éditeur dans `PUBLISHER` (`legal-fr.ts`). L'inscription envoie `termsVersion` ; l'API refuse une version différente de `TERMS_VERSION` (`packages/shared`) et enregistre `users.terms_version` et `users.terms_accepted_at`. Changer les conditions = incrémenter `TERMS_VERSION`.
 - Champ de recherche des listes : composant partagé `apps/app/src/components/search-field.tsx` (48 px sur mobile, 32 px sur ordinateur), à réutiliser sur toutes les listes.
 - Coque de l'application connectée : barre latérale sur ordinateur, barre d'onglets en bas sur mobile (`apps/app/src/components/app-shell/`). Les entrées pas encore construites sont affichées grisées avec « Bientôt ».
-- Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. En staging, même mode « log » : le lien apparaît dans les logs du Worker, pour tester invitations et mot de passe oublié. La production refuse l'envoi tant que Resend n'est pas branché.
+- Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. En staging et en production (`EMAIL_DELIVERY=resend`), l'API envoie par Resend depuis `ne-pas-repondre@passalio.com` avec le secret `RESEND_API_KEY` ; sans ce secret, l'envoi est refusé. L'invitation affiche le nom de la personne qui invite. Gabarits dans `packages/emails`, images dans `apps/app/public/email/` (ADR 0016).
 - Les informations légales de l'entreprise (SIRET, adresse, assurance, qualification) arriveront avec les attestations.
 
 ### Clients, lieux, équipements (contexte `customers`)

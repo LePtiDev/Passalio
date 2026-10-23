@@ -9,7 +9,15 @@ import { createEmailSender } from "./email";
 export const requestServicesMiddleware = createMiddleware<AppEnv>(async (context, next) => {
   const database = createDatabase(context.env.DB);
   const auditTrail = createAuditTrail(database, context.get("traceId"));
-  const emailSender = createEmailSender(context.env.EMAIL_DELIVERY, context.get("logger"));
+  const emailSender = createEmailSender(
+    {
+      delivery: context.env.EMAIL_DELIVERY,
+      resendApiKey: context.env.RESEND_API_KEY,
+      from: context.env.EMAIL_FROM,
+      assetsUrl: context.env.APP_URL,
+    },
+    context.get("logger"),
+  );
   const auth = createAuth({
     database,
     emailSender,

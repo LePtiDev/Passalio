@@ -33,11 +33,13 @@ Dernière mise à jour : 2026-10-23.
 | Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin`                          | ADR 0015                        |
 | Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux                                | ADR 0015                        |
 | Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification | ADR 0015                        |
+| E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                | ADR 0016                        |
 
 ## Hors code (Quentin)
 
 - [ ] Relire les contrats de travail de Quentin et d'Antho (exclusivité, non-concurrence, propriété intellectuelle) avant de créer la SAS
 - [ ] Créer la SAS : statuts, pacte d'associés, compte bancaire, annonce légale, immatriculation (`docs/company.md`)
+- [ ] Créer le compte Resend, vérifier le domaine `passalio.com` (région Irlande), créer la clé « envoi seul » et l'ajouter à l'environnement cloud
 - [ ] Céder le code à la SAS, déposer la marque Passalio à l'INPI au nom de la SAS, transférer domaines, Cloudflare, Stripe et Resend
 - [ ] Choisir l'outil de comptabilité relié à Stripe et compatible avec la facture électronique (devis à comparer)
 - [ ] Récupérer un vrai certificat de ramonage et une vraie attestation d'entretien d'appareil remplis, pour les comparer à `docs/regulatory/`
@@ -78,7 +80,8 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [ ] Abonnement : Stripe Billing, 29,99 € HT/mois et 299,90 € HT/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
-- [ ] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
+- [x] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
+- [ ] Poser le secret `RESEND_API_KEY` en staging et en production, puis tester un envoi sur chaque environnement
 - [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié
 - [ ] Vérification des mots de passe divulgués (ADR 0012)
 - [ ] Observabilité : Sentry navigateur et API, PostHog UE avec accord préalable de l'utilisateur (bannière), sourcemaps dans `release`

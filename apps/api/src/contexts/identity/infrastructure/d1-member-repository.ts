@@ -43,6 +43,15 @@ export const createD1MemberRepository = (database: Database): MemberRepository =
       .from(members)
       .where(and(inOrganization(organizationId), eq(members.userId, userId)))
       .get(),
+  findName: async (organizationId, userId) => {
+    const member = await database
+      .select({ name: users.name })
+      .from(members)
+      .innerJoin(users, eq(users.id, members.userId))
+      .where(and(inOrganization(organizationId), eq(members.userId, userId)))
+      .get();
+    return member?.name;
+  },
   findByEmail: async (organizationId, email) =>
     database
       .select(MEMBER_COLUMNS)

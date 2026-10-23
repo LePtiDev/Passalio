@@ -82,6 +82,7 @@ export const startTestPlatform = async () => {
     BETTER_AUTH_URL: "http://localhost:8787",
     APP_URL,
     EMAIL_DELIVERY: "log",
+    EMAIL_FROM: "Passalio <ne-pas-repondre@passalio.com>",
     TURNSTILE_SECRET_KEY: "test-turnstile-secret",
   };
   stubTurnstileSiteverify();

@@ -53,6 +53,7 @@ export type MemberRepository = {
   readonly findById: (organizationId: string, memberId: string) => Promise<Member | undefined>;
   readonly findByEmail: (organizationId: string, email: string) => Promise<Member | undefined>;
   readonly findByUserId: (organizationId: string, userId: string) => Promise<Member | undefined>;
+  readonly findName: (organizationId: string, userId: string) => Promise<string | undefined>;
   readonly updateRole: (
     organizationId: string,
     memberId: string,

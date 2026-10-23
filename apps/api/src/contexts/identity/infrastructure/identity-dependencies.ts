@@ -28,20 +28,25 @@ export const createIdentityDependencies = ({
   files,
   logger,
   appUrl,
-}: IdentityInfrastructure): IdentityDependencies => ({
-  organizations: createD1OrganizationRepository(database),
-  members: createD1MemberRepository(database),
-  invitations: createD1InvitationRepository(database),
-  auditTrail,
-  invitationNotifier: {
-    notify: (invitation, organization) =>
-      emailSender.sendInvitation({
-        email: invitation.email,
-        organizationName: organization.name,
-        url: invitationUrl(appUrl, invitation.organizationId, invitation.id),
-      }),
-  },
-  logoStorage: createR2LogoStorage(files),
-  companyDirectory: createSireneCompanyDirectory(logger),
-  now: () => new Date(),
-});
+}: IdentityInfrastructure): IdentityDependencies => {
+  const members = createD1MemberRepository(database);
+  return {
+    organizations: createD1OrganizationRepository(database),
+    members,
+    invitations: createD1InvitationRepository(database),
+    auditTrail,
+    invitationNotifier: {
+      notify: async (invitation, organization) =>
+        emailSender.sendInvitation({
+          email: invitation.email,
+          organizationName: organization.name,
+          inviterName:
+            (await members.findName(invitation.organizationId, invitation.inviterId)) ?? null,
+          url: invitationUrl(appUrl, invitation.organizationId, invitation.id),
+        }),
+    },
+    logoStorage: createR2LogoStorage(files),
+    companyDirectory: createSireneCompanyDirectory(logger),
+    now: () => new Date(),
+  };
+};

@@ -1,4 +1,5 @@
 import type { Logger } from "./logger";
+import { createResendEmailSender } from "./resend-email-sender";
 
 export type MagicLinkEmail = {
   readonly email: string;
@@ -13,6 +14,7 @@ export type PasswordResetEmail = {
 export type InvitationEmail = {
   readonly email: string;
   readonly organizationName: string;
+  readonly inviterName: string | null;
   readonly url: string;
 };
 
@@ -22,7 +24,14 @@ export type EmailSender = {
   readonly sendInvitation: (email: InvitationEmail) => Promise<void>;
 };
 
-export type EmailDelivery = "log" | "disabled";
+export type EmailDelivery = "log" | "resend" | "disabled";
+
+export type EmailSettings = {
+  readonly delivery: EmailDelivery;
+  readonly resendApiKey: string | undefined;
+  readonly from: string;
+  readonly assetsUrl: string;
+};
 
 export class EmailDeliveryDisabledError extends Error {
   constructor() {
@@ -55,5 +64,15 @@ const disabledEmailSender: EmailSender = {
   },
 };
 
-export const createEmailSender = (delivery: EmailDelivery, logger: Logger): EmailSender =>
-  delivery === "log" ? createLogEmailSender(logger) : disabledEmailSender;
+export const createEmailSender = (settings: EmailSettings, logger: Logger): EmailSender => {
+  if (settings.delivery === "log") {
+    return createLogEmailSender(logger);
+  }
+  if (settings.delivery === "resend" && settings.resendApiKey !== undefined) {
+    return createResendEmailSender(
+      { apiKey: settings.resendApiKey, from: settings.from, assetsUrl: settings.assetsUrl },
+      logger,
+    );
+  }
+  return disabledEmailSender;
+};
