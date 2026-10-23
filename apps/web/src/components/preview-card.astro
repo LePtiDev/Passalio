@@ -7,7 +7,10 @@ const { class: className } = Astro.props;
 ---
 
 <div
-  class:list={["flex max-w-110 flex-col rounded-2xl border border-line bg-white p-5", className]}
+  class:list={[
+    "flex max-w-105 flex-col rounded-xl border border-card-line bg-white px-4.5 py-4 text-[13px] shadow-card",
+    className,
+  ]}
 >
   <slot />
 </div>

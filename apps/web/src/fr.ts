@@ -18,7 +18,7 @@ export const fr = {
     lead: "Vous remplissez l'attestation chez le client, sur votre téléphone. Il signe sur l'écran et la reçoit par email. Un an plus tard, Passalio lui rappelle de vous rappeler.",
     primary: "Essayer gratuitement",
     secondary: "Voir comment ça se passe",
-    note: "Sans engagement. Fonctionne sans réseau, sur iPhone et Android.",
+    highlights: ["Sans engagement", "Fonctionne sans réseau", "iPhone et Android"],
     phone: {
       label: "Aperçu d'une attestation remplie sur le téléphone",
       customer: "Mme Durand · Saint-Maur",
@@ -38,6 +38,7 @@ export const fr = {
     toastText: "Prochain passage prévu en octobre 2027.",
   },
   pains: {
+    eyebrow: "Le constat",
     title: "Ce qui vous prend du temps, ce n'est pas le conduit.",
     lead: "Le ramonage, vous savez faire. C'est le papier autour qui déborde, surtout de septembre à décembre.",
     items: [
@@ -61,6 +62,7 @@ export const fr = {
   },
   passage: {
     eyebrow: "Avec Passalio",
+    step: (number: number) => `Étape ${number}`,
     title: "Un passage, du départ à l'année suivante.",
     lead: "Vous faites votre travail comme d'habitude. Le téléphone remplace le carnet, et ce qui se faisait le soir se fait tout seul.",
     before: {
@@ -140,14 +142,27 @@ export const fr = {
     today: "Aujourd'hui",
     date: "Mardi 14 octobre",
     members: [
-      { name: "Julien Martin", activity: "6 passages, 4 signés", role: "Patron", isOwner: true },
+      {
+        name: "Julien Martin",
+        initials: "JM",
+        activity: "6 passages, 4 signés",
+        role: "Patron",
+        isOwner: true,
+      },
       {
         name: "Kevin Robert",
+        initials: "KR",
         activity: "5 passages, 5 signés",
         role: "Technicien",
         isOwner: false,
       },
-      { name: "Léa Petit", activity: "3 passages, 1 signé", role: "Apprentie", isOwner: false },
+      {
+        name: "Léa Petit",
+        initials: "LP",
+        activity: "3 passages, 1 signé",
+        role: "Apprentie",
+        isOwner: false,
+      },
     ],
   },
   reassurance: [
@@ -185,7 +200,6 @@ export const fr = {
     action: "Essayer gratuitement",
   },
   footer: {
-    tagline: "Le logiciel des ramoneurs pour les attestations et les relances.",
     label: "Liens du pied de page",
     signIn: "Se connecter",
     terms: "Conditions",

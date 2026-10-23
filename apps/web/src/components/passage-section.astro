@@ -10,10 +10,13 @@ import SectionHeading from "./section-heading.astro";
 const { passage } = fr;
 ---
 
-<section id="passage" class="scroll-mt-4 py-[clamp(56px,8vw,112px)]">
-  <div class="mx-auto flex max-w-290 flex-col gap-[clamp(40px,6vw,72px)] px-5">
+<section
+  id="passage"
+  class="scroll-mt-4 border-y border-hairline bg-section py-[clamp(56px,7vw,104px)]"
+>
+  <div class="mx-auto flex max-w-270 flex-col gap-[clamp(40px,5vw,64px)] px-4 sm:px-6">
     <SectionHeading eyebrow={passage.eyebrow} title={passage.title} lead={passage.lead} />
-    <ol class="flex flex-col gap-[clamp(48px,6vw,72px)]">
+    <ol class="flex flex-col gap-[clamp(40px,5vw,64px)]">
       <PassageStep number={1} title={passage.before.title} text={passage.before.text}>
         <CustomerPreview />
       </PassageStep>

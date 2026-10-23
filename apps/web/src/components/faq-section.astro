@@ -1,17 +1,20 @@
 ---
 import { fr } from "../fr";
-import SectionHeading from "./section-heading.astro";
 ---
 
-<section id="questions" class="scroll-mt-4 py-[clamp(56px,8vw,104px)]">
-  <div class="mx-auto flex max-w-205 flex-col gap-8 px-5">
-    <SectionHeading title={fr.faq.title} />
-    <dl class="border-b border-line">
+<section id="questions" class="scroll-mt-4 border-t border-hairline py-[clamp(56px,7vw,96px)]">
+  <div class="mx-auto flex max-w-270 flex-wrap gap-x-16 gap-y-6 px-4 sm:px-6">
+    <h2
+      class="min-w-0 flex-[1_1_260px] text-[clamp(21px,2.2vw,27px)] leading-tight font-bold tracking-[-0.02em]"
+    >
+      {fr.faq.title}
+    </h2>
+    <dl class="min-w-0 flex-[2_1_480px] border-b border-card-line">
       {
         fr.faq.items.map((item) => (
-          <div class="flex flex-col gap-1.5 border-t border-line py-5">
-            <dt class="text-lg font-bold">{item.question}</dt>
-            <dd class="text-slate-text">{item.answer}</dd>
+          <div class="flex flex-col gap-1.5 border-t border-card-line py-4.5">
+            <dt class="text-sm font-semibold">{item.question}</dt>
+            <dd class="text-[13px] leading-relaxed text-slate-text">{item.answer}</dd>
           </div>
         ))
       }

@@ -5,21 +5,23 @@ import PreviewCard from "./preview-card.astro";
 const step = fr.passage.onSite;
 ---
 
-<PreviewCard class="gap-3">
-  <p class="text-xs font-bold tracking-[0.04em] text-slate-text uppercase">{step.heading}</p>
-  <dl class="flex flex-col gap-2 text-[15px]">
+<PreviewCard class="gap-2.5">
+  <p class="text-[11px] font-semibold tracking-[0.06em] text-slate-text uppercase">{step.heading}</p>
+  <dl class="flex flex-col">
     {
       step.fields.map((field) => (
-        <div class="flex justify-between gap-3">
+        <div class="flex justify-between gap-3 border-b border-hairline-faint py-1.5 last:border-b-0">
           <dt class="text-slate-text">{field.label}</dt>
-          <dd class="text-right font-semibold tabular-nums">{field.value}</dd>
+          <dd class="text-right font-medium tabular-nums">{field.value}</dd>
         </div>
       ))
     }
   </dl>
-  <p class="flex items-start gap-2 rounded-[10px] bg-warning-soft px-3 py-2.5 text-sm text-warning-strong">
+  <p
+    class="flex items-center gap-2 rounded-lg border border-warning-line bg-warning-faint px-2.5 py-2 text-xs text-warning-strong"
+  >
     <svg
-      class="mt-0.5 size-4.5 shrink-0"
+      class="size-3.5 shrink-0"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

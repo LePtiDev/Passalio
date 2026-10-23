@@ -12,29 +12,25 @@ const links: ReadonlyArray<{ page: AppPage; label: string }> = [
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-navy pt-12 pb-8 text-on-navy">
-  <div class="mx-auto flex max-w-290 flex-col gap-8 px-5">
-    <div class="flex flex-wrap items-start justify-between gap-6">
-      <div class="flex max-w-80 flex-col gap-2.5">
-        <img
-          src="/passalio-logo-white.svg"
-          alt={fr.brand}
-          width="132"
-          height="26"
-          class="h-6.5 w-auto self-start"
-        />
-        <p class="text-sm">{fr.footer.tagline}</p>
-      </div>
-      <nav aria-label={fr.footer.label} class="flex flex-wrap gap-x-6 text-[15px]">
-        {
-          links.map((link) => (
-            <a href={appUrl(link.page)} class="inline-flex min-h-12 items-center text-white hover:text-mint">
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
+<footer class="border-t border-hairline py-8">
+  <div
+    class="mx-auto flex max-w-270 flex-wrap items-center justify-between gap-x-8 gap-y-4 px-4 sm:px-6"
+  >
+    <div class="flex flex-wrap items-center gap-4">
+      <img src="/passalio-logo.svg" alt={fr.brand} width="76" height="15" class="h-3.75 w-auto" />
+      <p class="text-[13px] text-slate-text">{fr.footer.copyright(year)}</p>
     </div>
-    <p class="border-t border-navy-line pt-5 text-[13px]">{fr.footer.copyright(year)}</p>
+    <nav aria-label={fr.footer.label} class="flex flex-wrap gap-x-1 text-xs">
+      {
+        links.map((link) => (
+          <a
+            href={appUrl(link.page)}
+            class="inline-flex min-h-12 items-center px-2.5 text-slate-text hover:text-navy"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
   </div>
 </footer>

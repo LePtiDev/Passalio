@@ -103,6 +103,7 @@ Dernière mise à jour : 2026-10-23.
 ## Site passalio.com
 
 - [x] Landing page, première version (maquette : https://claude.ai/artifact/VXkqPLKM7fxAL5f6rYrvVK)
+- [x] Landing page plus fine, selon la maquette v3 validée le 2026-10-23
 - [x] Déployer le site sur staging.passalio.com et passalio.com, avec `release:*`
 - [ ] Rediriger www.passalio.com vers passalio.com
 - [ ] Landing : section prix, une fois le prix tranché, en hors taxes (ADR 0014)
