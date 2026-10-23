@@ -6,10 +6,22 @@ import { registerProspectWriteTools } from "./prospect-write-tools";
 import type { McpToolContext } from "./tool-context";
 import { toolsFr } from "./tools-fr";
 
-const SERVER_INFO = { name: "passalio-admin", version: "1.0.0" };
+const serverInfoOf = (appUrl: string) => ({
+  name: "passalio-admin",
+  title: "Passalio",
+  version: "1.0.0",
+  websiteUrl: appUrl,
+  icons: [{ src: `${appUrl}/icon-192.png`, mimeType: "image/png", sizes: ["192x192"] }],
+});
 
-export const createPassalioMcpServer = (context: McpToolContext, access: McpAccessLevel) => {
-  const server = new McpServer(SERVER_INFO, { instructions: toolsFr.serverInstructions });
+export const createPassalioMcpServer = (
+  context: McpToolContext,
+  access: McpAccessLevel,
+  appUrl: string,
+) => {
+  const server = new McpServer(serverInfoOf(appUrl), {
+    instructions: toolsFr.serverInstructions,
+  });
   if (canPlatform(context.actor, "platform:read")) {
     registerAdminTools(server, context);
   }

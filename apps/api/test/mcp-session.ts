@@ -136,7 +136,15 @@ const serverInitialization = z.object({
   serverInfo: z.object({
     name: z.string(),
     title: z.string().optional(),
-    icons: z.array(z.object({ src: z.string(), mimeType: z.string().optional() })).optional(),
+    icons: z
+      .array(
+        z.object({
+          src: z.string(),
+          mimeType: z.string().optional(),
+          sizes: z.array(z.string()).optional(),
+        }),
+      )
+      .optional(),
   }),
 });
 
