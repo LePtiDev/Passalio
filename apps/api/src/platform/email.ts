@@ -1,3 +1,4 @@
+import type { TeamInvitationRole } from "@passalio/emails";
 import type { Logger } from "./logger";
 import { createResendEmailSender } from "./resend-email-sender";
 
@@ -18,10 +19,18 @@ export type InvitationEmail = {
   readonly url: string;
 };
 
+export type TeamInvitationEmail = {
+  readonly email: string;
+  readonly inviterName: string;
+  readonly role: TeamInvitationRole;
+  readonly url: string;
+};
+
 export type EmailSender = {
   readonly sendMagicLink: (email: MagicLinkEmail) => Promise<void>;
   readonly sendPasswordReset: (email: PasswordResetEmail) => Promise<void>;
   readonly sendInvitation: (email: InvitationEmail) => Promise<void>;
+  readonly sendTeamInvitation: (email: TeamInvitationEmail) => Promise<void>;
 };
 
 export type EmailDelivery = "log" | "resend" | "disabled";
@@ -50,6 +59,9 @@ const createLogEmailSender = (logger: Logger): EmailSender => ({
   sendInvitation: async ({ url }) => {
     logger.info({ event: "email_logged", kind: "invitation", url });
   },
+  sendTeamInvitation: async ({ url }) => {
+    logger.info({ event: "email_logged", kind: "team_invitation", url });
+  },
 });
 
 const disabledEmailSender: EmailSender = {
@@ -60,6 +72,9 @@ const disabledEmailSender: EmailSender = {
     throw new EmailDeliveryDisabledError();
   },
   sendInvitation: async () => {
+    throw new EmailDeliveryDisabledError();
+  },
+  sendTeamInvitation: async () => {
     throw new EmailDeliveryDisabledError();
   },
 };

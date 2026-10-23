@@ -114,6 +114,9 @@ export const fr = {
       contact_not_found: "Ce contact n'existe plus.",
       owner_not_found: "Cette personne ne fait pas partie de l'équipe Passalio.",
       contact_not_in_company: "Ce contact appartient à une autre entreprise.",
+      already_in_team: "Cette personne fait déjà partie de l'équipe.",
+      teammate_not_found: "Cette personne ne fait plus partie de l'équipe.",
+      cannot_change_own_role: "Vous ne pouvez pas changer votre propre rôle.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
     },

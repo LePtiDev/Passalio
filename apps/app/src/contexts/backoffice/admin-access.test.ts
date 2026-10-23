@@ -11,6 +11,6 @@ describe("canSeePlatform", () => {
 
   it("opens the platform pages to the Passalio team", () => {
     expect(canSeePlatform("superadmin")).toBe(true);
-    expect(canSeePlatform("support")).toBe(true);
+    expect(canSeePlatform("admin")).toBe(true);
   });
 });

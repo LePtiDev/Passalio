@@ -4,6 +4,7 @@ import {
   magicLinkEmail,
   organizationInitials,
   passwordResetEmail,
+  teamInvitationEmail,
 } from "./transactional-emails";
 
 const ASSETS_URL = "https://app.passalio.com";
@@ -92,5 +93,22 @@ describe("organizationInitials", () => {
     ["!!!", "P"],
   ])("turns %s into %s", (name, initials) => {
     expect(organizationInitials(name)).toBe(initials);
+  });
+});
+
+describe("teamInvitationEmail", () => {
+  it("names the inviter and the role", () => {
+    const email = teamInvitationEmail(
+      {
+        url: "https://app.passalio.com/equipe-passalio/invitations/inv",
+        inviterName: "Quentin",
+        role: "sales",
+      },
+      ASSETS_URL,
+    );
+    expect(email.subject).toBe("Quentin vous invite dans l'équipe Passalio");
+    expect(email.text).toContain("Vous rejoignez l'espace admin comme Commercial.");
+    expect(email.html).toContain("Équipe Passalio");
+    expect(email.text).toContain("https://app.passalio.com/equipe-passalio/invitations/inv");
   });
 });

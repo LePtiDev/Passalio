@@ -51,17 +51,18 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 3. Contextes métier (DDD léger)
 
-| Contexte     | Responsabilité                                                       |
-| ------------ | -------------------------------------------------------------------- |
-| `identity`   | Comptes, entreprises, membres, rôles, permissions, impersonation     |
-| `customers`  | Clients, lieux, équipements, historique                              |
-| `scheduling` | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
-| `compliance` | Attestations, signature, PDF, numérotation, versions                 |
-| `engagement` | Échéances, relances, envois email/SMS                                |
-| `billing`    | Abonnement Stripe, état du compte                                    |
-| `backoffice` | Outils internes : support, impersonation, métriques                  |
-| `sales`      | Prospection de Passalio : entreprises, contacts, étapes, historique  |
-| `sync`       | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
+| Contexte        | Responsabilité                                                       |
+| --------------- | -------------------------------------------------------------------- |
+| `identity`      | Comptes, entreprises, membres, rôles, permissions, impersonation     |
+| `customers`     | Clients, lieux, équipements, historique                              |
+| `scheduling`    | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
+| `compliance`    | Attestations, signature, PDF, numérotation, versions                 |
+| `engagement`    | Échéances, relances, envois email/SMS                                |
+| `billing`       | Abonnement Stripe, état du compte                                    |
+| `backoffice`    | Outils internes : support, impersonation, métriques                  |
+| `sales`         | Prospection de Passalio : entreprises, contacts, étapes, historique  |
+| `platform-team` | Équipe Passalio : membres, rôles plateforme, invitations             |
+| `sync`          | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
 
@@ -130,13 +131,13 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 
 ### Rôles plateforme (équipe interne)
 
-- `superadmin` : tout le backoffice.
-- `support` : tout le backoffice sauf bloquer un compte.
-- `sales` : seulement la prospection (Commercial), pas les comptes clients (ADR 0017).
+- `superadmin` (Super admin) : tout le backoffice, y compris l'équipe Passalio (`team:manage`).
+- `admin` (Admin) : tout le backoffice sauf l'équipe (ADR 0018, remplace `support`).
+- `sales` (Commercial) : seulement la prospection, pas les comptes clients (ADR 0017).
 
-Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|support>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Lecture des comptes clients : `GET /api/admin/overview`, `/accounts`, `/accounts/:id` (et `/members`, `/usage`, `/journal`), `/journal`, réponses décrites par les schémas zod de `packages/shared/src/backoffice-responses.ts`. L'utilisation se mesure en jours d'utilisation par personne (`activity_days`). Voir ADR 0015.
+Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne depuis la page « Équipe Passalio » par invitation (ADR 0018), ou en urgence avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|admin|sales>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Lecture des comptes clients : `GET /api/admin/overview`, `/accounts`, `/accounts/:id` (et `/members`, `/usage`, `/journal`), `/journal`, réponses décrites par les schémas zod de `packages/shared/src/backoffice-responses.ts`. L'utilisation se mesure en jours d'utilisation par personne (`activity_days`). Voir ADR 0015.
 
-Écrans de l'espace admin (`apps/app/src/contexts/backoffice/`) : `/admin` (vue d'ensemble), `/admin/comptes?filtre=&recherche=`, `/admin/comptes/:accountId?onglet=personnel|utilisation|journal`, `/admin/journal`. Avant d'entrer, le garde de route appelle `/api/admin/me` : 404 renvoie à l'accueil, 403 à `/admin/securite` (activation de la double authentification : mot de passe, QR code, codes de secours), 401 à `/admin/code`. Une connexion par mot de passe d'un compte à double authentification passe par `/connexion/code`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
+Écrans de l'espace admin (`apps/app/src/contexts/backoffice/`) : `/admin` (vue d'ensemble), `/admin/comptes?filtre=&recherche=`, `/admin/comptes/:accountId?onglet=personnel|utilisation|journal`, `/admin/journal`, `/admin/equipe` (super admin seulement : membres, invitations, changer un rôle, retirer). L'invitation s'accepte sur `/equipe-passalio/invitations/:id` après connexion ou création de compte avec la même adresse. Avant d'entrer, le garde de route appelle `/api/admin/me` : 404 renvoie à l'accueil, 403 à `/admin/securite` (activation de la double authentification : mot de passe, QR code, codes de secours), 401 à `/admin/code`. Une connexion par mot de passe d'un compte à double authentification passe par `/connexion/code`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
 
 Un seul propriétaire par entreprise. Il peut transférer ce rôle à un administrateur, qui devient propriétaire pendant que l'ancien devient administrateur. Personne ne peut inviter, nommer ou retirer un propriétaire. Une même personne peut être membre de plusieurs entreprises, avec un rôle par entreprise.
 
@@ -152,7 +153,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Déploiement : un seul Worker par environnement sert l'application (fichiers statiques de `apps/app/dist`, repli sur `index.html`) et l'API (`/api/*` et `/health` passent d'abord par le Worker). Domaines : `app.staging.passalio.com` (Worker `passalio-api-staging`) et `app.passalio.com` (Worker `passalio-api`). `passalio.com` est réservé au site. Le service worker de la PWA ne répond jamais à la place de `/api`. Mise à jour automatique : le nouveau service worker prend la main dès son installation et la page se recharge sur la nouvelle version (`apps/app/src/lib/service-worker.ts`). Le navigateur vérifie s'il existe une version plus récente au retour sur l'onglet et toutes les 30 minutes. Les modifications faites hors ligne restent dans Dexie, un rechargement ne les perd pas.
 - L'application appelle l'API sur la même origine, sous `/api` (proxy Vite en local, route Workers `/api/*` sur le domaine de l'application en staging et production). Les cookies de session restent ainsi `SameSite=Lax` sans CORS. `BETTER_AUTH_URL` vaut donc l'adresse de l'application.
 - Écrans : `/connexion`, `/inscription`, `/mot-de-passe-oublie`, `/mot-de-passe/nouveau`, `/configuration/{entreprise,metiers,documents,equipe}`, `/` (Premiers pas), `/equipe`, `/reglages`, `/invitations/:organizationId/:invitationId`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
-- Gardes de route (`apps/app/src/lib/session.ts`) : une personne connectée qui ouvre `/connexion`, `/inscription`, `/mot-de-passe-oublie` ou `/connexion/code` repart vers `retour` ou l'accueil. Un admin plateforme (rôle `superadmin` ou `support`) ne voit jamais la configuration d'entreprise ni les Premiers pas sans entreprise : il est envoyé sur `/admin`. Pendant une impersonation, la session est celle du client, donc ces règles suivent son rôle. Le paramètre `retour` n'accepte qu'un chemin interne (`/…`, jamais `//…`).
+- Gardes de route (`apps/app/src/lib/session.ts`) : une personne connectée qui ouvre `/connexion`, `/inscription`, `/mot-de-passe-oublie` ou `/connexion/code` repart vers `retour` ou l'accueil. Un admin plateforme (rôle `superadmin`, `admin` ou `sales`) ne voit jamais la configuration d'entreprise ni les Premiers pas sans entreprise : il est envoyé sur `/admin`. Pendant une impersonation, la session est celle du client, donc ces règles suivent son rôle. Le paramètre `retour` n'accepte qu'un chemin interne (`/…`, jamais `//…`).
 - Pages légales publiques : `/conditions` (conditions générales et accord de sous-traitance RGPD), `/confidentialite`, `/mentions-legales`. Textes dans `apps/app/src/legal/`, informations de l'éditeur dans `PUBLISHER` (`legal-fr.ts`). L'inscription envoie `termsVersion` ; l'API refuse une version différente de `TERMS_VERSION` (`packages/shared`) et enregistre `users.terms_version` et `users.terms_accepted_at`. Changer les conditions = incrémenter `TERMS_VERSION`.
 - Champ de recherche des listes : composant partagé `apps/app/src/components/search-field.tsx` (48 px sur mobile, 32 px sur ordinateur), à réutiliser sur toutes les listes.
 - Coque de l'application connectée : barre latérale sur ordinateur, barre d'onglets en bas sur mobile (`apps/app/src/components/app-shell/`). Les entrées pas encore construites sont affichées grisées avec « Bientôt ».
@@ -175,7 +176,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 ### Prospection (contexte `sales`, ADR 0017)
 
 - Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, outil actuel `current_tool`, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
-- Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `support`, `sales`).
+- Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `admin`, `sales`).
 - Routes sous `/api/admin/prospects` : `GET /filters` (départements, personnes de l'équipe), `GET /map?department=&stage=`, `GET` et `POST /companies` (`stage`, `department`, `owner`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /companies/:companyId`, `POST /companies/:companyId/stage`, `/notes`, `/contacts`, `GET /contacts` (`filter=all|leaders|no_phone`, `department`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /contacts/:contactId`. Réponses décrites par `packages/shared/src/prospect-responses.ts`.
 - Écrans (espace admin, `apps/app/src/contexts/sales/`) : `/admin/entreprises?etape=&departement=&suivi=&recherche=`, `/admin/entreprises/:companyId`, `/admin/contacts?onglet=&departement=&recherche=`, `/admin/contacts/:contactId`. Onglets par étape, filtres actifs à gauche, recherche et menu « Filtres » à droite. Le rôle `sales`, sans `platform:read`, ne voit que Commercial : les pages Plateforme le renvoient vers `/admin/entreprises`.
 - Prospection (`/admin/prospection?etape=&departement=&recherche=&entreprise=`) : onglets À qualifier, Qualifiées, Pas intéressées ; liste à gauche, carte Leaflet (dépendance `leaflet`) sur le fond Plan IGN v2 servi par `data.geopf.fr` (WMTS, sans clé, attribution « © IGN »), points colorés par étape, fiche flottante pour qualifier sans quitter la carte. Sur mobile, carte plein écran, recherche flottante et feuille en bas. La fiche entreprise montre une mini-carte et un lien « Voir sur la carte » (tuile « Carte » sur mobile).
@@ -191,7 +192,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 ## 6. Impersonation (« voir comme l'utilisateur »)
 
-- Réservée à `superadmin` et `support`, via le plugin admin de Better Auth.
+- Réservée à `superadmin` et `admin`, via le plugin admin de Better Auth.
 - Motif obligatoire, durée limitée à 30 minutes.
 - **Lecture seule imposée côté serveur** : un middleware refuse toute méthode d'écriture quand la session est une impersonation. Signature d'attestation toujours interdite.
 - Bandeau rouge permanent dans l'application avec bouton « Quitter ».
@@ -213,26 +214,28 @@ Voir `docs/SECURITY.md` pour la protection et les sauvegardes.
 
 D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, un index inutile l'augmente à chaque écriture.
 
-| Table                | Index                                                                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `customers`          | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                               |
-| `sites`              | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                               |
-| `equipments`         | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                               |
-| `equipment_photos`   | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                              |
-| `interventions`      | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                                             |
-| `documents`          | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)`               |
-| `reminders`          | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                              |
-| `notifications`      | `(organization_id, created_at)`                                                                                                 |
-| `audit_logs`         | `(organization_id, created_at)`                                                                                                 |
-| `members`            | `(user_id)`, `(organization_id, user_id)` unique                                                                                |
-| `invitations`        | `(organization_id, status)`, `(email)`                                                                                          |
-| `sessions`           | `(token)` unique, `(user_id)`                                                                                                   |
-| `accounts`           | `(user_id)`                                                                                                                     |
-| `verifications`      | `(identifier)`                                                                                                                  |
-| `rate_limits`        | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                            |
-| `prospect_companies` | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)` |
-| `prospect_contacts`  | `(company_id)`, `(search_name)`                                                                                                 |
-| `prospect_events`    | `(company_id, created_at)`, `(contact_id, created_at)`                                                                          |
+| Table                  | Index                                                                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `customers`            | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                               |
+| `sites`                | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                               |
+| `equipments`           | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                               |
+| `equipment_photos`     | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                              |
+| `interventions`        | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                                             |
+| `documents`            | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)`               |
+| `reminders`            | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                              |
+| `notifications`        | `(organization_id, created_at)`                                                                                                 |
+| `audit_logs`           | `(organization_id, created_at)`                                                                                                 |
+| `members`              | `(user_id)`, `(organization_id, user_id)` unique                                                                                |
+| `invitations`          | `(organization_id, status)`, `(email)`                                                                                          |
+| `sessions`             | `(token)` unique, `(user_id)`                                                                                                   |
+| `accounts`             | `(user_id)`                                                                                                                     |
+| `verifications`        | `(identifier)`                                                                                                                  |
+| `rate_limits`          | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                            |
+| `prospect_companies`   | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)` |
+| `prospect_contacts`    | `(company_id)`, `(search_name)`                                                                                                 |
+| `prospect_events`      | `(company_id, created_at)`, `(contact_id, created_at)`                                                                          |
+| `users`                | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                        |
+| `platform_invitations` | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                       |
 
 Règles :
 

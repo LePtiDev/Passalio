@@ -2,6 +2,7 @@ import {
   invitationEmail,
   magicLinkEmail,
   passwordResetEmail,
+  teamInvitationEmail,
   type RenderedEmail,
 } from "@passalio/emails";
 import { z } from "zod";
@@ -16,7 +17,7 @@ export type ResendSettings = {
   readonly assetsUrl: string;
 };
 
-type EmailKind = "magic_link" | "password_reset" | "invitation";
+type EmailKind = "magic_link" | "password_reset" | "invitation" | "team_invitation";
 
 const resendResponseSchema = z.object({ id: z.string() });
 
@@ -60,5 +61,7 @@ export const createResendEmailSender = (
       send("password_reset", email, passwordResetEmail({ url }, assetsUrl)),
     sendInvitation: ({ email, url, organizationName, inviterName }) =>
       send("invitation", email, invitationEmail({ url, organizationName, inviterName }, assetsUrl)),
+    sendTeamInvitation: ({ email, url, inviterName, role }) =>
+      send("team_invitation", email, teamInvitationEmail({ url, inviterName, role }, assetsUrl)),
   };
 };

@@ -103,6 +103,21 @@ export {
   type PlatformPermission,
   type PlatformRole,
 } from "./platform-permissions";
+export {
+  changeTeammateRoleBody,
+  inviteTeammateBody,
+  pendingTeamInvitationResponse,
+  TEAM_INVITATION_LIFETIME_DAYS,
+  teamInvitationDetailsResponse,
+  teammateResponse,
+  teamResponse,
+  type ChangeTeammateRoleBody,
+  type InviteTeammateBody,
+  type PendingTeamInvitationResponse,
+  type TeamInvitationDetailsResponse,
+  type TeammateResponse,
+  type TeamResponse,
+} from "./platform-team";
 export { TERMS_VERSION } from "./terms";
 export { err, ok, type Err, type Ok, type Result } from "./result";
 export {

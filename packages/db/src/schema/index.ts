@@ -2,6 +2,7 @@ export { activityDays } from "./activity-days";
 export { customers, sites } from "./customers";
 export { equipmentPhotos, equipments } from "./equipments";
 export { auditLogs } from "./audit-logs";
+export { platformInvitations } from "./platform-invitations";
 export { prospectCompanies, prospectContacts, prospectEvents } from "./prospects";
 export { INVITATION_STATUSES, invitations, members, organizations } from "./organizations";
 export { rateLimits } from "./rate-limits";

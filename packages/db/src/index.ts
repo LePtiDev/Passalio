@@ -17,6 +17,7 @@ export {
   invitations,
   members,
   organizations,
+  platformInvitations,
   prospectCompanies,
   prospectContacts,
   prospectEvents,

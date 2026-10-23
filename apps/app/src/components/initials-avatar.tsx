@@ -11,6 +11,7 @@ const TONE_CLASS: Readonly<Record<AvatarTone, string>> = {
 
 const SIZE_CLASS = {
   small: "size-7 text-xs",
+  row: "size-8 text-xs",
   medium: "size-9 text-[13px] lg:size-7 lg:text-xs",
   large: "size-12 text-base lg:size-11 lg:text-sm",
   profile: "size-12 text-base lg:size-10 lg:text-sm",

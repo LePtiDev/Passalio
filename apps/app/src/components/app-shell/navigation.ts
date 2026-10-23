@@ -24,6 +24,7 @@ export type NavigationItem = {
     | "/admin"
     | "/admin/comptes"
     | "/admin/journal"
+    | "/admin/equipe"
     | "/admin/entreprises"
     | "/admin/contacts"
     | "/admin/prospection"
