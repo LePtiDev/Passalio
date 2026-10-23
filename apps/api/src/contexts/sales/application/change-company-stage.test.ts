@@ -66,3 +66,23 @@ describe("changeCompanyStage", () => {
     expect(state.events).toEqual([]);
   });
 });
+
+describe("changeCompanyStage, successive changes", () => {
+  it("records each step from the stage the company had just before", async () => {
+    let nextId = 0;
+    const change = changeCompanyStage(
+      createInMemorySalesDependencies(
+        state,
+        () => NOW,
+        () => `event-${(nextId += 1)}`,
+      ),
+    );
+    await change(sales, "company-1", "interested");
+    await change(sales, "company-1", "not_interested");
+    expect(state.events.map(({ fromStage, toStage }) => ({ fromStage, toStage }))).toEqual([
+      { fromStage: "qualified", toStage: "interested" },
+      { fromStage: "interested", toStage: "not_interested" },
+    ]);
+    expect(state.companies[0]?.stage).toBe("not_interested");
+  });
+});

@@ -72,3 +72,21 @@ describe("updateContact", () => {
     });
   });
 });
+
+describe("updateContact, untouched contacts", () => {
+  it("changes no contact when the contact is unknown", async () => {
+    await run()(sales, "contact-unknown", { phone: "0607080910" });
+    expect(state.contacts[0]).toMatchObject({
+      phone: "0102030405",
+      updatedAt: new Date("2026-01-01T00:00:00Z"),
+    });
+  });
+
+  it("changes only the contact asked for", async () => {
+    state.contacts.push(
+      inMemoryContact({ id: "contact-2", companyId: "company-1", lastName: "Benet" }),
+    );
+    await run()(sales, "contact-1", { jobTitle: "Gérant" });
+    expect(state.contacts.find(({ id }) => id === "contact-2")?.jobTitle).toBeNull();
+  });
+});
