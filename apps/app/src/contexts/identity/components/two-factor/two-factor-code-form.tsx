@@ -8,6 +8,7 @@ import { useSignOut } from "@/lib/use-sign-out";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
+import { TotpCodeInput } from "./totp-code-input";
 import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "../auth-styles";
 
 const text = twoFactorFr.code;
@@ -65,22 +66,32 @@ export const TwoFactorCodeForm = ({ subtitle, onVerified }: TwoFactorCodeFormPro
     [code, isBackup, onVerified],
   );
   const label = isBackup ? text.backupLabel : text.label;
+  const describedBy = error === undefined ? undefined : authFieldErrorId("two-factor-code");
   return (
     <form className="flex flex-col gap-5 lg:gap-[22px]" onSubmit={submit} noValidate>
       <AuthHeading title={text.title} subtitle={subtitle} />
       <div className="flex flex-col gap-4">
         <AuthField id="two-factor-code" label={label} error={error}>
-          <Input
-            id="two-factor-code"
-            value={code}
-            onChange={change}
-            autoComplete="one-time-code"
-            inputMode={isBackup ? "text" : "numeric"}
-            maxLength={isBackup ? 32 : 7}
-            className={`${AUTH_FIELD_CLASS} tracking-[0.3em] tabular-nums`}
-            aria-invalid={error !== undefined}
-            aria-describedby={error === undefined ? undefined : authFieldErrorId("two-factor-code")}
-          />
+          {isBackup ? (
+            <Input
+              id="two-factor-code"
+              value={code}
+              onChange={change}
+              autoComplete="off"
+              maxLength={32}
+              className={`${AUTH_FIELD_CLASS} tracking-[0.1em]`}
+              aria-invalid={error !== undefined}
+              aria-describedby={describedBy}
+            />
+          ) : (
+            <TotpCodeInput
+              id="two-factor-code"
+              value={code}
+              onChange={setCode}
+              isInvalid={error !== undefined}
+              describedBy={describedBy}
+            />
+          )}
         </AuthField>
         {isBackup ? <p className="-mt-2 text-[13px] text-[#64748B]">{text.backupHint}</p> : null}
         <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
