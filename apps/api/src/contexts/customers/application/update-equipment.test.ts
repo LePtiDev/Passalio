@@ -114,3 +114,23 @@ describe("updateEquipment", () => {
     expect(equipmentOf("equipment-b")?.brand).toBeNull();
   });
 });
+
+describe("updateEquipment of a missing equipment", () => {
+  it("answers not found for an unknown equipment", async () => {
+    expect(
+      await run()(technician, { equipmentId: "equipment-unknown", changes: { brand: "Atlantic" } }),
+    ).toEqual({ isOk: false, error: "equipment_not_found" });
+  });
+
+  it("answers not found for an equipment of an archived customer and keeps it as it was", async () => {
+    await createInMemoryCustomerDependencies(state).customers.archive(
+      "organization-a",
+      "customer-a",
+      NOW,
+    );
+    expect(
+      await run()(technician, { equipmentId: "equipment-a", changes: { brand: "Atlantic" } }),
+    ).toEqual({ isOk: false, error: "equipment_not_found" });
+    expect(equipmentOf("equipment-a")?.brand).toBeNull();
+  });
+});

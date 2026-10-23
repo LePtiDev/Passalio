@@ -179,3 +179,106 @@ describe("applyCustomerMutation", () => {
     expect(await run()(technician, creation)).toEqual({ isOk: true, value: undefined });
   });
 });
+
+describe("applyCustomerMutation, replays and concurrent changes", () => {
+  const creation = {
+    type: "create_customer",
+    customerId: "customer-new",
+    customer: { kind: "individual", lastName: "Martin" },
+  } as const;
+
+  it("accepts a replayed customer creation without creating it twice or changing it", async () => {
+    await run()(technician, creation);
+    await run()(technician, {
+      type: "update_customer",
+      customerId: "customer-new",
+      changes: { phone: "0102030405" },
+    });
+    expect(await run()(technician, creation)).toEqual({ isOk: true, value: undefined });
+    expect(state.customers.filter(({ id }) => id === "customer-new")).toHaveLength(1);
+    expect(state.customers.find(({ id }) => id === "customer-new")?.phone).toBe("0102030405");
+  });
+
+  it("rejects an equipment creation that reuses an id of another organization", async () => {
+    expect(
+      await run()(technician, {
+        type: "add_equipment",
+        siteId: "site-a",
+        equipmentId: "equipment-b",
+        equipment: { kind: "insert" },
+      }),
+    ).toEqual({ isOk: false, error: "already_exists" });
+    expect(state.equipments.find(({ id }) => id === "equipment-b")?.organizationId).toBe(
+      "organization-b",
+    );
+  });
+
+  it("keeps both changes when two people change different fields of the same customer", async () => {
+    await run()(technician, {
+      type: "update_customer",
+      customerId: "customer-a",
+      changes: { phone: "0102030405" },
+    });
+    await run()(organizationActorWith("secretary"), {
+      type: "update_customer",
+      customerId: "customer-a",
+      changes: { email: "lefevre@example.fr" },
+    });
+    expect(state.customers.find(({ id }) => id === "customer-a")).toMatchObject({
+      phone: "0102030405",
+      email: "lefevre@example.fr",
+    });
+  });
+
+  it("keeps the last change received when two people change the same field", async () => {
+    await run()(technician, {
+      type: "update_site",
+      siteId: "site-a",
+      changes: { accessNotes: "Code 1234" },
+    });
+    await run()(organizationActorWith("secretary"), {
+      type: "update_site",
+      siteId: "site-a",
+      changes: { accessNotes: "Code 5678" },
+    });
+    expect(state.sites.find(({ id }) => id === "site-a")?.accessNotes).toBe("Code 5678");
+  });
+
+  it.each<readonly [string, CustomerMutation]>([
+    ["create_customer", creation],
+    ["add_site", { type: "add_site", customerId: "customer-a", siteId: "site-new", site }],
+    [
+      "add_equipment",
+      {
+        type: "add_equipment",
+        siteId: "site-a",
+        equipmentId: "equipment-new",
+        equipment: { kind: "insert" },
+      },
+    ],
+    ["remove_equipment", { type: "remove_equipment", equipmentId: "equipment-a" }],
+    ["archive_customer", { type: "archive_customer", customerId: "customer-a" }],
+  ])(
+    "rejects a %s during an impersonation as forbidden and changes nothing",
+    async (_, mutation) => {
+      expect(
+        await run()(organizationActorWith("owner", { isImpersonating: true }), mutation),
+      ).toEqual({ isOk: false, error: "forbidden" });
+      expect(state.customers).toHaveLength(2);
+      expect(state.sites).toHaveLength(2);
+      expect(state.equipments.map(({ status }) => status)).toEqual(["active", "active"]);
+      expect(state.archivedAt.size).toBe(0);
+    },
+  );
+
+  it("does not apply a change to a customer of another organization", async () => {
+    expect(
+      await run()(technician, {
+        type: "update_customer",
+        customerId: "customer-b",
+        changes: { phone: "0102030405" },
+      }),
+    ).toEqual({ isOk: false, error: "customer_not_found" });
+    expect(state.customers.find(({ id }) => id === "customer-b")?.phone).toBeNull();
+  });
+});

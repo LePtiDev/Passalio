@@ -116,3 +116,36 @@ describe("uploadEquipmentPhoto", () => {
     expect(state.storedPhotos.size).toBe(2);
   });
 });
+
+describe("uploadEquipmentPhoto on a missing equipment", () => {
+  it("refuses an unknown equipment and stores no file", async () => {
+    expect(await run()(technician, { ...photo(), equipmentId: "equipment-unknown" })).toEqual({
+      isOk: false,
+      error: "equipment_not_found",
+    });
+    expect(state.photos.map(({ id }) => id)).toEqual(["photo-a", "photo-b"]);
+    expect(state.storedPhotos.size).toBe(2);
+  });
+
+  it("refuses an equipment of an archived customer and stores no file", async () => {
+    await createInMemoryCustomerDependencies(state).customers.archive(
+      "organization-a",
+      "customer-a",
+      NOW,
+    );
+    expect(await run()(technician, photo())).toEqual({
+      isOk: false,
+      error: "equipment_not_found",
+    });
+    expect(state.storedPhotos.size).toBe(2);
+  });
+
+  it("refuses a photo id already taken by another organization and keeps the other photo", async () => {
+    expect(await run()(technician, { ...photo(), id: "photo-b" })).toEqual({
+      isOk: false,
+      error: "already_exists",
+    });
+    expect(state.photos.find(({ id }) => id === "photo-b")?.organizationId).toBe("organization-b");
+    expect(state.storedPhotos.size).toBe(2);
+  });
+});

@@ -79,3 +79,18 @@ describe("removeEquipment", () => {
     });
   });
 });
+
+describe("removeEquipment of an archived customer", () => {
+  it("answers not found for an equipment of an archived customer and keeps it as it was", async () => {
+    await createInMemoryCustomerDependencies(state).customers.archive(
+      "organization-a",
+      "customer-a",
+      now,
+    );
+    expect(await run()(technician, { equipmentId: "equipment-a" })).toEqual({
+      isOk: false,
+      error: "equipment_not_found",
+    });
+    expect(equipmentOf("equipment-a")).toMatchObject({ status: "active", removedOn: null });
+  });
+});

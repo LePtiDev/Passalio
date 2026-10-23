@@ -158,3 +158,65 @@ describe("addEquipment", () => {
     expect(state.equipments).toHaveLength(2);
   });
 });
+
+describe("addEquipment, replacement and archive limits", () => {
+  it("refuses to replace an equipment of another site of the same organization and changes nothing", async () => {
+    seedCustomerOf(state, "organization-a", "a2");
+    expect(
+      await run()(technician, {
+        id: "equipment-new",
+        siteId: "site-a2",
+        replacesEquipmentId: "equipment-a",
+        equipment: { kind: "boiler" },
+      }),
+    ).toEqual({ isOk: false, error: "equipment_not_found" });
+    expect(equipmentOf("equipment-a")?.status).toBe("active");
+    expect(equipmentOf("equipment-new")).toBeUndefined();
+  });
+
+  it("stores no new equipment when the replaced one is already removed", async () => {
+    await run()(technician, {
+      id: "equipment-first",
+      siteId: "site-a",
+      replacesEquipmentId: "equipment-a",
+      equipment: { kind: "boiler" },
+    });
+    expect(
+      await run()(technician, {
+        id: "equipment-second",
+        siteId: "site-a",
+        replacesEquipmentId: "equipment-a",
+        equipment: { kind: "boiler" },
+      }),
+    ).toEqual({ isOk: false, error: "equipment_already_removed" });
+    expect(equipmentOf("equipment-second")).toBeUndefined();
+    expect(equipmentOf("equipment-a")?.replacedByEquipmentId).toBe("equipment-first");
+  });
+
+  it("stores nothing when the details do not fit the kind", async () => {
+    await run()(technician, {
+      id: "equipment-new",
+      siteId: "site-a",
+      replacesEquipmentId: "equipment-a",
+      equipment: { kind: "boiler", details: { refrigerant: "R32" } },
+    });
+    expect(equipmentOf("equipment-new")).toBeUndefined();
+    expect(equipmentOf("equipment-a")?.status).toBe("active");
+  });
+
+  it("refuses a site of an archived customer", async () => {
+    await createInMemoryCustomerDependencies(state).customers.archive(
+      "organization-a",
+      "customer-a",
+      NOW,
+    );
+    expect(
+      await run()(technician, {
+        id: "equipment-new",
+        siteId: "site-a",
+        equipment: { kind: "boiler" },
+      }),
+    ).toEqual({ isOk: false, error: "site_not_found" });
+    expect(equipmentOf("equipment-new")).toBeUndefined();
+  });
+});
