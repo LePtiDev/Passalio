@@ -1,10 +1,8 @@
-import { Search } from "lucide-react";
-import { useCallback, type ChangeEvent } from "react";
-import { Input } from "@/components/ui/input";
+import { useCallback } from "react";
+import { SearchField } from "@/components/search-field";
 import { cn } from "@/lib/utils";
 import { customersFr } from "../../fr";
 import type { CustomerFilter } from "../../hooks/use-customer-list";
-import { FIELD_CLASS } from "../customer-styles";
 
 const text = customersFr.list;
 
@@ -68,26 +66,15 @@ export const CustomerListToolbar = ({
   onQueryChange,
   onFilterChange,
 }: ToolbarProps) => {
-  const change = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => onQueryChange(event.target.value),
-    [onQueryChange],
-  );
   return (
     <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-end lg:justify-between lg:gap-4 lg:border-b lg:border-[#E3E8EF]">
-      <div className="relative flex items-center lg:w-72 lg:pb-2">
-        <Search
-          aria-hidden="true"
-          className="pointer-events-none absolute left-3.5 size-[18px] text-[#94A3B8] lg:left-3 lg:size-4"
-        />
-        <Input
-          type="search"
-          value={query}
-          onChange={change}
-          aria-label={text.searchLabel}
-          placeholder={text.searchPlaceholder}
-          className={cn(FIELD_CLASS, "pl-10 lg:pl-9")}
-        />
-      </div>
+      <SearchField
+        value={query}
+        label={text.searchLabel}
+        placeholder={text.searchPlaceholder}
+        onChange={onQueryChange}
+        className="lg:mb-2"
+      />
       <div className="grid grid-cols-3 gap-1 rounded-xl bg-[#EAEFF4] p-1 lg:flex lg:gap-6 lg:rounded-none lg:bg-transparent lg:p-0">
         {FILTERS.map(({ id, badge }) => (
           <FilterButton
