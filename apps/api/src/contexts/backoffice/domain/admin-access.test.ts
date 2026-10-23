@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  ADMIN_SESSION_MAX_AGE_MS,
+  TWO_FACTOR_PROOF_MAX_AGE_MS,
   evaluateAdminAccess,
   type AdminSessionFacts,
 } from "./admin-access";
@@ -15,12 +15,12 @@ const facts = (overrides: Partial<AdminSessionFacts> = {}): AdminSessionFacts =>
   isTwoFactorEnabled: true,
   isImpersonating: false,
   isBanned: false,
-  signedInAt: new Date(NOW.getTime() - 60_000),
+  twoFactorVerifiedAt: new Date(NOW.getTime() - 60_000),
   ...overrides,
 });
 
 describe("evaluateAdminAccess", () => {
-  it("lets a superadmin with two-factor and a recent sign-in in", () => {
+  it("lets a superadmin in after a recent two-factor code", () => {
     expect(evaluateAdminAccess(facts(), NOW)).toEqual({
       isOk: true,
       value: { userId: "user-1", email: "admin@passalio.com", name: "Quentin", role: "superadmin" },
@@ -48,11 +48,18 @@ describe("evaluateAdminAccess", () => {
     });
   });
 
-  it("asks to sign in again after twelve hours", () => {
-    const signedInAt = new Date(NOW.getTime() - ADMIN_SESSION_MAX_AGE_MS - 1);
-    expect(evaluateAdminAccess(facts({ signedInAt }), NOW)).toEqual({
+  it("asks for the code when the session never passed two-factor", () => {
+    expect(evaluateAdminAccess(facts({ twoFactorVerifiedAt: null }), NOW)).toEqual({
       isOk: false,
-      error: "admin_session_expired",
+      error: "two_factor_unverified",
+    });
+  });
+
+  it("asks for the code again after twelve hours", () => {
+    const twoFactorVerifiedAt = new Date(NOW.getTime() - TWO_FACTOR_PROOF_MAX_AGE_MS - 1);
+    expect(evaluateAdminAccess(facts({ twoFactorVerifiedAt }), NOW)).toEqual({
+      isOk: false,
+      error: "two_factor_unverified",
     });
   });
 });

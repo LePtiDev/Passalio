@@ -9,6 +9,7 @@ import type { AuditTrail } from "./audit-trail";
 import type { Database } from "./database";
 import type { EmailSender } from "./email";
 import { PLATFORM_ROLES } from "./platform-roles";
+import { markTwoFactorVerifiedSession } from "./two-factor-session";
 
 export const AUTH_BASE_PATH = "/api/auth";
 
@@ -106,7 +107,11 @@ export const createAuth = ({
     session: {
       expiresIn: 30 * DAY_IN_SECONDS,
       updateAge: DAY_IN_SECONDS,
+      additionalFields: {
+        twoFactorVerifiedAt: { type: "date", required: false, input: false },
+      },
     },
+    hooks: { after: markTwoFactorVerifiedSession },
     advanced: {
       ipAddress: { ipAddressHeaders: ["cf-connecting-ip"] },
       database: { generateId: () => newId() },

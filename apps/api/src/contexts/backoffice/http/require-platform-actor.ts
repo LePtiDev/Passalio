@@ -10,13 +10,13 @@ export type PlatformEnv = AppEnv & {
 const DENIAL_STATUS = {
   not_admin: 404,
   two_factor_required: 403,
-  admin_session_expired: 401,
+  two_factor_unverified: 401,
 } as const satisfies Record<AdminAccessDenial, number>;
 
 const DENIAL_ERROR = {
   not_admin: "not_found",
   two_factor_required: "two_factor_required",
-  admin_session_expired: "admin_session_expired",
+  two_factor_unverified: "two_factor_unverified",
 } as const satisfies Record<AdminAccessDenial, string>;
 
 export const requirePlatformActor = createMiddleware<PlatformEnv>(async (context, next) => {
@@ -33,7 +33,11 @@ export const requirePlatformActor = createMiddleware<PlatformEnv>(async (context
       isTwoFactorEnabled: session.user.twoFactorEnabled === true,
       isImpersonating: Boolean(session.session.impersonatedBy),
       isBanned: session.user.banned === true,
-      signedInAt: new Date(session.session.createdAt),
+      twoFactorVerifiedAt:
+        session.session.twoFactorVerifiedAt === null ||
+        session.session.twoFactorVerifiedAt === undefined
+          ? null
+          : new Date(session.session.twoFactorVerifiedAt),
     },
     new Date(),
   );

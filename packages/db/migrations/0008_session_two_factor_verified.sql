@@ -1,0 +1,1 @@
+ALTER TABLE `sessions` ADD `two_factor_verified_at` integer;
