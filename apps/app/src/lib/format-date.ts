@@ -8,6 +8,14 @@ const SHORT_DATE_WITH_YEAR = new Intl.DateTimeFormat("fr-FR", {
   year: "numeric",
 });
 
+const LONG_DATE = new Intl.DateTimeFormat("fr-FR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+export const formatLongDate = (date: Date): string => LONG_DATE.format(date);
+
 export const formatShortDate = (date: Date): string => SHORT_DATE.format(date);
 
 export const formatShortDateWithYear = (date: Date): string => SHORT_DATE_WITH_YEAR.format(date);

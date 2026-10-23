@@ -9,9 +9,12 @@
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "release": "node scripts/release.ts",
     "platform:role": "node scripts/platform-role.ts",
-    "prospects:import": "node scripts/prospects-import.ts"
+    "prospects:import": "node scripts/prospects-import.ts",
+    "mcp:revoke": "node scripts/mcp-revoke.ts"
   },
   "dependencies": {
+    "@cloudflare/workers-oauth-provider": "1.2.4",
+    "@modelcontextprotocol/sdk": "1.32.1",
     "@passalio/db": "workspace:*",
     "@passalio/emails": "workspace:*",
     "@passalio/shared": "workspace:*",

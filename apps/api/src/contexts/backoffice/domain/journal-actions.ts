@@ -7,4 +7,12 @@ export const PLATFORM_JOURNAL_ACTIONS = [
   "platform.invitation_canceled",
   "platform.invitation_accepted",
   "organization.created",
+  "mcp.authorized",
+  "mcp.revoked",
+  "mcp.create_prospect_company",
+  "mcp.update_prospect_company",
+  "mcp.change_prospect_stage",
+  "mcp.add_prospect_note",
+  "mcp.add_prospect_contact",
+  "mcp.update_prospect_contact",
 ] as const;

@@ -12,7 +12,13 @@ export default defineConfig({
       registerType: "autoUpdate",
       injectRegister: false,
       workbox: {
-        navigateFallbackDenylist: [/^\/api\//, /^\/health$/],
+        navigateFallbackDenylist: [
+          /^\/api\//,
+          /^\/health$/,
+          /^\/mcp$/,
+          /^\/oauth\//,
+          /^\/\.well-known\//,
+        ],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
@@ -35,6 +41,10 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": "http://localhost:8787",
+      "/mcp": "http://localhost:8787",
+      "/oauth": "http://localhost:8787",
+      "/.well-known/oauth-authorization-server": "http://localhost:8787",
+      "/.well-known/oauth-protected-resource": "http://localhost:8787",
     },
   },
   resolve: {

@@ -75,6 +75,20 @@ export {
 export { ForbiddenError } from "./errors";
 export { newId } from "./id";
 export {
+  MCP_ACCESS_LEVELS,
+  MCP_GRANT_DAYS,
+  MCP_SCOPES,
+  mcpApprovalBody,
+  mcpAuthorizationResponse,
+  mcpDenialBody,
+  mcpRedirectResponse,
+  type McpAccessLevel,
+  type McpApprovalBody,
+  type McpAuthorizationResponse,
+  type McpDenialBody,
+  type McpRedirectResponse,
+} from "./mcp-authorization";
+export {
   MAX_PASSWORD_LENGTH,
   MIN_PASSWORD_LENGTH,
   passwordStrength,

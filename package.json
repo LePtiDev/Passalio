@@ -19,6 +19,7 @@
     "test:e2e": "pnpm --filter @passalio/app test:e2e",
     "platform:grant": "pnpm --filter @passalio/api platform:role grant",
     "platform:revoke": "pnpm --filter @passalio/api platform:role revoke",
+    "mcp:revoke": "pnpm --filter @passalio/api mcp:revoke",
     "prospects:import": "pnpm --filter @passalio/api prospects:import"
   },
   "devDependencies": {

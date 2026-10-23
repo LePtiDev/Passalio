@@ -42,6 +42,7 @@ Dernière mise à jour : 2026-10-23.
 | Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche              | `components/prospection` (app)  |
 | Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement          | `components/pagination.tsx`     |
 | Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail          | ADR 0018                        |
+| Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                 | ADR 0019                        |
 
 ## Hors code (Quentin)
 
@@ -102,6 +103,9 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Importer les fiches en staging et en production (sur demande de Quentin)
 - [x] Espace admin : équipe Passalio, inviter un membre, changer son rôle, le retirer (maquette validée le 2026-10-23, ADR 0018)
 - [ ] Inviter Antho comme Commercial depuis la page Équipe, une fois l'équipe déployée (sur demande de Quentin)
+- [x] Serveur MCP admin : Claude lit l'admin et écrit dans la prospection, écran d'autorisation selon la maquette validée le 2026-10-23 (ADR 0019)
+- [ ] Serveur MCP : créer les KV `passalio-oauth-staging` et `passalio-oauth-production` (jeton Cloudflare avec droits KV), activer `MCP_ENABLED`, déployer (sur demande de Quentin)
+- [ ] Serveur MCP : outil d'import en lot de fiches prospects (100 lignes, simulation d'abord)
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)

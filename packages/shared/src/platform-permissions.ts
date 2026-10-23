@@ -15,6 +15,7 @@ export const PLATFORM_PERMISSIONS = [
   "prospects:read",
   "prospects:write",
   "team:manage",
+  "mcp:connect",
 ] as const;
 
 export type PlatformPermission = (typeof PLATFORM_PERMISSIONS)[number];
