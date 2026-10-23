@@ -9,10 +9,11 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { createTraceRecorder } from "@/lib/auth-errors";
 import { toastApiError } from "@/lib/errors";
-import { FORGOT_PASSWORD_PATH, SIGN_UP_PATH } from "@/lib/session";
+import { FORGOT_PASSWORD_PATH, SIGN_IN_CODE_PATH, SIGN_UP_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
 import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
+import { isTwoFactorRedirect, sendMagicLink } from "./sign-in-requests";
 import { AuthHeading } from "./auth-heading";
 import {
   AUTH_FIELD_CLASS,
@@ -37,19 +38,6 @@ type SignInValues = z.infer<typeof signInSchema>;
 
 type SignInFormProps = {
   readonly returnTo: string;
-};
-
-const sendMagicLink = async (email: string, returnTo: string) => {
-  const trace = createTraceRecorder();
-  const { error } = await authClient.signIn.magicLink(
-    { email, callbackURL: `${window.location.origin}${returnTo}` },
-    { onResponse: trace.onResponse },
-  );
-  if (error) {
-    toastApiError(trace.toApiError(error));
-    return false;
-  }
-  return true;
 };
 
 const FORGOT_PASSWORD_LINK = (
@@ -80,13 +68,17 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
       return;
     }
     const trace = createTraceRecorder();
-    const { error } = await authClient.signIn.email(
+    const { data, error } = await authClient.signIn.email(
       { email, password, rememberMe },
       { headers, onResponse: trace.onResponse },
     );
     if (error) {
       turnstile.reset();
       toastApiError(trace.toApiError(error));
+      return;
+    }
+    if (isTwoFactorRedirect(data)) {
+      await navigate({ to: SIGN_IN_CODE_PATH, search: { retour: returnTo } });
       return;
     }
     await navigate({ to: returnTo });

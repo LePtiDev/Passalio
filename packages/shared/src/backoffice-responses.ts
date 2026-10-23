@@ -20,7 +20,7 @@ export const accountSummaryResponse = z.object({
   trialEndsAt: z.string(),
   isInTrial: z.boolean(),
   staffCount: z.number(),
-  staff: z.array(z.object({ name: z.string(), role: organizationRole })),
+  staff: z.array(z.object({ id: z.string(), name: z.string(), role: organizationRole })),
   monthlyActivity: z.array(monthlyActivityResponse),
   trend: usageTrendResponse,
   lastActive: z.object({ day: z.string(), name: z.string() }).nullable(),
@@ -45,6 +45,7 @@ export const journalEntryResponse = z.object({
   organization: z.object({ id: z.string(), name: z.string() }).nullable(),
   actorName: z.string().nullable(),
   impersonatorName: z.string().nullable(),
+  targetName: z.string().nullable(),
   data: z.record(z.string(), z.string()).nullable(),
 });
 
@@ -113,6 +114,7 @@ export const accountUsageResponse = z.object({
   ),
 });
 
+export type MonthlyActivityResponse = z.infer<typeof monthlyActivityResponse>;
 export type UsageTrendResponse = z.infer<typeof usageTrendResponse>;
 export type AccountSummaryResponse = z.infer<typeof accountSummaryResponse>;
 export type AccountsPageResponse = z.infer<typeof accountsPageResponse>;

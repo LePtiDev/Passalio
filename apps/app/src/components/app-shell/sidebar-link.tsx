@@ -28,7 +28,11 @@ export const SidebarLink = ({ item }: { readonly item: NavigationItem }) => {
     );
   }
   return (
-    <Link to={item.to} activeOptions={item.to === "/" ? EXACT : PREFIX} className={LINK_CLASS}>
+    <Link
+      to={item.to}
+      activeOptions={item.isExact === true ? EXACT : PREFIX}
+      className={LINK_CLASS}
+    >
       <Icon aria-hidden="true" className={ICON_CLASS} strokeWidth={1.8} />
       {item.label}
     </Link>

@@ -4,6 +4,10 @@ import { readOfflineSession, rememberOfflineSession, type OfflineSession } from 
 
 export const SIGN_IN_PATH = "/connexion";
 export const SIGN_UP_PATH = "/inscription";
+export const SIGN_IN_CODE_PATH = "/connexion/code";
+export const ADMIN_PATH = "/admin";
+export const ADMIN_CODE_PATH = "/admin/code";
+export const ADMIN_SECURITY_PATH = "/admin/securite";
 export const FORGOT_PASSWORD_PATH = "/mot-de-passe-oublie";
 export const RESET_PASSWORD_PATH = "/mot-de-passe/nouveau";
 

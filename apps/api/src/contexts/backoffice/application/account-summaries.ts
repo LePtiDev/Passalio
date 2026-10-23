@@ -36,7 +36,7 @@ export const summarizeAccounts = async (
       trialEndsAt: trialEndsAt.toISOString(),
       isInTrial: row.createdAt > window.trialStartedAfter,
       staffCount: staff.length,
-      staff: staff.map(({ name, role }) => ({ name, role })),
+      staff: staff.map(({ userId, name, role }) => ({ id: userId, name, role })),
       monthlyActivity: window.months.map((month) => ({
         month,
         activeDays: activity

@@ -5,13 +5,20 @@ import logoWhite from "@/assets/passalio-logo-white.svg";
 import { fr } from "@/fr";
 import { LegalLinks } from "@/legal";
 import { identityFr } from "../fr";
+import { AdminShowcase } from "./admin-showcase";
 import { SignInShowcase } from "./sign-in-showcase";
 import { SignUpShowcase } from "./sign-up-showcase";
 
 type AuthLayoutProps = {
   readonly children: ReactNode;
-  readonly showcase: "sign-in" | "sign-up";
+  readonly showcase: "sign-in" | "sign-up" | "admin";
 };
+
+const SHOWCASES = {
+  "sign-in": <SignInShowcase />,
+  "sign-up": <SignUpShowcase />,
+  admin: <AdminShowcase />,
+} as const;
 
 const MobileBrandBand = () => (
   <div className="brand-grid flex h-[150px] shrink-0 flex-col justify-between px-5 py-[22px] lg:hidden">
@@ -55,7 +62,7 @@ export const AuthLayout = ({ children, showcase }: AuthLayoutProps) => (
       <AuthFooter />
     </div>
     <aside className="brand-grid hidden flex-col justify-center gap-8 overflow-hidden p-12 text-white lg:flex lg:basis-1/2">
-      {showcase === "sign-up" ? <SignUpShowcase /> : <SignInShowcase />}
+      {SHOWCASES[showcase]}
     </aside>
   </div>
 );

@@ -1,0 +1,52 @@
+export const twoFactorFr = {
+  showcase: {
+    badge: "Espace admin",
+    title: "Chaque accès aux comptes est protégé et journalisé.",
+    points: [
+      "Mot de passe et code à chaque connexion",
+      "Code redemandé toutes les 12 heures",
+      "Chaque action écrite dans le journal",
+    ],
+  },
+  code: {
+    title: "Code de vérification",
+    subtitle: "Saisissez le code affiché pour Passalio dans votre application d'authentification.",
+    adminSubtitle: "L'espace admin redemande votre code toutes les 12 heures.",
+    label: "Code à 6 chiffres",
+    backupLabel: "Code de secours",
+    backupHint: "Un des 10 codes notés à l'activation. Chaque code ne sert qu'une fois.",
+    submit: "Vérifier",
+    submitting: "Vérification…",
+    switchToBackup: "Utiliser un code de secours",
+    switchToApp: "Utiliser l'application",
+    changeAccount: "Changer de compte",
+    required: "Saisissez le code.",
+  },
+  setup: {
+    title: "Activez la double authentification",
+    subtitle:
+      "L'espace admin donne accès à tous les comptes. Un code de votre téléphone sera demandé à chaque connexion.",
+    passwordLabel: "Confirmez votre mot de passe",
+    passwordRequired: "Saisissez votre mot de passe.",
+    continue: "Continuer",
+    scanTitle: "1. Scannez ce QR code",
+    scanText: "Avec Google Authenticator, 1Password ou Authy.",
+    manualKey: "Sans appareil photo, saisissez la clé\u00A0:",
+    qrLabel: "QR code à scanner avec votre application d'authentification",
+    codeLabel: "2. Saisissez le code à 6 chiffres",
+    codeHint: "Le code change toutes les 30 secondes.",
+    activate: "Activer",
+    activating: "Activation…",
+    signOut: "Se déconnecter",
+  },
+  backupCodes: {
+    title: "Notez vos codes de secours",
+    subtitle:
+      "Si vous perdez votre téléphone, chacun de ces codes ouvre une seule connexion. Gardez-les dans votre gestionnaire de mots de passe.",
+    listLabel: "Codes de secours",
+    copy: "Copier les codes",
+    copied: "Codes copiés.",
+    done: "J'ai noté mes codes",
+  },
+  activated: "Double authentification activée.",
+} as const;

@@ -68,6 +68,7 @@ export type JournalRow = {
   readonly organizationName: string | null;
   readonly actorName: string | null;
   readonly impersonatorName: string | null;
+  readonly targetName: string | null;
   readonly data: Readonly<Record<string, string>> | null;
 };
 
