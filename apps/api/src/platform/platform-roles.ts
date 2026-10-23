@@ -4,5 +4,5 @@ export const PLATFORM_ROLES = {
   user: userAc,
   superadmin: adminAc,
   sales: userAc,
-  support: defaultAc.newRole({ user: ["list", "get", "impersonate"], session: ["list"] }),
+  admin: defaultAc.newRole({ user: ["list", "get", "impersonate"], session: ["list"] }),
 };

@@ -11,6 +11,7 @@ const ACTIVE_TAB_CLASS = "font-bold text-[#0F2A44]";
 const COLUMNS_CLASS: ReadonlyMap<number, string> = new Map([
   [3, "grid-cols-3"],
   [4, "grid-cols-4"],
+  [5, "grid-cols-5"],
 ]);
 
 const selectPathname = (state: { readonly location: { readonly pathname: string } }) =>

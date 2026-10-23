@@ -7,10 +7,12 @@ import {
   AccountScreen,
   AccountsScreen,
   AdminLayout,
+  canManageTeam,
   canSeePlatform,
   JournalScreen,
   loadAdminAccess,
   OverviewScreen,
+  TeamScreen,
   type AccountFilter,
   type AccountTab,
   type PlatformAdmin,
@@ -20,7 +22,7 @@ import { FormSkeleton } from "@/components/page-skeleton";
 import { ApiRequestError } from "@/lib/api-client";
 import { createRememberedCheck } from "@/lib/remembered-check";
 import { textParam } from "@/lib/search-params";
-import { ADMIN_CODE_PATH, ADMIN_SECURITY_PATH, requireSession } from "@/lib/session";
+import { ADMIN_CODE_PATH, ADMIN_PATH, ADMIN_SECURITY_PATH, requireSession } from "@/lib/session";
 import { useRevalidateOnNavigation } from "@/lib/use-revalidate-on-navigation";
 import { rootRoute } from "./root";
 
@@ -160,4 +162,18 @@ export const adminJournalRoute = createRoute({
   path: "/journal",
   beforeLoad: requirePlatformArea,
   component: JournalScreen,
+});
+
+export const adminTeamRoute = createRoute({
+  getParentRoute: () => adminShellRoute,
+  path: "/equipe",
+  beforeLoad: ({ context }) => {
+    if (!canManageTeam(context.admin.role)) {
+      throw redirect({ to: ADMIN_PATH });
+    }
+  },
+  component: function AdminTeamRouteScreen() {
+    const userId = adminTeamRoute.useRouteContext({ select: (context) => context.admin.userId });
+    return <TeamScreen currentUserId={userId} />;
+  },
 });

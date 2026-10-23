@@ -46,7 +46,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 - Webhooks Stripe vérifiés par signature.
 - Fichiers envoyés : type et taille vérifiés, stockés dans R2 hors du domaine de l'application.
 - `audit_logs` : connexions, changements de rôle, exports, suppressions, impersonations.
-- Espace admin (ADR 0015) : rôles plateforme donnés uniquement par `pnpm platform:grant`, jamais par une route. Double authentification TOTP obligatoire, codes vérifiés 5 fois par minute au plus. `/api/admin/*` répond 404 à qui n'est pas admin (et pendant une impersonation), 403 sans double authentification, 401 si la session n'a pas passé le code depuis moins de 12 heures (une connexion par lien magique doit aussi saisir le code).
+- Espace admin (ADR 0015) : rôles plateforme donnés par un super admin depuis la page Équipe (invitation par e-mail, permission `team:manage`, ADR 0018) ou en urgence par `pnpm platform:grant`. Un super admin ne change pas son propre rôle ; un changement de rôle ou un retrait ferme les sessions de la personne. Double authentification TOTP obligatoire, codes vérifiés 5 fois par minute au plus. `/api/admin/*` répond 404 à qui n'est pas admin (et pendant une impersonation), 403 sans double authentification, 401 si la session n'a pas passé le code depuis moins de 12 heures (une connexion par lien magique doit aussi saisir le code).
 
 ## 6. Dépendances
 

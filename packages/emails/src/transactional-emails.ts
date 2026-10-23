@@ -16,6 +16,14 @@ export type InvitationEmailInput = {
   readonly inviterName: string | null;
 };
 
+export type TeamInvitationRole = keyof typeof fr.teamInvitation.roles;
+
+export type TeamInvitationEmailInput = {
+  readonly url: string;
+  readonly inviterName: string;
+  readonly role: TeamInvitationRole;
+};
+
 const MAX_INITIALS = 2;
 
 export const organizationInitials = (organizationName: string) => {
@@ -81,6 +89,28 @@ export const invitationEmail = (
       action: { label: fr.invitation.action, url },
       validity: fr.invitation.validity,
       safety: fr.invitation.safety,
+    },
+    assetsUrl,
+  );
+
+export const teamInvitationEmail = (
+  { url, inviterName, role }: TeamInvitationEmailInput,
+  assetsUrl: string,
+): RenderedEmail =>
+  renderEmail(
+    {
+      subject: fr.teamInvitation.subject(inviterName),
+      hero: {
+        kind: "organization",
+        name: fr.teamInvitation.teamName,
+        initials: "P",
+        caption: fr.teamInvitation.invitedBy(inviterName),
+      },
+      title: fr.teamInvitation.title,
+      lead: fr.teamInvitation.lead(fr.teamInvitation.roles[role]),
+      action: { label: fr.teamInvitation.action, url },
+      validity: fr.teamInvitation.validity,
+      safety: fr.teamInvitation.safety,
     },
     assetsUrl,
   );

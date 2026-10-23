@@ -1,6 +1,7 @@
-import { Briefcase, Building2, LayoutGrid, List, MapPin, Users } from "lucide-react";
+import { Briefcase, Building2, LayoutGrid, List, MapPin, ShieldCheck, Users } from "lucide-react";
 import type { NavigationItem } from "@/components/app-shell/navigation";
 import { backofficeFr } from "../../fr";
+import { teamFr } from "../../team-fr";
 
 const text = backofficeFr.shell;
 
@@ -16,6 +17,17 @@ export const PLATFORM_NAVIGATION: readonly NavigationItem[] = [
   { label: text.journal, icon: List, to: "/admin/journal" },
 ];
 
+const TEAM_NAVIGATION: NavigationItem = {
+  label: teamFr.navigation,
+  icon: ShieldCheck,
+  to: "/admin/equipe",
+};
+
+export const SUPERADMIN_PLATFORM_NAVIGATION: readonly NavigationItem[] = [
+  ...PLATFORM_NAVIGATION,
+  TEAM_NAVIGATION,
+];
+
 export const ADMIN_MOBILE_NAVIGATION: readonly NavigationItem[] = [
   {
     label: text.commercial,
@@ -29,3 +41,8 @@ export const ADMIN_MOBILE_NAVIGATION: readonly NavigationItem[] = [
 ];
 
 export const SALES_MOBILE_NAVIGATION: readonly NavigationItem[] = COMMERCIAL_NAVIGATION;
+
+export const SUPERADMIN_MOBILE_NAVIGATION: readonly NavigationItem[] = [
+  ...ADMIN_MOBILE_NAVIGATION,
+  { ...TEAM_NAVIGATION, label: teamFr.navigationShort },
+];

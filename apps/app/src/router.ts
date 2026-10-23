@@ -14,6 +14,7 @@ import {
   adminOverviewRoute,
   adminRootRoute,
   adminShellRoute,
+  adminTeamRoute,
 } from "./routes/admin";
 import {
   adminCompaniesRoute,
@@ -41,6 +42,7 @@ import { signInCodeRoute } from "./routes/sign-in-code";
 import { signUpRoute } from "./routes/sign-up";
 import { signedInRoute } from "./routes/signed-in-layout";
 import { teamRoute } from "./routes/team";
+import { teamInvitationRoute } from "./routes/team-invitation";
 
 const routeTree = rootRoute.addChildren([
   signInRoute,
@@ -53,6 +55,7 @@ const routeTree = rootRoute.addChildren([
   onboardingDocumentsRoute,
   onboardingTeamRoute,
   invitationRoute,
+  teamInvitationRoute,
   termsRoute,
   privacyRoute,
   legalNoticeRoute,
@@ -64,6 +67,7 @@ const routeTree = rootRoute.addChildren([
       adminAccountsRoute,
       adminAccountRoute,
       adminJournalRoute,
+      adminTeamRoute,
       adminCompaniesRoute,
       adminCompanyRoute,
       adminContactsRoute,

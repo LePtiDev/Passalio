@@ -23,3 +23,6 @@ export const loadAdminAccess = async (): Promise<AdminAccess> => {
 
 export const canSeePlatform = (role: PlatformRole) =>
   PLATFORM_ROLE_PERMISSIONS[role].has("platform:read");
+
+export const canManageTeam = (role: PlatformRole) =>
+  PLATFORM_ROLE_PERMISSIONS[role].has("team:manage");

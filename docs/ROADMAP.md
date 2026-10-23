@@ -40,6 +40,7 @@ Dernière mise à jour : 2026-10-23.
 | Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »   | `contexts/sales` (app)          |
 | Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                         | PR #36                          |
 | Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche              | `components/prospection` (app)  |
+| Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail          | ADR 0018                        |
 
 ## Hors code (Quentin)
 
@@ -97,7 +98,9 @@ Dernière mise à jour : 2026-10-23.
 - [x] Commercial, données : tables, API `/api/admin/prospects`, rôle `sales`, commande `prospects:import` (ADR 0017)
 - [x] Commercial, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/9s2qiEWDn6mQw2nS74eUyv) : Entreprises, Contacts, fiches, ordinateur et mobile ; espace admin réduit à Commercial pour le rôle `sales`
 - [x] Commercial, écran Prospection : carte Leaflet (fond IGN), qualifier depuis la carte ; mini-carte et bouton « Carte » sur la fiche entreprise
-- [ ] Importer les fiches en staging et en production, puis donner le rôle `sales` à Antho (sur demande de Quentin)
+- [ ] Importer les fiches en staging et en production (sur demande de Quentin)
+- [x] Espace admin : équipe Passalio, inviter un membre, changer son rôle, le retirer (maquette validée le 2026-10-23, ADR 0018)
+- [ ] Inviter Antho comme Commercial depuis la page Équipe, une fois l'équipe déployée (sur demande de Quentin)
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)

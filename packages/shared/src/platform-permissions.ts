@@ -1,4 +1,4 @@
-export const PLATFORM_ROLES = ["superadmin", "support", "sales"] as const;
+export const PLATFORM_ROLES = ["superadmin", "admin", "sales"] as const;
 
 export type PlatformRole = (typeof PLATFORM_ROLES)[number];
 
@@ -14,6 +14,7 @@ export const PLATFORM_PERMISSIONS = [
   "billing:gift",
   "prospects:read",
   "prospects:write",
+  "team:manage",
 ] as const;
 
 export type PlatformPermission = (typeof PLATFORM_PERMISSIONS)[number];
@@ -22,15 +23,7 @@ export const PLATFORM_ROLE_PERMISSIONS: Readonly<
   Record<PlatformRole, ReadonlySet<PlatformPermission>>
 > = {
   superadmin: new Set(PLATFORM_PERMISSIONS),
-  support: new Set([
-    "platform:read",
-    "accounts:create",
-    "access:manage",
-    "accounts:impersonate",
-    "billing:gift",
-    "prospects:read",
-    "prospects:write",
-  ]),
+  admin: new Set(PLATFORM_PERMISSIONS.filter((permission) => permission !== "team:manage")),
   sales: new Set(["prospects:read", "prospects:write"]),
 };
 

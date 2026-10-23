@@ -5,10 +5,14 @@ import { SidebarLink } from "@/components/app-shell/sidebar-link";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { fr } from "@/fr";
 import { useSignOut } from "@/lib/use-sign-out";
-import { canSeePlatform } from "../../admin-access";
+import { canManageTeam, canSeePlatform } from "../../admin-access";
 import type { PlatformAdmin } from "../../backoffice-api";
 import { backofficeFr } from "../../fr";
-import { COMMERCIAL_NAVIGATION, PLATFORM_NAVIGATION } from "./admin-navigation";
+import {
+  COMMERCIAL_NAVIGATION,
+  PLATFORM_NAVIGATION,
+  SUPERADMIN_PLATFORM_NAVIGATION,
+} from "./admin-navigation";
 
 const text = backofficeFr.shell;
 
@@ -46,7 +50,10 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
       <nav aria-label={text.navigation} className="flex flex-1 flex-col gap-5">
         <NavigationGroup title={text.commercial} items={COMMERCIAL_NAVIGATION} />
         {canSeePlatform(admin.role) ? (
-          <NavigationGroup title={text.platform} items={PLATFORM_NAVIGATION} />
+          <NavigationGroup
+            title={text.platform}
+            items={canManageTeam(admin.role) ? SUPERADMIN_PLATFORM_NAVIGATION : PLATFORM_NAVIGATION}
+          />
         ) : null}
       </nav>
       <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-1.5 pt-3.5">

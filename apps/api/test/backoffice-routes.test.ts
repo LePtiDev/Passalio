@@ -14,7 +14,7 @@ let platform: TestPlatform;
 
 const json = (body: unknown): RequestInit => ({ method: "POST", body: JSON.stringify(body) });
 
-const grantRole = (email: string, role: "superadmin" | "support") =>
+const grantRole = (email: string, role: "superadmin" | "admin") =>
   grantPlatformRole(platform, email, role);
 
 const errorOf = async (response: Response) => errorResponse.parse(await response.json()).error;
@@ -44,7 +44,7 @@ describe("admin space access", () => {
 
   it("asks an admin to enable two-factor first", async () => {
     const cookie = await platform.signIn("support@passalio.com");
-    await grantRole("support@passalio.com", "support");
+    await grantRole("support@passalio.com", "admin");
     const response = await platform.request("/api/admin/me", {}, cookie);
     expect(response.status).toBe(403);
     expect(await errorOf(response)).toBe("two_factor_required");
@@ -65,7 +65,7 @@ describe("admin space access", () => {
   it("requires the code at the next sign-in, then opens the admin space", async () => {
     const email = "antho@passalio.com";
     const { secret } = await enableTwoFactor(await platform.signIn(email));
-    await grantRole(email, "support");
+    await grantRole(email, "admin");
     const signedIn = await platform.request(
       "/api/auth/sign-in/email",
       json({ email, password: TEST_PASSWORD }),

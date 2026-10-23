@@ -15,11 +15,14 @@ describe("canPlatform", () => {
     ["superadmin", "platform:read", true],
     ["superadmin", "accounts:block", true],
     ["superadmin", "billing:gift", true],
-    ["support", "platform:read", true],
-    ["support", "accounts:impersonate", true],
-    ["support", "access:manage", true],
-    ["support", "accounts:block", false],
-    ["support", "prospects:write", true],
+    ["superadmin", "team:manage", true],
+    ["admin", "platform:read", true],
+    ["admin", "accounts:impersonate", true],
+    ["admin", "access:manage", true],
+    ["admin", "accounts:block", true],
+    ["admin", "prospects:write", true],
+    ["admin", "team:manage", false],
+    ["sales", "team:manage", false],
     ["sales", "prospects:read", true],
     ["sales", "prospects:write", true],
     ["sales", "platform:read", false],
@@ -31,15 +34,16 @@ describe("canPlatform", () => {
 
 describe("assertPlatformCan", () => {
   it("throws a forbidden error naming the missing permission", () => {
-    expect(() => assertPlatformCan(actorWith("support"), "accounts:block")).toThrow(ForbiddenError);
+    expect(() => assertPlatformCan(actorWith("admin"), "team:manage")).toThrow(ForbiddenError);
   });
 });
 
 describe("isPlatformRole", () => {
   it.each([
     ["superadmin", true],
-    ["support", true],
+    ["admin", true],
     ["sales", true],
+    ["support", false],
     ["user", false],
     [null, false],
     [undefined, false],

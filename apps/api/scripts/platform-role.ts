@@ -5,7 +5,7 @@ import { createInterface } from "node:readline/promises";
 import { parseArgs } from "node:util";
 
 const ENVIRONMENTS = ["local", "staging", "production"] as const;
-const GRANTABLE_ROLES = ["superadmin", "support", "sales"] as const;
+const GRANTABLE_ROLES = ["superadmin", "admin", "sales"] as const;
 const ACTIONS = ["grant", "revoke"] as const;
 const EMAIL_PATTERN = /^[^\s'"@]+@[^\s'"@]+\.[^\s'"@]+$/;
 

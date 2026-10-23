@@ -10,7 +10,11 @@ import "./styles.css";
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
-    onError: (error) => toastApiError(apiErrorOf(error)),
+    onError: (error, _variables, _context, mutation) => {
+      if (mutation.meta?.["showsErrorsInline"] !== true) {
+        toastApiError(apiErrorOf(error));
+      }
+    },
   }),
 });
 

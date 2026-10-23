@@ -1,23 +1,27 @@
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { idColumn, timestampColumns } from "../columns";
 
-export const USER_ROLES = ["user", "superadmin", "support", "sales"] as const;
+export const USER_ROLES = ["user", "superadmin", "admin", "sales"] as const;
 
-export const users = sqliteTable("users", {
-  id: idColumn(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(false),
-  image: text("image"),
-  role: text("role", { enum: USER_ROLES }),
-  banned: integer("banned", { mode: "boolean" }).default(false),
-  banReason: text("ban_reason"),
-  banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
-  termsVersion: integer("terms_version"),
-  termsAcceptedAt: integer("terms_accepted_at", { mode: "timestamp_ms" }),
-  twoFactorEnabled: integer("two_factor_enabled", { mode: "boolean" }).default(false),
-  ...timestampColumns(),
-});
+export const users = sqliteTable(
+  "users",
+  {
+    id: idColumn(),
+    name: text("name").notNull(),
+    email: text("email").notNull().unique(),
+    emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(false),
+    image: text("image"),
+    role: text("role", { enum: USER_ROLES }),
+    banned: integer("banned", { mode: "boolean" }).default(false),
+    banReason: text("ban_reason"),
+    banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
+    termsVersion: integer("terms_version"),
+    termsAcceptedAt: integer("terms_accepted_at", { mode: "timestamp_ms" }),
+    twoFactorEnabled: integer("two_factor_enabled", { mode: "boolean" }).default(false),
+    ...timestampColumns(),
+  },
+  (table) => [index("users_role_idx").on(table.role)],
+);
 
 export const sessions = sqliteTable(
   "sessions",

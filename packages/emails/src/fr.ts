@@ -30,4 +30,15 @@ export const fr = {
     validity: "Valable 7 jours",
     safety: "Vous ne connaissez pas cette entreprise ? Ignorez cet e-mail.",
   },
+  teamInvitation: {
+    subject: (inviterName: string) => `${inviterName} vous invite dans l'équipe Passalio`,
+    teamName: "Équipe Passalio",
+    invitedBy: (inviterName: string) => `${inviterName} vous invite`,
+    title: "Rejoignez l'équipe Passalio",
+    lead: (roleLabel: string) => `Vous rejoignez l'espace admin comme ${roleLabel}.`,
+    roles: { superadmin: "Super admin", admin: "Admin", sales: "Commercial" },
+    action: "Rejoindre l'équipe",
+    validity: "Valable 7 jours",
+    safety: "Vous n'attendiez pas cette invitation ? Ignorez cet e-mail.",
+  },
 } as const;

@@ -27,9 +27,9 @@ describe("evaluateAdminAccess", () => {
     });
   });
 
-  it("lets a support member in", () => {
-    const result = evaluateAdminAccess(facts({ role: "support" }), NOW);
-    expect(result.isOk && result.value.role).toBe("support");
+  it("lets an admin member in", () => {
+    const result = evaluateAdminAccess(facts({ role: "admin" }), NOW);
+    expect(result.isOk && result.value.role).toBe("admin");
   });
 
   it.each<[string, Partial<AdminSessionFacts>]>([

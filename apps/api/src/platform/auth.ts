@@ -166,7 +166,7 @@ export const createAuth = ({
       admin({
         roles: PLATFORM_ROLES,
         defaultRole: "user",
-        adminRoles: ["superadmin", "support"],
+        adminRoles: ["superadmin", "admin"],
         impersonationSessionDuration: IMPERSONATION_LIFETIME_SECONDS,
       }),
     ],

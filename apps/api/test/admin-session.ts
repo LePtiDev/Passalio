@@ -10,7 +10,7 @@ const json = (body: unknown): RequestInit => ({ method: "POST", body: JSON.strin
 export const grantPlatformRole = async (
   platform: TestPlatform,
   email: string,
-  role: "superadmin" | "support" | "sales",
+  role: "superadmin" | "admin" | "sales",
 ) => {
   await platform.env.DB.prepare("UPDATE users SET role = ? WHERE email = ?")
     .bind(role, email)
@@ -38,7 +38,7 @@ export const enableTwoFactor = async (platform: TestPlatform, cookie: string) =>
 export const signInAsAdmin = async (
   platform: TestPlatform,
   email: string,
-  role: "superadmin" | "support" | "sales" = "superadmin",
+  role: "superadmin" | "admin" | "sales" = "superadmin",
 ) => {
   const { cookie } = await enableTwoFactor(platform, await platform.signIn(email));
   await grantPlatformRole(platform, email, role);
