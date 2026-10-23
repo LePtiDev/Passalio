@@ -4,6 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { apiErrorOf } from "./lib/api-client";
 import { toastApiError } from "./lib/errors";
+import { registerServiceWorker } from "./lib/service-worker";
 import { router } from "./router";
 import "./styles.css";
 
@@ -12,6 +13,8 @@ const queryClient = new QueryClient({
     onError: (error) => toastApiError(apiErrorOf(error)),
   }),
 });
+
+registerServiceWorker();
 
 const rootElement = document.querySelector("#root");
 

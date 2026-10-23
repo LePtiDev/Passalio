@@ -1,5 +1,5 @@
 import { TERMS_VERSION } from "@passalio/shared";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { startTestPlatform, APP_URL, type TestPlatform } from "./test-platform";
 
 let platform: TestPlatform;
@@ -59,6 +59,17 @@ describe("password sign-up and sign-in", () => {
     const oldTerms = await signUp("anciennes-conditions@example.fr", PASSWORD, TERMS_VERSION - 1);
     expect(withoutTerms.status).toBe(400);
     expect(oldTerms.status).toBe(400);
+  });
+
+  it("logs why an authentication request was refused, without personal data", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+    await signUp("motif-du-refus@example.fr", PASSWORD, null);
+    const lines = warn.mock.calls.map(([line]) => String(line));
+    warn.mockRestore();
+    const rejection = lines.find((line) => line.includes("auth_rejected"));
+    expect(rejection).toContain('"code":"TERMS_NOT_ACCEPTED"');
+    expect(rejection).toContain('"path":"/sign-up/email"');
+    expect(rejection).not.toContain("motif-du-refus");
   });
 
   it("refuses a password shorter than 12 characters", async () => {
