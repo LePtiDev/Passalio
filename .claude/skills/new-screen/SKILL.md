@@ -11,5 +11,5 @@ description: Créer un écran ou un composant dans la SPA React.
 6. Masquer les actions non autorisées avec `useCan("permission")`.
 7. Textes dans `fr.ts`.
 8. Vérifier sur une largeur de 360 px, zones tactiles de 48 px.
-9. Test Playwright si c'est un parcours critique.
+9. Tests : chaque état du composant (vide, chargement, erreur, succès), un test Playwright par parcours de l'écran (mobile et ordinateur), contrôle d'accessibilité, hors ligne pour un écran terrain. Agent `test-writer`, relecture par `test-reviewer`. Lignes ajoutées dans `docs/TESTING.md`.
 10. Avant de fusionner : captures mobile et ordinateur de chaque état, comparées à la maquette et montrées à Quentin.

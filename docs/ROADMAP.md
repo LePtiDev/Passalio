@@ -6,43 +6,44 @@ Dernière mise à jour : 2026-10-23.
 
 ## Fait
 
-| Quoi                                                                                                                              | Où                              |
-| --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                                                     | `CLAUDE.md`, `docs/`            |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`                                        | PR #1                           |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                                           | PR #2                           |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                                           | hors dépôt                      |
-| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                                            | `docs/competitor-parity.md`     |
-| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                                             | `docs/competitor-parity.md`     |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste                                        | PR #5                           |
-| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                                              | `docs/regulatory/`              |
-| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                                               | `CLAUDE.md`, skill `new-screen` |
-| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)                                         | `docs/adr/`                     |
-| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base                                    | PR #13                          |
-| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe                                   | PR #14                          |
-| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas                                    | PR #15                          |
-| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com                                        | PR #16                          |
-| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation                           | PR #18                          |
-| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation                            | PR #19                          |
-| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau                               | PR #20                          |
-| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié                                         | PR #17                          |
-| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                                              | `apps/web`                      |
-| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro                                | PR #21                          |
-| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                                               | ADR 0014, `docs/company.md`     |
-| Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                                          | PR #24                          |
-| Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin`                          | ADR 0015                        |
-| Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux                                | ADR 0015                        |
-| Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification | ADR 0015                        |
-| E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                | ADR 0016                        |
-| Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                        | `auth-routes.ts`                |
-| Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                    | `lib/session.ts`                |
-| Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage           | ADR 0017                        |
-| Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »   | `contexts/sales` (app)          |
-| Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                         | PR #36                          |
-| Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche              | `components/prospection` (app)  |
-| Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement          | `components/pagination.tsx`     |
-| Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail          | ADR 0018                        |
-| Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                 | ADR 0019                        |
+| Quoi                                                                                                                                     | Où                              |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                                                            | `CLAUDE.md`, `docs/`            |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`                                               | PR #1                           |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                                                  | PR #2                           |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                                                  | hors dépôt                      |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                                                   | `docs/competitor-parity.md`     |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                                                    | `docs/competitor-parity.md`     |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste                                               | PR #5                           |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                                                     | `docs/regulatory/`              |
+| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                                                      | `CLAUDE.md`, skill `new-screen` |
+| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)                                                | `docs/adr/`                     |
+| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base                                           | PR #13                          |
+| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe                                          | PR #14                          |
+| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas                                           | PR #15                          |
+| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com                                               | PR #16                          |
+| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation                                  | PR #18                          |
+| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation                                   | PR #19                          |
+| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau                                      | PR #20                          |
+| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié                                                | PR #17                          |
+| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                                                     | `apps/web`                      |
+| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro                                       | PR #21                          |
+| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                                                      | ADR 0014, `docs/company.md`     |
+| Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                                                 | PR #24                          |
+| Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin`                                 | ADR 0015                        |
+| Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux                                       | ADR 0015                        |
+| Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification        | ADR 0015                        |
+| E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                       | ADR 0016                        |
+| Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                               | `auth-routes.ts`                |
+| Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                           | `lib/session.ts`                |
+| Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage                  | ADR 0017                        |
+| Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »          | `contexts/sales` (app)          |
+| Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                                | PR #36                          |
+| Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche                     | `components/prospection` (app)  |
+| Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement                 | `components/pagination.tsx`     |
+| Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                 | ADR 0018                        |
+| Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                        | ADR 0019                        |
+| Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
 
 ## Hors code (Quentin)
 
@@ -110,6 +111,21 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)
 - [ ] Purge automatique après 12 mois : `activity_days`, journaux de connexion et d'actions (politique de confidentialité)
+
+## Tests (ADR 0020, inventaire dans `docs/TESTING.md`)
+
+- [x] Règles, garde-fou `test:guard`, lint des tests, agents, skill `fix-bug`
+- [ ] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
+- [ ] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection
+- [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
+- [ ] Sécurité transverse et aucune donnée personnelle dans les logs
+- [ ] Synchronisation : tests de propriétés, conflits, envoi rejoué
+- [ ] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest en mode navigateur)
+- [ ] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
+- [ ] Parcours Clients et hors ligne réel
+- [ ] Parcours Admin, Équipe Passalio, Commercial
+- [ ] Régression visuelle : captures de référence de chaque état
+- [ ] Couverture avec seuils, tests de mutation, `test:all` obligatoire dans `release:*`, tests de fumée après déploiement
 
 ## Site passalio.com
 

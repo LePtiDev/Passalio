@@ -13,5 +13,7 @@ pre-push:
   commands:
     typecheck:
       run: pnpm typecheck
+    test-guard:
+      run: pnpm test:guard
     test:
       run: pnpm test
