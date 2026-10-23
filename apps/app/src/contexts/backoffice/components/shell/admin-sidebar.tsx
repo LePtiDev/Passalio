@@ -24,7 +24,7 @@ const NavigationGroup = ({
   readonly items: readonly NavigationItem[];
 }) => (
   <div className="flex flex-col gap-0.5">
-    <span className="px-2.5 pb-1 text-[11px] leading-4 font-semibold tracking-[0.05em] text-[#64748B] uppercase">
+    <span className="px-2.5 pb-1 text-[10px] leading-3.5 font-medium tracking-[0.06em] text-[#94A3B8] uppercase">
       {title}
     </span>
     {items.map((item) => (
