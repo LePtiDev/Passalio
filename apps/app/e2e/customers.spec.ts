@@ -1,11 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const onboard = async (page: Page) => {
+const onboard = async (page: Page, email = "clients@example.fr") => {
   await page.goto("/connexion");
   await page.getByRole("link", { name: "Créer un compte" }).click();
   await page.getByLabel("Prénom").fill("Jean");
   await page.getByLabel("Nom", { exact: true }).fill("Dupont");
-  await page.getByLabel("Adresse email professionnelle").fill("clients@example.fr");
+  await page.getByLabel("Adresse email professionnelle").fill(email);
   await page.getByLabel("Mot de passe", { exact: true }).fill("cheminee-propre-2026");
   await page.getByRole("checkbox", { name: /J'accepte les conditions/ }).click();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
@@ -78,4 +78,26 @@ test("a technician creates a customer, adds a boiler, then replaces it by a heat
   await expect(page.getByRole("link", { name: /Jean-Pierre Moreau/ })).toBeVisible();
   await page.getByLabel("Rechercher un client").fill("nogent");
   await expect(page.getByRole("link", { name: /Jean-Pierre Moreau/ })).toBeVisible();
+});
+
+test("switching tabs does not wait for the server to confirm the session again", async ({
+  page,
+}) => {
+  await onboard(page, "onglets@example.fr");
+  const sessionChecks: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/auth/get-session")) {
+      sessionChecks.push(request.url());
+    }
+  });
+  const tabs = page.getByRole("navigation", { name: "Navigation principale" });
+
+  await tabs.getByRole("link", { name: "Clients" }).click();
+  await expect(page.getByText("Ajoutez votre premier client")).toBeVisible();
+  await tabs.getByRole("link", { name: "Réglages" }).click();
+  await expect(page).toHaveURL(/\/reglages/);
+  await tabs.getByRole("link", { name: "Accueil" }).click();
+  await expect(page.getByRole("heading", { name: "Bonjour Jean" })).toBeVisible();
+
+  expect(sessionChecks).toHaveLength(0);
 });

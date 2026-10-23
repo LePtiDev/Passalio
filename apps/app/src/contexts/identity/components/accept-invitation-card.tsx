@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { unwrap } from "@/lib/api-client";
 import { authClient } from "@/lib/auth-client";
+import { forgetRememberedChecks } from "@/lib/remembered-check";
 import { identityFr } from "../fr";
 import { identityApi } from "../identity-api";
 
@@ -23,6 +24,7 @@ export const AcceptInvitationCard = ({
       unwrap(await identityApi.acceptInvitation(organizationId, invitationId)),
     onSuccess: async () => {
       await authClient.organization.setActive({ organizationId });
+      forgetRememberedChecks();
       toast.success(identityFr.invitation.accepted);
       await navigate({ to: "/equipe" });
     },

@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import logo from "@/assets/passalio-logo.svg";
 import { fr } from "@/fr";
 import { authClient } from "@/lib/auth-client";
+import { forgetRememberedChecks } from "@/lib/remembered-check";
 import { SIGN_IN_PATH } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { onboardingFr } from "../../onboarding-fr";
@@ -38,6 +39,7 @@ export const OnboardingSidebar = ({ step }: { readonly step: OnboardingStep }) =
   const { data: session } = authClient.useSession();
   const signOut = useCallback(async () => {
     await authClient.signOut();
+    forgetRememberedChecks();
     await navigate({ to: SIGN_IN_PATH });
   }, [navigate]);
 

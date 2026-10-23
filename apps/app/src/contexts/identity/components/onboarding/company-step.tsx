@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { unwrap } from "@/lib/api-client";
 import { authClient } from "@/lib/auth-client";
+import { forgetRememberedChecks } from "@/lib/remembered-check";
 import { succeeds } from "@/lib/succeeds";
 import { identityApi, type CompanySummary, type OrganizationProfile } from "../../identity-api";
 import { onboardingFr } from "../../onboarding-fr";
@@ -54,6 +55,7 @@ const useSaveCompany = (organization: OrganizationProfile | null) => {
       }
       const { organization: created } = unwrap(await identityApi.createOrganization(details));
       await authClient.organization.setActive({ organizationId: created.id });
+      forgetRememberedChecks();
     },
     onSuccess: () => queryClient.invalidateQueries(),
   });
