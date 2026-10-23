@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createDatabase } from "../../src/platform/database";
+import { ACCEPTED_WHOLE_READS, acceptedStepsOf } from "./accepted-whole-reads";
 import { applyAllMigrations, startEmptyD1, type EmptyD1 } from "./empty-d1";
 import { QUERY_CATALOG } from "./query-catalog";
 import {
@@ -113,10 +114,18 @@ describe("query plans of the D1 repositories", () => {
     expect(new Set(names).size).toBe(names.length);
   });
 
+  it("every accepted whole read names a cataloged query", () => {
+    const cataloged = new Set(QUERY_CATALOG.map(({ method, query }) => `${method}: ${query}`));
+
+    expect(ACCEPTED_WHOLE_READS.filter(({ query }) => !cataloged.has(query))).toEqual([]);
+  });
+
   describe.each(QUERY_CATALOG.map((query) => [`${query.method}: ${query.query}`, query] as const))(
     "%s",
-    (_, query) => {
+    (name, query) => {
       let explained: readonly ExplainedStatement[];
+      const accepted = new Set(acceptedStepsOf(name));
+      const isNotAccepted = (step: string) => !accepted.has(step);
 
       beforeAll(async () => {
         explained = await explainedStatementsOf(query);
@@ -130,7 +139,7 @@ describe("query plans of the D1 repositories", () => {
         const scans = explained.map((statement) => ({
           sql: statement.sql,
           plan: statement.plan,
-          fullScans: fullScansOfGrowingTables(statement),
+          fullScans: fullScansOfGrowingTables(statement).filter(isNotAccepted),
         }));
 
         expect(scans.filter(({ fullScans }) => fullScans.length > 0)).toEqual([]);
@@ -153,10 +162,16 @@ describe("query plans of the D1 repositories", () => {
         const reads = explained.map((statement) => ({
           sql: statement.sql,
           plan: statement.plan,
-          wholeIndexReads: wholeIndexReadsOfGrowingTables(statement),
+          wholeIndexReads: wholeIndexReadsOfGrowingTables(statement).filter(isNotAccepted),
         }));
 
         expect(reads.filter(({ wholeIndexReads }) => wholeIndexReads.length > 0)).toEqual([]);
+      });
+
+      it("still makes every whole read accepted for it", () => {
+        const plans = new Set(explained.flatMap(({ plan }) => plan));
+
+        expect([...accepted].filter((step) => !plans.has(step))).toEqual([]);
       });
     },
   );
