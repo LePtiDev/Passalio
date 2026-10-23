@@ -5,24 +5,25 @@ import PreviewCard from "./preview-card.astro";
 const step = fr.passage.before;
 ---
 
-<PreviewCard class="gap-3.5">
+<PreviewCard class="gap-3">
   <div class="flex items-start justify-between gap-3">
     <div>
-      <p class="text-[17px] font-bold">{step.customer}</p>
-      <p class="text-sm text-slate-text">{step.address}</p>
+      <p class="text-sm font-semibold">{step.customer}</p>
+      <p class="text-slate-text">{step.address}</p>
     </div>
     <span
-      class="rounded-full bg-warning-soft px-2.5 py-1 text-xs font-bold whitespace-nowrap text-warning-strong"
+      class="inline-flex items-center gap-1.25 rounded-full bg-warning-soft px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap text-warning-strong"
     >
+      <span class="size-1.25 rounded-full bg-warning-dot" aria-hidden="true"></span>
       {step.offline}
     </span>
   </div>
-  <dl class="grid grid-cols-2 gap-3 border-t border-line pt-3 text-sm">
+  <dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-hairline pt-3">
     {
       step.fields.map((field) => (
         <div>
-          <dt class="text-slate-text">{field.label}</dt>
-          <dd class="font-semibold tabular-nums">{field.value}</dd>
+          <dt class="text-xs text-slate-text">{field.label}</dt>
+          <dd class="font-medium tabular-nums">{field.value}</dd>
         </div>
       ))
     }

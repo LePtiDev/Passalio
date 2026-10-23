@@ -5,28 +5,43 @@ import SectionHeading from "./section-heading.astro";
 const { team } = fr;
 ---
 
-<section class="py-[clamp(56px,8vw,104px)]">
-  <div class="mx-auto flex max-w-290 flex-wrap items-center gap-x-16 gap-y-10 px-5">
-    <div class="min-w-0 flex-[1_1_400px]">
+<section class="pb-[clamp(56px,7vw,96px)]">
+  <div class="mx-auto flex max-w-270 flex-wrap items-center gap-x-16 gap-y-8 px-4 sm:px-6">
+    <div class="max-w-115 min-w-0 flex-[1_1_380px]">
       <SectionHeading eyebrow={team.eyebrow} title={team.title} lead={team.lead} />
     </div>
-    <div class="min-w-0 flex-[1_1_420px] overflow-hidden rounded-2xl border border-line bg-white">
-      <div class="flex justify-between gap-3 border-b border-line px-5 py-3.5 font-bold">
-        <span>{team.today}</span>
-        <span class="font-semibold text-slate-text tabular-nums">{team.date}</span>
+    <div
+      class="min-w-0 flex-[1_1_400px] overflow-hidden rounded-xl border border-card-line bg-white text-[13px] shadow-card"
+    >
+      <div class="flex justify-between gap-3 border-b border-hairline bg-row-head px-4 py-2.5">
+        <span class="font-semibold">{team.today}</span>
+        <span class="text-slate-text tabular-nums">{team.date}</span>
       </div>
       <ul>
         {
-          team.members.map((member) => (
-            <li class="flex items-center justify-between gap-3 border-b border-line px-5 py-3.5 last:border-b-0">
-              <div>
-                <p class="font-semibold">{member.name}</p>
-                <p class="text-sm text-slate-text">{member.activity}</p>
+          team.members.map((member, index) => (
+            <li class="flex items-center justify-between gap-3 border-b border-hairline-faint px-4 py-2.5 last:border-b-0">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class:list={[
+                    "inline-flex size-7 items-center justify-center rounded-full text-[11px] font-semibold",
+                    index === 0 && "bg-navy text-white",
+                    index === 1 && "bg-validated-soft text-validated",
+                    index > 1 && "bg-mist text-navy",
+                  ]}
+                  aria-hidden="true"
+                >
+                  {member.initials}
+                </span>
+                <div>
+                  <p class="font-semibold">{member.name}</p>
+                  <p class="text-xs text-slate-text">{member.activity}</p>
+                </div>
               </div>
               <span
                 class:list={[
-                  "rounded-full px-2.5 py-1 text-xs font-bold",
-                  member.isOwner ? "bg-validated-soft text-validated" : "bg-mist text-navy",
+                  "rounded-md px-2 py-0.5 text-[11px] font-semibold",
+                  member.isOwner ? "bg-validated-soft text-validated" : "bg-mist text-slate-text",
                 ]}
               >
                 {member.role}

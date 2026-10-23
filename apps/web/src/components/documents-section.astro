@@ -1,34 +1,42 @@
 ---
 import { fr } from "../fr";
+import CheckIcon from "./check-icon.astro";
 import SectionHeading from "./section-heading.astro";
 
 const { documents } = fr;
 ---
 
-<section class="bg-navy py-[clamp(56px,8vw,104px)] text-white">
-  <div class="mx-auto flex max-w-290 flex-wrap items-center gap-x-16 gap-y-10 px-5">
-    <div class="min-w-0 flex-[1_1_400px]">
-      <SectionHeading
-        eyebrow={documents.eyebrow}
-        title={documents.title}
-        lead={documents.text}
-        isOnNavy
-      />
+<section class="py-[clamp(56px,7vw,96px)]">
+  <div class="mx-auto max-w-270 px-4 sm:px-6">
+    <div
+      class="flex flex-wrap items-center gap-x-14 gap-y-8 rounded-[20px] bg-navy p-[clamp(24px,5vw,56px)] text-white"
+    >
+      <div class="min-w-0 flex-[1_1_380px]">
+        <SectionHeading
+          eyebrow={documents.eyebrow}
+          title={documents.title}
+          lead={documents.text}
+          isOnNavy
+        />
+      </div>
+      <ul class="grid min-w-0 flex-[1_1_400px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
+        {
+          documents.items.map((item) => (
+            <li class="flex flex-col gap-2.5 rounded-xl border border-navy-card-line bg-white/4 p-4">
+              <p class="text-[11px] font-semibold tracking-[0.06em] text-mint uppercase">{item.kind}</p>
+              <p class="text-sm font-semibold">{item.title}</p>
+              <ul class="flex flex-col gap-1.5 text-[13px] text-on-navy">
+                {item.points.map((point) => (
+                  <li class="flex items-center gap-2">
+                    <CheckIcon class="size-3 shrink-0 text-mint" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
     </div>
-    <ul class="grid min-w-0 flex-[1_1_420px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
-      {
-        documents.items.map((item) => (
-          <li class="flex flex-col gap-2.5 rounded-2xl bg-white p-5 text-navy">
-            <p class="text-xs font-bold tracking-[0.04em] text-validated uppercase">{item.kind}</p>
-            <p class="text-lg font-extrabold">{item.title}</p>
-            <ul class="flex list-disc flex-col gap-1 pl-4.5 text-sm text-slate-text">
-              {item.points.map((point) => (
-                <li>{point}</li>
-              ))}
-            </ul>
-          </li>
-        ))
-      }
-    </ul>
   </div>
 </section>

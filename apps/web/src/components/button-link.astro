@@ -10,9 +10,10 @@ const { href, variant = "primary" } = Astro.props;
 <a
   href={href}
   class:list={[
-    "inline-flex min-h-12 items-center justify-center rounded-xl px-5.5 text-base font-bold",
-    variant === "primary" && "bg-navy text-white hover:bg-navy-hover",
-    variant === "outline" && "border border-input bg-white text-navy hover:border-navy",
+    "inline-flex h-12 items-center justify-center gap-1.5 rounded-md px-4.5 text-[15px] font-semibold whitespace-nowrap sm:h-8 sm:px-3 sm:text-[13px]",
+    variant === "primary" && "bg-navy text-white shadow-button hover:bg-navy-hover",
+    variant === "outline" &&
+      "border border-line bg-white text-navy shadow-[0_1px_2px_rgb(15_42_68/0.05)] hover:border-input",
   ]}
 >
   <slot />

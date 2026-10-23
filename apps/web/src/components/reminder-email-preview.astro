@@ -5,11 +5,11 @@ import PreviewCard from "./preview-card.astro";
 const step = fr.passage.nextYear;
 ---
 
-<PreviewCard class="gap-2.5">
-  <div class="flex justify-between gap-3 text-[13px] text-slate-text">
+<PreviewCard class="gap-2">
+  <div class="flex justify-between gap-3 text-xs text-slate-text">
     <span>{step.from}</span>
     <span class="tabular-nums">{step.date}</span>
   </div>
-  <p class="text-[17px] font-bold">{step.subject}</p>
-  <p class="text-[15px] text-slate-text">{step.body}</p>
+  <p class="text-sm font-semibold">{step.subject}</p>
+  <p class="leading-relaxed text-slate-text">{step.body}</p>
 </PreviewCard>

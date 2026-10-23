@@ -16,7 +16,22 @@
   --color-input: #cbd5e1;
   --color-warning-strong: #7c2d12;
   --color-warning-soft: #fef3c7;
+  --color-warning-dot: #b45309;
+  --color-warning-line: #fde68a;
+  --color-warning-faint: #fffbeb;
   --color-pdf: #b42318;
+  --color-pdf-soft: #fef2f2;
+  --color-hairline: #edf1f5;
+  --color-hairline-faint: #f1f4f8;
+  --color-card-line: #e3eaf1;
+  --color-panel: #f5f8fb;
+  --color-panel-line: #e8eef4;
+  --color-section: #f8fafc;
+  --color-row-head: #fafbfd;
+  --color-navy-card-line: #24476b;
+  --shadow-card: 0 1px 2px rgb(15 42 68 / 0.04), 0 8px 24px -12px rgb(15 42 68 / 0.12);
+  --shadow-button: 0 1px 2px rgb(15 42 68 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --shadow-phone: 0 24px 48px -24px rgb(15 42 68 / 0.4);
 }
 
 @layer base {
@@ -26,11 +41,23 @@
 
   body {
     font-family: var(--font-sans);
+    font-size: 15px;
     -webkit-font-smoothing: antialiased;
+  }
+
+  @media (width >= 40rem) {
+    body {
+      font-size: 14px;
+    }
   }
 
   :focus-visible {
     outline: 2px solid var(--color-validated);
     outline-offset: 2px;
   }
+}
+
+@utility dot-grid {
+  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+  background-size: 16px 16px;
 }
