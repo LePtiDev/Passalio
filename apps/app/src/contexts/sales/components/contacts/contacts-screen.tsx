@@ -10,17 +10,19 @@ import {
   AdminPage,
   type AdminTrailStep,
 } from "@/contexts/backoffice";
+import { CursorPagination } from "@/components/pagination";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { usePagedList } from "@/lib/use-paged-list";
 import { cn } from "@/lib/utils";
 import { departmentLabel } from "../../department-names";
 import { salesFr } from "../../fr";
-import { useContacts, useProspectFilters } from "../../hooks/use-sales-queries";
+import { useContactsPage, useProspectFilters } from "../../hooks/use-sales-queries";
 import type { ContactListScope } from "../../sales-api";
 import { departmentOptions } from "../companies/company-list-filters";
 import { ContactFormDialog } from "../forms/contact-form-dialog";
 import type { FilterGroup } from "../list/list-filters";
 import { ListTabs } from "../list/list-tabs";
-import { ListSkeleton, LoadMore } from "../list/list-states";
+import { ListSkeleton } from "../list/list-states";
 import { ListToolbar } from "../list/list-toolbar";
 import { LIST_HEADER_CLASS } from "../sales-styles";
 import { CONTACT_GRID_CLASS, ContactRow } from "./contact-row";
@@ -29,6 +31,8 @@ import { ContactsEmpty } from "./contacts-states";
 const text = salesFr.contacts;
 
 const SEARCH_DELAY_MS = 300;
+
+const CONTACT_ROW_HEIGHTS = { mobile: 73, desktop: 55 } as const;
 
 const TRAIL: readonly AdminTrailStep[] = [{ label: text.title }];
 
@@ -54,7 +58,11 @@ export const ContactsScreen = ({ scope, onScopeChange }: ContactsScreenProps) =>
     () => ({ ...scope, search: debouncedSearch }),
     [scope, debouncedSearch],
   );
-  const contacts = useContacts(debouncedScope);
+  const { measureList, ...paging } = usePagedList(
+    JSON.stringify(debouncedScope),
+    CONTACT_ROW_HEIGHTS,
+  );
+  const contacts = useContactsPage(debouncedScope, paging.cursor, paging.pageSize);
   const filters = useProspectFilters();
   const groups = useMemo<readonly FilterGroup[]>(
     () => [
@@ -69,9 +77,8 @@ export const ContactsScreen = ({ scope, onScopeChange }: ContactsScreenProps) =>
     ],
     [scope.department, filters.data, onScopeChange],
   );
-  const { refetch, fetchNextPage } = contacts;
+  const { refetch } = contacts;
   const retry = useCallback(() => void refetch(), [refetch]);
-  const loadMore = useCallback(() => void fetchNextPage(), [fetchNextPage]);
   const selectTab = useCallback(
     (filter: ContactFilter) => onScopeChange({ filter }),
     [onScopeChange],
@@ -91,11 +98,8 @@ export const ContactsScreen = ({ scope, onScopeChange }: ContactsScreenProps) =>
     ),
     [openCreate],
   );
-  const rows = useMemo(
-    () => contacts.data?.pages.flatMap((page) => page.contacts) ?? [],
-    [contacts.data],
-  );
-  const counts = contacts.data?.pages[0]?.counts ?? null;
+  const rows = contacts.data?.contacts ?? [];
+  const counts = contacts.data?.counts ?? null;
   const totals = filters.data?.totals ?? null;
   const department = scope.department === null ? null : departmentLabel(scope.department);
 
@@ -137,30 +141,38 @@ export const ContactsScreen = ({ scope, onScopeChange }: ContactsScreenProps) =>
           onSelect={selectTab}
         />
       </ListToolbar>
-      {contacts.isPending ? <ListSkeleton /> : null}
-      {contacts.isError ? <ErrorState error={contacts.error} onRetry={retry} /> : null}
-      {contacts.isSuccess && rows.length === 0 ? (
-        <ContactsEmpty
-          scope={debouncedScope}
-          onClearSearch={clearSearch}
-          onClearFilters={clearFilters}
-        />
-      ) : null}
-      {contacts.isSuccess && rows.length > 0 ? (
-        <>
-          <div className={ADMIN_CARD_CLASS}>
-            <ContactsHeader />
-            <ul>
-              {rows.map((contact, index) => (
-                <ContactRow key={contact.id} contact={contact} index={index} />
-              ))}
-            </ul>
-          </div>
-          {contacts.hasNextPage ? (
-            <LoadMore isLoading={contacts.isFetchingNextPage} onLoadMore={loadMore} />
-          ) : null}
-        </>
-      ) : null}
+      <div ref={measureList} className="flex flex-col gap-4 lg:gap-5">
+        {contacts.isPending ? <ListSkeleton /> : null}
+        {contacts.isError ? <ErrorState error={contacts.error} onRetry={retry} /> : null}
+        {contacts.isSuccess && rows.length === 0 ? (
+          <ContactsEmpty
+            scope={debouncedScope}
+            onClearSearch={clearSearch}
+            onClearFilters={clearFilters}
+          />
+        ) : null}
+        {contacts.isSuccess && rows.length > 0 ? (
+          <>
+            <div className={ADMIN_CARD_CLASS}>
+              <ContactsHeader />
+              <ul>
+                {rows.map((contact, index) => (
+                  <ContactRow key={contact.id} contact={contact} index={index} />
+                ))}
+              </ul>
+              <CursorPagination
+                paging={paging}
+                nextCursor={contacts.data?.nextCursor ?? null}
+                shown={rows.length}
+                total={
+                  debouncedScope.search === "" && counts !== null ? counts[scope.filter] : null
+                }
+                isLoading={contacts.isPlaceholderData}
+              />
+            </div>
+          </>
+        ) : null}
+      </div>
       <ContactFormDialog
         companyId={null}
         contact={null}

@@ -17,6 +17,7 @@ export type ListCompaniesInput = {
   readonly ownerUserId?: string | undefined;
   readonly query?: string | undefined;
   readonly cursor?: string | undefined;
+  readonly limit?: number | undefined;
 };
 
 export const listCompanies =
@@ -28,17 +29,18 @@ export const listCompanies =
     assertPlatformCan(actor, "prospects:read");
     const scope = { department: input.department, ownerUserId: input.ownerUserId };
     const query = input.query?.trim();
+    const limit = input.limit ?? COMPANIES_PAGE_SIZE;
     const [rows, counts] = await Promise.all([
       companies.list({
         ...scope,
         stage: input.stage,
         query: query === "" ? undefined : query,
         after: decodeNameCursor(input.cursor),
-        limit: COMPANIES_PAGE_SIZE + 1,
+        limit: limit + 1,
       }),
       companies.countByStage(scope),
     ]);
-    const { visible, nextCursor } = pageOf(rows, COMPANIES_PAGE_SIZE);
+    const { visible, nextCursor } = pageOf(rows, limit);
     return {
       companies: visible.map(companySummaryResponse),
       counts: stageCountsOf(counts),

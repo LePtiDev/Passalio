@@ -54,7 +54,7 @@ export const salesApi = {
   fetchFilters: () => apiRequest(`${BASE}/filters`, prospectFiltersResponse),
   fetchMap: (department: string | null) =>
     apiRequest(`${BASE}/map${query({ department })}`, prospectMapResponse),
-  fetchCompanies: (scope: CompanyListScope, cursor: string | null) =>
+  fetchCompanies: (scope: CompanyListScope, cursor: string | null, limit?: number) =>
     apiRequest(
       `${BASE}/companies${query({
         stage: scope.stage,
@@ -62,6 +62,7 @@ export const salesApi = {
         owner: scope.owner,
         q: scope.search,
         cursor,
+        limit: limit === undefined ? null : String(limit),
       })}`,
       prospectCompaniesPageResponse,
     ),
@@ -88,13 +89,14 @@ export const salesApi = {
       method: "POST",
       body: fields,
     }),
-  fetchContacts: (scope: ContactListScope, cursor: string | null) =>
+  fetchContacts: (scope: ContactListScope, cursor: string | null, limit: number) =>
     apiRequest(
       `${BASE}/contacts${query({
         filter: scope.filter,
         department: scope.department,
         q: scope.search,
         cursor,
+        limit: String(limit),
       })}`,
       prospectContactsPageResponse,
     ),

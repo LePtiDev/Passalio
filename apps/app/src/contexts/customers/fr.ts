@@ -142,7 +142,6 @@ export const customersFr = {
     overdue: "En retard · ",
     contact: (name: string, phone: string | null) =>
       phone === null ? `Contact : ${name}` : `Contact : ${name} · ${phone}`,
-    showMore: "Afficher plus",
     emptyTitle: "Ajoutez votre premier client",
     emptyText:
       "Un client, l'adresse de l'installation, puis ses appareils. Ses attestations et ses relances partiront de là.",

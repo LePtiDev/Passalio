@@ -39,16 +39,22 @@ const query = (entries: Readonly<Record<string, string | null | undefined>>) => 
 export const backofficeApi = {
   fetchAdmin: () => apiRequest("/admin/me", adminResponse),
   fetchOverview: () => apiRequest("/admin/overview", overviewResponse),
-  fetchAccounts: (filter: AccountFilter, search: string, cursor: string | null) =>
-    apiRequest(`/admin/accounts${query({ filter, q: search, cursor })}`, accountsPageResponse),
+  fetchAccounts: (filter: AccountFilter, search: string, cursor: string | null, limit: number) =>
+    apiRequest(
+      `/admin/accounts${query({ filter, q: search, cursor, limit: String(limit) })}`,
+      accountsPageResponse,
+    ),
   fetchAccount: (accountId: string) =>
     apiRequest(`/admin/accounts/${accountId}`, accountFileResponse),
   fetchAccountMembers: (accountId: string) =>
     apiRequest(`/admin/accounts/${accountId}/members`, accountMembersResponse),
   fetchAccountUsage: (accountId: string) =>
     apiRequest(`/admin/accounts/${accountId}/usage`, accountUsageResponse),
-  fetchAccountJournal: (accountId: string, cursor: string | null) =>
-    apiRequest(`/admin/accounts/${accountId}/journal${query({ cursor })}`, journalPageResponse),
-  fetchJournal: (cursor: string | null) =>
-    apiRequest(`/admin/journal${query({ cursor })}`, journalPageResponse),
+  fetchAccountJournal: (accountId: string, cursor: string | null, limit: number) =>
+    apiRequest(
+      `/admin/accounts/${accountId}/journal${query({ cursor, limit: String(limit) })}`,
+      journalPageResponse,
+    ),
+  fetchJournal: (cursor: string | null, limit: number) =>
+    apiRequest(`/admin/journal${query({ cursor, limit: String(limit) })}`, journalPageResponse),
 };

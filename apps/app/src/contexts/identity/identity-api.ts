@@ -99,9 +99,12 @@ export const identityApi = {
     const result = await apiRequest("/me", actorResponse);
     return result.isOk ? ok(result.value.actor) : result;
   },
-  fetchMembers: (cursor: string | null) =>
+  fetchMembers: (cursor: string | null, limit?: number) =>
     apiRequest(
-      cursor === null ? "/members" : `/members?cursor=${encodeURIComponent(cursor)}`,
+      `/members?${new URLSearchParams([
+        ...(cursor === null ? [] : [["cursor", cursor]]),
+        ...(limit === undefined ? [] : [["limit", String(limit)]]),
+      ]).toString()}`,
       membersPageResponse,
     ),
   createOrganization: (organization: NewOrganization) =>

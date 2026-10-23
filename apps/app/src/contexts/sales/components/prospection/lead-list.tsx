@@ -1,5 +1,5 @@
 import type { ProspectCompanySummaryResponse } from "@passalio/shared";
-import { useCallback } from "react";
+import { useCallback, type ReactNode } from "react";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -58,19 +58,23 @@ type LeadListProps = {
   readonly companies: readonly ProspectCompanySummaryResponse[];
   readonly selectedId: string | null;
   readonly onSelect: (companyId: string) => void;
+  readonly children: ReactNode;
 };
 
-export const LeadList = ({ companies, selectedId, onSelect }: LeadListProps) => (
-  <ul aria-label={text.leadsLabel} className={LEADS_CARD_CLASS}>
-    {companies.map((company) => (
-      <LeadRow
-        key={company.id}
-        company={company}
-        isSelected={company.id === selectedId}
-        onSelect={onSelect}
-      />
-    ))}
-  </ul>
+export const LeadList = ({ companies, selectedId, onSelect, children }: LeadListProps) => (
+  <div className={LEADS_CARD_CLASS}>
+    <ul aria-label={text.leadsLabel}>
+      {companies.map((company) => (
+        <LeadRow
+          key={company.id}
+          company={company}
+          isSelected={company.id === selectedId}
+          onSelect={onSelect}
+        />
+      ))}
+    </ul>
+    {children}
+  </div>
 );
 
 const SKELETON_ROWS = [

@@ -1,19 +1,22 @@
 import { useCallback, useMemo } from "react";
 import { ErrorState } from "@/components/error-state";
-import { Button } from "@/components/ui/button";
+import { CursorPagination } from "@/components/pagination";
+import { usePagedList } from "@/lib/use-paged-list";
 import { useCan } from "@/lib/permissions/use-can";
 import { cn } from "@/lib/utils";
 import { identityFr } from "../../fr";
 import { useActor } from "../../hooks/use-actor";
 import { usePendingInvitations } from "../../hooks/use-pending-invitations";
-import { useTeam } from "../../hooks/use-team";
+import { useTeamPage } from "../../hooks/use-team";
 import { MemberRow } from "./member-row";
 import { PendingInvitationList } from "./pending-invitation-list";
 import { TeamEmptyState } from "./team-empty-state";
 import { TeamSkeleton } from "./team-skeleton";
-import { MEMBER_GRID_CLASS, TEAM_CARD_CLASS, TEAM_SECONDARY_BUTTON_CLASS } from "./team-styles";
+import { MEMBER_GRID_CLASS, TEAM_CARD_CLASS } from "./team-styles";
 
 const text = identityFr.team;
+
+const MEMBER_ROW_HEIGHTS = { mobile: 73, desktop: 57 } as const;
 
 const MembersHeader = () => (
   <div
@@ -31,30 +34,35 @@ const MembersHeader = () => (
 );
 
 export const MembersPanel = ({ onInvite }: { readonly onInvite: (() => void) | null }) => {
-  const team = useTeam();
+  const { measureList, ...paging } = usePagedList("team", MEMBER_ROW_HEIGHTS);
+  const team = useTeamPage(paging.cursor, paging.pageSize);
   const pending = usePendingInvitations();
   const { data: actor } = useActor();
   const canManage = useCan("members:manage");
-  const { refetch, fetchNextPage } = team;
+  const { refetch } = team;
   const retry = useCallback(() => void refetch(), [refetch]);
-  const loadMore = useCallback(() => void fetchNextPage(), [fetchNextPage]);
   const invitations = useMemo(
     () => pending.data?.pages.flatMap((page) => page.invitations) ?? [],
     [pending.data],
   );
 
-  if (team.isPending) {
-    return <TeamSkeleton />;
-  }
   if (team.isError) {
     return <ErrorState error={team.error} onRetry={retry} />;
   }
+  if (team.isPending) {
+    return (
+      <div ref={measureList}>
+        <TeamSkeleton />
+      </div>
+    );
+  }
 
-  const members = team.data.pages.flatMap((page) => page.members);
-  const isAlone = members.length <= 1 && !team.hasNextPage && invitations.length === 0;
+  const { members, nextCursor } = team.data;
+  const isAlone =
+    members.length <= 1 && nextCursor === null && paging.page === 0 && invitations.length === 0;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div ref={measureList} className="flex flex-col gap-4">
       <div className={TEAM_CARD_CLASS}>
         <MembersHeader />
         <ul>
@@ -66,17 +74,14 @@ export const MembersPanel = ({ onInvite }: { readonly onInvite: (() => void) | n
             />
           ))}
         </ul>
+        <CursorPagination
+          paging={paging}
+          nextCursor={nextCursor}
+          shown={members.length}
+          total={null}
+          isLoading={team.isPlaceholderData}
+        />
       </div>
-      {team.hasNextPage ? (
-        <Button
-          variant="outline"
-          className={TEAM_SECONDARY_BUTTON_CLASS}
-          disabled={team.isFetchingNextPage}
-          onClick={loadMore}
-        >
-          {text.loadMore}
-        </Button>
-      ) : null}
       {invitations.length > 0 ? (
         <PendingInvitationList invitations={invitations} canManage={canManage} />
       ) : null}

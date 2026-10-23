@@ -56,6 +56,7 @@ export const transferOwnershipBody = z.object({
 
 export const listMembersQuery = z.object({
   cursor: z.uuid().optional(),
+  limit: z.coerce.number().int().min(5).max(50).optional(),
 });
 
 export const memberParams = z.object({
