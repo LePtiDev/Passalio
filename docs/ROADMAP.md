@@ -44,6 +44,7 @@ Dernière mise à jour : 2026-10-23.
 | Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                 | ADR 0018                        |
 | Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                        | ADR 0019                        |
 | Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
+| Filtres en cascade avec recherche (sous-menus sur ordinateur, panneau du bas sur mobile), coche à droite dans tous les menus             | `components/list` (app)         |
 
 ## Hors code (Quentin)
 
