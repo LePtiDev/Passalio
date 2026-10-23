@@ -1,0 +1,40 @@
+---
+import { fr } from "../fr";
+import { type AppPage, appUrl } from "../links";
+
+const links: ReadonlyArray<{ page: AppPage; label: string }> = [
+  { page: "signIn", label: fr.footer.signIn },
+  { page: "terms", label: fr.footer.terms },
+  { page: "privacy", label: fr.footer.privacy },
+  { page: "legalNotice", label: fr.footer.legalNotice },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-navy pt-12 pb-8 text-on-navy">
+  <div class="mx-auto flex max-w-290 flex-col gap-8 px-5">
+    <div class="flex flex-wrap items-start justify-between gap-6">
+      <div class="flex max-w-80 flex-col gap-2.5">
+        <img
+          src="/passalio-logo-white.svg"
+          alt={fr.brand}
+          width="132"
+          height="26"
+          class="h-6.5 w-auto self-start"
+        />
+        <p class="text-sm">{fr.footer.tagline}</p>
+      </div>
+      <nav aria-label={fr.footer.label} class="flex flex-wrap gap-x-6 text-[15px]">
+        {
+          links.map((link) => (
+            <a href={appUrl(link.page)} class="inline-flex min-h-12 items-center text-white hover:text-mint">
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+    <p class="border-t border-navy-line pt-5 text-[13px]">{fr.footer.copyright(year)}</p>
+  </div>
+</footer>

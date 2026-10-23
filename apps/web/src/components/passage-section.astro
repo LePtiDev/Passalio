@@ -1,0 +1,31 @@
+---
+import { fr } from "../fr";
+import AttestationEmailPreview from "./attestation-email-preview.astro";
+import CompanyPreview from "./company-preview.astro";
+import CustomerPreview from "./customer-preview.astro";
+import PassageStep from "./passage-step.astro";
+import ReminderEmailPreview from "./reminder-email-preview.astro";
+import SectionHeading from "./section-heading.astro";
+
+const { passage } = fr;
+---
+
+<section id="passage" class="scroll-mt-4 py-[clamp(56px,8vw,112px)]">
+  <div class="mx-auto flex max-w-290 flex-col gap-[clamp(40px,6vw,72px)] px-5">
+    <SectionHeading eyebrow={passage.eyebrow} title={passage.title} lead={passage.lead} />
+    <ol class="flex flex-col gap-[clamp(48px,6vw,72px)]">
+      <PassageStep number={1} title={passage.before.title} text={passage.before.text}>
+        <CustomerPreview />
+      </PassageStep>
+      <PassageStep number={2} title={passage.onSite.title} text={passage.onSite.text}>
+        <CompanyPreview />
+      </PassageStep>
+      <PassageStep number={3} title={passage.leaving.title} text={passage.leaving.text}>
+        <AttestationEmailPreview />
+      </PassageStep>
+      <PassageStep number={4} title={passage.nextYear.title} text={passage.nextYear.text} isLast>
+        <ReminderEmailPreview />
+      </PassageStep>
+    </ol>
+  </div>
+</section>

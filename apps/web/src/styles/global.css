@@ -1,1 +1,36 @@
 @import "tailwindcss";
+@import "@fontsource-variable/plus-jakarta-sans";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
+  --color-navy: #0f2a44;
+  --color-navy-hover: #16324f;
+  --color-navy-line: #1e3a5a;
+  --color-on-navy: #c9d6e3;
+  --color-validated: #0e7c5a;
+  --color-validated-soft: #e6f4ee;
+  --color-mint: #34d399;
+  --color-slate-text: #475569;
+  --color-mist: #eef3f8;
+  --color-line: #dce5ee;
+  --color-input: #cbd5e1;
+  --color-warning-strong: #7c2d12;
+  --color-warning-soft: #fef3c7;
+  --color-pdf: #b42318;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-validated);
+    outline-offset: 2px;
+  }
+}

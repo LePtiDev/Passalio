@@ -1,0 +1,13 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div
+  class:list={["flex max-w-110 flex-col rounded-2xl border border-line bg-white p-5", className]}
+>
+  <slot />
+</div>

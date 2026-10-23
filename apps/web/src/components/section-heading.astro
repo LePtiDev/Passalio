@@ -1,0 +1,45 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  isOnNavy?: boolean;
+}
+
+const { eyebrow, title, lead, isOnNavy = false } = Astro.props;
+---
+
+<div class="flex max-w-3xl flex-col gap-4">
+  {
+    eyebrow && (
+      <p
+        class:list={[
+          "text-[13px] font-bold tracking-[0.06em] uppercase",
+          isOnNavy ? "text-mint" : "text-validated",
+        ]}
+      >
+        {eyebrow}
+      </p>
+    )
+  }
+  <h2
+    class:list={[
+      "text-[clamp(28px,4.2vw,44px)] leading-[1.15] font-extrabold tracking-[-0.02em] text-balance",
+      isOnNavy && "text-white",
+    ]}
+  >
+    {title}
+  </h2>
+  {
+    lead && (
+      <p
+        class:list={[
+          "text-[clamp(17px,1.6vw,19px)]",
+          isOnNavy ? "text-on-navy" : "text-slate-text",
+        ]}
+      >
+        {lead}
+      </p>
+    )
+  }
+</div>
