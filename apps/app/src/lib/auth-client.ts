@@ -16,6 +16,7 @@ export const authClient = createAuthClient({
       user: {
         termsVersion: { type: "number", required: true },
         termsAcceptedAt: { type: "date", required: false, input: false },
+        role: { type: "string", required: false, input: false },
       },
     }),
   ],

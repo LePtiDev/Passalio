@@ -16,6 +16,7 @@ const AUTH_ERROR_CODES: ReadonlyMap<string, string> = new Map([
   ["TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE", "two_factor_too_many_attempts"],
   ["ACCOUNT_TEMPORARILY_LOCKED", "two_factor_too_many_attempts"],
   ["INVALID_PASSWORD", "invalid_password"],
+  ["TERMS_NOT_ACCEPTED", "terms_outdated"],
 ]);
 
 export type AuthClientError = {

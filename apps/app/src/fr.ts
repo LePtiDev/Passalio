@@ -100,6 +100,7 @@ export const fr = {
       two_factor_expired: "La vérification a expiré. Reconnectez-vous.",
       two_factor_too_many_attempts: "Trop d'essais. Reconnectez-vous dans quelques minutes.",
       invalid_password: "Mot de passe incorrect.",
+      terms_outdated: "Cette page n'est plus à jour. Rechargez-la, puis réessayez.",
       account_not_found: "Ce compte client n'existe plus.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
