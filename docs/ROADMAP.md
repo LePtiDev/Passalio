@@ -126,7 +126,10 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
 - [x] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection, clients, identité
 - [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
-- [ ] Sécurité transverse et aucune donnée personnelle dans les logs
+- [x] Sécurité transverse (cookies, limites de débit, Turnstile, fichiers envoyés, lien de mot de passe, sessions) et aucune donnée personnelle dans les logs
+- [ ] En-têtes de sécurité (CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`) promis par `SECURITY.md` mais pas encore posés, puis leurs tests
+- [ ] Vérifier le type d'un fichier envoyé sur son contenu, pas seulement sur l'en-tête déclaré
+- [ ] À décider : limite des codes de double authentification par compte (aujourd'hui par adresse IP) ; `retour` qui accepte `/\…`
 - [x] Synchronisation : tests de propriétés (fast-check), envoi rejoué, curseur, refus, photos
 - [ ] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest en mode navigateur)
 - [ ] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
