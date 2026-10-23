@@ -2,6 +2,7 @@ import { createRouter } from "@tanstack/react-router";
 import { forgotPasswordRoute } from "./routes/forgot-password";
 import { homeRoute } from "./routes/home";
 import { invitationRoute } from "./routes/invitation";
+import { legalNoticeRoute, privacyRoute, termsRoute } from "./routes/legal";
 import {
   onboardingCompanyRoute,
   onboardingDocumentsRoute,
@@ -26,6 +27,9 @@ const routeTree = rootRoute.addChildren([
   onboardingDocumentsRoute,
   onboardingTeamRoute,
   invitationRoute,
+  termsRoute,
+  privacyRoute,
+  legalNoticeRoute,
   signedInRoute.addChildren([homeRoute, teamRoute, settingsRoute]),
 ]);
 

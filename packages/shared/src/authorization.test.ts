@@ -31,6 +31,10 @@ describe("can", () => {
     ["technician", "members:read", true],
     ["owner", "ownership:transfer", true],
     ["admin", "ownership:transfer", false],
+    ["technician", "customers:write", true],
+    ["technician", "customers:archive", false],
+    ["secretary", "customers:archive", true],
+    ["admin", "customers:archive", true],
   ])("%s / %s → %s", (role, permission, expected) => {
     expect(can(actorWith(role), permission)).toBe(expected);
   });

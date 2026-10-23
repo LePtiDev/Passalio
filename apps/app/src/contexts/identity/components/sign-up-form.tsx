@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { TERMS_VERSION } from "@passalio/shared";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -12,6 +13,7 @@ import { SIGN_IN_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
 import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
+import { AcceptTermsLabel } from "./accept-terms-label";
 import { AuthHeading } from "./auth-heading";
 import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
 import { CheckboxField } from "./checkbox-field";
@@ -41,6 +43,8 @@ type SignUpFormProps = {
 
 const STRENGTH_ID = "password-strength";
 
+const ACCEPT_TERMS_LABEL = <AcceptTermsLabel />;
+
 export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
   const navigate = useNavigate();
   const turnstile = useTurnstile();
@@ -63,7 +67,7 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
     }
     const trace = createTraceRecorder();
     const { error } = await authClient.signUp.email(
-      { name: `${firstName} ${lastName}`, email, password },
+      { name: `${firstName} ${lastName}`, email, password, termsVersion: TERMS_VERSION },
       { headers, onResponse: trace.onResponse },
     );
     if (error) {
@@ -148,7 +152,7 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
         <CheckboxField
           control={form.control}
           name="hasAcceptedTerms"
-          label={text.acceptTerms}
+          label={ACCEPT_TERMS_LABEL}
           error={errors.hasAcceptedTerms?.message}
         />
         <div className="flex flex-col">

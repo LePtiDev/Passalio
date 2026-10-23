@@ -55,12 +55,13 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 
 ## 7. Données personnelles (RGPD)
 
-- L'artisan est responsable du traitement pour ses clients, l'éditeur est sous-traitant : contrat de sous-traitance dans les CGV.
+- L'artisan est responsable du traitement pour ses clients, l'éditeur est sous-traitant : accord de sous-traitance en annexe des conditions générales (`/conditions`). Politique de confidentialité sur `/confidentialite`, liste des sous-traitants ultérieurs à tenir à jour à chaque nouveau prestataire.
+- Preuve d'acceptation des conditions : version et date enregistrées sur `users` à l'inscription, refus côté serveur si la version manque ou n'est pas la courante.
 - Données minimales : ce que demande l'attestation et la relance, rien de plus.
 - Hébergement UE (R2 juridiction UE, D1 localisation Europe, PostHog UE, Sentry UE).
 - Aucune donnée personnelle dans les logs, Sentry, PostHog. Session replay avec masquage des champs.
 - Export complet et suppression du compte disponibles en libre-service.
-- Conservation : attestations conservées selon les durées réglementaires ; comptes résiliés purgés après le délai prévu aux CGV.
+- Conservation : attestations conservées selon les durées réglementaires ; données d'une entreprise exportables 90 jours après la fin de l'abonnement ou de l'essai, puis supprimées (sauvegardes effacées 30 jours plus tard).
 
 ## 8. Si un incident arrive
 

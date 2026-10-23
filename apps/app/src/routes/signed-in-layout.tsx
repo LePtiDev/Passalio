@@ -2,21 +2,36 @@ import { createRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar, type SignedInUser } from "@/components/app-shell/app-sidebar";
 import { MobileTabBar } from "@/components/app-shell/mobile-tab-bar";
 import { FormSkeleton } from "@/components/page-skeleton";
-import { ensureActiveOrganization } from "@/lib/session";
+import { LocalDatabaseProvider } from "@/lib/db/local-database-context";
+import { loadSignedInSession } from "@/lib/session";
 import { rootRoute } from "./root";
 
-const selectUser = (context: { readonly user: SignedInUser }) => context.user;
+type SignedInContext = {
+  readonly user: SignedInUser;
+  readonly userId: string;
+  readonly organizationId: string;
+};
+
+const selectContext = ({ user, userId, organizationId }: SignedInContext) => ({
+  user,
+  userId,
+  organizationId,
+});
 
 const SignedInLayout = () => {
-  const user = signedInRoute.useRouteContext({ select: selectUser });
+  const { user, userId, organizationId } = signedInRoute.useRouteContext({
+    select: selectContext,
+  });
   return (
-    <div className="min-h-dvh bg-[#F7F9FB] lg:flex lg:bg-white">
-      <AppSidebar user={user} />
-      <main className="flex min-h-dvh min-w-0 flex-1 flex-col pb-[84px] lg:pb-0">
-        <Outlet />
-      </main>
-      <MobileTabBar />
-    </div>
+    <LocalDatabaseProvider userId={userId} organizationId={organizationId}>
+      <div className="min-h-dvh bg-[#F7F9FB] lg:flex lg:bg-white">
+        <AppSidebar user={user} />
+        <main className="flex min-h-dvh min-w-0 flex-1 flex-col pb-[84px] lg:pb-0">
+          <Outlet />
+        </main>
+        <MobileTabBar />
+      </div>
+    </LocalDatabaseProvider>
   );
 };
 
@@ -24,8 +39,8 @@ export const signedInRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: "signed-in",
   beforeLoad: async ({ location }) => {
-    const { user } = await ensureActiveOrganization(location.href);
-    return { user: { name: user.name, email: user.email } };
+    const { userId, name, email, organizationId } = await loadSignedInSession(location.href);
+    return { user: { name, email }, userId, organizationId };
   },
   pendingComponent: () => (
     <main className="mx-auto max-w-screen-sm p-4">

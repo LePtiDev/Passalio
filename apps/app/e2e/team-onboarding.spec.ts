@@ -11,7 +11,7 @@ const signUp = async (page: Page, firstName: string, email: string) => {
   await page.getByLabel("Nom", { exact: true }).fill("Dupont");
   await page.getByLabel("Adresse email professionnelle").fill(email);
   await page.getByLabel("Mot de passe", { exact: true }).fill(PASSWORD);
-  await page.getByText("J'accepte les conditions").click();
+  await page.getByRole("checkbox", { name: /J'accepte les conditions/ }).click();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
 };
 

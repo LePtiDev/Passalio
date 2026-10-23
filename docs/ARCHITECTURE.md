@@ -48,15 +48,16 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 3. Contextes métier (DDD léger)
 
-| Contexte     | Responsabilité                                                   |
-| ------------ | ---------------------------------------------------------------- |
-| `identity`   | Comptes, entreprises, membres, rôles, permissions, impersonation |
-| `customers`  | Clients, lieux, équipements, historique                          |
-| `scheduling` | Interventions, tournées, confirmation J-1, suivi d'arrivée       |
-| `compliance` | Attestations, signature, PDF, numérotation, versions             |
-| `engagement` | Échéances, relances, envois email/SMS                            |
-| `billing`    | Abonnement Stripe, état du compte                                |
-| `backoffice` | Outils internes : support, impersonation, métriques              |
+| Contexte     | Responsabilité                                                       |
+| ------------ | -------------------------------------------------------------------- |
+| `identity`   | Comptes, entreprises, membres, rôles, permissions, impersonation     |
+| `customers`  | Clients, lieux, équipements, historique                              |
+| `scheduling` | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
+| `compliance` | Attestations, signature, PDF, numérotation, versions                 |
+| `engagement` | Échéances, relances, envois email/SMS                                |
+| `billing`    | Abonnement Stripe, état du compte                                    |
+| `backoffice` | Outils internes : support, impersonation, métriques                  |
+| `sync`       | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
 
@@ -115,6 +116,7 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 | Membres et rôles                  | ✓            | ✓              |             |             |
 | Paramètres entreprise             | ✓            | ✓              | lecture     | lecture     |
 | Clients, lieux, équipements       | ✓            | ✓              | ✓           | ✓           |
+| Archiver un client                | ✓            | ✓              | ✓           |             |
 | Planning de toute l'équipe        | ✓            | ✓              | ✓           | lecture     |
 | Ses interventions                 | ✓            | ✓              | ✓           | ✓           |
 | Remplir et signer une attestation | ✓            | ✓              |             | ✓           |
@@ -141,9 +143,29 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Déploiement : un seul Worker par environnement sert l'application (fichiers statiques de `apps/app/dist`, repli sur `index.html`) et l'API (`/api/*` et `/health` passent d'abord par le Worker). Domaines : `app.staging.passalio.com` (Worker `passalio-api-staging`) et `app.passalio.com` (Worker `passalio-api`). `passalio.com` est réservé au site. Le service worker de la PWA ne répond jamais à la place de `/api`.
 - L'application appelle l'API sur la même origine, sous `/api` (proxy Vite en local, route Workers `/api/*` sur le domaine de l'application en staging et production). Les cookies de session restent ainsi `SameSite=Lax` sans CORS. `BETTER_AUTH_URL` vaut donc l'adresse de l'application.
 - Écrans : `/connexion`, `/inscription`, `/mot-de-passe-oublie`, `/mot-de-passe/nouveau`, `/configuration/{entreprise,metiers,documents,equipe}`, `/` (Premiers pas), `/equipe`, `/reglages`, `/invitations/:organizationId/:invitationId`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
+- Pages légales publiques : `/conditions` (conditions générales et accord de sous-traitance RGPD), `/confidentialite`, `/mentions-legales`. Textes dans `apps/app/src/legal/`, informations de l'éditeur dans `PUBLISHER` (`legal-fr.ts`). L'inscription envoie `termsVersion` ; l'API refuse une version différente de `TERMS_VERSION` (`packages/shared`) et enregistre `users.terms_version` et `users.terms_accepted_at`. Changer les conditions = incrémenter `TERMS_VERSION`.
 - Coque de l'application connectée : barre latérale sur ordinateur, barre d'onglets en bas sur mobile (`apps/app/src/components/app-shell/`). Les entrées pas encore construites sont affichées grisées avec « Bientôt ».
 - Emails : en local (`EMAIL_DELIVERY=log`), le lien est écrit dans le terminal sans l'adresse. En staging, même mode « log » : le lien apparaît dans les logs du Worker, pour tester invitations et mot de passe oublié. La production refuse l'envoi tant que Resend n'est pas branché.
 - Les informations légales de l'entreprise (SIRET, adresse, assurance, qualification) arriveront avec les attestations.
+
+### Clients, lieux, équipements (contexte `customers`)
+
+- Tables : `customers` (particulier ou entreprise, `search_name` normalisé), `sites` (adresse d'intervention, occupant facultatif), `equipments`, `equipment_photos`. Toutes synchronisées : identifiant UUIDv7 que le téléphone peut choisir hors ligne, `updated_at`, `deleted_at`.
+- Type d'appareil : catalogue `EQUIPMENT_CATALOG` de `packages/trades`. Les métiers d'un appareil se déduisent de son type (un insert relève du ramonage et de l'entretien de poêle) : pas de `trade_id` sur `equipments`. L'API refuse un type qu'aucun métier de l'entreprise ne couvre.
+- Champs propres à un métier (conduit, type de chaudière, fluide frigorigène d'une PAC) : colonne JSON `details`, validée par le schéma de la famille d'appareil (`detailsSchemaOf`).
+- Installation et remplacement : `is_installed_by_us`, `commissioned_on`. Ajouter un appareil avec `replacesEquipmentId` passe l'ancien en `removed` (`removed_on`, `replaced_by_equipment_id`) dans le même lot. Un appareil retiré reste visible dans l'historique.
+- `last_sweeping_on` et `last_service_on` gardent le dernier passage fait avant Passalio. `next_due_date` reste vide tant que les périodicités par métier ne sont pas configurées.
+- Photos : fichiers dans R2 sous `organizations/{organization_id}/equipment-photos/{photo_id}`, 5 Mo maximum, JPEG, PNG ou WebP. La clé R2 n'est jamais renvoyée au navigateur.
+- Archivage (permission `customers:archive`) : suppression logique du client, de ses lieux, appareils et photos. Un client n'est jamais supprimé définitivement s'il a une attestation signée.
+- Routes : `POST /api/sync/push` et `GET /api/sync/pull` (voir plus bas), `GET` et `POST /api/customers` (recherche par préfixe `q`, curseur), `GET`, `PATCH` et `DELETE /api/customers/:customerId`, `POST /api/customers/:customerId/sites`, `PATCH /api/sites/:siteId`, `POST /api/sites/:siteId/equipments`, `PATCH /api/equipments/:equipmentId`, `POST /api/equipments/:equipmentId/removal`, `POST /api/equipments/:equipmentId/photos?kind=plate|overview`, `GET /api/photos/:photoId`.
+
+### Hors ligne et synchronisation (ADR 0003 et 0014)
+
+- Base locale Dexie par entreprise (`passalio-{organization_id}`, `apps/app/src/lib/db/`) : `customers`, `sites`, `equipments`, `photos`, plus `outbox` (modifications en attente), `pendingPhotos` (photos à envoyer), `rejections` (modifications refusées) et `syncState` (curseur, dernière synchronisation). Supprimée à la déconnexion.
+- Les écrans écrivent dans Dexie et ajoutent la modification à `outbox` dans la même transaction (`apps/app/src/contexts/customers/`). Types de modification et schémas zod communs dans `packages/shared` (`customer-mutations.ts`, `customer-schemas.ts`).
+- Cycle (`apps/app/src/lib/sync/`) : envoi de `outbox` par lots de 50 (`POST /api/sync/push`), envoi des photos une fois leur appareil connu du serveur, puis chargement (`GET /api/sync/pull?cursor=`) par pages de 200 lignes par table, suppressions comprises (`deletedAt`). Le curseur est opaque : un couple (`updated_at`, `id`) par table. Déclenché à l'ouverture, au retour du réseau, toutes les minutes et une seconde après chaque modification.
+- `useSyncStatus` donne l'état (`idle`, `syncing`, `offline`, `error`), le nombre de modifications en attente, de refus et l'heure de la dernière synchronisation, pour l'indicateur des écrans terrain.
+- Démarrage sans réseau : la dernière session (id, nom, email, entreprise active) est gardée dans `localStorage` et sert quand l'API est injoignable. Effacée à la déconnexion.
 
 ## 6. Impersonation (« voir comme l'utilisateur »)
 
@@ -169,22 +191,23 @@ Voir `docs/SECURITY.md` pour la protection et les sauvegardes.
 
 D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, un index inutile l'augmente à chaque écriture.
 
-| Table           | Index                                                                                                             |
-| --------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `customers`     | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                 |
-| `sites`         | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                 |
-| `equipments`    | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                 |
-| `interventions` | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                               |
-| `documents`     | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)` |
-| `reminders`     | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                |
-| `notifications` | `(organization_id, created_at)`                                                                                   |
-| `audit_logs`    | `(organization_id, created_at)`                                                                                   |
-| `members`       | `(user_id)`, `(organization_id, user_id)` unique                                                                  |
-| `invitations`   | `(organization_id, status)`, `(email)`                                                                            |
-| `sessions`      | `(token)` unique, `(user_id)`                                                                                     |
-| `accounts`      | `(user_id)`                                                                                                       |
-| `verifications` | `(identifier)`                                                                                                    |
-| `rate_limits`   | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                              |
+| Table              | Index                                                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `customers`        | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                 |
+| `sites`            | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                 |
+| `equipments`       | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                 |
+| `equipment_photos` | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                |
+| `interventions`    | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                               |
+| `documents`        | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)` |
+| `reminders`        | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                |
+| `notifications`    | `(organization_id, created_at)`                                                                                   |
+| `audit_logs`       | `(organization_id, created_at)`                                                                                   |
+| `members`          | `(user_id)`, `(organization_id, user_id)` unique                                                                  |
+| `invitations`      | `(organization_id, status)`, `(email)`                                                                            |
+| `sessions`         | `(token)` unique, `(user_id)`                                                                                     |
+| `accounts`         | `(user_id)`                                                                                                       |
+| `verifications`    | `(identifier)`                                                                                                    |
+| `rate_limits`      | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                              |
 
 Règles :
 

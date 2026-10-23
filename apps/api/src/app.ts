@@ -1,5 +1,7 @@
 import { Hono } from "hono";
+import { customerRoutes, equipmentRoutes } from "./contexts/customers";
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
+import { syncRoutes } from "./contexts/sync";
 import type { AppEnv } from "./env";
 import { authRoutes } from "./platform/auth-routes";
 import { handleError } from "./platform/errors";
@@ -16,7 +18,10 @@ const apiRoutes = new Hono<AppEnv>()
   .route("/", identityRoutes.userRoutes)
   .route("/", organizationRoutes.companySearchRoutes)
   .route("/", identityRoutes.memberRoutes)
-  .route("/", organizationRoutes.organizationSettingsRoutes);
+  .route("/", organizationRoutes.organizationSettingsRoutes)
+  .route("/", customerRoutes)
+  .route("/", equipmentRoutes)
+  .route("/", syncRoutes);
 
 export const app = createApp()
   .get("/health", (context) => context.json({ status: "ok" }))
