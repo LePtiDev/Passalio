@@ -65,6 +65,7 @@ describe("team access", () => {
         email: "quentin@passalio.com",
         role: "superadmin",
         isTwoFactorEnabled: true,
+        lastSignInAt: expect.any(String),
       }),
     );
     expect(team.members.find((member) => member.email === "ramoneur@example.fr")).toBeUndefined();

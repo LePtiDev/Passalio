@@ -9,7 +9,7 @@ const platformRoleOf = (row: { readonly role: string | null } | undefined) =>
 
 const lastSignInAtColumn = sql<
   number | null
->`(select max(${sessions.createdAt}) from ${sessions} where ${sessions.userId} = ${users.id} and ${sessions.impersonatedBy} is null)`;
+>`(select max(signed_in.created_at) from sessions as signed_in where signed_in.user_id = users.id and signed_in.impersonated_by is null)`;
 
 export const createD1TeammateRepository = (database: Database): TeammateRepository => {
   const setRole = (userId: string, role: PlatformRole | "user") =>

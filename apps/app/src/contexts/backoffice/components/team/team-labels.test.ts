@@ -21,4 +21,8 @@ describe("daysLeft", () => {
     expect(daysLeft("2026-10-23T15:00:00Z", NOW)).toBe(1);
     expect(daysLeft("2026-10-22T15:00:00Z", NOW)).toBe(0);
   });
+
+  it("never shows more days than an invitation lasts when clocks drift", () => {
+    expect(daysLeft("2026-10-30T14:40:05Z", NOW)).toBe(7);
+  });
 });

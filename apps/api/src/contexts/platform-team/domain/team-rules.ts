@@ -1,7 +1,7 @@
-import { err, ok, type Result } from "@passalio/shared";
+import { err, ok, type Result, TEAM_INVITATION_LIFETIME_DAYS } from "@passalio/shared";
 import type { InvitedUser, TeamInvitation } from "./team-models";
 
-export const TEAM_INVITATION_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
+export const TEAM_INVITATION_LIFETIME_MS = TEAM_INVITATION_LIFETIME_DAYS * 24 * 60 * 60 * 1000;
 
 export const normalizeEmail = (email: string): string => email.trim().toLowerCase();
 

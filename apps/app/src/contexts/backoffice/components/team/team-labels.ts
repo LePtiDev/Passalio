@@ -1,3 +1,4 @@
+import { TEAM_INVITATION_LIFETIME_DAYS } from "@passalio/shared";
 import { dayKeyOf, shortDay } from "../../calendar-labels";
 import { teamFr } from "../../team-fr";
 
@@ -24,4 +25,7 @@ export const lastSignInLabel = (iso: string | null, now: Date) => {
 };
 
 export const daysLeft = (iso: string, now: Date) =>
-  Math.max(0, Math.ceil((new Date(iso).getTime() - now.getTime()) / DAY_MS));
+  Math.min(
+    TEAM_INVITATION_LIFETIME_DAYS,
+    Math.max(0, Math.ceil((new Date(iso).getTime() - now.getTime()) / DAY_MS)),
+  );

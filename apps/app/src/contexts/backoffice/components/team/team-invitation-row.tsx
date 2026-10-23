@@ -53,7 +53,14 @@ export const TeamInvitationRow = ({ invitation, now }: TeamInvitationRowProps) =
             {invitation.inviterName === null
               ? teamFr.invitedOn(sentOn)
               : teamFr.invitedBy(invitation.inviterName, sentOn)}
-            <span className="lg:hidden"> · {teamFr.expiresIn(remaining)}</span>
+          </span>
+          <span
+            className={cn(
+              "text-[13px] font-medium lg:hidden",
+              remaining <= 1 ? "text-[#B42318]" : "text-[#B45309]",
+            )}
+          >
+            {teamFr.expiresIn(remaining)}
           </span>
         </span>
       </span>

@@ -1,6 +1,8 @@
 import * as z from "zod";
 import { PLATFORM_ROLES } from "./platform-permissions";
 
+export const TEAM_INVITATION_LIFETIME_DAYS = 7;
+
 const platformRole = z.enum(PLATFORM_ROLES);
 
 export const inviteTeammateBody = z.object({
