@@ -1,3 +1,4 @@
+import type { ChangesAfter } from "@passalio/shared";
 import type { TradeId } from "@passalio/trades";
 import type { Customer, CustomerSummary, Equipment, EquipmentPhoto, Site } from "./customer-models";
 import type { Changes } from "./record-changes";
@@ -12,6 +13,7 @@ type RecordChanges<T> = Changes<Omit<T, "id" | "organizationId" | "createdAt">>;
 
 export type CustomerRepository = {
   readonly exists: (id: string) => Promise<boolean>;
+  readonly existsInOrganization: (organizationId: string, id: string) => Promise<boolean>;
   readonly create: (customer: Customer, site: Site | undefined) => Promise<void>;
   readonly findById: (organizationId: string, customerId: string) => Promise<Customer | undefined>;
   readonly update: (
@@ -28,6 +30,7 @@ export type CustomerRepository = {
 
 export type SiteRepository = {
   readonly exists: (id: string) => Promise<boolean>;
+  readonly existsInOrganization: (organizationId: string, id: string) => Promise<boolean>;
   readonly create: (site: Site) => Promise<void>;
   readonly findById: (organizationId: string, siteId: string) => Promise<Site | undefined>;
   readonly update: (
@@ -45,6 +48,7 @@ export type EquipmentReplacement = {
 
 export type EquipmentRepository = {
   readonly exists: (id: string) => Promise<boolean>;
+  readonly existsInOrganization: (organizationId: string, id: string) => Promise<boolean>;
   readonly create: (equipment: Equipment, replacement?: EquipmentReplacement) => Promise<void>;
   readonly findById: (
     organizationId: string,
@@ -88,18 +92,7 @@ export type OrganizationTrades = {
   readonly of: (organizationId: string) => Promise<readonly TradeId[]>;
 };
 
-export type ChangeCursor = {
-  readonly updatedAt: Date;
-  readonly id: string;
-};
-
-export type Tombstoned<T> = T & { readonly deletedAt: Date | null };
-
-type ChangesAfter<T> = (
-  organizationId: string,
-  after: ChangeCursor | undefined,
-  limit: number,
-) => Promise<readonly Tombstoned<T>[]>;
+export type { ChangeCursor, Tombstoned } from "@passalio/shared";
 
 export type ChangeFeed = {
   readonly customers: ChangesAfter<Customer>;

@@ -15,6 +15,12 @@ export const createD1EquipmentRepository = (database: Database): EquipmentReposi
       .from(equipments)
       .where(eq(equipments.id, id))
       .get()) !== undefined,
+  existsInOrganization: async (organizationId, id) =>
+    (await database
+      .select({ id: equipments.id })
+      .from(equipments)
+      .where(and(eq(equipments.organizationId, organizationId), eq(equipments.id, id)))
+      .get()) !== undefined,
   create: async (equipment, replacement) => {
     await (replacement === undefined
       ? database.insert(equipments).values(equipment)

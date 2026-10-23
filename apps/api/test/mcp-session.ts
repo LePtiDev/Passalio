@@ -132,6 +132,22 @@ export const connectClaude = async (
 
 const jsonRpcResponse = z.object({ result: z.unknown().optional(), error: z.unknown().optional() });
 
+const serverInitialization = z.object({
+  serverInfo: z.object({
+    name: z.string(),
+    title: z.string().optional(),
+    icons: z
+      .array(
+        z.object({
+          src: z.string(),
+          mimeType: z.string().optional(),
+          sizes: z.array(z.string()).optional(),
+        }),
+      )
+      .optional(),
+  }),
+});
+
 const toolList = z.object({ tools: z.array(z.object({ name: z.string() })) });
 
 export const mcpClientFor = (platform: TestPlatform, accessToken: string) => {
@@ -148,6 +164,14 @@ export const mcpClientFor = (platform: TestPlatform, accessToken: string) => {
     return jsonRpcResponse.parse(await response.json()).result;
   };
   return {
+    initialize: async () =>
+      serverInitialization.parse(
+        await call("initialize", {
+          protocolVersion: "2025-06-18",
+          capabilities: {},
+          clientInfo: { name: "claude-test", version: "1.0.0" },
+        }),
+      ),
     toolNames: async () => toolList.parse(await call("tools/list")).tools.map((tool) => tool.name),
     callTool: async (name: string, toolArguments: Record<string, unknown>) =>
       call("tools/call", { name, arguments: toolArguments }),

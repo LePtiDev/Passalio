@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { backofficeRoutes } from "./contexts/backoffice";
+import { numberBlockRoutes } from "./contexts/compliance";
 import { customerRoutes, equipmentRoutes } from "./contexts/customers";
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
 import { mcpAuthorizationRoutes, mcpRoutes } from "./contexts/mcp";
@@ -31,6 +32,7 @@ const apiRoutes = new Hono<AppEnv>()
   .route("/", organizationRoutes.organizationSettingsRoutes)
   .route("/", customerRoutes)
   .route("/", equipmentRoutes)
+  .route("/", numberBlockRoutes)
   .route("/", syncRoutes);
 
 export const app = createApp()

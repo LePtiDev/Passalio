@@ -175,6 +175,14 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 - Écrans (terrain, hors ligne) : `/clients` (liste, recherche par nom, ville ou téléphone, filtres d'échéance), `/clients/nouveau`, `/clients/:customerId` (fiche), `/clients/:customerId/modifier`, `/clients/:customerId/lieux/nouveau`, `/clients/:customerId/appareils/nouveau?lieu=&remplace=`. Ils lisent et écrivent uniquement dans Dexie. Les types d'appareil proposés suivent les métiers de l'entreprise. Photos et lecture de plaque : téléphone seulement. L'adresse est complétée par la Base Adresse Nationale (`data.geopf.fr`), saisie manuelle possible hors ligne.
 
+### Passages et certificats (contextes `scheduling` et `compliance`, ADR 0021)
+
+- Tables : `interventions` (client, lieu, technicien `technician_user_id`, date et heure prévues, durée, appareils prévus `equipment_ids`, prix annoncé, statut `planned`, `completed` ou `cancelled`, date d'achèvement, moyen de paiement et montant payé), `documents` (certificat signé : passage, appareil, métier, modèle et version, numéro et préfixe, téléphone, signataire, `signed_at`, `completed_on`, `cancels_document_id`, contenu `data` en JSON), `document_number_blocks` (blocs de 20 numéros réservés par une personne pour un téléphone).
+- Synchronisation seulement : modifications `create_intervention`, `update_intervention`, `cancel_intervention`, `complete_intervention` (`packages/shared/src/scheduling.ts`) et `sign_document` (`packages/shared/src/compliance.ts`). `/sync/pull` renvoie aussi `interventions` et `documents`.
+- Permissions : `schedule:write` (propriétaire, administrateur, secrétariat) pour tous les passages, `interventions:write-own` pour ceux du technicien lui-même ; `documents:sign` pour réserver des numéros et signer (jamais pendant une impersonation, jamais le secrétariat) ; `documents:read-all` ou `documents:read-own` (le technicien ne reçoit que ses certificats).
+- Certificat de ramonage : schéma `chimneySweepingCertificate` (version 1) et règles `checkCertificate` dans `packages/trades/src/chimney-sweeping/`. Bloquent la signature : au moins un conduit identifié, vacuité sur toute la longueur ou ramonage partiel avec la partie non ramonée, aucune vacuité pour un appareil gaz étanche (conduit concentrique), conseils d'utilisation pour un appareil à combustible solide hors chaudière, capital social d'une SARL ou société par actions, signature du client ou « client absent ». À la signature, l'appareil reçoit `last_sweeping_on` et `next_due_date` (+12 mois).
+- Route : `POST /api/document-number-blocks` (`{ deviceId }` → `{ id, deviceId, numberPrefix, firstNumber, lastNumber }`).
+
 ### Prospection (contexte `sales`, ADR 0017)
 
 - Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, outil actuel `current_tool`, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
@@ -193,6 +201,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 ### Hors ligne et synchronisation (ADR 0003 et 0014)
 
+- Passages et certificats passent par la même synchronisation (ADR 0021) ; leurs écrans arrivent avec la maquette validée le 2026-10-23.
 - Base locale Dexie par entreprise (`passalio-{organization_id}`, `apps/app/src/lib/db/`) : `customers`, `sites`, `equipments`, `photos`, plus `outbox` (modifications en attente), `pendingPhotos` (photos à envoyer), `rejections` (modifications refusées) et `syncState` (curseur, dernière synchronisation). Supprimée à la déconnexion.
 - Les écrans écrivent dans Dexie et ajoutent la modification à `outbox` dans la même transaction (`apps/app/src/contexts/customers/`). Types de modification et schémas zod communs dans `packages/shared` (`customer-mutations.ts`, `customer-schemas.ts`).
 - Cycle (`apps/app/src/lib/sync/`) : envoi de `outbox` par lots de 50 (`POST /api/sync/push`), envoi des photos une fois leur appareil connu du serveur, puis chargement (`GET /api/sync/pull?cursor=`) par pages de 200 lignes par table, suppressions comprises (`deletedAt`). Le curseur est opaque : un couple (`updated_at`, `id`) par table. Déclenché à l'ouverture, au retour du réseau, toutes les minutes et une seconde après chaque modification.
@@ -223,28 +232,29 @@ Voir `docs/SECURITY.md` pour la protection et les sauvegardes.
 
 D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, un index inutile l'augmente à chaque écriture.
 
-| Table                  | Index                                                                                                                           |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `customers`            | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                               |
-| `sites`                | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                               |
-| `equipments`           | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                               |
-| `equipment_photos`     | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                              |
-| `interventions`        | `(organization_id, technician_id, scheduled_date)`, `(organization_id, updated_at)`                                             |
-| `documents`            | `(organization_id, equipment_id, signed_at)`, `(organization_id, number)` unique, `(organization_id, updated_at)`               |
-| `reminders`            | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                              |
-| `notifications`        | `(organization_id, created_at)`                                                                                                 |
-| `audit_logs`           | `(organization_id, created_at)`                                                                                                 |
-| `members`              | `(user_id)`, `(organization_id, user_id)` unique                                                                                |
-| `invitations`          | `(organization_id, status)`, `(email)`                                                                                          |
-| `sessions`             | `(token)` unique, `(user_id)`                                                                                                   |
-| `accounts`             | `(user_id)`                                                                                                                     |
-| `verifications`        | `(identifier)`                                                                                                                  |
-| `rate_limits`          | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                            |
-| `prospect_companies`   | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)` |
-| `prospect_contacts`    | `(company_id)`, `(search_name)`                                                                                                 |
-| `prospect_events`      | `(company_id, created_at)`, `(contact_id, created_at)`                                                                          |
-| `users`                | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                        |
-| `platform_invitations` | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                       |
+| Table                    | Index                                                                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `customers`              | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                                                                        |
+| `sites`                  | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                                                                        |
+| `equipments`             | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                                                                        |
+| `equipment_photos`       | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                                                                       |
+| `interventions`          | `(organization_id, updated_at)`                                                                                                                                          |
+| `documents`              | `(organization_id, number)` unique, `(organization_id, cancels_document_id)` unique, `(organization_id, updated_at)`, `(organization_id, signed_by_user_id, updated_at)` |
+| `document_number_blocks` | `(organization_id, user_id, last_number)` pour vérifier qu'un numéro est réservé                                                                                         |
+| `reminders`              | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                                                                       |
+| `notifications`          | `(organization_id, created_at)`                                                                                                                                          |
+| `audit_logs`             | `(organization_id, created_at)`                                                                                                                                          |
+| `members`                | `(user_id)`, `(organization_id, user_id)` unique                                                                                                                         |
+| `invitations`            | `(organization_id, status)`, `(email)`                                                                                                                                   |
+| `sessions`               | `(token)` unique, `(user_id)`                                                                                                                                            |
+| `accounts`               | `(user_id)`                                                                                                                                                              |
+| `verifications`          | `(identifier)`                                                                                                                                                           |
+| `rate_limits`            | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                                                                     |
+| `prospect_companies`     | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)`                                          |
+| `prospect_contacts`      | `(company_id)`, `(search_name)`                                                                                                                                          |
+| `prospect_events`        | `(company_id, created_at)`, `(contact_id, created_at)`                                                                                                                   |
+| `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                 |
+| `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                |
 
 Règles :
 

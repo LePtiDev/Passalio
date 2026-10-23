@@ -43,8 +43,11 @@ Dernière mise à jour : 2026-10-23.
 | Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement                 | `components/pagination.tsx`     |
 | Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                 | ADR 0018                        |
 | Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                        | ADR 0019                        |
+| Serveur MCP : page d'autorisation jamais servie depuis un ancien cache, nom et icône Passalio dans Claude, `favicon.ico`                 | `service-worker-routes.ts`      |
 | Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug` | ADR 0020, `docs/TESTING.md`     |
 | Filtres en cascade avec recherche (sous-menus sur ordinateur, panneau du bas sur mobile), coche à droite dans tous les menus             | `components/list` (app)         |
+| Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                         | `CLAUDE.md`                     |
+| Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois  | ADR 0021                        |
 
 ## Hors code (Quentin)
 
@@ -81,13 +84,17 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Liste des modifications refusées par le serveur, consultable depuis l'indicateur de synchronisation
 - [ ] Tester le démarrage sans réseau sur l'application installée (staging), service worker compris
 - [x] Écrans clients selon la maquette validée le 2026-10-22 (https://claude.ai/artifact/Tha55S1NCL2MsWPN3TxquD) : liste, fiche, nouveau client, nouvel appareil, remplacement
+- [ ] Champs obligatoires : remplacer « facultatif » par l'astérisque rouge sur les écrans existants (clients, onboarding, Commercial)
 - [ ] Import d'un fichier de clients (bouton « Importer un fichier » affiché « Bientôt »)
 - [ ] Modifier un lieu et un appareil depuis la fiche (le menu propose seulement Remplacer et Retirer)
 - [ ] Lecture de la plaque signalétique d'un appareil par photo (API Claude), champs à confirmer par le technicien, téléphone seulement
-- [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (configuration dans `packages/trades`)
-- [ ] Métier ramonage et entretien d'appareil dans `packages/trades` (bloqué par les documents réels)
-- [ ] Attestation : formulaire, photos sur R2, signature, PDF sur le téléphone, numérotation, immuable une fois signée
-- [ ] Planning simple : interventions par technicien et par jour
+- [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (fait pour le ramonage : 12 mois ; appareils collectifs à 6 mois et règles locales à faire)
+- [x] Métier ramonage dans `packages/trades` : schéma du certificat version 1 et règles bloquantes tirées de `docs/regulatory/`
+- [ ] Métier entretien d'appareil dans `packages/trades` (bloqué par les documents réels)
+- [x] Passages et certificats, données : tables, synchronisation, numérotation par blocs de 20, certificat immuable (ADR 0021)
+- [ ] Planning et certificat, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, passage, certificat, récapitulatif et signatures, certificat signé, historique sur la fiche
+- [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
+- [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [ ] Abonnement : Stripe Billing, 29,99 € HT/mois et 299,90 € HT/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
@@ -116,11 +123,15 @@ Dernière mise à jour : 2026-10-23.
 ## Tests (ADR 0020, inventaire dans `docs/TESTING.md`)
 
 - [x] Règles, garde-fou `test:guard`, lint des tests, agents, skill `fix-bug`
+- [ ] Synchronisation : rejouer une modification ou un retrait après archivage, doublons dans un même lot (comportement à décider)
 - [ ] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
-- [ ] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection
+- [x] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection, clients, identité
 - [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
-- [ ] Sécurité transverse et aucune donnée personnelle dans les logs
-- [ ] Synchronisation : tests de propriétés, conflits, envoi rejoué
+- [x] Sécurité transverse (cookies, limites de débit, Turnstile, fichiers envoyés, lien de mot de passe, sessions) et aucune donnée personnelle dans les logs
+- [ ] En-têtes de sécurité (CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`) promis par `SECURITY.md` mais pas encore posés, puis leurs tests
+- [ ] Vérifier le type d'un fichier envoyé sur son contenu, pas seulement sur l'en-tête déclaré
+- [ ] À décider : limite des codes de double authentification par compte (aujourd'hui par adresse IP) ; `retour` qui accepte `/\…`
+- [x] Synchronisation : tests de propriétés (fast-check), envoi rejoué, curseur, refus, photos
 - [ ] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest en mode navigateur)
 - [ ] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
 - [ ] Parcours Clients et hors ligne réel
