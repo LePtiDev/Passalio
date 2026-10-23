@@ -1,5 +1,8 @@
 import { createD1AccountReadModel } from "../../src/contexts/backoffice/infrastructure/d1-account-read-model";
 import { createD1JournalReadModel } from "../../src/contexts/backoffice/infrastructure/d1-journal-read-model";
+import { createD1DocumentRepository } from "../../src/contexts/compliance/infrastructure/d1-document-repository";
+import { createD1NumberBlockRepository } from "../../src/contexts/compliance/infrastructure/d1-number-block-repository";
+import { createD1SigningTargets } from "../../src/contexts/compliance/infrastructure/d1-signing-targets";
 import { createD1ChangeFeed } from "../../src/contexts/customers/infrastructure/d1-change-feed";
 import { createD1CustomerRepository } from "../../src/contexts/customers/infrastructure/d1-customer-repository";
 import { createD1EquipmentRepository } from "../../src/contexts/customers/infrastructure/d1-equipment-repository";
@@ -18,6 +21,11 @@ import { createD1ContactRepository } from "../../src/contexts/sales/infrastructu
 import { createD1EventRepository } from "../../src/contexts/sales/infrastructure/d1-event-repository";
 import { mainContactsOf } from "../../src/contexts/sales/infrastructure/main-contacts";
 import { createSalesDependencies } from "../../src/contexts/sales/infrastructure/sales-dependencies";
+import {
+  createD1InterventionPlaces,
+  createD1TeamMembers,
+} from "../../src/contexts/scheduling/infrastructure/d1-intervention-places";
+import { createD1InterventionRepository } from "../../src/contexts/scheduling/infrastructure/d1-intervention-repository";
 import { createActivityLog } from "../../src/platform/activity-log";
 import { createAuditTrail } from "../../src/platform/audit-trail";
 import type { Database } from "../../src/platform/database";
@@ -38,6 +46,12 @@ export const createRepositories = (database: Database) => {
     organizations: createD1OrganizationRepository(database),
     members: createD1MemberRepository(database),
     invitations: createD1InvitationRepository(database),
+    interventions: createD1InterventionRepository(database),
+    interventionPlaces: createD1InterventionPlaces(database),
+    teamMembers: createD1TeamMembers(database),
+    documents: createD1DocumentRepository(database),
+    numberBlocks: createD1NumberBlockRepository(database),
+    signingTargets: createD1SigningTargets(database),
     prospectCompanies: createD1CompanyRepository(database),
     prospectContacts: createD1ContactRepository(database),
     prospectEvents: createD1EventRepository(database),

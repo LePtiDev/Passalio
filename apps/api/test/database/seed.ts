@@ -15,6 +15,7 @@ import {
   aTeamInvitation,
   LATER,
 } from "./domain-fixtures";
+import { aSignedDocument, anIntervention, DEVICE_ID, sweepingOf } from "./field-fixtures";
 import { TRACE_ID, type Repositories } from "./repositories";
 
 const aUser = (name: string, role: "user" | "superadmin" | "sales") => ({
@@ -79,6 +80,26 @@ export const seedDatabase = async (database: Database, repositories: Repositorie
   const invitation = anInvitation(organization.id, owner.id);
   await repositories.invitations.create(invitation);
 
+  const intervention = anIntervention(
+    organization.id,
+    { customerId: customer.id, siteId: site.id, equipmentId: equipment.id },
+    technician.id,
+  );
+  await repositories.interventions.create(intervention);
+  const numberBlock = await repositories.numberBlocks.reserve({
+    id: newId(),
+    organizationId: organization.id,
+    userId: technician.id,
+    deviceId: DEVICE_ID,
+    size: 20,
+    at: AT,
+  });
+  const document = aSignedDocument(intervention, equipment.id, {
+    number: numberBlock.firstNumber,
+    numberPrefix: numberBlock.numberPrefix,
+  });
+  await repositories.documents.sign(document, sweepingOf(equipment.id));
+
   const company = aProspectCompany(salesperson.id);
   const contact = aProspectContact(company.id, true);
   await repositories.prospectCompanies.create(company);
@@ -123,6 +144,9 @@ export const seedDatabase = async (database: Database, repositories: Repositorie
     equipment,
     photo,
     invitation,
+    intervention,
+    numberBlock,
+    document,
     company,
     contact,
     teamInvitation,

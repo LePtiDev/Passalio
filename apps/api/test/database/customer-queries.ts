@@ -26,6 +26,11 @@ export const CUSTOMER_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.customers.exists(s.customer.id),
   },
   {
+    method: "customers.existsInOrganization",
+    query: "customer of the organization",
+    run: (r, s) => r.customers.existsInOrganization(s.organization.id, s.customer.id),
+  },
+  {
     method: "customers.create",
     query: "create a customer with its first site",
     run: async (r, s) => {
@@ -81,6 +86,11 @@ export const CUSTOMER_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.sites.exists(s.site.id),
   },
   {
+    method: "sites.existsInOrganization",
+    query: "site of the organization",
+    run: (r, s) => r.sites.existsInOrganization(s.organization.id, s.site.id),
+  },
+  {
     method: "sites.create",
     query: "add a site",
     run: (r, s) => r.sites.create(aSite(s.organization.id, s.customer.id)),
@@ -105,6 +115,11 @@ export const CUSTOMER_QUERIES: readonly CatalogedQuery[] = [
     method: "equipments.exists",
     query: "equipment id already used",
     run: (r, s) => r.equipments.exists(s.equipment.id),
+  },
+  {
+    method: "equipments.existsInOrganization",
+    query: "equipment of the organization",
+    run: (r, s) => r.equipments.existsInOrganization(s.organization.id, s.equipment.id),
   },
   {
     method: "equipments.create",

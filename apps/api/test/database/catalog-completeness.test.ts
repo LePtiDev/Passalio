@@ -9,6 +9,8 @@ const COMPOSING_FACTORIES: Readonly<Record<string, string>> = {
   usageByOrganization: "subquery of the back office account read model, cataloged through it",
   createBackofficeDependencies: "only calls the cataloged read models",
   createCustomerDependencies: "only calls the cataloged repositories",
+  createComplianceDependencies: "only calls the cataloged repositories",
+  createSchedulingDependencies: "only calls the cataloged repositories",
   createIdentityDependencies: "only calls the cataloged repositories",
   createTeamDependencies: "only calls the cataloged repositories",
   createAuth: "Better Auth, cataloged through the session read of every request",

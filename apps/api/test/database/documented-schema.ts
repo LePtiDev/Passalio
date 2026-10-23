@@ -26,11 +26,12 @@ export const ARCHITECTURE_INDEXES: readonly DocumentedIndex[] = [
   index("equipments", ["organization_id", "updated_at"]),
   index("equipment_photos", ["organization_id", "equipment_id"]),
   index("equipment_photos", ["organization_id", "updated_at"]),
-  index("interventions", ["organization_id", "technician_id", "scheduled_date"]),
   index("interventions", ["organization_id", "updated_at"]),
-  index("documents", ["organization_id", "equipment_id", "signed_at"]),
   uniqueIndex("documents", ["organization_id", "number"]),
+  uniqueIndex("documents", ["organization_id", "cancels_document_id"]),
   index("documents", ["organization_id", "updated_at"]),
+  index("documents", ["organization_id", "signed_by_user_id", "updated_at"]),
+  index("document_number_blocks", ["organization_id", "user_id", "last_number"]),
   index("reminders", ["status", "due_at"]),
   index("reminders", ["organization_id", "equipment_id"]),
   index("notifications", ["organization_id", "created_at"]),
@@ -65,6 +66,9 @@ export const ORGANIZATION_DATA_TABLES = [
   "sites",
   "equipments",
   "equipment_photos",
+  "interventions",
+  "documents",
+  "document_number_blocks",
   "members",
   "invitations",
 ] as const;
@@ -87,4 +91,23 @@ export const TABLES_WITHOUT_ORGANIZATION: Readonly<Record<string, string>> = {
 
 export const PASSALIO_TABLES = ["prospect_companies", "prospect_contacts", "prospect_events"];
 
-export const SYNCHRONIZED_TABLES = ["customers", "sites", "equipments", "equipment_photos"];
+export const SYNCHRONIZED_TABLES = [
+  "customers",
+  "sites",
+  "equipments",
+  "equipment_photos",
+  "interventions",
+  "documents",
+];
+
+export const BETTER_AUTH_TABLES: readonly string[] = [
+  "users",
+  "sessions",
+  "accounts",
+  "verifications",
+  "two_factors",
+  "rate_limits",
+  "organizations",
+  "members",
+  "invitations",
+];
