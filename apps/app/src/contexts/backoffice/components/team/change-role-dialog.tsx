@@ -45,6 +45,7 @@ export const ChangeRoleDialog = ({ teammate, onClose }: ChangeRoleDialogProps) =
     <TeamDialog
       isOpen
       title={text.title(teammate.name)}
+      mobileTitle={text.mobileTitle}
       description={text.text(teammate.name)}
       submitLabel={isPending ? text.saving : text.submit}
       isSubmitting={isPending}

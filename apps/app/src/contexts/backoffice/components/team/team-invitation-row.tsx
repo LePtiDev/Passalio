@@ -9,7 +9,7 @@ import { teamFr } from "../../team-fr";
 import { ADMIN_SECONDARY_BUTTON_CLASS } from "../admin-styles";
 import { RoleBadge } from "./role-badge";
 import { daysLeft } from "./team-labels";
-import { TEAM_GRID_CLASS, TEAM_ROW_CLASS } from "./team-styles";
+import { IDENTITY_TEXT_CLASS, TEAM_GRID_CLASS, TEAM_ROW_CLASS } from "./team-styles";
 
 type TeamInvitationRowProps = {
   readonly invitation: PendingTeamInvitationResponse;
@@ -36,13 +36,13 @@ export const TeamInvitationRow = ({ invitation, now }: TeamInvitationRowProps) =
       <span className="flex min-w-0 items-center gap-3">
         <span
           aria-hidden="true"
-          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#F7F9FB] text-[#64748B] lg:size-7"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#F7F9FB] text-[#64748B]"
         >
-          <Mail className="size-4 lg:size-3.5" />
+          <Mail className="size-[15px]" />
         </span>
-        <span className="flex min-w-0 flex-col gap-0.5">
+        <span className={IDENTITY_TEXT_CLASS}>
           <span className="flex min-w-0 items-center gap-2">
-            <span className="truncate text-[15px] font-semibold lg:text-[13px]">
+            <span className="truncate text-[15px] font-bold lg:text-[13px]">
               {invitation.email}
             </span>
             <span className="lg:hidden">

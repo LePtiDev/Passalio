@@ -15,5 +15,5 @@ export {
 export { AdminHeading, AdminPage, type AdminTrailStep } from "./components/shell/admin-page";
 export type { PlatformAdmin } from "./backoffice-api";
 export { useNow } from "./hooks/use-now";
-export { JoinTeamCard } from "./components/team/join-team-card";
+export { JoinTeamScreen } from "./components/team/join-team-screen";
 export { TeamScreen } from "./components/team/team-screen";

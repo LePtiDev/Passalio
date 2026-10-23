@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback, type ReactNode } from "react";
 import { toast } from "sonner";
 import { ErrorState } from "@/components/error-state";
+import { AuthLayout } from "@/contexts/identity";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiErrorOf, unwrap } from "@/lib/api-client";
@@ -23,9 +24,25 @@ const INVALID_CODES: ReadonlySet<string> = new Set(["invitation_not_found", "inv
 
 const NO_RETRY = false;
 
+const WELCOME_SHOWCASE = { badge: text.showcaseBadge, title: text.showcaseTitle };
+
+const INVALID_SHOWCASE = { badge: text.showcaseBadge, title: text.invalidShowcaseTitle };
+
+const JoinLayout = ({
+  children,
+  isInvalid = false,
+}: {
+  readonly children: ReactNode;
+  readonly isInvalid?: boolean;
+}) => (
+  <AuthLayout showcase={isInvalid ? INVALID_SHOWCASE : WELCOME_SHOWCASE} hasMobileBand={false}>
+    {children}
+  </AuthLayout>
+);
+
 const Heading = ({ title, children }: { readonly title: string; readonly children: ReactNode }) => (
   <div className="flex flex-col gap-1.5">
-    <h1 className="text-[22px] leading-tight font-bold tracking-tight">{title}</h1>
+    <h1 className="text-[22px] leading-tight font-bold tracking-[-0.015em]">{title}</h1>
     <p className="text-[15px] leading-normal text-[#475569] lg:text-sm">{children}</p>
   </div>
 );
@@ -39,13 +56,13 @@ const JoinSkeleton = () => (
   </div>
 );
 
-type JoinTeamCardProps = {
+type JoinTeamScreenProps = {
   readonly invitationId: string;
   readonly currentEmail: string;
   readonly returnTo: string;
 };
 
-export const JoinTeamCard = ({ invitationId, currentEmail, returnTo }: JoinTeamCardProps) => {
+export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTeamScreenProps) => {
   const navigate = useNavigate();
   const switchAccount = useSignOut(returnTo);
   const goHome = useCallback(() => void navigate({ to: "/" }), [navigate]);
@@ -67,51 +84,65 @@ export const JoinTeamCard = ({ invitationId, currentEmail, returnTo }: JoinTeamC
   const join = useCallback(() => mutate(), [mutate]);
 
   if (invitation.isPending) {
-    return <JoinSkeleton />;
+    return (
+      <JoinLayout>
+        <JoinSkeleton />
+      </JoinLayout>
+    );
   }
   if (invitation.isError) {
     if (!INVALID_CODES.has(apiErrorOf(invitation.error).code)) {
-      return <ErrorState error={invitation.error} onRetry={retry} />;
+      return (
+        <JoinLayout>
+          <ErrorState error={invitation.error} onRetry={retry} />
+        </JoinLayout>
+      );
     }
     return (
-      <div className="flex flex-col gap-5">
-        <Heading title={text.invalidTitle}>{text.invalidText}</Heading>
-        <Button className={PRIMARY_CLASS} onClick={goHome}>
-          {text.home}
-        </Button>
-      </div>
+      <JoinLayout isInvalid>
+        <div className="flex flex-col gap-5">
+          <Heading title={text.invalidTitle}>{text.invalidText}</Heading>
+          <Button className={PRIMARY_CLASS} onClick={goHome}>
+            {text.home}
+          </Button>
+        </div>
+      </JoinLayout>
     );
   }
   const { role, email, inviterName } = invitation.data.invitation;
   if (email.toLocaleLowerCase() !== currentEmail.toLocaleLowerCase()) {
     return (
-      <div className="flex flex-col gap-5">
-        <Heading title={text.mismatchTitle}>{text.mismatchText(email, currentEmail)}</Heading>
-        <Button className={PRIMARY_CLASS} onClick={switchAccount}>
-          {text.switchTo}
-        </Button>
-      </div>
+      <JoinLayout isInvalid>
+        <div className="flex flex-col gap-5">
+          <Heading title={text.mismatchTitle}>{text.mismatchText(email, currentEmail)}</Heading>
+          <Button className={PRIMARY_CLASS} onClick={switchAccount}>
+            {text.switchTo}
+          </Button>
+        </div>
+      </JoinLayout>
     );
   }
   return (
-    <div className="flex flex-col gap-5">
-      <Heading title={text.title}>
-        {text.text(inviterName)}{" "}
-        <strong className="text-[#0F2A44]">{PLATFORM_ROLE_LABELS[role]}</strong>.{" "}
-        {text.signedInAs(currentEmail)}
-      </Heading>
-      <div className="flex flex-col gap-1.5 rounded-[10px] border border-[#E3E8EF] bg-[#F7F9FB] px-3.5 py-3">
-        <strong className="text-[15px] lg:text-sm">{text.nextTitle}</strong>
-        <span className="text-[15px] leading-normal text-[#475569] lg:text-sm">
-          {text.nextText}
-        </span>
+    <JoinLayout>
+      <div className="flex flex-col gap-5">
+        <Heading title={text.title}>
+          {text.text(inviterName)}{" "}
+          <strong className="text-[#0F2A44]">{PLATFORM_ROLE_LABELS[role]}</strong>.{" "}
+          {text.signedInAs(currentEmail)}
+        </Heading>
+        <div className="flex flex-col gap-1.5 rounded-[10px] border border-[#E3E8EF] bg-[#F7F9FB] px-3.5 py-3">
+          <strong className="text-[15px] lg:text-sm">{text.nextTitle}</strong>
+          <span className="text-[15px] leading-normal text-[#475569] lg:text-sm">
+            {text.nextText}
+          </span>
+        </div>
+        <Button className={PRIMARY_CLASS} disabled={accept.isPending} onClick={join}>
+          {accept.isPending ? text.joining : text.submit}
+        </Button>
+        <button type="button" className={LINK_CLASS} onClick={switchAccount}>
+          {text.switchAccount}
+        </button>
       </div>
-      <Button className={PRIMARY_CLASS} disabled={accept.isPending} onClick={join}>
-        {accept.isPending ? text.joining : text.submit}
-      </Button>
-      <button type="button" className={LINK_CLASS} onClick={switchAccount}>
-        {text.switchAccount}
-      </button>
-    </div>
+    </JoinLayout>
   );
 };

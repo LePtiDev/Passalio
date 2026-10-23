@@ -1,4 +1,4 @@
-type AuthShowcaseHeadingProps = {
+export type AuthShowcaseHeadingProps = {
   readonly badge: string;
   readonly title: string;
 };

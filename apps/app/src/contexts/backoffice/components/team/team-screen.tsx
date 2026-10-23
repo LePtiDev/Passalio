@@ -1,3 +1,4 @@
+import type { TeammateResponse } from "@passalio/shared";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { ErrorState } from "@/components/error-state";
@@ -21,6 +22,11 @@ import { TeamRolesCard } from "./team-roles-card";
 import { TeamSkeleton } from "./team-skeleton";
 import { TEAM_GRID_CLASS } from "./team-styles";
 import { TeammateRow } from "./teammate-row";
+
+const selfFirst = (members: readonly TeammateResponse[], currentUserId: string) => [
+  ...members.filter((member) => member.id === currentUserId),
+  ...members.filter((member) => member.id !== currentUserId),
+];
 
 const TRAIL: readonly AdminTrailStep[] = [{ label: teamFr.title }];
 
@@ -67,7 +73,7 @@ export const TeamScreen = ({ currentUserId }: { readonly currentUserId: string }
     [],
   );
 
-  const members = team.data?.members ?? [];
+  const members = selfFirst(team.data?.members ?? [], currentUserId);
   const invitations = team.data?.invitations ?? [];
   return (
     <AdminPage
@@ -87,13 +93,18 @@ export const TeamScreen = ({ currentUserId }: { readonly currentUserId: string }
       </AdminHeading>
       <InviteButton onClick={openInvite} className="lg:hidden" />
       {team.isPending ? <TeamSkeleton /> : null}
-      {team.isError ? <ErrorState error={team.error} onRetry={retry} /> : null}
+      {team.isError ? (
+        <ErrorState error={team.error} onRetry={retry} message={teamFr.loadError} />
+      ) : null}
       {team.isSuccess ? (
         <>
           <section className="flex flex-col gap-2.5">
             <h2 className={cn(SECTION_TITLE_CLASS, "lg:hidden")}>{teamFr.membersTitle}</h2>
             <div className={ADMIN_CARD_CLASS}>
-              <div aria-hidden="true" className={cn(TEAM_GRID_CLASS, ADMIN_TABLE_HEADER_CLASS)}>
+              <div
+                aria-hidden="true"
+                className={cn(TEAM_GRID_CLASS, ADMIN_TABLE_HEADER_CLASS, "leading-[1.3]")}
+              >
                 <span>{teamFr.columns.member}</span>
                 <span>{teamFr.columns.role}</span>
                 <span>{teamFr.columns.lastSignIn}</span>

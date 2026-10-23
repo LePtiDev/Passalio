@@ -2,6 +2,10 @@ import type { PlatformRole } from "@passalio/shared";
 
 const plural = (count: number, one: string, many: string) => `${count} ${count <= 1 ? one : many}`;
 
+const ELIDED_INITIAL = /^[aeiouyhàâäéèêëîïôöûüù]/iu;
+
+const ofName = (name: string) => (ELIDED_INITIAL.test(name) ? `d'${name}` : `de ${name}`);
+
 export const PLATFORM_ROLE_LABELS: Readonly<Record<PlatformRole, string>> = {
   superadmin: "Super admin",
   admin: "Admin",
@@ -59,9 +63,11 @@ export const teamFr = {
   rolesTitle: "Ce que permet chaque rôle",
   rolesNote:
     "Chaque membre active la double authentification avant d'entrer. Chaque invitation, changement de rôle ou retrait est écrit dans le journal.",
-  loadError: "Impossible de charger l'équipe.",
+  loadError: "Impossible de charger l'équipe. Vérifiez votre connexion et réessayez.",
+  back: "Retour",
   inviteDialog: {
     title: "Inviter un membre de l'équipe Passalio",
+    mobileTitle: "Inviter un membre",
     text: "La personne reçoit un e-mail pour rejoindre l'équipe. Le lien est valable 7 jours.",
     emailLabel: "E-mail",
     emailPlaceholder: "prenom@passalio.com",
@@ -72,7 +78,8 @@ export const teamFr = {
     sent: (email: string) => `Invitation envoyée à ${email}.`,
   },
   roleDialog: {
-    title: (name: string) => `Changer le rôle de ${name}`,
+    title: (name: string) => `Changer le rôle ${ofName(name)}`,
+    mobileTitle: "Changer le rôle",
     text: (name: string) =>
       `Le nouveau rôle s'applique tout de suite. ${name} devra se reconnecter.`,
     current: "rôle actuel",
@@ -89,6 +96,9 @@ export const teamFr = {
   },
   join: {
     title: "Rejoindre l'équipe Passalio",
+    showcaseBadge: "Espace admin",
+    showcaseTitle: "Bienvenue dans l'équipe. Chaque accès aux comptes est protégé et journalisé.",
+    invalidShowcaseTitle: "Chaque accès aux comptes est protégé et journalisé.",
     text: (inviter: string | null) =>
       inviter === null ? "Vous êtes invité comme" : `${inviter} vous invite comme`,
     signedInAs: (email: string) => `Vous êtes connecté avec ${email}.`,

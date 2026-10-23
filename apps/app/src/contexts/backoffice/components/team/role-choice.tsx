@@ -25,7 +25,7 @@ export const RoleChoice = ({ name, value, currentRole, onChange }: RoleChoicePro
   );
   return (
     <fieldset className="flex min-w-0 flex-col gap-2">
-      <legend className="mb-1.5 text-sm font-semibold lg:text-[13px]">
+      <legend className="mb-3.5 text-[13px] font-semibold lg:sr-only">
         {teamFr.inviteDialog.roleLabel}
       </legend>
       {PLATFORM_ROLES.map((role) => {
@@ -53,13 +53,13 @@ export const RoleChoice = ({ name, value, currentRole, onChange }: RoleChoicePro
               htmlFor={`${name}-${role}`}
               className="flex cursor-pointer flex-col items-start gap-0.5 py-3 pr-3.5 pl-11 text-left"
             >
-              <span className="text-[15px] font-semibold lg:text-sm">
+              <span className="text-sm font-bold">
                 {PLATFORM_ROLE_LABELS[role]}
                 {role === currentRole ? (
                   <span className="font-medium text-[#64748B]"> · {teamFr.roleDialog.current}</span>
                 ) : null}
               </span>
-              <span className="text-[13px] leading-snug font-normal text-[#475569]">
+              <span className="text-[15px] leading-[1.45] font-normal text-[#475569] lg:text-[13px]">
                 {PLATFORM_ROLE_DESCRIPTIONS[role]}
               </span>
             </Label>

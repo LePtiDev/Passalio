@@ -66,6 +66,7 @@ export const InviteTeammateDialog = ({ isOpen, onOpenChange }: InviteTeammateDia
     <TeamDialog
       isOpen={isOpen}
       title={text.title}
+      mobileTitle={text.mobileTitle}
       description={text.text}
       submitLabel={invite.isPending ? text.sending : text.submit}
       isSubmitting={invite.isPending}
@@ -74,7 +75,7 @@ export const InviteTeammateDialog = ({ isOpen, onOpenChange }: InviteTeammateDia
       onSubmit={submit}
     >
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor={EMAIL_INPUT_ID} className="text-sm font-semibold lg:text-[13px]">
+        <Label htmlFor={EMAIL_INPUT_ID} className="text-[13px] font-semibold">
           {text.emailLabel}
         </Label>
         <Input
@@ -83,13 +84,13 @@ export const InviteTeammateDialog = ({ isOpen, onOpenChange }: InviteTeammateDia
           inputMode="email"
           autoComplete="off"
           placeholder={text.emailPlaceholder}
-          className="h-12 rounded-[10px] border-[#D5DDE6] text-base aria-invalid:border-[#B42318] lg:h-10 lg:rounded-lg lg:text-sm"
+          className="h-12 rounded-lg border-[#D5DDE6] bg-white text-base text-[#0F2A44] focus-visible:border-[#0E7C5A] focus-visible:ring-[3px] focus-visible:ring-[rgb(14_124_90/0.15)] aria-invalid:border-[#B42318] aria-invalid:ring-[3px] aria-invalid:ring-[rgb(180_35_24/0.12)] lg:h-10 lg:text-sm"
           aria-invalid={emailError !== undefined}
           aria-describedby={emailError === undefined ? undefined : `${EMAIL_INPUT_ID}-error`}
           {...form.register("email")}
         />
         {emailError === undefined ? null : (
-          <p id={`${EMAIL_INPUT_ID}-error`} className="text-sm text-[#B42318] lg:text-[13px]">
+          <p id={`${EMAIL_INPUT_ID}-error`} className="text-[13px] text-[#B42318]">
             {emailError}
           </p>
         )}

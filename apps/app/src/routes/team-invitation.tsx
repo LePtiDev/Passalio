@@ -1,6 +1,5 @@
 import { createRoute } from "@tanstack/react-router";
-import { JoinTeamCard } from "@/contexts/backoffice";
-import { AuthLayout } from "@/contexts/identity";
+import { JoinTeamScreen } from "@/contexts/backoffice";
 import { FormSkeleton } from "@/components/page-skeleton";
 import { requireSession } from "@/lib/session";
 import { rootRoute } from "./root";
@@ -16,10 +15,6 @@ export const teamInvitationRoute = createRoute({
   component: function TeamInvitationScreen() {
     const { invitationId } = teamInvitationRoute.useParams();
     const { email, returnTo } = teamInvitationRoute.useRouteContext();
-    return (
-      <AuthLayout showcase="admin">
-        <JoinTeamCard invitationId={invitationId} currentEmail={email} returnTo={returnTo} />
-      </AuthLayout>
-    );
+    return <JoinTeamScreen invitationId={invitationId} currentEmail={email} returnTo={returnTo} />;
   },
 });

@@ -15,7 +15,7 @@ import { ADMIN_SECONDARY_BUTTON_CLASS } from "../admin-styles";
 import type { TeammateSummary } from "./change-role-dialog";
 import { RoleBadge } from "./role-badge";
 import { lastSignInLabel } from "./team-labels";
-import { TEAM_GRID_CLASS, TEAM_ROW_CLASS } from "./team-styles";
+import { IDENTITY_TEXT_CLASS, TEAM_GRID_CLASS, TEAM_ROW_CLASS } from "./team-styles";
 
 const MENU_ITEM_CLASS = "min-h-12 text-base";
 
@@ -53,16 +53,16 @@ const Identity = ({
     <InitialsAvatar
       name={teammate.name}
       tone={teammate.role === "superadmin" ? "mint" : "slate"}
-      size="medium"
+      size="row"
     />
-    <span className="flex min-w-0 flex-col gap-0.5">
+    <span className={IDENTITY_TEXT_CLASS}>
       <span className="flex min-w-0 items-center gap-2">
-        <span className="truncate text-[15px] font-semibold lg:text-[13px]">{teammate.name}</span>
+        <span className="truncate text-[15px] font-bold lg:text-[13px]">{teammate.name}</span>
         <span className="lg:hidden">
           <RoleBadge role={teammate.role} />
         </span>
       </span>
-      <span className="truncate text-[13px] text-[#64748B] lg:text-[13px]">
+      <span className="truncate text-[13px] text-[#64748B]">
         <span className="lg:hidden">{subtitle}</span>
         <span className="hidden lg:inline">{teammate.email}</span>
       </span>
