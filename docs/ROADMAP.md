@@ -35,6 +35,7 @@ Dernière mise à jour : 2026-10-23.
 | Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification | ADR 0015                        |
 | E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                | ADR 0016                        |
 | Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                        | `auth-routes.ts`                |
+| Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                    | `lib/session.ts`                |
 
 ## Hors code (Quentin)
 

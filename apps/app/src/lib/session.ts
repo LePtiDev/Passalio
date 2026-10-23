@@ -27,6 +27,20 @@ export const requireSession = async (returnTo: string) => {
 
 export const COMPANY_SETUP_PATH = "/configuration/entreprise";
 
+const HOME_PATH = "/";
+
+export const requireSignedOut = async (returnTo?: string) => {
+  if ((await loadSession()) !== null) {
+    throw redirect({ to: returnTo ?? HOME_PATH });
+  }
+};
+
+const redirectPlatformAdmin = (role: string | null | undefined) => {
+  if (isPlatformRole(role)) {
+    throw redirect({ to: ADMIN_PATH });
+  }
+};
+
 const activateFirstOrganization = async (
   activeOrganizationId: string | null | undefined,
 ): Promise<string | null> => {
@@ -44,6 +58,7 @@ const activateFirstOrganization = async (
 
 export const loadOrganizationState = async (returnTo: string) => {
   const session = await requireSession(returnTo);
+  redirectPlatformAdmin(session.user.role);
   const organizationId = await activateFirstOrganization(session.session.activeOrganizationId);
   return { session, organizationId, hasOrganization: organizationId !== null };
 };
