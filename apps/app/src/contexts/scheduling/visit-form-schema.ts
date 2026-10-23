@@ -1,4 +1,5 @@
 import { TIME_OF_DAY_PATTERN, type InterventionFields } from "@passalio/shared";
+import { TRADE_IDS, visitDurationMinutes } from "@passalio/trades";
 import * as z from "zod";
 import { schedulingFr } from "./fr";
 
@@ -33,6 +34,8 @@ export const visitFormSchema = z.object({
   scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { error: errors.date }),
   startTime: z.string().regex(TIME_OF_DAY_PATTERN, { error: errors.time }),
   technicianUserId: z.string().min(1, { error: errors.technician }),
+  visitTypes: z.array(z.enum(TRADE_IDS)).min(1, { error: errors.visitType }).optional(),
+  durationMinutes: visitDurationMinutes.optional(),
   equipmentIds: z.array(z.string()),
   price: z.string().trim().refine(isPrice, { error: errors.price }),
   notes: z.string().trim().max(2000),
@@ -59,7 +62,8 @@ export const toInterventionFields = (values: VisitFormValues): InterventionField
   technicianUserId: values.technicianUserId,
   scheduledDate: values.scheduledDate,
   startTime: values.startTime,
-  durationMinutes: DEFAULT_DURATION_MINUTES,
+  durationMinutes: values.durationMinutes ?? DEFAULT_DURATION_MINUTES,
+  visitTypes: values.visitTypes ?? [],
   equipmentIds: values.equipmentIds,
   announcedPriceCents: priceCentsOf(values.price),
   notes: values.notes === "" ? null : values.notes,

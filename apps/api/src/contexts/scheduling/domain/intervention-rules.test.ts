@@ -6,6 +6,7 @@ import {
   canManageInterventionOf,
   cancellationChanges,
   checkEquipmentsAtPlace,
+  checkVisitTypes,
   completionChanges,
   newIntervention,
   plannedChanges,
@@ -185,5 +186,50 @@ describe("cancellationChanges", () => {
       isOk: false,
       error: "intervention_closed",
     });
+  });
+});
+
+describe("checkVisitTypes", () => {
+  it("accepts the trades as visit types", () => {
+    expect(checkVisitTypes(["chimney_sweeping", "septic_tank_emptying"])).toEqual({
+      isOk: true,
+      value: ["chimney_sweeping", "septic_tank_emptying"],
+    });
+  });
+
+  it("accepts an intervention without visit type", () => {
+    expect(checkVisitTypes([])).toEqual({ isOk: true, value: [] });
+  });
+
+  it("keeps a single copy of a visit type listed twice, in the order given", () => {
+    expect(checkVisitTypes(["stove_maintenance", "chimney_sweeping", "stove_maintenance"])).toEqual(
+      { isOk: true, value: ["stove_maintenance", "chimney_sweeping"] },
+    );
+  });
+
+  it.each([["plumbing"], ["chimney_sweeping", "plumbing"], [""], ["Chimney_sweeping"]])(
+    "refuses an unknown visit type in %j",
+    (...visitTypes) => {
+      expect(checkVisitTypes(visitTypes)).toEqual({ isOk: false, error: "invalid_visit_type" });
+    },
+  );
+});
+
+describe("newIntervention with visit types", () => {
+  it("keeps the visit types given", () => {
+    expect(
+      newIntervention(fields, {
+        id: "intervention-1",
+        organizationId: "organization-a",
+        createdByUserId: "user-secretary",
+        equipmentIds: ["equipment-1"],
+        visitTypes: ["chimney_sweeping", "boiler_maintenance"],
+        at: CREATED_AT,
+      }).visitTypes,
+    ).toEqual(["chimney_sweeping", "boiler_maintenance"]);
+  });
+
+  it("gives no visit type when none is given", () => {
+    expect(planned().visitTypes).toEqual([]);
   });
 });

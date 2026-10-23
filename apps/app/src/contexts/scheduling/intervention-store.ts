@@ -1,4 +1,5 @@
 import { newId, type InterventionFields } from "@passalio/shared";
+import { isVisitType } from "@passalio/trades";
 import type { LocalDatabase } from "@/lib/db/local-database";
 import type { InterventionRecord } from "@/lib/db/local-records";
 import { enqueue } from "@/lib/db/outbox";
@@ -25,6 +26,7 @@ export const localIntervention = (
   startTime: fields.startTime ?? null,
   durationMinutes: fields.durationMinutes,
   equipmentIds: [...fields.equipmentIds],
+  visitTypes: (fields.visitTypes ?? []).filter(isVisitType),
   announcedPriceCents: fields.announcedPriceCents ?? null,
   notes: fields.notes ?? null,
   status: "planned",

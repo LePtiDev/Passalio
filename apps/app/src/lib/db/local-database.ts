@@ -11,6 +11,7 @@ import type {
   SiteRecord,
   SyncRejection,
   SyncStateEntry,
+  VisitTypeRecord,
 } from "./local-records";
 
 export const LOCAL_DATABASE_PREFIX = "passalio-";
@@ -23,6 +24,7 @@ export class LocalDatabase extends Dexie {
   declare interventions: EntityTable<InterventionRecord, "id">;
   declare documents: EntityTable<DocumentRecord, "id">;
   declare members: EntityTable<MemberRecord, "userId">;
+  declare visitTypes: EntityTable<VisitTypeRecord, "type">;
   declare outbox: EntityTable<OutboxEntry, "seq">;
   declare pendingPhotos: EntityTable<PendingPhoto, "id">;
   declare rejections: EntityTable<SyncRejection, "id">;
@@ -45,6 +47,16 @@ export class LocalDatabase extends Dexie {
       documents: "id, interventionId, equipmentId",
       members: "userId",
     });
+    this.version(3)
+      .stores({ visitTypes: "type" })
+      .upgrade((transaction) =>
+        transaction
+          .table("interventions")
+          .toCollection()
+          .modify((intervention: { visitTypes?: unknown }) => {
+            intervention.visitTypes ??= [];
+          }),
+      );
   }
 }
 

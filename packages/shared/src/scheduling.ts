@@ -13,6 +13,8 @@ export const TIME_OF_DAY_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 export const MAX_INTERVENTION_EQUIPMENTS = 20;
 
+export const MAX_VISIT_TYPES = 10;
+
 const MAX_DURATION_MINUTES = 12 * 60;
 const MAX_PRICE_CENTS = 10_000_000;
 
@@ -25,6 +27,7 @@ export const interventionFields = z.object({
   scheduledDate: requiredCalendarDate,
   startTime: z.string().regex(TIME_OF_DAY_PATTERN).nullable().optional(),
   durationMinutes: z.int().min(5).max(MAX_DURATION_MINUTES),
+  visitTypes: z.array(z.string().min(1).max(40)).max(MAX_VISIT_TYPES).optional(),
   equipmentIds: z.array(z.uuid()).max(MAX_INTERVENTION_EQUIPMENTS),
   announcedPriceCents: priceCents,
   notes: optionalText(NOTES_MAX_LENGTH),

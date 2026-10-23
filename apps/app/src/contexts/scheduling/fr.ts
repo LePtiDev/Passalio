@@ -1,3 +1,5 @@
+import type { TradeId } from "@passalio/trades";
+
 const plural = (count: number, one: string, many: string) => `${count} ${count <= 1 ? one : many}`;
 
 const WHOLE_EUROS = new Intl.NumberFormat("fr-FR", {
@@ -10,6 +12,41 @@ const EUROS_AND_CENTS = new Intl.NumberFormat("fr-FR", { style: "currency", curr
 
 export const formatEuros = (cents: number) =>
   (cents % 100 === 0 ? WHOLE_EUROS : EUROS_AND_CENTS).format(cents / 100);
+
+export const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  if (hours === 0) {
+    return `${rest} min`;
+  }
+  return rest === 0 ? `${hours} h` : `${hours} h ${String(rest).padStart(2, "0")}`;
+};
+
+export const VISIT_TYPE_LABELS: Readonly<
+  Record<TradeId, { readonly label: string; readonly usual: string }>
+> = {
+  chimney_sweeping: { label: "Ramonage", usual: "d'un ramonage" },
+  stove_maintenance: { label: "Entretien de poêle", usual: "d'un entretien de poêle" },
+  boiler_maintenance: { label: "Entretien de chaudière", usual: "d'un entretien de chaudière" },
+  heat_pump_maintenance: {
+    label: "Entretien de pompe à chaleur",
+    usual: "d'un entretien de pompe à chaleur",
+  },
+  septic_tank_emptying: { label: "Vidange de fosse", usual: "d'une vidange de fosse" },
+};
+
+export const visitTypesLabel = (types: readonly TradeId[]) =>
+  types.map((type) => VISIT_TYPE_LABELS[type].label).join(", ");
+
+const lowerFirst = (value: string) => value.charAt(0).toLowerCase() + value.slice(1);
+
+const durationBreakdown = (parts: readonly { type: TradeId; minutes: number }[]) =>
+  `${parts
+    .map(({ type, minutes }, index) => {
+      const label = VISIT_TYPE_LABELS[type].label;
+      return `${index === 0 ? label : lowerFirst(label)} ${formatDuration(minutes)}`;
+    })
+    .join(" + ")}.`;
 
 export const schedulingFr = {
   planning: {
@@ -101,6 +138,8 @@ export const schedulingFr = {
     email: "Email",
     announcedPrice: "Prix annoncé",
     technician: "Technicien",
+    visitType: "Type de passage",
+    typeAndDuration: (types: string, duration: string) => `${types} · ${duration}`,
     fillCertificate: "Remplir le certificat",
     soon: "Bientôt",
     subtitle: (day: string, technician: string, equipments: number) =>
@@ -144,7 +183,25 @@ export const schedulingFr = {
     notesPlaceholder: "Ex. : prévoir le débistrage",
     created: "Passage ajouté au planning.",
     required: "obligatoire",
+    visitType: "Type de passage",
+    visitTypeHint: "Choisi d'après les appareils du client.",
+    visitTypeConfirm: "Valider",
+    visitTypePlaceholder: "Choisir le type",
+    visitTypeCount: (count: number) => `${count} types choisis`,
+    durationHint: (parts: readonly { type: TradeId; minutes: number }[]) => {
+      const [only] = parts;
+      if (only === undefined) {
+        return "Choisissez la durée prévue.";
+      }
+      return parts.length === 1
+        ? `Durée habituelle ${VISIT_TYPE_LABELS[only.type].usual}. Vous pouvez la changer.`
+        : durationBreakdown(parts);
+    },
+    durationChanged: (usual: number) =>
+      `Modifiée pour ce passage. Habituellement ${formatDuration(usual)}.`,
+    durationReset: (usual: number) => `Remettre ${formatDuration(usual)}`,
     errors: {
+      visitType: "Choisissez le type de passage.",
       customer: "Choisissez le client.",
       site: "Choisissez le lieu.",
       date: "Indiquez la date.",
@@ -153,13 +210,28 @@ export const schedulingFr = {
       price: "Indiquez un prix valide, par exemple 75.",
       saveFailed: "Le passage n'a pas pu être enregistré sur ce téléphone.",
     },
-    durations: [
-      { minutes: 30, label: "30 min" },
-      { minutes: 45, label: "45 min" },
-      { minutes: 60, label: "1 h" },
-      { minutes: 90, label: "1 h 30" },
-      { minutes: 120, label: "2 h" },
-      { minutes: 180, label: "3 h" },
-    ],
+  },
+  visitTypes: {
+    title: "Types de passage",
+    subtitle: "Durées par défaut",
+    backToSettings: "Retour aux réglages",
+    settings: "Réglages",
+    intro:
+      "La durée choisie ici remplit le champ Durée d'un nouveau passage. On peut toujours la changer pour un passage.",
+    footnote:
+      "Les types suivent les métiers de votre entreprise (Réglages › Entreprise). Les passages déjà prévus gardent leur durée.",
+    defaultDuration: (duration: string) => `Durée par défaut : ${duration}`,
+    sheetText: "Durée par défaut d'un passage de ce type.",
+    decrease: "Réduire de 15 minutes",
+    increase: "Augmenter de 15 minutes",
+    stepHint: "Par pas de 15 minutes, de 15 min à 8 h.",
+    save: "Enregistrer",
+    saved: "Durée enregistrée. Elle s'applique aux prochains passages.",
+    saveFailed: "La durée n'a pas pu être enregistrée. Réessayez.",
+    loadFailed:
+      "Impossible de récupérer les types de passage. Vérifiez votre connexion puis réessayez.",
+    loading: "Chargement des types de passage",
+    emptyTitle: "Aucun type de passage",
+    emptyText: "Choisissez les métiers de votre entreprise pour régler leurs durées.",
   },
 } as const;

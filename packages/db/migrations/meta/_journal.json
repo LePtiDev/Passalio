@@ -99,6 +99,13 @@
       "when": 1792790508268,
       "tag": "0013_plate_readings",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1792794965259,
+      "tag": "0014_visit_types",
+      "breakpoints": true
     }
   ]
 }

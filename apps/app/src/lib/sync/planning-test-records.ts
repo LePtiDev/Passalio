@@ -23,6 +23,7 @@ export const serverInterventionRecord = (
   startTime: "09:00",
   durationMinutes: 60,
   equipmentIds: [],
+  visitTypes: [],
   announcedPriceCents: null,
   notes: null,
   status: "planned",

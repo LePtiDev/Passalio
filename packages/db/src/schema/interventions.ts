@@ -1,4 +1,5 @@
 import { INTERVENTION_STATUSES, PAYMENT_METHODS } from "@passalio/shared";
+import type { TradeId } from "@passalio/trades";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { idColumn, organizationIdColumn, syncedTimestampColumns } from "../columns";
 import { customers, sites } from "./customers";
@@ -21,6 +22,7 @@ export const interventions = sqliteTable(
     scheduledDate: text("scheduled_date").notNull(),
     startTime: text("start_time"),
     durationMinutes: integer("duration_minutes").notNull(),
+    visitTypes: text("visit_types", { mode: "json" }).$type<TradeId[]>().notNull().default([]),
     equipmentIds: text("equipment_ids", { mode: "json" }).$type<string[]>().notNull(),
     announcedPriceCents: integer("announced_price_cents"),
     notes: text("notes"),

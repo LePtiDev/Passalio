@@ -4,6 +4,7 @@ import {
   ORGANIZATION_ROLES,
   PAYMENT_METHODS,
 } from "@passalio/shared";
+import { TRADE_IDS } from "@passalio/trades";
 import * as z from "zod";
 import { nullableText, synced } from "./local-records";
 
@@ -16,6 +17,7 @@ export const interventionRecord = z.object({
   startTime: nullableText,
   durationMinutes: z.number(),
   equipmentIds: z.array(z.string()),
+  visitTypes: z.array(z.enum(TRADE_IDS)).default([]),
   announcedPriceCents: z.number().nullable(),
   notes: nullableText,
   status: z.enum(INTERVENTION_STATUSES),
@@ -46,6 +48,12 @@ export const memberRecord = z.object({
   role: z.enum(ORGANIZATION_ROLES),
 });
 
+export const visitTypeRecord = z.object({
+  type: z.enum(TRADE_IDS),
+  minutes: z.number(),
+});
+
 export type InterventionRecord = z.infer<typeof interventionRecord>;
 export type DocumentRecord = z.infer<typeof documentRecord>;
 export type MemberRecord = z.infer<typeof memberRecord>;
+export type VisitTypeRecord = z.infer<typeof visitTypeRecord>;

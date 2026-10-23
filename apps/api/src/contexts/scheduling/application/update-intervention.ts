@@ -2,6 +2,7 @@ import { err, ok, type Actor, type InterventionChanges, type Result } from "@pas
 import {
   assertCanManageInterventionOf,
   checkEquipmentsAtPlace,
+  checkVisitTypes,
   plannedChanges,
 } from "../domain/intervention-rules";
 import type { SchedulingDependencies } from "../domain/scheduling-ports";
@@ -50,6 +51,13 @@ export const updateIntervention =
     if (!equipmentIds.isOk) {
       return equipmentIds;
     }
+    const visitTypes =
+      input.changes.visitTypes === undefined
+        ? ok(undefined)
+        : checkVisitTypes(input.changes.visitTypes);
+    if (!visitTypes.isOk) {
+      return visitTypes;
+    }
     const changes = plannedChanges(current, input.changes, now());
     if (!changes.isOk) {
       return changes;
@@ -57,6 +65,7 @@ export const updateIntervention =
     await interventions.update(actor.organizationId, current.id, {
       ...changes.value,
       ...(equipmentIds.value === undefined ? {} : { equipmentIds: equipmentIds.value }),
+      ...(visitTypes.value === undefined ? {} : { visitTypes: visitTypes.value }),
     });
     return ok(undefined);
   };

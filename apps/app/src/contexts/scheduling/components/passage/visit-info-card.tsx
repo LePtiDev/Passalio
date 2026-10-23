@@ -1,7 +1,16 @@
-import { Euro, KeyRound, Mail, MapPin, Phone, UserRound, type LucideIcon } from "lucide-react";
+import {
+  Euro,
+  KeyRound,
+  Mail,
+  MapPin,
+  Phone,
+  Timer,
+  UserRound,
+  type LucideIcon,
+} from "lucide-react";
 import { CARD_CLASS, fullAddressOf } from "@/contexts/customers";
 import { cn } from "@/lib/utils";
-import { formatEuros, schedulingFr } from "../../fr";
+import { formatDuration, formatEuros, schedulingFr, visitTypesLabel } from "../../fr";
 import type { VisitFile } from "../../hooks/use-visit";
 
 const text = schedulingFr.visit;
@@ -32,6 +41,17 @@ export const VisitInfoCard = ({
         intervention.announcedPriceCents === null
           ? null
           : formatEuros(intervention.announcedPriceCents),
+    },
+    {
+      icon: Timer,
+      label: text.visitType,
+      value:
+        intervention.visitTypes.length === 0
+          ? null
+          : text.typeAndDuration(
+              visitTypesLabel(intervention.visitTypes),
+              formatDuration(intervention.durationMinutes),
+            ),
     },
     {
       icon: UserRound,

@@ -102,7 +102,12 @@ export const outboxEntry = z.object({
 
 export type OutboxEntry = z.infer<typeof outboxEntry>;
 
-export type { DocumentRecord, InterventionRecord, MemberRecord } from "./planning-records";
+export type {
+  DocumentRecord,
+  InterventionRecord,
+  MemberRecord,
+  VisitTypeRecord,
+} from "./planning-records";
 
 export type PendingPhoto = {
   readonly id: string;

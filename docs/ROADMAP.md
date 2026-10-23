@@ -50,6 +50,7 @@ Dernière mise à jour : 2026-10-23.
 | Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois                                       | ADR 0021                         |
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                                                                   | `contexts/scheduling` (app)      |
+| Types de passage : durée par défaut par métier dans Réglages, type et durée modifiable sur le nouveau passage                                                                 | `contexts/scheduling`            |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
 
 ## Hors code (Quentin)
@@ -99,7 +100,9 @@ Dernière mise à jour : 2026-10-23.
 - [x] Passages et certificats, données : tables, synchronisation, numérotation par blocs de 20, certificat immuable (ADR 0021)
 - [x] Planning, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, fiche passage
 - [ ] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé, historique sur la fiche client
-- [ ] Planning : modifier un passage (date, heure, technicien), choisir sa durée, le marquer terminé sans certificat
+- [x] Types de passage : durée par défaut par métier (Réglages › Types de passage), type et durée modifiable sur le nouveau passage (maquette validée le 2026-10-23)
+- [ ] Planning : modifier un passage (date, heure, technicien, type, durée), le marquer terminé sans certificat
+- [ ] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable
 - [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
 - [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
