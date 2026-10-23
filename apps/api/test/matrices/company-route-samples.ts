@@ -1,4 +1,4 @@
-import { syncPushBody } from "@passalio/shared";
+import { reserveNumberBlockBody, syncPushBody } from "@passalio/shared";
 import {
   addEquipmentBody,
   addSiteBody,
@@ -58,6 +58,10 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
   "GET /api/organization/logo": () => read("/api/organization/logo"),
   "POST /api/organization/onboarding-completion": () =>
     withoutBody("POST", "/api/organization/onboarding-completion"),
+  "POST /api/document-number-blocks": () =>
+    withJson("POST", "/api/document-number-blocks", reserveNumberBlockBody, {
+      deviceId: crypto.randomUUID(),
+    }),
   "GET /api/customers": () => read("/api/customers"),
   "POST /api/customers": () =>
     withJson("POST", "/api/customers", createCustomerBody, {

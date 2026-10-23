@@ -22,7 +22,9 @@ const fileResponse = z.object({
 
 const SUPPORT_EMAIL = "support-impersonation@passalio.com";
 
-const WRITE_ROUTES = SESSION_ROUTES.filter(isWriteRoute);
+const WRITE_ROUTES = SESSION_ROUTES.filter(
+  (route) => isWriteRoute(route) && route.access !== "platform",
+);
 const MEMBER_READ_ROUTES = MEMBER_ROUTES.filter((route) => !isWriteRoute(route));
 const PLATFORM_READ_ROUTES = PLATFORM_ROUTES.filter((route) => !isWriteRoute(route));
 
