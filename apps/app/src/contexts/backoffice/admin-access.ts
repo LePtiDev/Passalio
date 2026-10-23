@@ -1,3 +1,4 @@
+import { PLATFORM_ROLE_PERMISSIONS, type PlatformRole } from "@passalio/shared";
 import { backofficeApi, type PlatformAdmin } from "./backoffice-api";
 
 type AdminDenial = "hidden" | "setup" | "code" | "unavailable";
@@ -19,3 +20,6 @@ export const loadAdminAccess = async (): Promise<AdminAccess> => {
   }
   return { status: DENIALS.get(result.error.code) ?? "unavailable" };
 };
+
+export const canSeePlatform = (role: PlatformRole) =>
+  PLATFORM_ROLE_PERMISSIONS[role].has("platform:read");

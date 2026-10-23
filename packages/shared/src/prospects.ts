@@ -51,6 +51,7 @@ export const prospectCompanyFields = z.object({
   website: optionalText(200),
   activity: optionalText(300),
   headcount: optionalText(60),
+  currentTool: optionalText(120),
   notes: optionalText(PROSPECT_NOTE_MAX_LENGTH),
 });
 

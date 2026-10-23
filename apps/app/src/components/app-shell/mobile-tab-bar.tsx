@@ -8,6 +8,11 @@ const TAB_CLASS =
 
 const ACTIVE_TAB_CLASS = "font-bold text-[#0F2A44]";
 
+const COLUMNS_CLASS: ReadonlyMap<number, string> = new Map([
+  [3, "grid-cols-3"],
+  [4, "grid-cols-4"],
+]);
+
 const selectPathname = (state: { readonly location: { readonly pathname: string } }) =>
   state.location.pathname;
 
@@ -52,7 +57,10 @@ export const MobileTabBar = ({
   return (
     <nav
       aria-label={label}
-      className="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-[#E3E8EF] bg-white px-2 pt-1.5 pb-[max(14px,env(safe-area-inset-bottom))] lg:hidden"
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-10 grid border-t border-[#E3E8EF] bg-white px-2 pt-1.5 pb-[max(14px,env(safe-area-inset-bottom))] lg:hidden",
+        COLUMNS_CLASS.get(items.length) ?? "grid-cols-4",
+      )}
     >
       {items.map((item) => (
         <Tab key={item.label} item={item} pathname={pathname} />

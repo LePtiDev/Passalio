@@ -20,6 +20,7 @@ export type ProspectCompany = {
   readonly website: string | null;
   readonly activity: string | null;
   readonly headcount: string | null;
+  readonly currentTool: string | null;
   readonly foundedOn: string | null;
   readonly registryStatus: string | null;
   readonly notes: string | null;

@@ -1,0 +1,1 @@
+ALTER TABLE `prospect_companies` ADD `current_tool` text;

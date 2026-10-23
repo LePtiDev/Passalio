@@ -174,9 +174,10 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 
 ### Prospection (contexte `sales`, ADR 0017)
 
-- Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
+- Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, outil actuel `current_tool`, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
 - Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `support`, `sales`).
 - Routes sous `/api/admin/prospects` : `GET /filters` (départements, personnes de l'équipe), `GET /map?department=&stage=`, `GET` et `POST /companies` (`stage`, `department`, `owner`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /companies/:companyId`, `POST /companies/:companyId/stage`, `/notes`, `/contacts`, `GET /contacts` (`filter=all|leaders|no_phone`, `department`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /contacts/:contactId`. Réponses décrites par `packages/shared/src/prospect-responses.ts`.
+- Écrans (espace admin, `apps/app/src/contexts/sales/`) : `/admin/entreprises?etape=&departement=&suivi=&recherche=`, `/admin/entreprises/:companyId`, `/admin/contacts?onglet=&departement=&recherche=`, `/admin/contacts/:contactId`. Onglets par étape, filtres actifs à gauche, recherche et menu « Filtres » à droite. Le rôle `sales`, sans `platform:read`, ne voit que Commercial : les pages Plateforme le renvoient vers `/admin/entreprises`.
 - Import : `pnpm prospects:import --env <local|staging|production> --file <csv>` (géocodage IGN, relançable sans perdre étapes et notes).
 
 ### Hors ligne et synchronisation (ADR 0003 et 0014)

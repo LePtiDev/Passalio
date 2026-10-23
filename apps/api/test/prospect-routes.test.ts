@@ -120,6 +120,7 @@ describe("prospect companies", () => {
       { code: "75", count: 1 },
       { code: "94", count: 2 },
     ]);
+    expect(filters.totals.companies).toBe(3);
     const assigned = await send(admin, `/companies/${gazHop.id}`, "PATCH", {
       ownerUserId: antho?.id,
     });
