@@ -11,9 +11,11 @@ import { createTraceRecorder } from "@/lib/auth-errors";
 import { toastApiError } from "@/lib/errors";
 import { RESET_PASSWORD_PATH, SIGN_IN_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
+import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AuthHeading } from "./auth-heading";
 import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
+import { TurnstileSlot } from "./turnstile-slot";
 
 const text = identityFr.forgotPassword;
 
@@ -33,18 +35,25 @@ const BackToSignIn = () => (
 
 export const ForgotPasswordForm = () => {
   const [isSent, setIsSent] = useState(false);
+  const turnstile = useTurnstile();
   const form = useForm<ForgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   });
 
   const submit = form.handleSubmit(async ({ email }) => {
+    const headers = await turnstile.captchaHeaders();
+    if (headers === null) {
+      toastApiError({ code: "captcha_failed", traceId: null });
+      return;
+    }
     const trace = createTraceRecorder();
     const { error } = await authClient.requestPasswordReset(
       { email, redirectTo: `${window.location.origin}${RESET_PASSWORD_PATH}` },
-      { onResponse: trace.onResponse },
+      { headers, onResponse: trace.onResponse },
     );
     if (error) {
+      turnstile.reset();
       toastApiError(trace.toApiError(error));
       return;
     }
@@ -80,9 +89,15 @@ export const ForgotPasswordForm = () => {
           {...form.register("email")}
         />
       </AuthField>
-      <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
-        {isSubmitting ? text.submitting : text.submit}
-      </Button>
+      <div className="flex flex-col">
+        <TurnstileSlot
+          containerRef={turnstile.containerRef}
+          isInteractive={turnstile.isInteractive}
+        />
+        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+          {isSubmitting ? text.submitting : text.submit}
+        </Button>
+      </div>
       <BackToSignIn />
     </form>
   );

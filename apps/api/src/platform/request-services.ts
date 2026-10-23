@@ -16,6 +16,7 @@ export const requestServicesMiddleware = createMiddleware<AppEnv>(async (context
     secret: context.env.BETTER_AUTH_SECRET,
     baseUrl: context.env.BETTER_AUTH_URL,
     appUrl: context.env.APP_URL,
+    turnstileSecretKey: context.env.TURNSTILE_SECRET_KEY,
   });
   context.set("database", database);
   context.set("auditTrail", auditTrail);

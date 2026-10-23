@@ -8,6 +8,8 @@ const AUTH_ERROR_CODES: ReadonlyMap<string, string> = new Map([
   ["USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL", "email_already_used"],
   ["PASSWORD_TOO_SHORT", "weak_password"],
   ["INVALID_TOKEN", "invalid_reset_token"],
+  ["VERIFICATION_FAILED", "captcha_failed"],
+  ["MISSING_RESPONSE", "captcha_failed"],
 ]);
 
 export type AuthClientError = {

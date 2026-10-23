@@ -3,7 +3,7 @@ import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, newId, TERMS_VERSION } from "
 import { betterAuth } from "better-auth";
 import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, magicLink, organization } from "better-auth/plugins";
+import { admin, captcha, magicLink, organization } from "better-auth/plugins";
 import type { AuditTrail } from "./audit-trail";
 import type { Database } from "./database";
 import type { EmailSender } from "./email";
@@ -27,6 +27,12 @@ const RATE_LIMIT_RULES = {
   "/reset-password": { window: MINUTE_IN_SECONDS, max: 5 },
 } as const;
 
+export const CAPTCHA_PROTECTED_PATHS = [
+  "/sign-up/email",
+  "/sign-in/email",
+  "/request-password-reset",
+] as const;
+
 const withAcceptedTerms = <User extends Readonly<Record<string, unknown>>>(user: User) => {
   if (user["termsVersion"] !== TERMS_VERSION) {
     throw new APIError("BAD_REQUEST", { code: "TERMS_NOT_ACCEPTED" });
@@ -41,6 +47,7 @@ export type AuthDependencies = {
   readonly secret: string;
   readonly baseUrl: string;
   readonly appUrl: string;
+  readonly turnstileSecretKey: string;
 };
 
 export const createAuth = ({
@@ -50,6 +57,7 @@ export const createAuth = ({
   secret,
   baseUrl,
   appUrl,
+  turnstileSecretKey,
 }: AuthDependencies) =>
   betterAuth({
     appName: "Passalio",
@@ -110,6 +118,11 @@ export const createAuth = ({
       },
     },
     plugins: [
+      captcha({
+        provider: "cloudflare-turnstile",
+        secretKey: turnstileSecretKey,
+        endpoints: [...CAPTCHA_PROTECTED_PATHS],
+      }),
       magicLink({
         expiresIn: MAGIC_LINK_LIFETIME_SECONDS,
         storeToken: "hashed",

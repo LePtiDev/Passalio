@@ -11,6 +11,7 @@ import { createTraceRecorder } from "@/lib/auth-errors";
 import { toastApiError } from "@/lib/errors";
 import { SIGN_IN_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
+import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AcceptTermsLabel } from "./accept-terms-label";
 import { AuthHeading } from "./auth-heading";
@@ -19,6 +20,7 @@ import { CheckboxField } from "./checkbox-field";
 import { PasswordInput } from "./password-input";
 import { newPasswordSchema } from "./password-schema";
 import { PasswordStrengthMeter } from "./password-strength-meter";
+import { TurnstileSlot } from "./turnstile-slot";
 
 const text = identityFr.signUp;
 
@@ -45,6 +47,7 @@ const ACCEPT_TERMS_LABEL = <AcceptTermsLabel />;
 
 export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
   const navigate = useNavigate();
+  const turnstile = useTurnstile();
   const form = useForm<SignUpInput, unknown, SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -57,12 +60,18 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
   });
 
   const submit = form.handleSubmit(async ({ firstName, lastName, email, password }) => {
+    const headers = await turnstile.captchaHeaders();
+    if (headers === null) {
+      toastApiError({ code: "captcha_failed", traceId: null });
+      return;
+    }
     const trace = createTraceRecorder();
     const { error } = await authClient.signUp.email(
       { name: `${firstName} ${lastName}`, email, password, termsVersion: TERMS_VERSION },
-      { onResponse: trace.onResponse },
+      { headers, onResponse: trace.onResponse },
     );
     if (error) {
+      turnstile.reset();
       toastApiError(trace.toApiError(error));
       return;
     }
@@ -146,9 +155,15 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
           label={ACCEPT_TERMS_LABEL}
           error={errors.hasAcceptedTerms?.message}
         />
-        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
-          {isSubmitting ? text.submitting : text.submit}
-        </Button>
+        <div className="flex flex-col">
+          <TurnstileSlot
+            containerRef={turnstile.containerRef}
+            isInteractive={turnstile.isInteractive}
+          />
+          <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+            {isSubmitting ? text.submitting : text.submit}
+          </Button>
+        </div>
       </div>
       <p className="text-center text-sm text-muted-foreground lg:text-[13px]">
         {text.hasAccount}{" "}
