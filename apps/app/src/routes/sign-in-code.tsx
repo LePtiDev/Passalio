@@ -1,7 +1,7 @@
 import { createRoute } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { AuthLayout, TwoFactorCodeForm, twoFactorFr } from "@/contexts/identity";
-import { SIGN_IN_CODE_PATH } from "@/lib/session";
+import { requireSignedOut, SIGN_IN_CODE_PATH } from "@/lib/session";
 import { returnToSearch } from "./return-to-search";
 import { rootRoute } from "./root";
 
@@ -9,6 +9,7 @@ export const signInCodeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: SIGN_IN_CODE_PATH,
   validateSearch: returnToSearch,
+  beforeLoad: ({ search }) => requireSignedOut(search.retour),
   component: function SignInCodeScreen() {
     const { retour } = signInCodeRoute.useSearch();
     const navigate = signInCodeRoute.useNavigate();
