@@ -258,3 +258,19 @@ describe("TeamScreen pending tab", () => {
     );
   });
 });
+
+describe("TeamScreen company error", () => {
+  it("shows the short trace id when the company cannot be loaded", async () => {
+    installFakeApi({
+      ...baseRoutes(),
+      [ORGANIZATION_ROUTE]: errorReply("internal", TRACE_ID),
+      [MEMBERS_ROUTE]: membersReply(teamSeenBy("owner")),
+    });
+
+    renderTeam();
+    await membersList();
+
+    expect(await screen.findByText(fr.errors.code(SHORT_TRACE_ID))).toBeVisible();
+    expect(screen.queryByText(text.subtitle(""))).not.toBeInTheDocument();
+  });
+});
