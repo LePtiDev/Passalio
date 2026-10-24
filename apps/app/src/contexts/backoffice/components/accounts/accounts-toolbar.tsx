@@ -8,8 +8,8 @@ import { backofficeFr } from "../../fr";
 const text = backofficeFr.accounts;
 
 const BADGE_CLASS: Readonly<Record<AccountFilter, string>> = {
-  all: "text-[#64748B] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
-  trial: "text-[#64748B] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
+  all: "text-[#475569] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
+  trial: "text-[#475569] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
   dropping: "bg-[#FEF3E2] text-[#B45309]",
 };
 
