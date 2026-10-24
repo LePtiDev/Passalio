@@ -1,12 +1,13 @@
 import type { Variables } from "../../../env";
 import type { SchedulingDependencies } from "../domain/scheduling-ports";
-import type { VisitTypeDependencies } from "../domain/visit-type-ports";
-import { createD1VisitTypeSettings } from "../infrastructure/d1-visit-type-settings";
+import type { ServiceDependencies } from "../domain/service-models";
+import { createD1ServiceRepository } from "../infrastructure/d1-service-repository";
 import { createSchedulingDependencies } from "../infrastructure/scheduling-dependencies";
 
 export const schedulingDependencies = (variables: Variables): SchedulingDependencies =>
   createSchedulingDependencies(variables.database);
 
-export const visitTypeDependencies = (variables: Variables): VisitTypeDependencies => ({
-  settings: createD1VisitTypeSettings(variables.database),
+export const serviceDependencies = (variables: Variables): ServiceDependencies => ({
+  services: createD1ServiceRepository(variables.database),
+  now: () => new Date(),
 });

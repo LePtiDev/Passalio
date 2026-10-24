@@ -106,7 +106,7 @@ export type {
   DocumentRecord,
   InterventionRecord,
   MemberRecord,
-  VisitTypeRecord,
+  ServiceRecord,
 } from "./planning-records";
 
 export type PendingPhoto = {

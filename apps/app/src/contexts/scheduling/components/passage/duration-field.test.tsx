@@ -2,15 +2,27 @@ import { GlobalRegistrator } from "@happy-dom/global-registrator";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { VisitTypeRecord } from "@/lib/db/local-records";
+import type { ServiceRecord } from "@/lib/db/local-records";
 import { DurationField } from "./duration-field";
+
+const serviceOf = (name: string, durationMinutes: number): ServiceRecord => ({
+  id: `service-${name}`,
+  name,
+  durationMinutes,
+  priceCents: null,
+  document: "none",
+  trade: null,
+});
+
+const sweeping = serviceOf("Ramonage", 60);
+const stove = serviceOf("Entretien poêle", 90);
 
 let root: Root;
 let container: HTMLDivElement;
 
 const render = async (
   minutes: number,
-  chosen: readonly VisitTypeRecord[],
+  chosen: readonly ServiceRecord[],
   onChange: (minutes: number) => void = () => undefined,
 ) => {
   await act(async () => {
@@ -47,30 +59,27 @@ afterEach(async () => {
 
 describe("DurationField", () => {
   it("is a required field", async () => {
-    await render(90, [{ type: "stove_maintenance", minutes: 90 }]);
+    await render(90, [stove]);
     const trigger = container.querySelector("#visit-duration");
     expect(trigger?.getAttribute("aria-required")).toBe("true");
     expect(container.textContent).toContain("Durée");
     expect(container.textContent).toContain("*");
   });
 
-  it("names the usual duration of a single type", async () => {
-    await render(60, [{ type: "chimney_sweeping", minutes: 60 }]);
-    expect(hintText()).toBe("Durée habituelle d'un ramonage. Vous pouvez la changer.");
+  it("names the usual duration of a single service", async () => {
+    await render(60, [sweeping]);
+    expect(hintText()).toBe("Durée habituelle : 1 h. Vous pouvez la changer.");
     expect(buttonNamed("Remettre 1 h")).toBeUndefined();
   });
 
-  it("details the durations of several types", async () => {
-    await render(150, [
-      { type: "chimney_sweeping", minutes: 60 },
-      { type: "stove_maintenance", minutes: 90 },
-    ]);
-    expect(hintText()).toBe("Ramonage 1 h + entretien de poêle 1 h 30.");
+  it("details the durations of several services", async () => {
+    await render(150, [sweeping, stove]);
+    expect(hintText()).toBe("Ramonage 1 h + entretien poêle 1 h 30.");
   });
 
   it("tells a duration changed by hand and restores the usual one", async () => {
     const onChange = vi.fn<(minutes: number) => void>();
-    await render(105, [{ type: "chimney_sweeping", minutes: 60 }], onChange);
+    await render(105, [sweeping], onChange);
     expect(hintText()).toContain("Modifiée pour ce passage. Habituellement 1 h.");
     const reset = buttonNamed("Remettre 1 h");
     expect(reset).toBeDefined();
@@ -80,16 +89,9 @@ describe("DurationField", () => {
     expect(onChange).toHaveBeenCalledWith(60);
   });
 
-  it("restores the sum of several types", async () => {
+  it("restores the sum of several services", async () => {
     const onChange = vi.fn<(minutes: number) => void>();
-    await render(
-      60,
-      [
-        { type: "chimney_sweeping", minutes: 60 },
-        { type: "stove_maintenance", minutes: 90 },
-      ],
-      onChange,
-    );
+    await render(60, [sweeping, stove], onChange);
     expect(hintText()).toContain("Modifiée pour ce passage. Habituellement 2 h 30.");
     await act(async () => {
       buttonNamed("Remettre 2 h 30")?.click();
@@ -98,34 +100,27 @@ describe("DurationField", () => {
   });
 
   it("does not call a duration capped at 8 hours a change made by hand", async () => {
-    await render(480, [
-      { type: "chimney_sweeping", minutes: 300 },
-      { type: "heat_pump_maintenance", minutes: 300 },
-    ]);
+    await render(480, [serviceOf("Tubage", 300), serviceOf("Entretien PAC", 300)]);
     expect(hintText()).not.toContain("Modifiée pour ce passage");
     expect(buttonNamed("Remettre 10 h")).toBeUndefined();
   });
 
+  it("does not call 8 hours a change made by hand for a service of several days", async () => {
+    await render(480, [serviceOf("Tubage", 2880)]);
+    expect(hintText()).toBe("Durée habituelle : 2 jours. Vous pouvez la changer.");
+  });
+
   it("never restores a duration longer than 8 hours", async () => {
     const onChange = vi.fn<(minutes: number) => void>();
-    await render(
-      240,
-      [
-        { type: "chimney_sweeping", minutes: 300 },
-        { type: "heat_pump_maintenance", minutes: 300 },
-      ],
-      onChange,
-    );
-    const reset = [...container.querySelectorAll("button")].find((button) =>
-      button.textContent?.startsWith("Remettre"),
-    );
+    await render(240, [serviceOf("Tubage", 2880), stove], onChange);
+    expect(hintText()).toContain("Habituellement 8 h.");
     await act(async () => {
-      reset?.click();
+      buttonNamed("Remettre 8 h")?.click();
     });
     expect(onChange).toHaveBeenCalledWith(480);
   });
 
-  it("asks to choose the duration when no type is chosen", async () => {
+  it("asks to choose the duration when no service is chosen", async () => {
     await render(60, []);
     expect(hintText()).toBe("Choisissez la durée prévue.");
   });
