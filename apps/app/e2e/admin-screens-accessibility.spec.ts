@@ -56,6 +56,10 @@ const CASES: readonly (readonly [AdminScreenName, CheckName])[] = [
   ["overview", "touch targets of at least 48 px on mobile"],
   ["journal", "touch targets of at least 48 px on mobile"],
   ["prospect company file", "touch targets of at least 48 px on mobile"],
+  ["overview", "no serious accessibility violation on desktop"],
+  ["customer account file", "no serious accessibility violation on desktop"],
+  ["journal", "no serious accessibility violation on desktop"],
+  ["Passalio team", "no serious accessibility violation on desktop"],
 ];
 
 for (const [screen, checkName] of CASES) {
