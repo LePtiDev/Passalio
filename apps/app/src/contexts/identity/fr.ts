@@ -44,7 +44,7 @@ export const identityFr = {
         text: "Dans la cave ou sur le toit, tout se synchronise au retour.",
       },
     ],
-    pricing: "29,99 € par mois, utilisateurs illimités, sans engagement.",
+    pricing: "Dès 29 € HT par mois, sans engagement.",
   },
   fields: {
     emailLabel: "Adresse email",
