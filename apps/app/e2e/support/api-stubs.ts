@@ -73,3 +73,18 @@ export const holdApi = async (
     heldRequests: () => held,
   };
 };
+
+export const respondWithJson = async (
+  page: Page,
+  matcher: ApiMatcher,
+  body: unknown,
+  method: HttpMethod = "GET",
+) => {
+  await page.route(matcher, async (route) => {
+    if (route.request().method() !== method) {
+      await route.fallback();
+      return;
+    }
+    await route.fulfill({ status: 200, json: body });
+  });
+};
