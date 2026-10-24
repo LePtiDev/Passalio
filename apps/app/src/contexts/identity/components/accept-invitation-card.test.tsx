@@ -85,3 +85,24 @@ describe("AcceptInvitationCard", () => {
     expect(api.requestsTo(SET_ACTIVE_ORGANIZATION_ROUTE)).toHaveLength(0);
   });
 });
+
+describe("AcceptInvitationCard repeated clicks", () => {
+  afterEach(forgetToasts);
+
+  it("accepts the invitation only once when the button is clicked twice", async () => {
+    const accept = heldReply(jsonReply({ memberId: "member-9" }));
+    const api = installFakeApi({
+      ...signedOutRoutes(),
+      [ACCEPT_ROUTE]: accept.reply,
+      [SET_ACTIVE_ORGANIZATION_ROUTE]: jsonReply({ id: "organization-2" }),
+    });
+    const { user, router } = renderCard();
+
+    await user.click(await screen.findByRole("button", { name: text.accept }));
+    await user.click(await screen.findByRole("button", { name: text.accepting }));
+    accept.release();
+
+    await waitFor(() => expect(router.state.location.pathname).toBe("/equipe"));
+    expect(api.requestsTo(ACCEPT_ROUTE)).toHaveLength(1);
+  });
+});

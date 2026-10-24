@@ -157,3 +157,35 @@ describe("DocumentsStep", () => {
     expect(screen.getByText(text.logoAction)).toBeVisible();
   });
 });
+
+describe("DocumentsStep logo limits", () => {
+  afterEach(forgetToasts);
+
+  it("accepts a logo of exactly 2 MB", async () => {
+    const api = installDocuments();
+    const { user } = renderDocuments();
+
+    await user.upload(
+      await screen.findByLabelText(new RegExp(text.logoAction)),
+      logoFile(LOGO_MAX_BYTES),
+    );
+
+    expect(await screen.findByText(text.logoReplace)).toBeVisible();
+    expect(screen.queryByText(text.logoTooBig)).not.toBeInTheDocument();
+    expect(api.requestsTo(LOGO_ROUTE)).toHaveLength(1);
+  });
+
+  it("does not send a file that is not an image", async () => {
+    const api = installDocuments();
+    const { user } = renderDocuments();
+
+    await user.upload(
+      await screen.findByLabelText(new RegExp(text.logoAction)),
+      new File([new Uint8Array(1024)], "devis.pdf", { type: "application/pdf" }),
+    );
+
+    expect(screen.getByText(text.logoAction)).toBeVisible();
+    expect(screen.queryByText(text.logoUploading)).not.toBeInTheDocument();
+    expect(api.requestsTo(LOGO_ROUTE)).toHaveLength(0);
+  });
+});

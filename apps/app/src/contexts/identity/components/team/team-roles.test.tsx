@@ -174,3 +174,95 @@ describe("TeamScreen actions by role", () => {
     expect(screen.queryByRole("button", { name: pendingText.resend })).toBeNull();
   });
 });
+
+const waitForActor = () => screen.findByText(text.you);
+
+describe("TeamScreen actions once the role is known", () => {
+  it.each<OrganizationRole>(["secretary", "technician"])(
+    "a %s whose role is loaded sees no invite, role or member action",
+    async (role) => {
+      installTeam(role);
+      renderTeam();
+      await waitForMembers();
+      await waitForActor();
+
+      expect(screen.queryByRole("button", { name: identityFr.invite.title })).toBeNull();
+      for (const member of Object.values(TEAM)) {
+        expect(screen.queryByRole("button", { name: text.roleLabel(member.name) })).toBeNull();
+        expect(screen.queryByRole("button", { name: text.actionsFor(member.name) })).toBeNull();
+      }
+    },
+  );
+
+  it.each<OrganizationRole>(["secretary", "technician"])(
+    "a %s sees the pending invitations tab without resend or cancel",
+    async (role) => {
+      installTeam(role);
+      const { user } = renderTeam();
+      await waitForMembers();
+      await waitForActor();
+
+      await user.click(screen.getByRole("tab", { name: new RegExp(text.pendingTabShort) }));
+      const card = closestOf(await screen.findByText(PENDING.email), "li");
+
+      expect(within(card).queryByRole("button", { name: pendingText.resend })).toBeNull();
+      expect(
+        within(card).queryByRole("button", { name: `${pendingText.cancel} ${PENDING.email}` }),
+      ).toBeNull();
+    },
+  );
+
+  it.each<OrganizationRole>(["secretary", "technician"])(
+    "a %s sees the empty pending tab without the invite action",
+    async (role) => {
+      installFakeApi({
+        ...signedInRoutes(role),
+        [ORGANIZATION_ROUTE]: organizationReply(),
+        [MEMBERS_ROUTE]: membersReply(teamSeenBy(role)),
+        [INVITATIONS_ROUTE]: invitationsReply([]),
+      });
+      const { user } = renderTeam();
+      await waitForMembers();
+      await waitForActor();
+
+      await user.click(screen.getByRole("tab", { name: new RegExp(text.pendingTabShort) }));
+
+      expect(await screen.findByText(pendingText.emptyTitle)).toBeVisible();
+      expect(screen.queryByRole("button", { name: text.emptyAction })).toBeNull();
+    },
+  );
+
+  it("an owner seen through an impersonation can neither cancel an invitation nor manage a member", async () => {
+    installTeam("owner", teamSeenBy("owner"), { isImpersonating: true });
+    const { user } = renderTeam();
+    await waitForMembers();
+    await waitForActor();
+    const card = closestOf(await screen.findByText(PENDING.email), "li");
+
+    expect(within(card).queryByRole("button")).toBeNull();
+    for (const member of Object.values(TEAM)) {
+      expect(screen.queryByRole("button", { name: text.roleLabel(member.name) })).toBeNull();
+      expect(screen.queryByRole("button", { name: text.actionsFor(member.name) })).toBeNull();
+    }
+
+    await user.click(screen.getByRole("tab", { name: new RegExp(text.pendingTabShort) }));
+    const pendingCard = closestOf(await screen.findByText(PENDING.email), "li");
+    expect(within(pendingCard).queryByRole("button")).toBeNull();
+  });
+
+  it("an owner seen through an impersonation gets no invite action in an empty team", async () => {
+    installFakeApi({
+      ...signedInRoutes("owner"),
+      [ME_ROUTE]: actorReply("owner", { isImpersonating: true }),
+      [ORGANIZATION_ROUTE]: organizationReply(),
+      [MEMBERS_ROUTE]: membersReply(aloneAs("owner")),
+      [INVITATIONS_ROUTE]: invitationsReply([]),
+    });
+    renderTeam();
+    await waitForActor();
+
+    expect(await screen.findByText(text.emptyTitle)).toBeVisible();
+    expect(screen.queryByRole("button", { name: text.emptyAction })).toBeNull();
+    expect(screen.queryByRole("button", { name: identityFr.invite.title })).toBeNull();
+  });
+});

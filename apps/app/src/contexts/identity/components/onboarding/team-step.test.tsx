@@ -180,3 +180,62 @@ describe("TeamStep", () => {
     }
   });
 });
+
+describe("TeamStep while sending", () => {
+  afterEach(forgetToasts);
+
+  it("shows a pending send button and blocks both buttons while the invitations are sent", async () => {
+    const invitation = heldReply(jsonReply({ id: "invitation-1" }));
+    const api = installTeamStep({ [INVITE_ROUTE]: invitation.reply });
+    const { user, router } = renderTeamStep();
+
+    await user.type(await screen.findByLabelText(text.emailLabel(1)), "luc@exemple.fr");
+    await user.click(screen.getByRole("button", { name: text.send(1) }));
+
+    expect(await screen.findByRole("button", { name: text.sending })).toBeDisabled();
+    expect(screen.getByRole("button", { name: onboardingFr.layout.later })).toBeDisabled();
+
+    invitation.release();
+
+    await waitFor(() => expect(router.state.location.pathname).toBe("/"));
+    expect(api.requestsTo(INVITE_ROUTE)).toHaveLength(1);
+    expect(api.requestsTo(COMPLETION_ROUTE)).toHaveLength(1);
+  });
+
+  it("never offers the owner role to a new person", async () => {
+    installTeamStep();
+    const { user } = renderTeamStep();
+
+    await user.click(await screen.findByRole("combobox", { name: text.roleLabel(1) }));
+
+    const options = await screen.findAllByRole("option");
+    expect(options.map((option) => option.textContent)).not.toContain(ROLE_LABELS.owner);
+    expect(options.map((option) => option.textContent)).toContain(ROLE_LABELS.admin);
+  });
+
+  it("sends the address without the spaces typed around it", async () => {
+    const api = installTeamStep();
+    const { user, router } = renderTeamStep();
+
+    await user.type(await screen.findByLabelText(text.emailLabel(1)), "  luc@exemple.fr  ");
+    await user.click(screen.getByRole("button", { name: text.send(1) }));
+
+    await waitFor(() => expect(router.state.location.pathname).toBe("/"));
+    expect(api.requestsTo(INVITE_ROUTE).map(({ body }) => body)).toEqual([
+      { email: "luc@exemple.fr", role: "technician" },
+    ]);
+  });
+
+  it("ignores rows that only contain spaces", async () => {
+    const api = installTeamStep();
+    const { user, router } = renderTeamStep();
+
+    await user.type(await screen.findByLabelText(text.emailLabel(1)), "luc@exemple.fr");
+    await user.type(screen.getByLabelText(text.emailLabel(2)), "   ");
+    await user.click(screen.getByRole("button", { name: text.send(1) }));
+
+    await waitFor(() => expect(router.state.location.pathname).toBe("/"));
+    expect(api.requestsTo(INVITE_ROUTE)).toHaveLength(1);
+    expect(screen.queryByText(identityFr.fields.invalidEmail)).not.toBeInTheDocument();
+  });
+});

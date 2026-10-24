@@ -208,3 +208,70 @@ describe("SignInForm", () => {
     );
   });
 });
+
+describe("SignInForm feedback", () => {
+  afterEach(forgetToasts);
+
+  it("links each validation message to its field for screen readers", async () => {
+    installTurnstile();
+    installFakeApi(signedOutRoutes());
+    const { user } = renderSignIn();
+
+    await user.click(await screen.findByRole("button", { name: text.submit }));
+
+    expect(await screen.findByLabelText(fields.emailLabel)).toHaveAccessibleDescription(
+      fields.invalidEmail,
+    );
+    expect(screen.getByLabelText(fields.passwordLabel)).toHaveAccessibleDescription(
+      fields.passwordRequired,
+    );
+    expect(screen.getByLabelText(fields.passwordLabel)).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("disables the sign-in link button while the link is being sent", async () => {
+    installTurnstile();
+    const magicLink = heldReply(jsonReply({ status: true }));
+    const api = installFakeApi({ ...signedOutRoutes(), [MAGIC_LINK_ROUTE]: magicLink.reply });
+    const { user } = renderSignIn();
+
+    await user.type(await screen.findByLabelText(fields.emailLabel), "paul@ramonage-dupont.fr");
+    const button = screen.getByRole("button", { name: text.magicLink });
+    await user.click(button);
+
+    await waitFor(() => expect(button).toBeDisabled());
+    await user.click(button);
+    magicLink.release();
+
+    expect(await screen.findByRole("heading", { name: text.checkInboxTitle })).toBeVisible();
+    expect(api.requestsTo(MAGIC_LINK_ROUTE)).toHaveLength(1);
+  });
+
+  it("keeps the typed address and re-enables the link button after a failed sign-in link", async () => {
+    installTurnstile();
+    installFakeApi({ ...signedOutRoutes(), [MAGIC_LINK_ROUTE]: authErrorReply("FAILED", 500) });
+    const { user } = renderSignIn();
+
+    await user.type(await screen.findByLabelText(fields.emailLabel), "paul@ramonage-dupont.fr");
+    await user.click(screen.getByRole("button", { name: text.magicLink }));
+
+    expect(await screen.findByText(fr.errors.code(SHORT_TRACE_ID))).toBeVisible();
+    expect(screen.getByLabelText(fields.emailLabel)).toHaveValue("paul@ramonage-dupont.fr");
+    await waitFor(() => expect(screen.getByRole("button", { name: text.magicLink })).toBeEnabled());
+  });
+
+  it("keeps the typed address after a wrong password", async () => {
+    installTurnstile();
+    installFakeApi({
+      ...signedOutRoutes(),
+      [SIGN_IN_ROUTE]: authErrorReply("INVALID_EMAIL_OR_PASSWORD", 401),
+    });
+    const { user } = renderSignIn();
+
+    await fillCredentials(user);
+    await user.click(screen.getByRole("button", { name: text.submit }));
+
+    expect(await screen.findByText(fr.errors.messages.invalid_credentials)).toBeVisible();
+    expect(screen.getByLabelText(fields.emailLabel)).toHaveValue("paul@ramonage-dupont.fr");
+    expect(screen.queryByText(TRACE_ID)).not.toBeInTheDocument();
+  });
+});

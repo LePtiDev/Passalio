@@ -199,3 +199,62 @@ describe("TeamScreen", () => {
     expect(within(alert).getByRole("button", { name: fr.errors.retry })).toBeVisible();
   });
 });
+
+describe("TeamScreen pending tab", () => {
+  afterEach(forgetToasts);
+
+  it("shows a skeleton shaped like the invitation rows while the pending invitations load", async () => {
+    const invitations = heldReply(
+      invitationsReply([pendingInvitation({ id: "invitation-1", email: "marc@exemple.fr" })]),
+    );
+    installFakeApi({
+      ...baseRoutes(),
+      [MEMBERS_ROUTE]: membersReply(teamSeenBy("owner")),
+      [INVITATIONS_ROUTE]: invitations.reply,
+    });
+
+    const { user, container } = renderTeam();
+    await membersList();
+    await user.click(pendingTab());
+
+    const skeleton = await findBusyElement(container);
+    expect(within(skeleton).getAllByRole("listitem")).toHaveLength(3);
+    expect(skeletonsIn(skeleton).length).toBeGreaterThanOrEqual(9);
+    expect(screen.queryByText(pendingText.emptyTitle)).not.toBeInTheDocument();
+
+    invitations.release();
+
+    expect(await screen.findByText("marc@exemple.fr")).toBeVisible();
+    expect(busyElementIn(container)).toBeNull();
+  });
+
+  it("loads the next page of pending invitations on demand", async () => {
+    const api = installFakeApi({
+      ...baseRoutes(),
+      [MEMBERS_ROUTE]: membersReply(teamSeenBy("owner")),
+      [INVITATIONS_ROUTE]: (request) =>
+        request.search.get("cursor") === "page-2"
+          ? invitationsReply([pendingInvitation({ id: "invitation-2", email: "julie@exemple.fr" })])
+          : invitationsReply(
+              [pendingInvitation({ id: "invitation-1", email: "marc@exemple.fr" })],
+              "page-2",
+            ),
+    });
+
+    const { user } = renderTeam();
+    await membersList();
+    await user.click(pendingTab());
+
+    expect(await screen.findByText("marc@exemple.fr")).toBeVisible();
+    expect(screen.queryByText("julie@exemple.fr")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: text.loadMore }));
+
+    expect(await screen.findByText("julie@exemple.fr")).toBeVisible();
+    expect(screen.getByText("marc@exemple.fr")).toBeVisible();
+    expect(screen.queryByRole("button", { name: text.loadMore })).not.toBeInTheDocument();
+    expect(api.requestsTo(INVITATIONS_ROUTE).map(({ search }) => search.get("cursor"))).toContain(
+      "page-2",
+    );
+  });
+});
