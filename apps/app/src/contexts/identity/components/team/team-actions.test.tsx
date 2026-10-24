@@ -141,7 +141,11 @@ describe("TeamScreen management actions", () => {
     const api = installTeam({ "PATCH /api/members/member-luc": noContentReply() });
     const { user } = await renderTeam();
 
-    await user.click(screen.getByRole("button", { name: text.roleLabel(TEAM.technician.name) }));
+    await user.click(
+      screen.getByRole("button", {
+        name: text.roleLabel(TEAM.technician.name, TEAM.technician.role),
+      }),
+    );
     await user.click(await screen.findByRole("menuitemradio", { name: ROLE_LABELS.secretary }));
 
     expect(

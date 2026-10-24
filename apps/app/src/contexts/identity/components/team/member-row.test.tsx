@@ -56,7 +56,7 @@ const renderTeam = async () => {
 };
 
 const technicianRoleButton = () =>
-  screen.getByRole("button", { name: text.roleLabel(TEAM.technician.name) });
+  screen.getByRole("button", { name: text.roleLabel(TEAM.technician.name, TEAM.technician.role) });
 
 describe("MemberRow role and invitation actions", () => {
   afterEach(forgetToasts);

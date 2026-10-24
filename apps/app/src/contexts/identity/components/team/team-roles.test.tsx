@@ -67,7 +67,9 @@ describe("TeamScreen actions by role", () => {
         2,
       );
       for (const member of otherManageableMembers(role)) {
-        expect(screen.getByRole("button", { name: text.roleLabel(member.name) })).toBeVisible();
+        expect(
+          screen.getByRole("button", { name: text.roleLabel(member.name, member.role) }),
+        ).toBeVisible();
         expect(screen.getByRole("button", { name: text.actionsFor(member.name) })).toBeVisible();
       }
     },
@@ -81,9 +83,13 @@ describe("TeamScreen actions by role", () => {
       await waitForMembers();
       await screen.findAllByRole("button", { name: identityFr.invite.title });
 
-      expect(screen.queryByRole("button", { name: text.roleLabel(TEAM.owner.name) })).toBeNull();
+      expect(
+        screen.queryByRole("button", { name: text.roleLabel(TEAM.owner.name, TEAM.owner.role) }),
+      ).toBeNull();
       expect(screen.queryByRole("button", { name: text.actionsFor(TEAM.owner.name) })).toBeNull();
-      expect(screen.queryByRole("button", { name: text.roleLabel(TEAM[role].name) })).toBeNull();
+      expect(
+        screen.queryByRole("button", { name: text.roleLabel(TEAM[role].name, TEAM[role].role) }),
+      ).toBeNull();
       expect(screen.queryByRole("button", { name: text.actionsFor(TEAM[role].name) })).toBeNull();
     },
   );
@@ -139,7 +145,9 @@ describe("TeamScreen actions by role", () => {
 
       expect(screen.queryByRole("button", { name: identityFr.invite.title })).toBeNull();
       for (const member of Object.values(TEAM)) {
-        expect(screen.queryByRole("button", { name: text.roleLabel(member.name) })).toBeNull();
+        expect(
+          screen.queryByRole("button", { name: text.roleLabel(member.name, member.role) }),
+        ).toBeNull();
         expect(screen.queryByRole("button", { name: text.actionsFor(member.name) })).toBeNull();
       }
       expect(within(card).queryByRole("button")).toBeNull();
@@ -169,7 +177,9 @@ describe("TeamScreen actions by role", () => {
     await screen.findByText(PENDING.email);
 
     expect(screen.queryByRole("button", { name: identityFr.invite.title })).toBeNull();
-    expect(screen.queryByRole("button", { name: text.roleLabel(TEAM.admin.name) })).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: text.roleLabel(TEAM.admin.name, TEAM.admin.role) }),
+    ).toBeNull();
     expect(screen.queryByRole("button", { name: text.actionsFor(TEAM.admin.name) })).toBeNull();
     expect(screen.queryByRole("button", { name: pendingText.resend })).toBeNull();
   });
@@ -188,7 +198,9 @@ describe("TeamScreen actions once the role is known", () => {
 
       expect(screen.queryByRole("button", { name: identityFr.invite.title })).toBeNull();
       for (const member of Object.values(TEAM)) {
-        expect(screen.queryByRole("button", { name: text.roleLabel(member.name) })).toBeNull();
+        expect(
+          screen.queryByRole("button", { name: text.roleLabel(member.name, member.role) }),
+        ).toBeNull();
         expect(screen.queryByRole("button", { name: text.actionsFor(member.name) })).toBeNull();
       }
     },
@@ -241,7 +253,9 @@ describe("TeamScreen actions once the role is known", () => {
 
     expect(within(card).queryByRole("button")).toBeNull();
     for (const member of Object.values(TEAM)) {
-      expect(screen.queryByRole("button", { name: text.roleLabel(member.name) })).toBeNull();
+      expect(
+        screen.queryByRole("button", { name: text.roleLabel(member.name, member.role) }),
+      ).toBeNull();
       expect(screen.queryByRole("button", { name: text.actionsFor(member.name) })).toBeNull();
     }
 

@@ -136,7 +136,7 @@ export const identityFr = {
     emptyTitle: "Vous êtes seul pour l'instant",
     emptyText: "Invitez vos techniciens et votre secrétariat. Ils recevront un lien par email.",
     emptyAction: "Inviter une personne",
-    roleLabel: (name: string) => `Rôle de ${name}`,
+    roleLabel: (name: string, role: OrganizationRole) => `${ROLE_LABELS[role]}, rôle de ${name}`,
     roleChanged: (name: string, role: string) => `${name} est maintenant ${role.toLowerCase()}.`,
     remove: "Retirer de l'équipe",
     removeTitle: (name: string) => `Retirer ${name} de l'équipe ?`,
