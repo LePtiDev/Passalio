@@ -43,7 +43,7 @@ const MobileTab = <Id extends string>({ id, label, isActive, onSelect }: TabProp
       aria-selected={isActive}
       onClick={select}
       className={cn(
-        "h-10 min-w-0 truncate rounded-[9px] px-1 text-sm",
+        "h-12 min-w-0 truncate rounded-[9px] px-1 text-sm",
         isActive
           ? "bg-white font-semibold text-[#0F2A44] shadow-[0_1px_2px_rgba(15,42,68,0.1)]"
           : "font-medium text-[#475569]",
