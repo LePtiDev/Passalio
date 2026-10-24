@@ -18,7 +18,7 @@ const LIST_CLASS =
   "grid h-auto w-full grid-cols-3 gap-1 rounded-xl bg-[#EAEFF4] p-1 group-data-[orientation=horizontal]/tabs:h-auto lg:flex lg:justify-start lg:gap-6 lg:rounded-none lg:border-b lg:border-[#E3E8EF] lg:bg-transparent lg:p-0";
 
 const TRIGGER_CLASS =
-  "h-10 gap-1.5 rounded-[9px] text-sm font-medium text-[#475569] data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-[#0F2A44] group-data-[variant=default]/tabs-list:data-[state=active]:shadow-[0_1px_2px_rgba(15,42,68,0.1)] lg:-mb-px lg:h-auto lg:flex-none lg:rounded-none lg:border-0 lg:border-b-2 lg:border-transparent lg:px-0 lg:py-2.5 lg:text-[13px] lg:text-[#64748B] lg:data-[state=active]:border-b-[#0F2A44] lg:data-[state=active]:bg-transparent lg:group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none";
+  "h-12 gap-1.5 rounded-[9px] text-sm font-medium text-[#475569] data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-[#0F2A44] group-data-[variant=default]/tabs-list:data-[state=active]:shadow-[0_1px_2px_rgba(15,42,68,0.1)] lg:-mb-px lg:h-auto lg:flex-none lg:rounded-none lg:border-0 lg:border-b-2 lg:border-transparent lg:px-0 lg:py-2.5 lg:text-[13px] lg:text-[#64748B] lg:data-[state=active]:border-b-[#0F2A44] lg:data-[state=active]:bg-transparent lg:group-data-[variant=default]/tabs-list:data-[state=active]:shadow-none";
 
 const COUNT_CLASS = "hidden rounded-full bg-[#EEF3F8] px-2 py-px text-xs text-[#0F2A44] lg:inline";
 
