@@ -4,7 +4,7 @@ import { customersFr } from "../fr";
 import { useSyncIndicator } from "../hooks/use-sync-indicator";
 
 export const SyncPill = () => {
-  const { isOffline, label, phase, rejectedCount } = useSyncIndicator();
+  const { isOffline, label, phase, rejectedCount, errorCode } = useSyncIndicator();
   const hasRejections = rejectedCount > 0;
   return (
     <output
@@ -21,6 +21,12 @@ export const SyncPill = () => {
         <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
       )}
       <span>{label}</span>
+      {errorCode === undefined ? null : (
+        <>
+          <span aria-hidden="true">·</span>
+          <span className="tabular-nums">{errorCode}</span>
+        </>
+      )}
       {hasRejections ? (
         <>
           <span aria-hidden="true">·</span>
@@ -32,12 +38,19 @@ export const SyncPill = () => {
 };
 
 export const MobileSyncLine = ({ prefix }: { readonly prefix?: string | undefined }) => {
-  const { isOffline, label, phase, rejectedCount } = useSyncIndicator();
+  const { isOffline, label, phase, rejectedCount, errorCode } = useSyncIndicator();
   if (phase === "error" || (!isOffline && rejectedCount > 0)) {
+    const detail = phase === "error" ? errorCode : customersFr.sync.rejectedShort(rejectedCount);
     return (
       <span className="flex items-center gap-1.5 truncate text-[13px] font-semibold text-[#B45309]">
         <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-[#D97706]" />
-        {phase === "error" ? label : `${label} · ${customersFr.sync.rejectedShort(rejectedCount)}`}
+        <span>{label}</span>
+        {detail === undefined ? null : (
+          <>
+            <span aria-hidden="true">·</span>
+            <span className="tabular-nums">{detail}</span>
+          </>
+        )}
       </span>
     );
   }
