@@ -72,6 +72,7 @@ export const backofficeFr = {
       usage: "Utilisation",
       lastSeen: "Dernière connexion",
     },
+    openPrefix: "Ouvrir",
     open: (name: string) => `Ouvrir ${name}`,
     searchEmptyTitle: (search: string) => `Aucune entreprise pour « ${search} »`,
     searchEmptyText: "La recherche porte sur le nom de l'entreprise.",

@@ -7,7 +7,7 @@ import {
   ADMIN_CARD_CLASS,
   ADMIN_CARD_HEADER_CLASS,
   ADMIN_CARD_TITLE_CLASS,
-  ADMIN_LINK_CLASS,
+  ADMIN_CARD_LINK_CLASS,
   ADMIN_TABLE_HEADER_CLASS,
 } from "../admin-styles";
 import { Sparkline } from "../usage/sparkline";
@@ -69,7 +69,7 @@ export const DroppingCard = ({
         </h2>
         <span className="hidden text-[13px] text-[#64748B] lg:inline">{text.droppingSubtitle}</span>
       </span>
-      <AccountsFilterLink filter="dropping" className={ADMIN_LINK_CLASS}>
+      <AccountsFilterLink filter="dropping" className={ADMIN_CARD_LINK_CLASS}>
         {text.seeAll}
       </AccountsFilterLink>
     </div>

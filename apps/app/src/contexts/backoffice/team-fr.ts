@@ -48,6 +48,7 @@ export const teamFr = {
   youShort: "vous",
   changeRole: "Changer le rôle",
   remove: "Retirer",
+  memberActionsPrefix: "Actions pour",
   memberActions: (name: string) => `Actions pour ${name}`,
   mobileHint: "Touchez un membre pour changer son rôle ou le retirer.",
   invitationsTitle: "Invitations en attente",
