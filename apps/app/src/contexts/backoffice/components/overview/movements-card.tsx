@@ -6,7 +6,7 @@ import {
   ADMIN_CARD_CLASS,
   ADMIN_CARD_HEADER_CLASS,
   ADMIN_CARD_TITLE_CLASS,
-  ADMIN_LINK_CLASS,
+  ADMIN_CARD_LINK_CLASS,
 } from "../admin-styles";
 import { JournalSentence } from "../journal/journal-sentence";
 
@@ -22,7 +22,7 @@ export const MovementsCard = ({
       <h2 id="movements-title" className={ADMIN_CARD_TITLE_CLASS}>
         {text.movementsTitle}
       </h2>
-      <Link to="/admin/journal" className={ADMIN_LINK_CLASS}>
+      <Link to="/admin/journal" className={ADMIN_CARD_LINK_CLASS}>
         {text.journalLink}
       </Link>
     </div>
