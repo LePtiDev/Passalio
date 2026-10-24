@@ -47,6 +47,7 @@ const FILES_QUERYING_D1 = [
   "contexts/sales/infrastructure/d1-event-repository.ts",
   "contexts/sales/infrastructure/d1-follow-up-repository.ts",
   "contexts/sales/infrastructure/d1-task-repository.ts",
+  "contexts/sales/infrastructure/d1-visitor-rate-limit.ts",
   "contexts/sales/infrastructure/main-contacts.ts",
   "contexts/sales/infrastructure/sales-dependencies.ts",
   "contexts/scheduling/infrastructure/d1-intervention-places.ts",

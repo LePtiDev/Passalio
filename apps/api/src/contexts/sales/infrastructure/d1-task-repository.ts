@@ -1,5 +1,5 @@
 import { prospectCompanies, prospectContacts, prospectTasks, users } from "@passalio/db";
-import { and, asc, eq, getTableColumns, lt, type SQL } from "drizzle-orm";
+import { and, asc, eq, getTableColumns, isNull, lt, type SQL } from "drizzle-orm";
 import type { Database } from "../../../platform/database";
 import type { TaskRepository } from "../domain/call-ports";
 import { contactNameOf } from "../domain/prospect-rules";
@@ -65,4 +65,13 @@ export const createD1TaskRepository = (database: Database): TaskRepository => ({
       and(eq(prospectTasks.ownerUserId, ownerUserId), lt(prospectTasks.dueAt, before)),
       limit,
     ),
+  openUnownedDueBefore: async (before, limit) =>
+    openTasksWhere(
+      database,
+      and(isNull(prospectTasks.ownerUserId), lt(prospectTasks.dueAt, before)),
+      limit,
+    ),
+  createFromWebsite: async (task) => {
+    await database.insert(prospectTasks).values({ ...task, source: "website" });
+  },
 });

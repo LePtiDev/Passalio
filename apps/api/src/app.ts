@@ -5,7 +5,12 @@ import { customerRoutes, equipmentRoutes, plateReadingRoutes } from "./contexts/
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
 import { mcpAuthorizationRoutes, mcpRoutes } from "./contexts/mcp";
 import { teamInvitationRoutes, teamRoutes } from "./contexts/platform-team";
-import { prospectCallRoutes, prospectCompanyRoutes, prospectContactRoutes } from "./contexts/sales";
+import {
+  prospectCallRoutes,
+  prospectCompanyRoutes,
+  prospectContactRoutes,
+  websiteCallbackRoutes,
+} from "./contexts/sales";
 import { serviceRoutes } from "./contexts/scheduling";
 import { syncRoutes } from "./contexts/sync";
 import type { AppEnv } from "./env";
@@ -42,4 +47,5 @@ const apiRoutes = new Hono<AppEnv>()
 export const app = createApp()
   .get("/health", (context) => context.json({ status: "ok" }))
   .route("/", mcpRoutes)
+  .route("/api/public", websiteCallbackRoutes)
   .route("/api", apiRoutes);

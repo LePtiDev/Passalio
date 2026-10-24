@@ -14,10 +14,18 @@ export const getMyDay =
   async (actor: PlatformActor): Promise<ProspectMyDayResponse> => {
     assertPlatformCan(actor, "prospects:read");
     const at = now();
-    const [dueTasks, callsToday] = await Promise.all([
-      tasks.openOfOwnerDueBefore(actor.userId, startOfNextParisDay(at), MY_DAY_TASKS_LIMIT),
+    const endOfDay = startOfNextParisDay(at);
+    const [ownTasks, unownedTasks, callsToday] = await Promise.all([
+      tasks.openOfOwnerDueBefore(actor.userId, endOfDay, MY_DAY_TASKS_LIMIT),
+      tasks.openUnownedDueBefore(endOfDay, MY_DAY_TASKS_LIMIT),
       calls.countByAuthorSince(actor.userId, startOfParisDay(at)),
     ]);
+    const dueTasks = [...ownTasks, ...unownedTasks]
+      .toSorted(
+        (first, second) =>
+          first.dueAt.getTime() - second.dueAt.getTime() || first.id.localeCompare(second.id),
+      )
+      .slice(0, MY_DAY_TASKS_LIMIT);
     const overdue = dueTasks.filter(({ dueAt }) => dueAt < at).length;
     return {
       tasks: dueTasks.map(taskResponse),

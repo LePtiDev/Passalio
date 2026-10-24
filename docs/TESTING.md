@@ -140,6 +140,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6    | Routes : 201, 204, 400, 404, 409, 422, réponses conformes aux schémas zod, rappel dans Ma journée, suppression en cascade avec l'entreprise           | `apps/api/test/prospect-call-routes.test.ts`                                  |
 | 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes et index des nouvelles requêtes                                        | `apps/api/test/matrices`, `apps/api/test/database`                            |
 
+## Demande de rappel depuis le site (ADR 0028)
+
+| Famille | Ce qui est vérifié                                                                                                                            | Test                                                                                             |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 1       | Formulaire : prénom, téléphone français, code postal, créneau, message, page, jeton                                                           | `packages/shared/src/public-callback.test.ts`                                                    |
+| 2       | Département du code postal (Corse, outre-mer), heure du rappel en heure de Paris (heure d'hiver), téléphone écrit par paires                  | `sales/domain/website-callback-rules.test.ts`                                                    |
+| 4       | Entreprise retrouvée par son téléphone ou celui d'un contact, ou créée ; rappel et note ; refus robot ou limite sans rien écrire ; Ma journée | `sales/application/request-website-callback.test.ts`, `get-my-day`                               |
+| 5, 6    | Route : 201 sans session, 400, 403, 429 après 5 demandes, CORS réservé au site, entreprise inconnue créée une seule fois                      | `apps/api/test/website-callback-routes.test.ts`, `apps/api/test/matrices/website-routes.test.ts` |
+| 9       | Plans de requêtes et index des recherches par téléphone, des rappels sans propriétaire et de la limite par visiteur                           | `apps/api/test/database`                                                                         |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.

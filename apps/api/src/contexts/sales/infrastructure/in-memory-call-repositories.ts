@@ -15,6 +15,7 @@ export type InMemoryCallState = {
   readonly calls: ProspectCall[];
   readonly followUps: ProspectFollowUp[];
   readonly tasks: ProspectTask[];
+  readonly websiteTaskIds: string[];
 };
 
 type PeopleLookup = {
@@ -180,6 +181,18 @@ export const createInMemoryCallRepositories = (
           .toSorted(byDueAt)
           .slice(0, limit)
           .flatMap(taskRowOf),
+      openUnownedDueBefore: async (before, limit) =>
+        state.tasks
+          .filter(
+            (task) => task.ownerUserId === null && task.status === "open" && task.dueAt < before,
+          )
+          .toSorted(byDueAt)
+          .slice(0, limit)
+          .flatMap(taskRowOf),
+      createFromWebsite: async (task) => {
+        state.tasks.push(task);
+        state.websiteTaskIds.push(task.id);
+      },
     },
   };
 };

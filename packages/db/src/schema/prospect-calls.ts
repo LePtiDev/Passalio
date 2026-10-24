@@ -5,6 +5,7 @@ import {
   INTEREST_LEVELS,
   NEXT_ACTIONS,
   NOTIFY_MODES,
+  PROSPECT_TASK_SOURCES,
   PROSPECT_TASK_STATUSES,
   SCHEDULED_NEXT_ACTIONS,
   PROSPECT_TEAM_SIZES,
@@ -72,6 +73,7 @@ export const prospectTasks = sqliteTable(
     notifyAt: integer("notify_at", { mode: "timestamp_ms" }),
     notifiedAt: integer("notified_at", { mode: "timestamp_ms" }),
     status: text("status", { enum: PROSPECT_TASK_STATUSES }).notNull(),
+    source: text("source", { enum: PROSPECT_TASK_SOURCES }),
     ...timestampColumns(),
   },
   (table) => [

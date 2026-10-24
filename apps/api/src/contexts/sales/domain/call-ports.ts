@@ -56,4 +56,6 @@ export type TaskRepository = {
     before: Date,
     limit: number,
   ) => Promise<readonly TaskRow[]>;
+  readonly openUnownedDueBefore: (before: Date, limit: number) => Promise<readonly TaskRow[]>;
+  readonly createFromWebsite: (task: ProspectTask) => Promise<void>;
 };

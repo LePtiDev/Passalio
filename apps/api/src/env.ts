@@ -10,6 +10,7 @@ export type Bindings = {
   readonly BETTER_AUTH_SECRET: string;
   readonly BETTER_AUTH_URL: string;
   readonly APP_URL: string;
+  readonly SITE_URL: string;
   readonly TURNSTILE_SECRET_KEY: string;
   readonly EMAIL_DELIVERY: EmailDelivery;
   readonly EMAIL_FROM: string;

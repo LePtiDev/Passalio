@@ -100,4 +100,24 @@ export const PROSPECT_CALL_QUERIES: readonly CatalogedQuery[] = [
     query: "open tasks of a salesperson due by tonight",
     run: (r, s) => r.prospectTasks.openOfOwnerDueBefore(s.salesperson.id, LATER, 100),
   },
+  {
+    method: "prospectTasks.openUnownedDueBefore",
+    query: "open website callbacks nobody owns, due by tonight",
+    run: (r) => r.prospectTasks.openUnownedDueBefore(LATER, 100),
+  },
+  {
+    method: "prospectTasks.createFromWebsite",
+    query: "callback asked from the website",
+    run: (r, s) =>
+      r.prospectTasks.createFromWebsite({
+        ...aProspectTask(s.company.id, null, s.salesperson.id),
+        id: newId(),
+        ownerUserId: null,
+      }),
+  },
+  {
+    method: "websiteVisitors.isAllowed",
+    query: "website callback rate limit of a visitor",
+    run: (r) => r.websiteVisitors.isAllowed({ ipAddress: "198.51.100.42" }, LATER),
+  },
 ];

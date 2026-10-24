@@ -12,6 +12,7 @@ const MIGRATIONS_DIRECTORY = join(import.meta.dirname, "../../../packages/db/mig
 const STATEMENT_BREAKPOINT = "--> statement-breakpoint";
 
 export const APP_URL = "http://localhost:5173";
+export const SITE_URL = "http://localhost:4321";
 export const TEST_PASSWORD = "mot-de-passe-de-test";
 export const VALID_CAPTCHA_TOKEN = "jeton-turnstile-valide";
 
@@ -83,6 +84,7 @@ export const startTestPlatform = async () => {
     BETTER_AUTH_SECRET: "test-secret-that-is-long-enough-for-better-auth",
     BETTER_AUTH_URL: "http://localhost:8787",
     APP_URL,
+    SITE_URL,
     EMAIL_DELIVERY: "log",
     EMAIL_FROM: "Passalio <ne-pas-repondre@passalio.com>",
     TURNSTILE_SECRET_KEY: "test-turnstile-secret",
