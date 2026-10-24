@@ -58,7 +58,7 @@ Dernière mise à jour : 2026-10-24.
 | Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
 | ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                      | ADR 0024                                            |
-| Site : navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100                   | PR à venir                                          |
+| Site : navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100                   | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
 
 ## Hors code (Quentin)
 
