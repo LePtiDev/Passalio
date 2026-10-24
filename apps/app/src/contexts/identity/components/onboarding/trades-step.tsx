@@ -52,6 +52,7 @@ export const TradesStep = ({ organization }: { readonly organization: Organizati
   const updateOrganization = useUpdateOrganization();
   const [selected, setSelected] = useState<readonly TradeId[]>(organization.trades);
   const [isMissing, setIsMissing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggle = useCallback((trade: TradeId) => {
     setIsMissing(false);
@@ -68,9 +69,12 @@ export const TradesStep = ({ organization }: { readonly organization: Organizati
         return;
       }
       const trades = TRADE_IDS.filter((trade) => selected.includes(trade));
+      setIsSaving(true);
       if (await succeeds(updateOrganization.mutateAsync({ trades }))) {
         await navigate({ to: ONBOARDING_PATHS[4] });
+        return;
       }
+      setIsSaving(false);
     },
     [navigate, selected, updateOrganization],
   );
@@ -109,14 +113,8 @@ export const TradesStep = ({ organization }: { readonly organization: Organizati
           <span className="hidden text-xs text-[#64748B] lg:inline">
             {text.selected(selected.length)}
           </span>
-          <Button
-            type="submit"
-            className={ONBOARDING_PRIMARY_BUTTON_CLASS}
-            disabled={updateOrganization.isPending}
-          >
-            {updateOrganization.isPending
-              ? onboardingFr.layout.saving
-              : onboardingFr.layout.continue}
+          <Button type="submit" className={ONBOARDING_PRIMARY_BUTTON_CLASS} disabled={isSaving}>
+            {isSaving ? onboardingFr.layout.saving : onboardingFr.layout.continue}
           </Button>
         </span>
       </OnboardingFooter>

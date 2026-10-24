@@ -57,6 +57,7 @@ Dernière mise à jour : 2026-10-24.
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx`                    |
 | Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
 | ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
+| Configuration : « Continuer » reste bloqué jusqu'à l'étape suivante (cause d'un test instable)                                                                                | `onboarding-step-transition.spec.ts`                |
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                      | ADR 0024                                            |
 | Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                            | ADR 0025                                            |
 
