@@ -115,6 +115,7 @@ export const customersFr = {
     rejected: (count: number) =>
       `${plural(count, "modification refusée", "modifications refusées")} par le serveur.`,
     rejectedShort: (count: number) => plural(count, "refusée", "refusées"),
+    acknowledgeRejections: "Compris",
     pendingBadge: "À envoyer",
   },
   list: {

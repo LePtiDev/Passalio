@@ -68,7 +68,8 @@ export const TeamStep = () => {
       await navigate({ to: "/", search: { bienvenue: true } });
     },
   });
-  const finish = completion.mutateAsync;
+  const { mutate: completeNow, mutateAsync: finish } = completion;
+  const finishLater = useCallback(() => completeNow(), [completeNow]);
 
   const submit = form.handleSubmit(async (values) => {
     const toSend = values.invitations.filter(({ email }) => email !== "");
@@ -131,7 +132,7 @@ export const TeamStep = () => {
             type="button"
             variant="ghost"
             className={ONBOARDING_GHOST_BUTTON_CLASS}
-            onClick={() => completion.mutate()}
+            onClick={finishLater}
             disabled={isSubmitting || completion.isPending}
           >
             {onboardingFr.layout.later}

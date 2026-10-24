@@ -16,6 +16,8 @@ const TRAIL = [{ label: fr.shell.settings, to: "/reglages" }, { label: fr.shell.
 
 const text = identityFr.team;
 
+const organizationNameOnly = (name: string) => name;
+
 const countOf = (pageLengths: readonly number[] | undefined, hasMore: boolean) =>
   pageLengths === undefined || hasMore
     ? null
@@ -47,7 +49,7 @@ export const TeamScreen = () => {
           <OrganizationSubtitle
             className="truncate text-[13px] text-[#64748B]"
             skeletonClassName="mt-1 h-3.5 w-32"
-            render={(name) => name}
+            render={organizationNameOnly}
           />
         </span>
         {canManage ? (

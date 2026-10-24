@@ -1,11 +1,18 @@
 import { CloudOff } from "lucide-react";
+import { useCallback } from "react";
+import { useLocalSession } from "@/lib/db/local-database-context";
+import { forgetRejections } from "@/lib/sync/sync-rejections";
+import { DESKTOP_QUERY, useMediaQuery } from "@/lib/use-media-query";
 import { cn } from "@/lib/utils";
 import { customersFr } from "../fr";
 import { useSyncIndicator } from "../hooks/use-sync-indicator";
 
 export const SyncPill = () => {
   const { isOffline, label, phase, rejectedCount, errorCode } = useSyncIndicator();
-  const hasRejections = rejectedCount > 0;
+  const { database } = useLocalSession();
+  const isDesktop = useMediaQuery(DESKTOP_QUERY);
+  const acknowledge = useCallback(() => void forgetRejections(database), [database]);
+  const hasRejections = rejectedCount > 0 && isDesktop;
   return (
     <output
       className={cn(
@@ -31,6 +38,13 @@ export const SyncPill = () => {
         <>
           <span aria-hidden="true">·</span>
           <span>{customersFr.sync.rejected(rejectedCount)}</span>
+          <button
+            type="button"
+            onClick={acknowledge}
+            className="-my-1 rounded-full px-2 py-1 underline underline-offset-2 hover:bg-white/60"
+          >
+            {customersFr.sync.acknowledgeRejections}
+          </button>
         </>
       ) : null}
     </output>
