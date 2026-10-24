@@ -171,7 +171,7 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
             {isSubmitting ? text.submitting : text.submit}
           </Button>
         </div>
-        <div className="flex items-center gap-3 text-xs text-[#94A3B8]">
+        <div className="flex items-center gap-3 text-xs text-[#64748B]">
           <span className="h-px flex-1 bg-[#E3E8EF]" />
           {text.or}
           <span className="h-px flex-1 bg-[#E3E8EF]" />
