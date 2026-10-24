@@ -1,34 +1,59 @@
 ---
-import { fr } from "../fr";
-import { type AppPage, appUrl } from "../links";
+import { PATHS } from "../content/catalog";
+import { footerFr } from "../copy/navigation-fr";
+import { appUrl } from "../links";
+import { activityMenu, productMenu } from "../navigation";
 
-const links: ReadonlyArray<{ page: AppPage; label: string }> = [
-  { page: "signIn", label: fr.footer.signIn },
-  { page: "terms", label: fr.footer.terms },
-  { page: "privacy", label: fr.footer.privacy },
-  { page: "legalNotice", label: fr.footer.legalNotice },
+const columns = [
+  {
+    title: footerFr.activity,
+    links: activityMenu().map((entry) => ({ href: entry.href, label: entry.title })),
+  },
+  {
+    title: footerFr.product,
+    links: productMenu().map((entry) => ({ href: entry.href, label: entry.title })),
+  },
+  {
+    title: footerFr.company,
+    links: [
+      { href: PATHS.home, label: footerFr.home },
+      { href: PATHS.stories, label: footerFr.stories },
+      { href: appUrl("signIn"), label: footerFr.signIn },
+    ],
+  },
+  {
+    title: footerFr.legal,
+    links: [
+      { href: appUrl("terms"), label: footerFr.terms },
+      { href: appUrl("privacy"), label: footerFr.privacy },
+      { href: appUrl("legalNotice"), label: footerFr.legalNotice },
+    ],
+  },
 ];
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-hairline py-8">
-  <div
-    class="mx-auto flex max-w-270 flex-wrap items-center justify-between gap-x-8 gap-y-4 px-4 sm:px-6"
-  >
-    <div class="flex flex-wrap items-center gap-4">
-      <img src="/passalio-logo.svg" alt={fr.brand} width="76" height="15" class="h-3.75 w-auto" />
-      <p class="text-[13px] text-slate-text">{fr.footer.copyright(year)}</p>
+  <div class="mx-auto flex max-w-270 flex-wrap gap-x-7 gap-y-6 px-4 sm:px-6">
+    <div class="flex flex-[1_1_180px] flex-col gap-2">
+      <img src="/passalio-logo.svg" alt="Passalio" width="76" height="15" class="h-3.75 w-auto self-start" />
+      <p class="text-[13px] text-slate-text">{footerFr.copyright(year)}</p>
     </div>
-    <nav aria-label={fr.footer.label} class="flex flex-wrap gap-x-1 text-xs">
+    <nav aria-label={footerFr.label} class="contents">
       {
-        links.map((link) => (
-          <a
-            href={appUrl(link.page)}
-            class="inline-flex min-h-12 items-center px-2.5 text-slate-text hover:text-navy"
-          >
-            {link.label}
-          </a>
+        columns.map((column) => (
+          <div class="flex flex-[1_1_160px] flex-col">
+            <p class="pb-1 text-[13px] font-semibold text-navy">{column.title}</p>
+            {column.links.map((link) => (
+              <a
+                href={link.href}
+                class="inline-flex min-h-12 items-center text-[13px] text-slate-text hover:text-navy sm:min-h-8"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         ))
       }
     </nav>

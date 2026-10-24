@@ -1,0 +1,24 @@
+---
+import type { MarketingPage } from "../../content/content-schema";
+
+interface Props {
+  pains: MarketingPage["pains"];
+}
+
+const { pains } = Astro.props;
+---
+
+<section class="border-t border-hairline py-7 sm:py-9">
+  <ul class="mx-auto grid max-w-270 gap-4.5 px-4 sm:grid-cols-3 sm:gap-8 sm:px-6">
+    {
+      pains.map((pain) => (
+        <li class="flex flex-col gap-1">
+          <p class="text-[11px] font-semibold tracking-[0.08em] text-warning-dot uppercase">
+            {pain.title}
+          </p>
+          <p class="text-slate-text">{pain.text}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

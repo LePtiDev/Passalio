@@ -1,0 +1,22 @@
+---
+import ButtonLink from "../components/button-link.astro";
+import SiteHeader from "../components/navigation/site-header.astro";
+import SiteFooter from "../components/site-footer.astro";
+import { PATHS } from "../content/catalog";
+import { marketingFr } from "../copy/marketing-fr";
+import BaseLayout from "../layouts/base-layout.astro";
+
+const copy = marketingFr.notFound;
+---
+
+<BaseLayout title={copy.title} description={copy.description} path="/404" isNotFound>
+  <SiteHeader currentPath="/404" />
+  <main class="mx-auto flex max-w-270 flex-col items-start gap-4 px-4 py-20 sm:px-6 sm:py-28">
+    <h1 class="text-[31px] leading-tight font-bold tracking-[-0.03em] sm:text-[44px]">
+      {copy.heading}
+    </h1>
+    <p class="text-base text-slate-text sm:text-[15px]">{copy.text}</p>
+    <ButtonLink href={PATHS.home}>{copy.action}</ButtonLink>
+  </main>
+  <SiteFooter />
+</BaseLayout>

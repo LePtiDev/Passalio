@@ -1,0 +1,41 @@
+---
+import { storiesFr } from "../../copy/stories-fr";
+
+interface Props {
+  activities: ReadonlyArray<string>;
+}
+
+const { activities } = Astro.props;
+const filters = [{ value: "", label: storiesFr.allFilter }, ...activities.map((activity) => ({ value: activity, label: activity }))];
+---
+
+<div role="group" aria-label={storiesFr.filterLabel} class="flex flex-wrap gap-1.5">
+  {
+    filters.map((filter, index) => (
+      <button
+        type="button"
+        aria-pressed={index === 0 ? "true" : "false"}
+        data-story-filter={filter.value}
+        class="h-12 rounded-full border border-line bg-white px-3 text-[13px] font-semibold whitespace-nowrap text-navy aria-pressed:border-navy aria-pressed:bg-navy aria-pressed:text-white sm:h-8"
+      >
+        {filter.label}
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-story-list]").forEach((list) => {
+    const buttons = Array.from(list.querySelectorAll<HTMLButtonElement>("[data-story-filter]"));
+    const items = Array.from(list.querySelectorAll<HTMLElement>("[data-story-item]"));
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.dataset["storyFilter"] ?? "";
+        buttons.forEach((other) => other.setAttribute("aria-pressed", String(other === button)));
+        items.forEach((item) => {
+          item.hidden = value !== "" && item.dataset["storyItem"] !== value;
+        });
+      });
+    });
+  });
+</script>

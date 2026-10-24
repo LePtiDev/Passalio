@@ -1,0 +1,26 @@
+---
+import type { MenuEntry } from "../../navigation";
+import MenuIcon from "./menu-icon.astro";
+
+interface Props {
+  entry: MenuEntry;
+  isCurrent: boolean;
+}
+
+const { entry, isCurrent } = Astro.props;
+---
+
+<a
+  href={entry.href}
+  aria-current={isCurrent ? "page" : undefined}
+  class:list={[
+    "flex min-h-12 items-center gap-3 rounded-[7px] px-2.5 py-2 text-navy hover:bg-panel focus-visible:bg-panel",
+    isCurrent && "bg-panel",
+  ]}
+>
+  <MenuIcon icon={entry.icon} class="size-[30px]" />
+  <span class="flex min-w-0 flex-col">
+    <span class="text-[15px] font-semibold lg:text-[13px]">{entry.title}</span>
+    <span class="text-[13px] leading-snug text-slate-text lg:text-xs">{entry.text}</span>
+  </span>
+</a>

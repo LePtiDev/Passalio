@@ -1,29 +1,49 @@
 ---
 import DocumentsSection from "../components/documents-section.astro";
 import FaqSection from "../components/faq-section.astro";
-import FinalCallSection from "../components/final-call-section.astro";
-import HeroSection from "../components/hero-section.astro";
+import ActivitiesSection from "../components/home/activities-section.astro";
+import HomeCallbackSection from "../components/home/home-callback-section.astro";
+import HomeHero from "../components/home/home-hero.astro";
+import ProductGrid from "../components/home/product-grid.astro";
+import ProofStrip from "../components/home/proof-strip.astro";
+import TrustSection from "../components/home/trust-section.astro";
+import SiteHeader from "../components/navigation/site-header.astro";
 import PainsSection from "../components/pains-section.astro";
 import PassageSection from "../components/passage-section.astro";
-import ReassuranceSection from "../components/reassurance-section.astro";
 import SiteFooter from "../components/site-footer.astro";
-import SiteHeader from "../components/site-header.astro";
+import StoriesSection from "../components/stories/stories-section.astro";
 import TeamSection from "../components/team-section.astro";
+import { PATHS } from "../content/catalog";
 import { fr } from "../fr";
 import BaseLayout from "../layouts/base-layout.astro";
+import { faqJsonLd, organizationJsonLd, softwareJsonLd, websiteJsonLd } from "../seo";
 ---
 
-<BaseLayout title={fr.meta.title} description={fr.meta.description}>
-  <SiteHeader />
+<BaseLayout
+  title={fr.meta.title}
+  description={fr.meta.description}
+  path={PATHS.home}
+  structuredData={[
+    organizationJsonLd(),
+    websiteJsonLd(),
+    softwareJsonLd(fr.meta.description),
+    faqJsonLd(fr.faq.items),
+  ]}
+>
+  <SiteHeader currentPath={PATHS.home} />
   <main>
-    <HeroSection />
+    <HomeHero />
+    <ProofStrip />
+    <ProductGrid />
     <PainsSection />
     <PassageSection />
     <DocumentsSection />
     <TeamSection />
-    <ReassuranceSection />
+    <ActivitiesSection />
+    <StoriesSection />
+    <TrustSection />
     <FaqSection />
-    <FinalCallSection />
+    <HomeCallbackSection />
   </main>
   <SiteFooter />
 </BaseLayout>

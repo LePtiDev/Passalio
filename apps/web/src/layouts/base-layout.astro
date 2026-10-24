@@ -1,30 +1,73 @@
 ---
+import fontUrl from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url";
 import "../styles/global.css";
+import {
+  type JsonLd,
+  OG_IMAGE_SIZE,
+  absoluteUrl,
+  ogImagePath,
+  serializeJsonLd,
+} from "../seo";
 import { SITE_ENVIRONMENT, isIndexable } from "../site-environment";
 
 interface Props {
   title: string;
   description: string;
+  path: string;
+  ogType?: "website" | "article";
+  isNotFound?: boolean;
+  structuredData?: ReadonlyArray<JsonLd>;
 }
 
-const { title, description } = Astro.props;
-const isIndexed = isIndexable(SITE_ENVIRONMENT);
+const {
+  title,
+  description,
+  path,
+  ogType = "website",
+  isNotFound = false,
+  structuredData = [],
+} = Astro.props;
+const canBeIndexed = !isNotFound && isIndexable(SITE_ENVIRONMENT);
+const canonical = absoluteUrl(path);
+const image = absoluteUrl(ogImagePath(path));
 ---
 
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
     <meta name="description" content={description} />
-    {!isIndexed && <meta name="robots" content="noindex, nofollow" />}
+    {!isNotFound && <link rel="canonical" href={canonical} />}
+    {canBeIndexed ? (
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+    ) : (
+      <meta name="robots" content="noindex, follow" />
+    )}
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#0f2a44" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Passalio" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content={String(OG_IMAGE_SIZE.width)} />
+    <meta property="og:image:height" content={String(OG_IMAGE_SIZE.height)} />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>{title}</title>
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    {
+      structuredData.map((data) => (
+        <script is:inline type="application/ld+json" set:html={serializeJsonLd(data)} />
+      ))
+    }
   </head>
   <body class="min-h-dvh bg-white text-base leading-relaxed text-navy">
     <slot />
