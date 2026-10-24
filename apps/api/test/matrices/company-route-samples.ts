@@ -1,5 +1,5 @@
 import { reserveNumberBlockBody, syncPushBody } from "@passalio/shared";
-import { visitDurations } from "@passalio/trades";
+import { serviceChanges, serviceFields } from "@passalio/trades";
 import {
   addEquipmentBody,
   addSiteBody,
@@ -63,9 +63,21 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     withJson("POST", "/api/document-number-blocks", reserveNumberBlockBody, {
       deviceId: crypto.randomUUID(),
     }),
-  "GET /api/visit-types": () => read("/api/visit-types"),
-  "PATCH /api/visit-types/durations": () =>
-    withJson("PATCH", "/api/visit-types/durations", visitDurations, {}),
+  "GET /api/services": () => read("/api/services"),
+  "POST /api/services": () =>
+    withJson("POST", "/api/services", serviceFields, {
+      name: "Ramonage de conduit",
+      durationMinutes: 60,
+      priceCents: 7500,
+      document: "chimney_sweeping_certificate",
+      trade: "chimney_sweeping",
+    }),
+  "PATCH /api/services/:serviceId": () =>
+    withJson("PATCH", `/api/services/${crypto.randomUUID()}`, serviceChanges, {
+      priceCents: 8000,
+    }),
+  "POST /api/services/:serviceId/archive": () =>
+    withoutBody("POST", `/api/services/${crypto.randomUUID()}/archive`),
   "GET /api/customers": () => read("/api/customers"),
   "POST /api/customers": () =>
     withJson("POST", "/api/customers", createCustomerBody, {

@@ -5,12 +5,14 @@ export type InMemorySchedulingState = {
   readonly interventions: Intervention[];
   readonly places: Map<string, InterventionPlace & { readonly organizationId: string }>;
   readonly members: Set<string>;
+  readonly services: Map<string, string>;
 };
 
 export const createInMemorySchedulingState = (): InMemorySchedulingState => ({
   interventions: [],
   places: new Map(),
   members: new Set(),
+  services: new Map(),
 });
 
 export const memberKey = (organizationId: string, userId: string) => `${organizationId}:${userId}`;
@@ -71,6 +73,10 @@ export const createInMemorySchedulingDependencies = (
     team: {
       isMember: async (organizationId, userId) =>
         state.members.has(memberKey(organizationId, userId)),
+    },
+    catalog: {
+      knownIds: async (organizationId, serviceIds) =>
+        serviceIds.filter((serviceId) => state.services.get(serviceId) === organizationId),
     },
     now,
   };

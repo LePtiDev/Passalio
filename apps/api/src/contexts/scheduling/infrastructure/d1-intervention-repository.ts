@@ -20,6 +20,8 @@ export const createD1InterventionRepository = (database: Database): Intervention
       ...intervention,
       equipmentIds: [...intervention.equipmentIds],
       visitTypes: [...intervention.visitTypes],
+      technicianUserIds: [...intervention.technicianUserIds],
+      serviceLines: [...intervention.serviceLines],
     });
   },
   findById: async (organizationId, interventionId) =>
@@ -28,13 +30,19 @@ export const createD1InterventionRepository = (database: Database): Intervention
       .from(interventions)
       .where(and(activeInOrganization(organizationId), eq(interventions.id, interventionId)))
       .get(),
-  update: async (organizationId, interventionId, { equipmentIds, visitTypes, ...changes }) => {
+  update: async (
+    organizationId,
+    interventionId,
+    { equipmentIds, visitTypes, technicianUserIds, serviceLines, ...changes },
+  ) => {
     await database
       .update(interventions)
       .set({
         ...changes,
         ...(equipmentIds === undefined ? {} : { equipmentIds: [...equipmentIds] }),
         ...(visitTypes === undefined ? {} : { visitTypes: [...visitTypes] }),
+        ...(technicianUserIds === undefined ? {} : { technicianUserIds: [...technicianUserIds] }),
+        ...(serviceLines === undefined ? {} : { serviceLines: [...serviceLines] }),
       })
       .where(and(activeInOrganization(organizationId), eq(interventions.id, interventionId)));
   },

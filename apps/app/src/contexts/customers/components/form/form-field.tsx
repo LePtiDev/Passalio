@@ -38,7 +38,7 @@ export const FormField = ({
       <Label htmlFor={id} className={LABEL_CLASS}>
         {label}
         {isRequired === true ? (
-          <span aria-hidden="true" className="text-destructive">
+          <span aria-hidden="true" className="-ml-0.5 text-destructive">
             *
           </span>
         ) : null}

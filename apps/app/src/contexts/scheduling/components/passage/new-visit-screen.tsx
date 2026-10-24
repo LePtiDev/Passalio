@@ -22,7 +22,7 @@ import type { Technician } from "../../technicians";
 import { useChosenCustomer } from "../../hooks/use-customer-choice";
 import { useNow } from "../../hooks/use-now";
 import { useTechnicians } from "../../hooks/use-technicians";
-import { useVisitTypeChoice } from "../../hooks/use-visit-type-choice";
+import { useServiceChoice } from "../../hooks/use-service-choice";
 import {
   DEFAULT_DURATION_MINUTES,
   emptyVisitForm,
@@ -30,12 +30,13 @@ import {
   visitFormSchema,
   type VisitFormValues,
 } from "../../visit-form-schema";
-import { DateInput, SiteSelect, TechnicianSelect, TimeInput } from "./appointment-fields";
+import { DateInput, SiteSelect, TimeInput } from "./appointment-fields";
 import { CustomerPicker } from "./customer-picker";
 import { DurationField } from "./duration-field";
 import { EquipmentChecklist } from "./equipment-checklist";
 import { siteLabelOf } from "./site-label";
-import { VisitTypeField } from "./visit-type-field";
+import { ServiceField } from "./service-field";
+import { TechniciansField } from "./technicians-field";
 
 const text = schedulingFr.form;
 
@@ -78,7 +79,9 @@ const NewVisitForm = ({
     [chosen, siteId],
   );
   const equipmentField = useController({ control, name: "equipmentIds" }).field;
-  const visitType = useVisitTypeChoice(form, equipments);
+  const service = useServiceChoice(form, equipments);
+  const priceHint =
+    service.chosen.length === 0 ? text.priceHint : text.priceFromServices(service.chosen);
   const firstSiteId = sites[0]?.id ?? "";
   const siteIds = sites.map(({ id }) => id).join();
 
@@ -134,24 +137,24 @@ const NewVisitForm = ({
         {sites.length > 1 ? <SiteSelect control={control} sites={sites} /> : null}
       </Fieldset>
       <Fieldset title={text.appointmentSection}>
-        {visitType.offered.length === 0 ? null : (
-          <VisitTypeField
-            offered={visitType.offered}
-            value={visitType.chosenTypes}
-            error={visitType.error}
-            onChange={visitType.chooseTypes}
+        {service.offered.length === 0 ? null : (
+          <ServiceField
+            offered={service.offered}
+            value={service.chosenIds}
+            error={service.error}
+            onChange={service.chooseServices}
           />
         )}
         <div className="grid gap-4 lg:grid-cols-3">
           <DateInput control={control} />
           <TimeInput control={control} />
           <DurationField
-            minutes={visitType.durationMinutes}
-            chosen={visitType.chosen}
-            onChange={visitType.chooseDuration}
+            minutes={service.durationMinutes}
+            chosen={service.chosen}
+            onChange={service.chooseDuration}
           />
         </div>
-        <TechnicianSelect control={control} technicians={technicians} />
+        <TechniciansField control={control} technicians={technicians} />
       </Fieldset>
       {chosen === null || chosen === undefined ? null : (
         <Fieldset
@@ -169,7 +172,7 @@ const NewVisitForm = ({
         <FormField
           id="visit-price"
           label={text.price}
-          hint={text.priceHint}
+          hint={priceHint}
           error={formState.errors.price?.message}
         >
           <Input
@@ -180,7 +183,7 @@ const NewVisitForm = ({
             aria-describedby={describedBy(
               "visit-price",
               formState.errors.price?.message,
-              text.priceHint,
+              priceHint,
             )}
             className={FIELD_CLASS}
             {...form.register("price")}

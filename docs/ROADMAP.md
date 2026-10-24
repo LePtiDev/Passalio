@@ -51,6 +51,7 @@ Dernière mise à jour : 2026-10-24.
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                                                          | ADR 0022                                            |
 | Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                                                                                                       | `contexts/scheduling` (app)                         |
 | Types de passage : durée par défaut par métier dans Réglages, type et durée modifiable sur le nouveau passage                                                                                                     | `contexts/scheduling`                               |
+| Prestations : liste par entreprise (durée, prix, document remis), plusieurs prestations et plusieurs techniciens par passage, prix annoncé prérempli                                                              | ADR 0026                                            |
 | Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                                                      | `components/equipment` (app)                        |
 | Lecture de plaque, tests : réduction de la photo, bandeau, marques des champs, listes déroulantes, remplissage du formulaire, parcours illisible, PAC, panne, hors ligne                                          | `docs/TESTING.md`                                   |
 | Lecture de plaque, note d'exploitation de l'IA : fonctionnement, coût estimé, choix du modèle, activation, incidents                                                                                              | `docs/ai-plate-reading.md`                          |
@@ -58,6 +59,8 @@ Dernière mise à jour : 2026-10-24.
 | Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                                                        | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
 | ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                                                                | ADR 0023, `packages/test-guard`                     |
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                                                          | ADR 0024                                            |
+| Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                                                                | ADR 0025                                            |
+| Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                              | `docs/stripe.md`                                    |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100 | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
 
 ## Hors code (Quentin)
@@ -111,13 +114,17 @@ Dernière mise à jour : 2026-10-24.
 - [x] Planning, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, fiche passage
 - [ ] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé, historique sur la fiche client
 - [x] Types de passage : durée par défaut par métier (Réglages › Types de passage), type et durée modifiable sur le nouveau passage (maquette validée le 2026-10-23)
-- [ ] Planning : modifier un passage (date, heure, technicien, type, durée), le marquer terminé sans certificat
-- [ ] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable
+- [ ] Planning : modifier un passage (date, heure, techniciens, prestations, durée), le marquer terminé sans certificat
+- [x] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable ; plusieurs prestations et plusieurs techniciens par passage (maquette validée le 2026-10-24, ADR 0026)
+- [ ] Chantiers sur plusieurs jours : un jour par passage, techniciens différents par jour, bloc « Chantier · jour 1 sur 3 » au planning, fiche chantier (maquette validée le 2026-10-24)
 - [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
 - [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
-- [ ] Abonnement : Stripe Billing, 29,99 € HT/mois et 299,90 € HT/an, essai gratuit de 14 jours sans carte, lecture seule en fin d'essai ou après 15 jours d'impayé (conditions, articles 6 et 8)
+- [x] Grille de prix et fonctionnement du paiement décidés (ADR 0025, choix de Quentin du 2026-10-24)
+- [ ] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, lecture seule, emails (fin d'essai J-3 et J0, paiement refusé, lecture seule)
+- [ ] Abonnement, code : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures en lecture seule, passage Solo vers Équipe à l'invitation d'un deuxième technicien (ADR 0025)
+- [ ] Ouvrir le compte Stripe de production au nom de la SAS, mentions de la facture Stripe validées par la vérification réglementaire
 - [x] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
 - [ ] Poser le secret `RESEND_API_KEY` en staging et en production, puis tester un envoi sur chaque environnement
 - [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié
@@ -182,7 +189,7 @@ Dernière mise à jour : 2026-10-24.
 - [x] Landing page plus fine, selon la maquette v3 validée le 2026-10-23
 - [x] Déployer le site sur staging.passalio.com et passalio.com, avec `release:*`
 - [ ] Rediriger www.passalio.com vers passalio.com
-- [ ] Landing : section prix, une fois le prix tranché, en hors taxes (ADR 0014)
+- [ ] Landing : section prix en hors taxes, Solo et Équipe (ADR 0014, ADR 0025)
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
 - [x] Barre de navigation commune, pages par activité, pages fonction, histoires de terrain, page Sans réseau, SEO complet (maquette : https://claude.ai/artifact/6LZhtqB84KkzXpjxumRoqt)
