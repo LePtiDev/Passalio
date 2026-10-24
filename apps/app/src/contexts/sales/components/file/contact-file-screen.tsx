@@ -56,11 +56,12 @@ export const ContactFileScreen = ({ contactId }: { readonly contactId: string })
   const file = useContactFile(contactId);
   const { refetch } = file;
   const retry = useCallback(() => void refetch(), [refetch]);
-  const name = file.data?.contact.name ?? salesFr.contacts.title;
-  const trail = useMemo<readonly AdminTrailStep[]>(
-    () => [{ label: salesFr.contacts.title, to: "/admin/contacts" }, { label: name }],
-    [name],
-  );
+  const recordName = file.data?.contact.name ?? null;
+  const name = recordName ?? salesFr.contacts.title;
+  const trail = useMemo<readonly AdminTrailStep[]>(() => {
+    const parent: AdminTrailStep = { label: salesFr.contacts.title, to: "/admin/contacts" };
+    return recordName === null ? [parent] : [parent, { label: recordName }];
+  }, [recordName]);
   return (
     <AdminPage section="commercial" trail={trail} mobileTitle={name} mobileBack={BACK}>
       {file.isPending ? <FileSkeleton /> : null}
