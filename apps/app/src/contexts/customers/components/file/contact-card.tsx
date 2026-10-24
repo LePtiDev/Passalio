@@ -90,7 +90,7 @@ export const ContactCard = ({ customer, firstSite }: ContactCardProps) => {
               />
               {label}
             </dt>
-            <dd className={cn("truncate text-[15px] lg:text-[13px]", isMuted && "text-[#94A3B8]")}>
+            <dd className={cn("truncate text-[15px] lg:text-[13px]", isMuted && "text-[#64748B]")}>
               {value}
             </dd>
           </div>
