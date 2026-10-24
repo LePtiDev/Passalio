@@ -17,9 +17,12 @@ import { findMcpCaller } from "../../src/contexts/mcp/infrastructure/mcp-caller-
 import { countMcpCall } from "../../src/contexts/mcp/infrastructure/mcp-rate-limit";
 import { createD1TeamInvitationRepository } from "../../src/contexts/platform-team/infrastructure/d1-team-invitation-repository";
 import { createD1TeammateRepository } from "../../src/contexts/platform-team/infrastructure/d1-teammate-repository";
+import { createD1CallRepository } from "../../src/contexts/sales/infrastructure/d1-call-repository";
 import { createD1CompanyRepository } from "../../src/contexts/sales/infrastructure/d1-company-repository";
 import { createD1ContactRepository } from "../../src/contexts/sales/infrastructure/d1-contact-repository";
 import { createD1EventRepository } from "../../src/contexts/sales/infrastructure/d1-event-repository";
+import { createD1FollowUpRepository } from "../../src/contexts/sales/infrastructure/d1-follow-up-repository";
+import { createD1TaskRepository } from "../../src/contexts/sales/infrastructure/d1-task-repository";
 import { mainContactsOf } from "../../src/contexts/sales/infrastructure/main-contacts";
 import { createSalesDependencies } from "../../src/contexts/sales/infrastructure/sales-dependencies";
 import {
@@ -59,6 +62,9 @@ export const createRepositories = (database: Database) => {
     prospectCompanies: createD1CompanyRepository(database),
     prospectContacts: createD1ContactRepository(database),
     prospectEvents: createD1EventRepository(database),
+    prospectCalls: createD1CallRepository(database),
+    prospectFollowUps: createD1FollowUpRepository(database),
+    prospectTasks: createD1TaskRepository(database),
     prospectMainContacts: {
       of: (companyIds: readonly string[]) => mainContactsOf(database, companyIds),
     },

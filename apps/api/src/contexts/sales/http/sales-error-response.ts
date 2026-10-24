@@ -7,6 +7,8 @@ const ERROR_STATUS: Readonly<Record<ProspectError, ContentfulStatusCode>> = {
   contact_not_found: 404,
   owner_not_found: 422,
   contact_not_in_company: 422,
+  task_not_found: 404,
+  task_closed: 409,
 };
 
 export const salesErrorResponse = (context: Context, error: ProspectError) =>

@@ -8,7 +8,9 @@ import type {
   ProspectContact,
   ProspectEvent,
 } from "../domain/prospect-models";
+import type { ProspectCall, ProspectFollowUp, ProspectTask } from "../domain/call-models";
 import type { NameCursor, SalesDependencies } from "../domain/prospect-ports";
+import { createInMemoryCallRepositories } from "./in-memory-call-repositories";
 import {
   companySearchName,
   companySearchText,
@@ -21,6 +23,9 @@ export type InMemorySalesState = {
   readonly companies: ProspectCompany[];
   readonly contacts: ProspectContact[];
   readonly events: ProspectEvent[];
+  readonly calls: ProspectCall[];
+  readonly followUps: ProspectFollowUp[];
+  readonly tasks: ProspectTask[];
   readonly people: Person[];
   readonly deletedCompanies: { readonly actorUserId: string; readonly companyId: string }[];
 };
@@ -29,6 +34,9 @@ export const createInMemorySalesState = (): InMemorySalesState => ({
   companies: [],
   contacts: [],
   events: [],
+  calls: [],
+  followUps: [],
+  tasks: [],
   people: [],
   deletedCompanies: [],
 });
@@ -194,6 +202,9 @@ export const createInMemorySalesDependencies = (
         removeWhere(state.companies, ({ id }) => id === companyId);
         removeWhere(state.contacts, (contact) => contact.companyId === companyId);
         removeWhere(state.events, (event) => event.companyId === companyId);
+        removeWhere(state.calls, (call) => call.companyId === companyId);
+        removeWhere(state.followUps, (followUp) => followUp.companyId === companyId);
+        removeWhere(state.tasks, (task) => task.companyId === companyId);
       },
       list: async ({ department, ownerUserId, stage, query, after, limit }) =>
         state.companies
@@ -300,6 +311,7 @@ export const createInMemorySalesDependencies = (
       ofContact: async (contactId, limit) =>
         newestEvents((event) => event.contactId === contactId, limit),
     },
+    ...createInMemoryCallRepositories(state, { personOf, contactPersonOf, mainContactOf }),
     people: {
       owners: async () =>
         state.people.toSorted((first, second) => first.name.localeCompare(second.name)),

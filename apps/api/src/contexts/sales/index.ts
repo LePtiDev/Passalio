@@ -10,6 +10,7 @@ export { listContacts } from "./application/list-contacts";
 export { updateCompany } from "./application/update-company";
 export { updateContact } from "./application/update-contact";
 export type { ProspectError } from "./domain/prospect-error";
+export { callRoutes as prospectCallRoutes } from "./http/call-routes";
 export { companyRoutes as prospectCompanyRoutes } from "./http/company-routes";
 export { contactRoutes as prospectContactRoutes } from "./http/contact-routes";
 export { createSalesDependencies } from "./infrastructure/sales-dependencies";

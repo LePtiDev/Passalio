@@ -57,6 +57,7 @@ Dernière mise à jour : 2026-10-24.
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx`                    |
 | Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
 | ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
+| Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                      | ADR 0024                                            |
 
 ## Hors code (Quentin)
 
@@ -133,6 +134,12 @@ Dernière mise à jour : 2026-10-24.
 - [x] Serveur MCP admin : Claude lit l'admin et écrit dans la prospection, écran d'autorisation selon la maquette validée le 2026-10-23 (ADR 0019)
 - [x] Serveur MCP : KV `passalio-oauth-staging` et `passalio-oauth-production`, `MCP_ENABLED` activé en staging et en production
 - [ ] Serveur MCP : outil d'import en lot de fiches prospects (100 lignes, simulation d'abord)
+- [x] Prospection, appels, données et API : appels, rappels, qualification, Ma journée, séries (ADR 0024)
+- [ ] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
+- [ ] Prospection, configuration de la boîte mail dans le profil (admin pour un autre membre), envoi SMTP, rappels par e-mail
+- [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
+- [ ] Prospection, campagnes : envoi programmé, montée progressive de 5 à 25 par jour, créneau 8 h à 11 h
+- [ ] Prospection, statistiques : réponses, rendez-vous, taux de décroché par heure
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)
