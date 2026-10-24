@@ -72,6 +72,9 @@ export const fr = {
     previous: "Page précédente",
     next: "Page suivante",
   },
+  dialog: {
+    close: "Fermer",
+  },
   settings: {
     title: "Réglages",
     signedInAs: "Connecté en tant que",
