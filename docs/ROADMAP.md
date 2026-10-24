@@ -51,6 +51,7 @@ Dernière mise à jour : 2026-10-24.
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)     |
 | Lecture de plaque, tests : réduction de la photo, bandeau, marques des champs, listes déroulantes, remplissage du formulaire, parcours illisible, PAC, panne, hors ligne      | `docs/TESTING.md`                |
+| Lecture de plaque, note d'exploitation de l'IA : fonctionnement, coût estimé, choix du modèle, activation, incidents                                                          | `docs/ai-plate-reading.md`       |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
 
 ## Hors code (Quentin)
