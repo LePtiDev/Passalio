@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ADMIN_PRIMARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { describedBy, FormField } from "@/contexts/customers";
 import { departmentLabel } from "../../department-names";
 import { callsFr } from "../../fr-calls";
@@ -118,7 +117,7 @@ export const CallSeriesCard = () => {
             </SelectContent>
           </Select>
         </FormField>
-        <Button type="submit" className={`${ADMIN_PRIMARY_BUTTON_CLASS} gap-2`}>
+        <Button type="submit">
           <Play aria-hidden="true" className="size-3.5" strokeWidth={2} />
           {validSize === null ? text.launchInvalid : text.launch(validSize)}
         </Button>

@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { CircleCheck } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { ADMIN_PRIMARY_BUTTON_CLASS, ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { callsFr } from "../../fr-calls";
 import { EmptyFrame } from "../list/list-states";
@@ -9,12 +8,9 @@ import type { SessionProgress } from "./session-progress";
 
 const text = callsFr.session;
 
-const PRIMARY_LINK_CLASS = cn(buttonVariants(), ADMIN_PRIMARY_BUTTON_CLASS);
+const PRIMARY_LINK_CLASS = buttonVariants();
 
-const SECONDARY_LINK_CLASS = cn(
-  buttonVariants({ variant: "outline" }),
-  ADMIN_SECONDARY_BUTTON_CLASS,
-);
+const SECONDARY_LINK_CLASS = cn(buttonVariants({ variant: "secondary" }));
 
 export const SessionDone = ({ progress }: { readonly progress: SessionProgress }) => (
   <section

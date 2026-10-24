@@ -2,7 +2,7 @@ import type { ProspectCompanySummaryResponse, ProspectContactResponse } from "@p
 import { Briefcase, ChevronRight, Clock, Mail, Pencil, Phone, Smartphone } from "lucide-react";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { Button } from "@/components/ui/button";
-import { ADMIN_CARD_CLASS, ADMIN_PRIMARY_BUTTON_CLASS } from "@/contexts/backoffice";
+import { ADMIN_CARD_CLASS } from "@/contexts/backoffice";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../../fr";
@@ -48,7 +48,7 @@ export const ContactFileHeader = ({ contact, company, onEdit }: ContactHeaderPro
         </div>
         <div className="flex gap-2">
           <CallLink phone={phone} className={SECONDARY_ACTION_CLASS} />
-          <Button variant="outline" className={SECONDARY_ACTION_CLASS} onClick={onEdit}>
+          <Button variant="secondary" onClick={onEdit}>
             <Pencil aria-hidden="true" className="size-3.5" strokeWidth={1.8} />
             {text.edit}
           </Button>
@@ -65,11 +65,8 @@ export const ContactFileHeader = ({ contact, company, onEdit }: ContactHeaderPro
           </span>
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <CallLink
-            phone={phone}
-            className={cn(buttonVariants(), ADMIN_PRIMARY_BUTTON_CLASS, "gap-2")}
-          />
-          <Button variant="outline" className={SECONDARY_ACTION_CLASS} onClick={onEdit}>
+          <CallLink phone={phone} className={buttonVariants()} />
+          <Button variant="secondary" onClick={onEdit}>
             {text.edit}
           </Button>
         </div>

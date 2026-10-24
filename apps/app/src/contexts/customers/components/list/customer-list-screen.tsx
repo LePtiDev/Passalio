@@ -12,7 +12,7 @@ import { usePageNumber } from "@/lib/use-page-number";
 import { customersFr } from "../../fr";
 import { useCustomerList, type CustomerFilter } from "../../hooks/use-customer-list";
 import { useSyncIndicator } from "../../hooks/use-sync-indicator";
-import { CARD_CLASS, PRIMARY_BUTTON_CLASS } from "../customer-styles";
+import { CARD_CLASS } from "../customer-styles";
 import { MobileSyncLine, OfflineBanner, SyncPill } from "../sync-indicator";
 import { CustomerListToolbar } from "./customer-list-toolbar";
 import {
@@ -148,7 +148,7 @@ export const CustomerListScreen = () => {
               <p className="text-[13px] text-[#475569]">{subtitle}</p>
             )}
           </div>
-          <Button asChild className={PRIMARY_BUTTON_CLASS}>
+          <Button asChild>
             <Link to="/clients/nouveau">
               <Plus aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
               {text.newCustomer}

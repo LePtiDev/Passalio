@@ -12,7 +12,7 @@ import { FORGOT_PASSWORD_PATH, SIGN_IN_PATH } from "@/lib/session";
 import { identityFr } from "../fr";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AuthHeading } from "./auth-heading";
-import { AUTH_PRIMARY_BUTTON_CLASS, AUTH_FIELD_CLASS } from "./auth-styles";
+import { AUTH_FIELD_CLASS } from "./auth-styles";
 import { PasswordInput } from "./password-input";
 import { newPasswordSchema } from "./password-schema";
 import { PasswordStrengthMeter } from "./password-strength-meter";
@@ -28,7 +28,7 @@ const STRENGTH_ID = "new-password-strength";
 const InvalidResetLink = () => (
   <div className="flex flex-col gap-5" role="alert">
     <AuthHeading title={text.invalidLinkTitle} subtitle={text.invalidLink} />
-    <Button asChild className={AUTH_PRIMARY_BUTTON_CLASS}>
+    <Button asChild>
       <Link to={FORGOT_PASSWORD_PATH}>{text.requestNewLink}</Link>
     </Button>
   </div>
@@ -85,7 +85,7 @@ export const ResetPasswordForm = ({ token }: { readonly token: string | null }) 
         />
         <PasswordStrengthMeter id={STRENGTH_ID} password={typedPassword} />
       </AuthField>
-      <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+      <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? text.submitting : text.submit}
       </Button>
     </form>

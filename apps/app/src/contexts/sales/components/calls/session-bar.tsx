@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { callsFr } from "../../fr-calls";
 import type { SessionProgress } from "./session-progress";
@@ -103,12 +102,12 @@ export const SessionBar = ({ isSingle, exit, progress, onSkip, onFinish }: Sessi
       {running === null ? null : (
         <span className="hidden gap-2 lg:flex">
           {onSkip === undefined ? null : (
-            <Button variant="outline" className={ADMIN_SECONDARY_BUTTON_CLASS} onClick={onSkip}>
+            <Button variant="secondary" onClick={onSkip}>
               {text.skip}
             </Button>
           )}
           {onFinish === undefined ? null : (
-            <Button variant="outline" className={ADMIN_SECONDARY_BUTTON_CLASS} onClick={onFinish}>
+            <Button variant="secondary" onClick={onFinish}>
               {text.finish}
             </Button>
           )}

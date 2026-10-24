@@ -1,6 +1,5 @@
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ADMIN_PRIMARY_BUTTON_CLASS, ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { callsFr } from "../../fr-calls";
 import { CALL_FORM_ID } from "./call-result-form";
@@ -41,21 +40,10 @@ export const MobileDeskFooter = ({
     data-sticky-footer
     className="sticky bottom-0 -mx-4 mt-auto flex gap-2.5 border-t border-[#E3E8EF] bg-white px-4 pt-3 pb-5"
   >
-    <Button
-      type="button"
-      variant="outline"
-      className={ADMIN_SECONDARY_BUTTON_CLASS}
-      disabled={isSaving}
-      onClick={onSkip}
-    >
+    <Button type="button" variant="secondary" disabled={isSaving} onClick={onSkip}>
       {text.skip}
     </Button>
-    <Button
-      type="submit"
-      form={CALL_FORM_ID}
-      disabled={isSaving}
-      className={cn(ADMIN_PRIMARY_BUTTON_CLASS, "flex-1")}
-    >
+    <Button type="submit" form={CALL_FORM_ID} disabled={isSaving} className="flex-1">
       {hasNext ? text.saveAndNext : text.save}
     </Button>
   </div>

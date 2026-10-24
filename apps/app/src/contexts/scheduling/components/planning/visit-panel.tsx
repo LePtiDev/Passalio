@@ -10,14 +10,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useMemo, type ReactNode } from "react";
-import {
-  fullAddressOf,
-  PRIMARY_BUTTON_CLASS,
-  routeUrlOf,
-  SECONDARY_BUTTON_CLASS,
-} from "@/contexts/customers";
+import { fullAddressOf, routeUrlOf } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { formatEuros, schedulingFr, visitTypesLabel } from "../../fr";
 import { longDayLabel } from "../../planning-dates";
 import type { PlanningVisit } from "../../planning-visits";
@@ -90,13 +84,13 @@ export const VisitPanel = ({
         {intervention.notes === null ? null : <Fact icon={StickyNote}>{intervention.notes}</Fact>}
       </dl>
       <div className="flex flex-col gap-2 pt-1">
-        <Button asChild className={cn(PRIMARY_BUTTON_CLASS, "w-full")}>
+        <Button asChild className="w-full">
           <Link to="/passages/$interventionId" params={params}>
             {text.open}
           </Link>
         </Button>
         {site === null ? null : (
-          <Button asChild variant="outline" className={cn(SECONDARY_BUTTON_CLASS, "w-full")}>
+          <Button asChild variant="secondary" className="w-full">
             <a href={routeUrlOf(site)} target="_blank" rel="noreferrer">
               <Navigation aria-hidden="true" className="size-3.5" />
               {text.route}

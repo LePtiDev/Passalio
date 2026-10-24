@@ -19,8 +19,6 @@ type ConfirmDialogProps = {
   readonly onConfirm: () => void;
 };
 
-const BUTTON_CLASS = "h-12 text-base lg:h-10 lg:text-sm";
-
 export const ConfirmDialog = ({
   isOpen,
   title,
@@ -36,10 +34,8 @@ export const ConfirmDialog = ({
         <AlertDialogDescription>{description}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel className={BUTTON_CLASS}>
-          {customersFr.file.confirmCancel}
-        </AlertDialogCancel>
-        <AlertDialogAction variant="destructive" className={BUTTON_CLASS} onClick={onConfirm}>
+        <AlertDialogCancel>{customersFr.file.confirmCancel}</AlertDialogCancel>
+        <AlertDialogAction variant="danger" onClick={onConfirm}>
           {confirmLabel}
         </AlertDialogAction>
       </AlertDialogFooter>

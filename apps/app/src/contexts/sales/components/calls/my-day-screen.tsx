@@ -3,13 +3,7 @@ import { Play } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { ErrorState } from "@/components/error-state";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  ADMIN_PRIMARY_BUTTON_CLASS,
-  AdminHeading,
-  AdminPage,
-  useNow,
-  type AdminTrailStep,
-} from "@/contexts/backoffice";
+import { AdminHeading, AdminPage, useNow, type AdminTrailStep } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { dayTitle } from "../../call-time-labels";
 import { callsFr } from "../../fr-calls";
@@ -32,7 +26,7 @@ const StartCallsLink = ({
   readonly hasTasks: boolean;
   readonly className?: string;
 }) => {
-  const classes = cn(buttonVariants(), ADMIN_PRIMARY_BUTTON_CLASS, "gap-2", className);
+  const classes = cn(buttonVariants(), className);
   const content = (
     <>
       <Play aria-hidden="true" className="size-4" strokeWidth={2} />

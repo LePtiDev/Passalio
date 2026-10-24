@@ -1,10 +1,8 @@
 import { Minus, Plus } from "lucide-react";
 import { useCallback, useState } from "react";
-import { PRIMARY_BUTTON_CLASS } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import type { VisitTypeRecord } from "@/lib/db/local-records";
-import { cn } from "@/lib/utils";
 import { formatDuration, schedulingFr, VISIT_TYPE_LABELS } from "../../fr";
 import { steppedDuration } from "../../visit-types";
 
@@ -52,12 +50,7 @@ const DurationStepper = ({
         </button>
       </div>
       <p className="text-center text-[13px] text-[#64748B]">{text.stepHint}</p>
-      <Button
-        type="button"
-        onClick={save}
-        disabled={isSaving}
-        className={cn(PRIMARY_BUTTON_CLASS, "w-full")}
-      >
+      <Button type="button" onClick={save} disabled={isSaving} className="w-full">
         {text.save}
       </Button>
     </>

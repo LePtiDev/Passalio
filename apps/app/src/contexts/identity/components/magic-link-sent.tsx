@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { identityFr } from "../fr";
-import { AUTH_SECONDARY_BUTTON_CLASS } from "./auth-styles";
 
 const RESEND_DELAY_SECONDS = 60;
 
@@ -52,27 +51,17 @@ export const MagicLinkSent = ({ email, onResend, onUseOtherEmail }: MagicLinkSen
       </div>
       <div className="grid grid-cols-2 gap-2.5">
         {MAILBOXES.map((mailbox) => (
-          <Button
-            key={mailbox.href}
-            asChild
-            variant="outline"
-            className={AUTH_SECONDARY_BUTTON_CLASS}
-          >
+          <Button key={mailbox.href} asChild variant="secondary">
             <a href={mailbox.href} target="_blank" rel="noreferrer">
               {mailbox.label}
             </a>
           </Button>
         ))}
       </div>
-      <Button
-        variant="outline"
-        className={AUTH_SECONDARY_BUTTON_CLASS}
-        disabled={secondsLeft > 0}
-        onClick={resend}
-      >
+      <Button variant="secondary" disabled={secondsLeft > 0} onClick={resend}>
         {secondsLeft > 0 ? text.resendIn(formatCountdown(secondsLeft)) : text.resend}
       </Button>
-      <Button variant="ghost" className={AUTH_SECONDARY_BUTTON_CLASS} onClick={onUseOtherEmail}>
+      <Button variant="secondary" onClick={onUseOtherEmail}>
         {text.otherEmail}
       </Button>
     </div>

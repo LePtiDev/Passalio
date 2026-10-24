@@ -24,6 +24,3 @@ export const DIALOG_CONTENT_CLASS =
 export const DIALOG_TITLE_CLASS = "text-left text-lg font-semibold";
 
 export const DIALOG_TEXT_CLASS = "text-left text-[15px] leading-[1.45] text-[#475569] lg:text-sm";
-
-export const DIALOG_BUTTON_CLASS =
-  "h-12 rounded-[10px] text-[15px] font-semibold lg:h-10 lg:rounded-lg lg:px-4 lg:text-sm";

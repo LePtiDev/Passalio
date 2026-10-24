@@ -1,7 +1,7 @@
 import type { TradeId } from "@passalio/trades";
 import { Check, ChevronDown } from "lucide-react";
 import { useCallback, useState } from "react";
-import { describedBy, FIELD_CLASS, FormField, PRIMARY_BUTTON_CLASS } from "@/contexts/customers";
+import { describedBy, FIELD_CLASS, FormField } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -152,7 +152,7 @@ const MobileTypePicker = ({ offered, value, error, onChange }: VisitTypeFieldPro
           <span aria-hidden="true" className="mx-auto mb-1 h-1 w-10 rounded-full bg-[#CBD5E1]" />
           <SheetTitle className="text-[17px] font-bold">{text.visitType}</SheetTitle>
           <TypeList offered={offered} value={draft} isLarge onChange={changeDraft} />
-          <Button type="button" onClick={confirm} className={cn(PRIMARY_BUTTON_CLASS, "w-full")}>
+          <Button type="button" onClick={confirm} className="w-full">
             {text.visitTypeConfirm}
           </Button>
         </SheetContent>

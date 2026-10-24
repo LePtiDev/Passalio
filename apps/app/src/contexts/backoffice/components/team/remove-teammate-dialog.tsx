@@ -14,7 +14,6 @@ import { useRemoveTeammate } from "../../hooks/use-platform-team";
 import { teamFr } from "../../team-fr";
 import type { TeammateSummary } from "./change-role-dialog";
 import {
-  DIALOG_BUTTON_CLASS,
   DIALOG_OVERLAY_CLASS,
   DIALOG_SHADOW_CLASS,
   DIALOG_TEXT_CLASS,
@@ -60,14 +59,8 @@ export const RemoveTeammateDialog = ({ teammate, onClose }: RemoveTeammateDialog
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-2">
-          <AlertDialogCancel className={cn(DIALOG_BUTTON_CLASS, "border-[#E3E8EF] font-medium")}>
-            {teamFr.cancel}
-          </AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            className={DIALOG_BUTTON_CLASS}
-            onClick={confirm}
-          >
+          <AlertDialogCancel>{teamFr.cancel}</AlertDialogCancel>
+          <AlertDialogAction variant="danger" onClick={confirm}>
             {text.submit}
           </AlertDialogAction>
         </AlertDialogFooter>

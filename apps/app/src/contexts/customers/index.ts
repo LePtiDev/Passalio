@@ -37,8 +37,6 @@ export {
   HINT_TEXT_CLASS,
   LINK_BUTTON_CLASS,
   NEUTRAL_BADGE_CLASS,
-  PRIMARY_BUTTON_CLASS,
-  SECONDARY_BUTTON_CLASS,
   SELECT_TRIGGER_CLASS,
 } from "./components/customer-styles";
 export { MobileSyncLine, OfflineBanner, SyncPill } from "./components/sync-indicator";

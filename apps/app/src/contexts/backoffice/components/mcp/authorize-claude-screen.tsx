@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import { useCallback, useState, type ReactNode } from "react";
 import type { McpAccessLevel, McpAuthorizationResponse } from "@passalio/shared";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { AuthLayout } from "@/contexts/identity";
 import { apiErrorOf, unwrap, type ApiError } from "@/lib/api-client";
 import { errorCodeLine } from "@/lib/errors";
@@ -26,12 +26,6 @@ const INVALID_CODES: ReadonlySet<string> = new Set([
 
 const DEFAULT_ACCESS: McpAccessLevel = "write";
 
-const PRIMARY_CLASS =
-  "h-12 flex-1 rounded-lg text-base font-semibold shadow-[0_1px_2px_rgba(15,42,68,0.2)] lg:h-11 lg:text-sm";
-
-const SECONDARY_CLASS =
-  "h-12 flex-1 rounded-lg border-[#E3E8EF] text-base font-semibold text-[#0F2A44] lg:h-11 lg:text-sm";
-
 const LINK_CLASS =
   "flex min-h-12 items-center text-[15px] text-[#475569] hover:text-[#0F2A44] lg:min-h-0 lg:text-[13px]";
 
@@ -53,10 +47,7 @@ const isInvalid = (error: ApiError) => INVALID_CODES.has(error.code);
 const InvalidRequest = () => (
   <Layout>
     <Heading title={mcpFr.invalidTitle}>{mcpFr.invalidText}</Heading>
-    <a
-      href={ADMIN_PATH}
-      className="flex h-12 items-center justify-center rounded-lg bg-primary text-base font-semibold text-primary-foreground lg:h-11 lg:text-sm"
-    >
+    <a href={ADMIN_PATH} className={buttonVariants()}>
       {mcpFr.toAdmin}
     </a>
   </Layout>
@@ -76,9 +67,7 @@ const LoadError = ({
         {mcpFr.errorText}
         {code === null ? null : mcpFr.errorCode(code)}
       </Heading>
-      <Button className={PRIMARY_CLASS} onClick={onRetry}>
-        {mcpFr.retry}
-      </Button>
+      <Button onClick={onRetry}>{mcpFr.retry}</Button>
     </Layout>
   );
 };
@@ -103,10 +92,7 @@ const Granted = ({
     <Heading title={mcpFr.grantedTitle}>
       {mcpFr.grantedText(MCP_ACCESS_LABELS[access], formatLongDate(new Date(expiresAt)))}
     </Heading>
-    <a
-      href={redirectTo}
-      className="flex h-12 items-center justify-center rounded-lg bg-primary text-base font-semibold text-primary-foreground lg:h-11 lg:text-sm"
-    >
+    <a href={redirectTo} className={buttonVariants()}>
       {mcpFr.backToClaude}
     </a>
     <a href={ADMIN_PATH} className={LINK_CLASS}>
@@ -163,10 +149,10 @@ const ConsentForm = ({ request, email, onGranted, onInvalid }: ConsentFormProps)
       <AccessChoice value={access} onChange={setAccess} />
       <p className="text-sm leading-normal text-[#475569] lg:text-[13px]">{mcpFr.footnote}</p>
       <div className="flex flex-col-reverse gap-2.5 lg:flex-row lg:gap-3">
-        <Button variant="outline" className={SECONDARY_CLASS} disabled={isBusy} onClick={refuse}>
+        <Button variant="secondary" className="flex-1" disabled={isBusy} onClick={refuse}>
           {mcpFr.deny}
         </Button>
-        <Button className={PRIMARY_CLASS} disabled={isBusy} onClick={submit}>
+        <Button className="flex-1" disabled={isBusy} onClick={submit}>
           {approve.isPending ? mcpFr.approving : mcpFr.approve}
         </Button>
       </div>

@@ -8,7 +8,7 @@ import { fr } from "@/fr";
 import { cn } from "@/lib/utils";
 import { routeUrlOf } from "../../customer-view";
 import { customersFr } from "../../fr";
-import { NEUTRAL_BADGE_CLASS, SECONDARY_BUTTON_CLASS, SOON_BADGE_CLASS } from "../customer-styles";
+import { NEUTRAL_BADGE_CLASS, SOON_BADGE_CLASS } from "../customer-styles";
 import { MobileSyncLine } from "../sync-indicator";
 import { useCustomerParams } from "../../hooks/use-route-params";
 import { CustomerActionsMenu } from "./customer-actions-menu";
@@ -58,20 +58,20 @@ export const CustomerFileDesktopHeader = ({ customer, name, subtitle }: HeaderPr
       </div>
       <div className="flex items-center gap-2">
         {customer.phone === null ? null : (
-          <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+          <Button asChild variant="secondary">
             <a href={`tel:${customer.phone}`}>
               <Phone aria-hidden="true" className="size-3.5" />
               {text.call}
             </a>
           </Button>
         )}
-        <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+        <Button asChild variant="secondary">
           <Link to="/clients/$customerId/modifier" params={params}>
             <Pencil aria-hidden="true" className="size-3.5" />
             {text.edit}
           </Link>
         </Button>
-        <Button variant="outline" disabled className={cn(SECONDARY_BUTTON_CLASS, "text-[#94A3B8]")}>
+        <Button variant="secondary" disabled className="text-[#94A3B8]">
           <CalendarDays aria-hidden="true" className="size-3.5" />
           {text.schedule}
           <span className={SOON_BADGE_CLASS}>{fr.shell.soon}</span>

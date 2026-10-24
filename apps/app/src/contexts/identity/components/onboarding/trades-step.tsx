@@ -13,7 +13,6 @@ import { AUTH_ERROR_CLASS } from "../auth-styles";
 import { BackButton } from "./back-button";
 import { OnboardingBody, OnboardingFooter, OnboardingHeading } from "./onboarding-layout";
 import { ONBOARDING_PATHS } from "./onboarding-steps";
-import { ONBOARDING_PRIMARY_BUTTON_CLASS } from "./onboarding-styles";
 
 const text = onboardingFr.trades;
 
@@ -111,7 +110,7 @@ export const TradesStep = ({ organization }: { readonly organization: Organizati
           </span>
           <Button
             type="submit"
-            className={ONBOARDING_PRIMARY_BUTTON_CLASS}
+            className="flex-1 lg:flex-none"
             disabled={updateOrganization.isPending}
           >
             {updateOrganization.isPending

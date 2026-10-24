@@ -2,18 +2,13 @@ import type { LucideIcon } from "lucide-react";
 import { Phone } from "lucide-react";
 import type { ComponentProps } from "react";
 import { buttonVariants } from "@/components/ui/button";
-import { ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../../fr";
 
 export const TILE_CLASS =
   "flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl border border-[#E3E8EF] bg-white text-[13px] font-semibold text-[#0F2A44] disabled:opacity-50 aria-disabled:opacity-50";
 
-export const SECONDARY_ACTION_CLASS = cn(
-  buttonVariants({ variant: "outline" }),
-  ADMIN_SECONDARY_BUTTON_CLASS,
-  "gap-1.5",
-);
+export const SECONDARY_ACTION_CLASS = buttonVariants({ variant: "secondary" });
 
 const telHref = (phone: string) => `tel:${phone.replaceAll(/[^\d+]/g, "")}`;
 

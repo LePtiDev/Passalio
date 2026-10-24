@@ -1,7 +1,7 @@
 import type { ProspectTaskResponse } from "@passalio/shared";
 import { Phone } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { ADMIN_CARD_CLASS, ADMIN_PRIMARY_BUTTON_CLASS } from "@/contexts/backoffice";
+import { ADMIN_CARD_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { callsFr } from "../../fr-calls";
 import { EmptyFrame } from "../list/list-states";
@@ -43,11 +43,7 @@ const DueTaskRow = ({ task, now }: { readonly task: ProspectTaskResponse; readon
     <TaskCallLink
       task={task}
       label={`${callsFr.myDay.call} ${task.contact?.name ?? task.company.name}`}
-      className={cn(
-        buttonVariants(),
-        ADMIN_PRIMARY_BUTTON_CLASS,
-        "w-12 shrink-0 gap-1.5 px-0 lg:h-8 lg:w-full",
-      )}
+      className={cn(buttonVariants(), "w-12 shrink-0 gap-1.5 px-0 lg:h-8 lg:w-full")}
     >
       <Phone aria-hidden="true" className="size-4 lg:size-3.5" strokeWidth={1.8} />
       <span className="hidden lg:inline">{callsFr.myDay.call}</span>
@@ -72,7 +68,7 @@ export const DueTasks = ({
     {tasks.length === 0 ? (
       <div className="p-3.5 lg:p-4">
         <EmptyFrame title={text.dueEmpty} description={text.dueEmptyText}>
-          <a href="#volume" className={cn(buttonVariants({ variant: "outline" }), "h-12 lg:h-8")}>
+          <a href="#volume" className={buttonVariants({ variant: "secondary" })}>
             {text.volumeTitle}
           </a>
         </EmptyFrame>

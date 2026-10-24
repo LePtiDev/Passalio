@@ -273,6 +273,7 @@ Règles :
 - `search_name` : nom normalisé (minuscules, sans accents) pour une recherche par préfixe qui utilise l'index.
 - Le contenu d'une attestation est stocké en JSON dans `documents.data`. Les fichiers vont dans R2, jamais dans D1.
 - Pagination par curseur (`updated_at`, `id`). Pas de `COUNT(*)` sur les grosses tables : compteurs dénormalisés si besoin.
+- Boutons : un seul composant `Button` (`apps/app/src/components/ui/button.tsx`), variantes `primary` (par défaut), `secondary` et `danger` (confirmation de suppression), taille `icon` pour un bouton à icône seule. Même géométrie partout : 48 px de haut et arrondi 10 px sur mobile, 32 px et arrondi 7 px sur ordinateur, comme les champs de saisie. Un lien qui ressemble à un bouton utilise `buttonVariants`. Aucune classe de bouton par contexte.
 - Listes à l'écran : une page tient sans défiler. `useFittingRows` (`apps/app/src/lib/`) calcule le nombre de lignes selon la hauteur de la fenêtre (5 à 50), envoyé en `limit` aux routes de liste ; `useCursorPages` garde la pile des curseurs pour revenir en arrière ; le composant `Pagination` affiche « 1–10 sur 34 », la page et les boutons précédent et suivant. Les clients, lus dans Dexie, sont découpés côté app (`usePageNumber`).
 - Vérifier chaque nouvelle requête avec `EXPLAIN QUERY PLAN`.
 - Suppression logique (`deleted_at`) pour la synchronisation, purge définitive par un job mensuel.

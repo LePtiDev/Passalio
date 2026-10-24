@@ -1,16 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Check, ChevronRight } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { fr } from "@/fr";
 import { cn } from "@/lib/utils";
 import type { GettingStartedTask } from "./getting-started-tasks";
 
 const ROW_CLASS =
   "flex min-h-14 items-center gap-3 border-b border-[#EEF2F6] px-3.5 last:border-b-0 lg:min-h-0 lg:px-4 lg:py-3";
-
-const ACTION_CLASS = {
-  primary: "bg-primary text-white hover:bg-primary/90",
-  secondary: "border border-[#D5DDE6] bg-white text-[#0F2A44] hover:bg-[#F7F9FB]",
-} as const;
 
 const StatusDot = ({ isDone }: { readonly isDone: boolean }) => (
   <span
@@ -57,8 +53,8 @@ export const GettingStartedRow = ({ task, isNext }: GettingStartedRowProps) => {
           <TaskText task={task} />
           <span
             className={cn(
-              "hidden h-[30px] items-center rounded-[7px] px-3 text-xs font-semibold lg:inline-flex",
-              ACTION_CLASS[isNext ? "primary" : "secondary"],
+              buttonVariants({ variant: isNext ? "primary" : "secondary" }),
+              "hidden lg:inline-flex",
             )}
           >
             {task.action.label}

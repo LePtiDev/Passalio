@@ -39,6 +39,7 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 ## Interface
 
 - Toujours vérifier si un composant shadcn/ui existe avant d'en créer un. L'ajouter avec `pnpm dlx shadcn@latest add <composant>`.
+- Boutons : uniquement le composant `Button` (variantes `primary`, `secondary`, `danger`), jamais de classe de bouton recopiée. Même hauteur et même arrondi partout (48 px mobile, 32 px ordinateur).
 - Tout chargement affiche un skeleton (`Skeleton` de shadcn/ui) qui reproduit la forme du contenu final. Jamais de spinner seul sur un écran.
 - Chaque liste a un état vide utile (message + action principale).
 - Champs obligatoires : astérisque rouge après le libellé (`*`, couleur destructive). Jamais de mention « facultatif » : un champ sans astérisque est facultatif.

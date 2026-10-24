@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ADMIN_CARD_CLASS, ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
+import { ADMIN_CARD_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../../fr";
 import { EmptyFrame } from "../list/list-states";
@@ -47,10 +47,7 @@ export const RecordNotFound = ({
   readonly to: "/admin/entreprises" | "/admin/contacts";
 }) => (
   <EmptyFrame title={salesFr.file.notFoundTitle} description={salesFr.file.notFoundText}>
-    <Link
-      to={to}
-      className={cn(buttonVariants({ variant: "outline" }), ADMIN_SECONDARY_BUTTON_CLASS)}
-    >
+    <Link to={to} className={buttonVariants({ variant: "secondary" })}>
       {salesFr.file.backToList}
     </Link>
   </EmptyFrame>

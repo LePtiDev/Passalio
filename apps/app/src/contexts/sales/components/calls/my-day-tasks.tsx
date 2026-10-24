@@ -1,12 +1,13 @@
+import { cn } from "@/lib/utils";
 import type { ProspectTaskResponse } from "@passalio/shared";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, Phone } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { ADMIN_PRIMARY_BUTTON_CLASS } from "@/contexts/backoffice";
-import { cn } from "@/lib/utils";
 import { callsFr } from "../../fr-calls";
 import { EmptyFrame } from "../list/list-states";
 import { TaskCallLink, TaskKindChip, TaskTime, taskOwnerOf, taskWhoOf } from "./task-parts";
+
+const CALL_BUTTON_CLASS = cn(buttonVariants({ variant: "secondary" }), "hidden lg:inline-flex");
 
 const text = callsFr.myDay;
 
@@ -26,7 +27,7 @@ const TaskRow = ({ task, now }: { readonly task: ProspectTaskResponse; readonly 
         <span className="truncate text-[15px] font-semibold lg:text-[13px]">{taskWhoOf(task)}</span>
         <span className="truncate text-[13px] text-[#64748B]">{taskOwnerOf(task)}</span>
       </span>
-      <span className="hidden h-[30px] shrink-0 items-center gap-1.5 rounded-[7px] border border-[#E3E8EF] px-3 text-[13px] font-semibold lg:inline-flex">
+      <span className={CALL_BUTTON_CLASS}>
         <Phone aria-hidden="true" className="size-3.5" strokeWidth={1.8} />
         {text.call}
       </span>
@@ -68,7 +69,7 @@ export const MyDayTasks = ({
     {tasks.length === 0 ? (
       <div className="lg:p-4">
         <EmptyFrame title={text.emptyTitle} description={text.emptyText}>
-          <Link to="/admin/appels" className={cn(buttonVariants(), ADMIN_PRIMARY_BUTTON_CLASS)}>
+          <Link to="/admin/appels" className={buttonVariants()}>
             {text.emptyAction}
           </Link>
         </EmptyFrame>

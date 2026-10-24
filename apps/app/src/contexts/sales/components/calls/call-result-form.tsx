@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ADMIN_PRIMARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { describedBy, FormField } from "@/contexts/customers";
 import { callsFr } from "../../fr-calls";
 import { FIELD_CLASS, SELECT_TRIGGER_CLASS } from "../sales-styles";
@@ -126,7 +125,7 @@ export const CallResultForm = ({
       {hasFooter ? (
         <div className="flex items-center gap-3 border-t border-[#EEF2F6] pt-3.5">
           <span className="flex-1 truncate text-[13px] text-[#64748B]">{nextLabel}</span>
-          <Button type="submit" disabled={isSaving} className={ADMIN_PRIMARY_BUTTON_CLASS}>
+          <Button type="submit" disabled={isSaving}>
             {nextLabel === null ? text.save : text.saveAndNext}
           </Button>
         </div>

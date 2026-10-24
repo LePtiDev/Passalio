@@ -59,6 +59,7 @@ Dernière mise à jour : 2026-10-24.
 | ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                      | ADR 0024                                            |
 | Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                       | `contexts/sales/components/calls`                   |
+| Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                    | PR #62                                              |
 
 ## Hors code (Quentin)
 
