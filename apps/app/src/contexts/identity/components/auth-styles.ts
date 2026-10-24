@@ -11,4 +11,8 @@ export const AUTH_SECONDARY_BUTTON_CLASS =
 
 export const AUTH_LINK_CLASS = "font-semibold text-success no-underline hover:text-[#0B6349]";
 
+export const AUTH_TOUCH_LINK_CLASS = `-my-3.5 inline-flex min-h-12 items-center lg:my-0 lg:min-h-0 ${AUTH_LINK_CLASS}`;
+
+export const AUTH_INLINE_LINK_CLASS = `py-4 lg:py-0 ${AUTH_LINK_CLASS}`;
+
 export const AUTH_ERROR_CLASS = "text-sm text-destructive lg:text-[13px]";

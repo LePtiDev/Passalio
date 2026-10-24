@@ -15,7 +15,7 @@ import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AcceptTermsLabel } from "./accept-terms-label";
 import { AuthHeading } from "./auth-heading";
-import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
+import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
 import { CheckboxField } from "./checkbox-field";
 import { PasswordInput } from "./password-input";
 import { newPasswordSchema } from "./password-schema";
@@ -167,7 +167,7 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
       </div>
       <p className="text-center text-sm text-muted-foreground lg:text-[13px]">
         {text.hasAccount}{" "}
-        <Link to={SIGN_IN_PATH} search={signInSearch} className={AUTH_LINK_CLASS}>
+        <Link to={SIGN_IN_PATH} search={signInSearch} className={AUTH_TOUCH_LINK_CLASS}>
           {text.signIn}
         </Link>
       </p>
