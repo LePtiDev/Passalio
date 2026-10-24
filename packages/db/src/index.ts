@@ -26,6 +26,7 @@ export {
   prospectContacts,
   prospectEvents,
   rateLimits,
+  services,
   USER_ROLES,
   sessions,
   sites,

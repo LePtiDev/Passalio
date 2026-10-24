@@ -1,5 +1,5 @@
 import type { TradeId } from "@passalio/trades";
-import { AirVent, Droplets, Flame, Heater, Thermometer, type LucideIcon } from "lucide-react";
+import { AirVent, Droplets, Flame, Heater, Tag, Thermometer, type LucideIcon } from "lucide-react";
 
 const ICONS: Readonly<Record<TradeId, LucideIcon>> = {
   chimney_sweeping: Flame,
@@ -9,8 +9,8 @@ const ICONS: Readonly<Record<TradeId, LucideIcon>> = {
   septic_tank_emptying: Droplets,
 };
 
-export const VisitTypeIcon = ({ type }: { readonly type: TradeId }) => {
-  const Icon = ICONS[type];
+export const ServiceIcon = ({ trade }: { readonly trade: TradeId | null }) => {
+  const Icon = trade === null ? Tag : ICONS[trade];
   return (
     <span
       aria-hidden="true"

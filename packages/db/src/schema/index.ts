@@ -9,4 +9,5 @@ export { platformInvitations } from "./platform-invitations";
 export { prospectCompanies, prospectContacts, prospectEvents } from "./prospects";
 export { INVITATION_STATUSES, invitations, members, organizations } from "./organizations";
 export { rateLimits } from "./rate-limits";
+export { services } from "./services";
 export { accounts, USER_ROLES, sessions, twoFactors, users, verifications } from "./users";

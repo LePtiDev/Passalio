@@ -243,6 +243,7 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `equipment_photos`       | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                                                                       |
 | `plate_readings`         | `(organization_id, day)` pour le quota du jour                                                                                                                           |
 | `interventions`          | `(organization_id, updated_at)`                                                                                                                                          |
+| `services`               | `(organization_id, created_at)` pour la liste des prestations                                                                                                            |
 | `documents`              | `(organization_id, number)` unique, `(organization_id, cancels_document_id)` unique, `(organization_id, updated_at)`, `(organization_id, signed_by_user_id, updated_at)` |
 | `document_number_blocks` | `(organization_id, user_id, last_number)` pour vérifier qu'un numéro est réservé                                                                                         |
 | `reminders`              | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                                                                       |

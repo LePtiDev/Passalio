@@ -8,10 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { VisitTypeRecord } from "@/lib/db/local-records";
+import type { ServiceRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import { formatDuration, schedulingFr } from "../../fr";
-import { DURATION_CHOICES, usualDurationOf } from "../../visit-types";
+import { DURATION_CHOICES, usualDurationOf } from "../../services";
 
 const text = schedulingFr.form;
 
@@ -25,7 +25,7 @@ const DurationHint = ({
   onReset,
 }: {
   readonly minutes: number;
-  readonly chosen: readonly VisitTypeRecord[];
+  readonly chosen: readonly ServiceRecord[];
   readonly onReset: () => void;
 }) => {
   const usual = usualDurationOf(chosen);
@@ -56,7 +56,7 @@ export const DurationField = ({
   onChange,
 }: {
   readonly minutes: number;
-  readonly chosen: readonly VisitTypeRecord[];
+  readonly chosen: readonly ServiceRecord[];
   readonly onChange: (minutes: number) => void;
 }) => {
   const choose = useCallback((value: string) => onChange(Number(value)), [onChange]);
