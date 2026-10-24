@@ -63,7 +63,7 @@ export const fr = {
       },
     },
     trialTitle: "Essai gratuit en cours",
-    trialText: "Puis 29,99 € par mois, utilisateurs illimités, sans engagement.",
+    trialText: "Puis dès 29 € HT par mois, sans engagement.",
   },
   pagination: {
     label: "Pagination",

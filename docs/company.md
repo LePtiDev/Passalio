@@ -26,7 +26,7 @@ Analyse complète : document « Passalio : quel statut juridique ? » (https://c
 
 - Franchise de TVA tant que le chiffre d'affaires reste sous 37 500 € par an (41 250 € en seuil majoré) pour des services. La baisse à 25 000 € prévue en 2025 a été abandonnée.
 - Factures en franchise : mention « TVA non applicable, art. 293 B du CGI ».
-- Prix affichés hors taxes dès le départ (29,99 € HT par mois, 299,90 € HT par an), pour ne pas changer le prix le jour où la TVA s'applique. Environ 105 abonnements mensuels atteignent le seuil.
+- Prix affichés hors taxes dès le départ (Solo 29 € HT par mois, Équipe 49 € HT par mois, ADR 0025), pour ne pas changer le prix le jour où la TVA s'applique. Environ 105 abonnements mensuels atteignent le seuil.
 - Option à voir avec le comptable : facturer la TVA dès la création pour récupérer celle des dépenses.
 
 ## Comptabilité

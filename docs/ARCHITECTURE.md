@@ -1,6 +1,6 @@
 # Architecture
 
-Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : attestations remplies et signées sur place, PDF envoyé au client, relances automatiques. 29,99 €/mois ou 299,90 €/an, utilisateurs illimités, tous métiers.
+Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : attestations remplies et signées sur place, PDF envoyé au client, relances automatiques. Formule Solo à 29 € HT/mois (un technicien) et formule Équipe à 49 € HT/mois (techniciens illimités), 2 mois offerts à l'année, bureau illimité, tous métiers (ADR 0025).
 
 ## 1. Stack
 
