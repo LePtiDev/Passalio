@@ -6,9 +6,6 @@ import type { PagedList } from "@/lib/use-paged-list";
 
 const text = fr.pagination;
 
-const BUTTON_CLASS =
-  "size-12 rounded-[10px] border-[#E3E8EF] bg-white p-0 text-[#0F2A44] lg:size-8 lg:rounded-[7px]";
-
 type PaginationProps = {
   readonly page: number;
   readonly pageSize: number;
@@ -43,18 +40,18 @@ export const Pagination = ({
           <span className="mr-1 hidden lg:inline">{text.page(page + 1, pages)}</span>
         )}
         <Button
-          variant="outline"
+          variant="secondary"
           aria-label={text.previous}
-          className={BUTTON_CLASS}
+          size="icon"
           disabled={page === 0 || isLoading}
           onClick={onPrevious}
         >
           <ChevronLeft aria-hidden="true" className="size-5 lg:size-4" />
         </Button>
         <Button
-          variant="outline"
+          variant="secondary"
           aria-label={text.next}
-          className={BUTTON_CLASS}
+          size="icon"
           disabled={!hasNext || isLoading}
           onClick={onNext}
         >

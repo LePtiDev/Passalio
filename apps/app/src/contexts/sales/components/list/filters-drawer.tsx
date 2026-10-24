@@ -104,14 +104,14 @@ export const FiltersDrawer = ({
         {openGroup === null ? (
           <DrawerFooter className="flex-row gap-2 pb-[max(16px,env(safe-area-inset-bottom))]">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={clearAll}
               disabled={activeCount === 0}
-              className="h-12 flex-1 text-base"
+              className="flex-1"
             >
               {text.clearAllFilters}
             </Button>
-            <Button onClick={close} className="h-12 flex-1 text-base">
+            <Button onClick={close} className="flex-1">
               {text.showResults}
             </Button>
           </DrawerFooter>

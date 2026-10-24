@@ -7,12 +7,7 @@ import { cn } from "@/lib/utils";
 import { usePlatformTeam } from "../../hooks/use-platform-team";
 import { useNow } from "../../hooks/use-now";
 import { teamFr } from "../../team-fr";
-import {
-  ADMIN_CARD_CLASS,
-  ADMIN_PRIMARY_BUTTON_CLASS,
-  ADMIN_SECONDARY_BUTTON_CLASS,
-  ADMIN_TABLE_HEADER_CLASS,
-} from "../admin-styles";
+import { ADMIN_CARD_CLASS, ADMIN_TABLE_HEADER_CLASS } from "../admin-styles";
 import { AdminHeading, AdminPage, type AdminTrailStep } from "../shell/admin-page";
 import { ChangeRoleDialog, type TeammateSummary } from "./change-role-dialog";
 import { InviteTeammateDialog } from "./invite-teammate-dialog";
@@ -44,7 +39,7 @@ const InviteButton = ({
   readonly onClick: () => void;
   readonly className: string;
 }) => (
-  <Button className={cn(ADMIN_PRIMARY_BUTTON_CLASS, className)} onClick={onClick}>
+  <Button className={className} onClick={onClick}>
     <Plus aria-hidden="true" />
     {teamFr.invite}
   </Button>
@@ -131,8 +126,8 @@ export const TeamScreen = ({ currentUserId }: { readonly currentUserId: string }
                 <div className="flex flex-wrap items-center gap-3 p-4">
                   <p className="text-[15px] text-[#475569] lg:text-[13px]">{teamFr.noInvitation}</p>
                   <Button
-                    variant="outline"
-                    className={cn(ADMIN_SECONDARY_BUTTON_CLASS, "hidden lg:ml-auto lg:inline-flex")}
+                    variant="secondary"
+                    className="hidden lg:ml-auto lg:inline-flex"
                     onClick={openInvite}
                   >
                     <Plus aria-hidden="true" />

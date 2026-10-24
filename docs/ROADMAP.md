@@ -63,6 +63,8 @@ Dernière mise à jour : 2026-10-24.
 | Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                                                                | ADR 0025                                            |
 | Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                              | `docs/stripe.md`                                    |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100 | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
+| Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                           | `contexts/sales/components/calls`                   |
+| Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                        | PR #62                                              |
 
 ## Hors code (Quentin)
 
@@ -144,7 +146,9 @@ Dernière mise à jour : 2026-10-24.
 - [x] Serveur MCP : KV `passalio-oauth-staging` et `passalio-oauth-production`, `MCP_ENABLED` activé en staging et en production
 - [ ] Serveur MCP : outil d'import en lot de fiches prospects (100 lignes, simulation d'abord)
 - [x] Prospection, appels, données et API : appels, rappels, qualification, Ma journée, séries (ADR 0024)
-- [ ] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
+- [x] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
+- [ ] Prospection, écrans : tuiles Mails, Campagnes, Ma semaine et conseils de Ma journée ; onglets Prioritaires et Faits aujourd'hui des Appels ; nombre d'entreprises qui correspondent à une série (avec les PR mails, campagnes, statistiques)
+- [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
 - [ ] Prospection, configuration de la boîte mail dans le profil (admin pour un autre membre), envoi SMTP, rappels par e-mail
 - [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
 - [ ] Prospection, campagnes : envoi programmé, montée progressive de 5 à 25 par jour, créneau 8 h à 11 h

@@ -15,12 +15,7 @@ import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { isTwoFactorRedirect, sendMagicLink } from "./sign-in-requests";
 import { AuthHeading } from "./auth-heading";
-import {
-  AUTH_FIELD_CLASS,
-  AUTH_PRIMARY_BUTTON_CLASS,
-  AUTH_SECONDARY_BUTTON_CLASS,
-  AUTH_TOUCH_LINK_CLASS,
-} from "./auth-styles";
+import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS } from "./auth-styles";
 import { CheckboxField } from "./checkbox-field";
 import { MagicLinkSent } from "./magic-link-sent";
 import { PasswordInput } from "./password-input";
@@ -167,7 +162,7 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
             containerRef={turnstile.containerRef}
             isInteractive={turnstile.isInteractive}
           />
-          <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? text.submitting : text.submit}
           </Button>
         </div>
@@ -178,8 +173,7 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
         </div>
         <Button
           type="button"
-          variant="outline"
-          className={AUTH_SECONDARY_BUTTON_CLASS}
+          variant="secondary"
           disabled={isSendingLink}
           onClick={requestMagicLink}
         >

@@ -84,7 +84,7 @@ export const InviteTeammateDialog = ({ isOpen, onOpenChange }: InviteTeammateDia
           inputMode="email"
           autoComplete="off"
           placeholder={text.emailPlaceholder}
-          className="h-12 rounded-lg border-[#D5DDE6] bg-white text-base text-[#0F2A44] focus-visible:border-[#0E7C5A] focus-visible:ring-[3px] focus-visible:ring-[rgb(14_124_90/0.15)] aria-invalid:border-[#B42318] aria-invalid:ring-[3px] aria-invalid:ring-[rgb(180_35_24/0.12)] lg:h-10 lg:text-sm"
+          className="h-12 rounded-[10px] border-[#D5DDE6] bg-white text-base text-[#0F2A44] lg:rounded-[7px] focus-visible:border-[#0E7C5A] focus-visible:ring-[3px] focus-visible:ring-[rgb(14_124_90/0.15)] aria-invalid:border-[#B42318] aria-invalid:ring-[3px] aria-invalid:ring-[rgb(180_35_24/0.12)] lg:h-8 lg:text-[13px]"
           aria-invalid={emailError !== undefined}
           aria-describedby={emailError === undefined ? undefined : `${EMAIL_INPUT_ID}-error`}
           {...form.register("email")}

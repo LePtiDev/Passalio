@@ -5,7 +5,6 @@ import { ErrorState } from "@/components/error-state";
 import { Button } from "@/components/ui/button";
 import {
   ADMIN_CARD_CLASS,
-  ADMIN_PRIMARY_BUTTON_CLASS,
   AdminHeading,
   AdminPage,
   type AdminTrailStep,
@@ -92,7 +91,7 @@ export const ContactsScreen = ({ scope, onScopeChange }: ContactsScreenProps) =>
   const openCreate = useCallback(() => setIsCreating(true), []);
   const mobileAction = useMemo(
     () => (
-      <Button aria-label={text.create} className="size-12 shrink-0 rounded-xl" onClick={openCreate}>
+      <Button aria-label={text.create} size="icon" onClick={openCreate}>
         <Plus aria-hidden="true" className="size-5" strokeWidth={2.2} />
       </Button>
     ),
@@ -119,7 +118,7 @@ export const ContactsScreen = ({ scope, onScopeChange }: ContactsScreenProps) =>
           totals === null ? text.subtitleLoading : text.subtitle(totals.contacts, totals.companies)
         }
       >
-        <Button className={ADMIN_PRIMARY_BUTTON_CLASS} onClick={openCreate}>
+        <Button onClick={openCreate}>
           <Plus aria-hidden="true" strokeWidth={2.2} />
           {text.create}
         </Button>

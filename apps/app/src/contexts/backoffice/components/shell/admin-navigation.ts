@@ -1,4 +1,14 @@
-import { Briefcase, Building2, LayoutGrid, List, MapPin, ShieldCheck, Users } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  House,
+  LayoutGrid,
+  List,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import type { NavigationItem } from "@/components/app-shell/navigation";
 import { backofficeFr } from "../../fr";
 import { teamFr } from "../../team-fr";
@@ -6,6 +16,8 @@ import { teamFr } from "../../team-fr";
 const text = backofficeFr.shell;
 
 export const COMMERCIAL_NAVIGATION: readonly NavigationItem[] = [
+  { label: text.myDay, icon: House, to: "/admin/journee" },
+  { label: text.calls, icon: Phone, to: "/admin/appels" },
   { label: text.companies, icon: Building2, to: "/admin/entreprises" },
   { label: text.contacts, icon: Users, to: "/admin/contacts" },
   { label: text.prospection, icon: MapPin, to: "/admin/prospection" },
@@ -33,7 +45,13 @@ export const ADMIN_MOBILE_NAVIGATION: readonly NavigationItem[] = [
     label: text.commercial,
     icon: Building2,
     to: "/admin/entreprises",
-    activeFor: ["/admin/entreprises", "/admin/contacts", "/admin/prospection"],
+    activeFor: [
+      "/admin/entreprises",
+      "/admin/contacts",
+      "/admin/prospection",
+      "/admin/journee",
+      "/admin/appels",
+    ],
   },
   { label: text.overviewShort, icon: LayoutGrid, to: "/admin", isExact: true },
   { label: text.accountsShort, icon: Briefcase, to: "/admin/comptes" },

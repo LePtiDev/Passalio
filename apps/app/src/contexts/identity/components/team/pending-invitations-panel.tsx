@@ -7,7 +7,6 @@ import { usePendingInvitations } from "../../hooks/use-pending-invitations";
 import { PendingInvitationList } from "./pending-invitation-list";
 import { TeamEmptyState } from "./team-empty-state";
 import { TeamSkeleton } from "./team-skeleton";
-import { TEAM_SECONDARY_BUTTON_CLASS } from "./team-styles";
 
 const text = identityFr.pendingInvitations;
 
@@ -38,12 +37,7 @@ export const PendingInvitationsPanel = ({
     <div className="flex flex-col gap-4">
       <PendingInvitationList invitations={invitations} canManage={canManage} />
       {pending.hasNextPage ? (
-        <Button
-          variant="outline"
-          className={TEAM_SECONDARY_BUTTON_CLASS}
-          disabled={pending.isFetchingNextPage}
-          onClick={loadMore}
-        >
+        <Button variant="secondary" disabled={pending.isFetchingNextPage} onClick={loadMore}>
           {identityFr.team.loadMore}
         </Button>
       ) : null}

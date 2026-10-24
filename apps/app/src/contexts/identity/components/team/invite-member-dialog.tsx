@@ -14,16 +14,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 import { identityFr } from "../../fr";
 import { useInviteMember } from "../../hooks/use-team";
-import {
-  AUTH_ERROR_CLASS,
-  AUTH_FIELD_CLASS,
-  AUTH_LABEL_CLASS,
-  AUTH_PRIMARY_BUTTON_CLASS,
-  AUTH_SECONDARY_BUTTON_CLASS,
-} from "../auth-styles";
+import { AUTH_ERROR_CLASS, AUTH_FIELD_CLASS, AUTH_LABEL_CLASS } from "../auth-styles";
 import { RoleSelect } from "../role-select";
 
 const inviteSchema = z.object({
@@ -103,23 +96,14 @@ export const InviteMemberDialog = ({ isOpen, onOpenChange }: InviteMemberDialogP
               label={text.roleLabel}
               value={role.value}
               onChange={role.onChange}
-              className="lg:h-10 lg:text-sm lg:data-[size=default]:h-10"
+              className="lg:h-8 lg:text-[13px] lg:data-[size=default]:h-8"
             />
           </div>
           <DialogFooter className="gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className={AUTH_SECONDARY_BUTTON_CLASS}
-              onClick={close}
-            >
+            <Button type="button" variant="secondary" onClick={close}>
               {identityFr.team.cancel}
             </Button>
-            <Button
-              type="submit"
-              className={cn(AUTH_PRIMARY_BUTTON_CLASS, "lg:px-4")}
-              disabled={invite.isPending}
-            >
+            <Button type="submit" disabled={invite.isPending}>
               {invite.isPending ? text.sending : text.submit}
             </Button>
           </DialogFooter>

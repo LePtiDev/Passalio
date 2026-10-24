@@ -25,11 +25,7 @@ export const ErrorState = ({ error, onRetry, message }: ErrorStateProps) => {
           <span className="text-[13px] text-[#64748B] tabular-nums lg:text-xs">{codeLine}</span>
         )}
       </span>
-      <Button
-        variant="outline"
-        className="h-12 rounded-[10px] border-[#D5DDE6] text-[15px] font-semibold lg:h-8 lg:rounded-[7px] lg:px-3 lg:text-[13px]"
-        onClick={onRetry}
-      >
+      <Button variant="secondary" onClick={onRetry}>
         {fr.errors.retry}
       </Button>
     </div>

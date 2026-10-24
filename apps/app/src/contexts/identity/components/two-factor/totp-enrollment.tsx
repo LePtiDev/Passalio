@@ -6,7 +6,6 @@ import { errorMessage, toastApiError } from "@/lib/errors";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
-import { AUTH_PRIMARY_BUTTON_CLASS } from "../auth-styles";
 import { QrCode } from "./qr-code";
 import { TotpCodeInput } from "./totp-code-input";
 
@@ -78,7 +77,7 @@ export const TotpEnrollment = ({ totpUri, backupCodes, onActivated }: TotpEnroll
           />
         </AuthField>
         <p className="-mt-2 text-xs text-[#64748B]">{text.codeHint}</p>
-        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? text.activating : text.activate}
         </Button>
       </div>

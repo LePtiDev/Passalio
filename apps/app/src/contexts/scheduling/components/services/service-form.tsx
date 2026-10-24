@@ -3,14 +3,7 @@ import { SERVICE_DOCUMENTS } from "@passalio/trades";
 import { Archive, Timer } from "lucide-react";
 import { useCallback } from "react";
 import { useController, useForm } from "react-hook-form";
-import {
-  describedBy,
-  FIELD_CLASS,
-  FormField,
-  PRIMARY_BUTTON_CLASS,
-  SECONDARY_BUTTON_CLASS,
-  SELECT_TRIGGER_CLASS,
-} from "@/contexts/customers";
+import { describedBy, FIELD_CLASS, FormField, SELECT_TRIGGER_CLASS } from "@/contexts/customers";
 import { ErrorState } from "@/components/error-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -150,20 +143,16 @@ export const ServiceForm = ({
         {isExisting ? (
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             onClick={onArchive}
             disabled={isArchiving}
-            className={cn(SECONDARY_BUTTON_CLASS, "w-full text-[#B42318] lg:w-auto")}
+            className="w-full text-[#B42318] lg:w-auto"
           >
             <Archive aria-hidden="true" className="size-4 lg:size-3.5" />
             {text.archive}
           </Button>
         ) : null}
-        <Button
-          type="submit"
-          disabled={isSaving}
-          className={cn(PRIMARY_BUTTON_CLASS, "w-full lg:ml-auto lg:w-auto lg:px-4")}
-        >
+        <Button type="submit" disabled={isSaving} className="w-full lg:ml-auto lg:w-auto">
           {text.save}
         </Button>
       </div>

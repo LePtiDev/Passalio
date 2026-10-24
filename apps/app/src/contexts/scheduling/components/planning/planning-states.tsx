@@ -1,6 +1,5 @@
 import { CalendarDays, CloudOff, Plus } from "lucide-react";
 import { useMemo } from "react";
-import { PRIMARY_BUTTON_CLASS } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -97,7 +96,7 @@ export const EmptyPlanning = ({
         {canPlan ? text.emptyText : text.emptyTechnicianText}
       </p>
       {canPlan ? (
-        <Button asChild className={cn(PRIMARY_BUTTON_CLASS, "mt-1 w-full px-4 lg:w-auto lg:px-3")}>
+        <Button asChild className="mt-1 w-full lg:w-auto">
           <NewVisitLink day={day}>
             <Plus aria-hidden="true" className="size-4 lg:size-3.5" />
             {text.newVisit}

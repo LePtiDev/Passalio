@@ -5,7 +5,6 @@ import { daysUntil, formatShortDate } from "@/lib/format-date";
 import { identityFr, ROLE_LABELS } from "../../fr";
 import { useCancelInvitation, useResendInvitation } from "../../hooks/use-pending-invitations";
 import type { PendingInvitation } from "../../identity-api";
-import { TEAM_DANGER_BUTTON_CLASS, TEAM_SECONDARY_BUTTON_CLASS } from "./team-styles";
 
 const text = identityFr.pendingInvitations;
 
@@ -50,17 +49,12 @@ export const PendingInvitationCard = ({
       </div>
       {canManage ? (
         <div className="grid grid-cols-2 gap-2 lg:flex">
-          <Button
-            variant="outline"
-            className={TEAM_SECONDARY_BUTTON_CLASS}
-            disabled={isBusy}
-            onClick={onResend}
-          >
+          <Button variant="secondary" disabled={isBusy} onClick={onResend}>
             {text.resend}
           </Button>
           <Button
-            variant="ghost"
-            className={TEAM_DANGER_BUTTON_CLASS}
+            variant="secondary"
+            className="text-destructive hover:text-destructive"
             disabled={isBusy}
             onClick={onCancel}
             aria-label={`${text.cancel} ${email}`}

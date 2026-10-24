@@ -74,8 +74,8 @@ const DeleteCompanyButton = ({ company }: { readonly company: ProspectCompanyRes
     <>
       <Button
         type="button"
-        variant="ghost"
-        className="h-12 px-2 text-[15px] font-semibold text-[#B42318] hover:bg-[#FEF3F2] hover:text-[#B42318] lg:h-8 lg:text-[13px]"
+        variant="secondary"
+        className="text-[#B42318] hover:text-[#B42318]"
         disabled={remove.isPending}
         onClick={open}
       >

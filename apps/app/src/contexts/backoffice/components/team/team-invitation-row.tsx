@@ -6,7 +6,6 @@ import { formatShortDate } from "@/lib/format-date";
 import { cn } from "@/lib/utils";
 import { useCancelTeamInvitation, useResendTeamInvitation } from "../../hooks/use-platform-team";
 import { teamFr } from "../../team-fr";
-import { ADMIN_SECONDARY_BUTTON_CLASS } from "../admin-styles";
 import { RoleBadge } from "./role-badge";
 import { daysLeft } from "./team-labels";
 import { IDENTITY_TEXT_CLASS, TEAM_GRID_CLASS, TEAM_ROW_CLASS } from "./team-styles";
@@ -78,19 +77,16 @@ export const TeamInvitationRow = ({ invitation, now }: TeamInvitationRowProps) =
       <span className="hidden text-[13px] text-[#64748B] lg:block">{teamFr.afterJoining}</span>
       <span className="col-span-2 flex justify-end gap-1.5 lg:col-span-1">
         <Button
-          variant="outline"
-          className={cn(ADMIN_SECONDARY_BUTTON_CLASS, "flex-1 lg:flex-none")}
+          variant="secondary"
+          className="flex-1 lg:flex-none"
           disabled={resend.isPending}
           onClick={resendInvitation}
         >
           {teamFr.resend}
         </Button>
         <Button
-          variant="outline"
-          className={cn(
-            ADMIN_SECONDARY_BUTTON_CLASS,
-            "flex-1 text-[#B42318] hover:text-[#B42318] lg:flex-none",
-          )}
+          variant="secondary"
+          className="flex-1 text-[#B42318] hover:text-[#B42318] lg:flex-none"
           disabled={cancel.isPending}
           onClick={cancelInvitation}
         >

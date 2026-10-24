@@ -8,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cn } from "@/lib/utils";
 import { identityFr } from "../../fr";
 
 type ConfirmDialogProps = {
@@ -20,8 +19,6 @@ type ConfirmDialogProps = {
   readonly onOpenChange: (isOpen: boolean) => void;
   readonly onConfirm: () => void;
 };
-
-const BUTTON_CLASS = "h-12 text-base lg:h-10 lg:text-sm";
 
 export const ConfirmDialog = ({
   isOpen,
@@ -39,11 +36,8 @@ export const ConfirmDialog = ({
         <AlertDialogDescription>{description}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel className={BUTTON_CLASS}>{identityFr.team.cancel}</AlertDialogCancel>
-        <AlertDialogAction
-          className={cn(BUTTON_CLASS, isDestructive && "bg-destructive hover:bg-destructive/90")}
-          onClick={onConfirm}
-        >
+        <AlertDialogCancel>{identityFr.team.cancel}</AlertDialogCancel>
+        <AlertDialogAction variant={isDestructive ? "danger" : "primary"} onClick={onConfirm}>
           {confirmLabel}
         </AlertDialogAction>
       </AlertDialogFooter>

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { DASHED_CARD_CLASS, SECONDARY_BUTTON_CLASS } from "@/contexts/customers";
+import { DASHED_CARD_CLASS } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { schedulingFr } from "../../fr";
 
@@ -12,7 +12,7 @@ export const VisitNotFound = () => (
         <h1 className="text-[17px] font-bold lg:text-[15px]">{text.notFoundTitle}</h1>
         <p className="text-[15px] text-[#475569] lg:text-[13px]">{text.notFoundText}</p>
       </span>
-      <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+      <Button asChild variant="secondary">
         <Link to="/planning">{text.back}</Link>
       </Button>
     </div>

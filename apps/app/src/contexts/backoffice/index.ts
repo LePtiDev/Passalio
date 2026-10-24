@@ -7,11 +7,7 @@ export { JournalScreen } from "./components/journal/journal-screen";
 export { OverviewScreen } from "./components/overview/overview-screen";
 export { AdminLayout } from "./components/shell/admin-layout";
 export { backofficeFr } from "./fr";
-export {
-  ADMIN_CARD_CLASS,
-  ADMIN_PRIMARY_BUTTON_CLASS,
-  ADMIN_SECONDARY_BUTTON_CLASS,
-} from "./components/admin-styles";
+export { ADMIN_CARD_CLASS } from "./components/admin-styles";
 export { AdminHeading, AdminPage, type AdminTrailStep } from "./components/shell/admin-page";
 export type { PlatformAdmin } from "./backoffice-api";
 export { useNow } from "./hooks/use-now";

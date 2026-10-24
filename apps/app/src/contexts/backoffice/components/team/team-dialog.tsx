@@ -11,7 +11,6 @@ import {
 import { cn } from "@/lib/utils";
 import { teamFr } from "../../team-fr";
 import {
-  DIALOG_BUTTON_CLASS,
   DIALOG_CONTENT_CLASS,
   DIALOG_OVERLAY_CLASS,
   DIALOG_SHADOW_CLASS,
@@ -81,15 +80,10 @@ export const TeamDialog = ({
           </div>
           {children}
           <div className="flex flex-col gap-2 lg:flex-row lg:justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              className={cn(DIALOG_BUTTON_CLASS, "border-[#E3E8EF] font-medium max-lg:hidden")}
-              onClick={onCancel}
-            >
+            <Button type="button" variant="secondary" className="max-lg:hidden" onClick={onCancel}>
               {teamFr.cancel}
             </Button>
-            <Button type="submit" className={DIALOG_BUTTON_CLASS} disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               {submitLabel}
             </Button>
           </div>

@@ -14,9 +14,6 @@ import { PLATFORM_ROLE_LABELS, teamFr } from "../../team-fr";
 
 const text = teamFr.join;
 
-const PRIMARY_CLASS =
-  "h-12 rounded-[10px] text-base font-semibold shadow-[0_1px_2px_rgba(15,42,68,0.2)] lg:h-11 lg:rounded-lg lg:text-sm";
-
 const LINK_CLASS =
   "min-h-12 self-start text-sm text-[#475569] hover:text-[#0F2A44] lg:min-h-0 lg:text-[13px]";
 
@@ -102,9 +99,7 @@ export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTea
       <JoinLayout isInvalid>
         <div className="flex flex-col gap-5">
           <Heading title={text.invalidTitle}>{text.invalidText}</Heading>
-          <Button className={PRIMARY_CLASS} onClick={goHome}>
-            {text.home}
-          </Button>
+          <Button onClick={goHome}>{text.home}</Button>
         </div>
       </JoinLayout>
     );
@@ -115,7 +110,7 @@ export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTea
       <JoinLayout isInvalid>
         <div className="flex flex-col gap-5">
           <Heading title={text.mismatchTitle}>{text.mismatchText(email, currentEmail)}</Heading>
-          <Button className={PRIMARY_CLASS} onClick={switchAccount} disabled={isSigningOut}>
+          <Button onClick={switchAccount} disabled={isSigningOut}>
             {text.switchTo}
           </Button>
         </div>
@@ -136,7 +131,7 @@ export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTea
             {text.nextText}
           </span>
         </div>
-        <Button className={PRIMARY_CLASS} disabled={accept.isPending} onClick={join}>
+        <Button disabled={accept.isPending} onClick={join}>
           {accept.isPending ? text.joining : text.submit}
         </Button>
         <button

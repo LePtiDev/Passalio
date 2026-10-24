@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../../fr";
 import { EmptyFrame } from "../list/list-states";
@@ -18,18 +17,14 @@ type ProspectionEmptyProps = {
 const EmptyAction = ({ scope, onClearSearch, onClearDepartment }: ProspectionEmptyProps) => {
   if (scope.search !== "") {
     return (
-      <Button variant="outline" className={ADMIN_SECONDARY_BUTTON_CLASS} onClick={onClearSearch}>
+      <Button variant="secondary" onClick={onClearSearch}>
         {salesFr.list.clearSearch}
       </Button>
     );
   }
   if (scope.department !== null) {
     return (
-      <Button
-        variant="outline"
-        className={ADMIN_SECONDARY_BUTTON_CLASS}
-        onClick={onClearDepartment}
-      >
+      <Button variant="secondary" onClick={onClearDepartment}>
         {salesFr.list.anyDepartment}
       </Button>
     );
@@ -37,10 +32,7 @@ const EmptyAction = ({ scope, onClearSearch, onClearDepartment }: ProspectionEmp
   return (
     <Link
       to="/admin/entreprises"
-      className={cn(
-        "inline-flex items-center rounded-[10px] border border-[#E3E8EF] px-4 lg:px-3",
-        ADMIN_SECONDARY_BUTTON_CLASS,
-      )}
+      className={cn("inline-flex items-center rounded-[10px] border border-[#E3E8EF] px-4 lg:px-3")}
     >
       {text.seeCompanies}
     </Link>

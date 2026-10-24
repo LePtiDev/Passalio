@@ -125,3 +125,26 @@ describe("getMyDay", () => {
     expect((await run()(sales)).tasks).toHaveLength(MY_DAY_TASKS_LIMIT);
   });
 });
+
+describe("getMyDay for the whole team", () => {
+  it("also lists the open tasks nobody follows yet, such as a callback asked on a landing page", async () => {
+    state.tasks.push(
+      inMemoryTask({
+        id: "task-unowned",
+        companyId: "company-1",
+        ownerUserId: null,
+        dueAt: new Date("2026-10-24T09:00:00Z"),
+      }),
+      inMemoryTask({
+        id: "task-unowned-tomorrow",
+        companyId: "company-1",
+        ownerUserId: null,
+        dueAt: new Date("2026-10-25T09:00:00Z"),
+      }),
+    );
+    expect((await run()(sales)).tasks.map(({ id }) => id)).toEqual(["task-unowned"]);
+    expect((await run()(platformActorWith("admin"))).tasks.map(({ id }) => id)).toEqual([
+      "task-unowned",
+    ]);
+  });
+});

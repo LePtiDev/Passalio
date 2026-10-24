@@ -22,7 +22,6 @@ import {
 import { formatSiret, toDisplayName } from "./display-name";
 import { OnboardingBody, OnboardingFooter, OnboardingHeading } from "./onboarding-layout";
 import { ONBOARDING_PATHS } from "./onboarding-steps";
-import { ONBOARDING_PRIMARY_BUTTON_CLASS } from "./onboarding-styles";
 import { TeamSizeSelect } from "./team-size-select";
 
 const text = onboardingFr.company;
@@ -154,7 +153,7 @@ export const CompanyStep = ({
       </OnboardingBody>
       <OnboardingFooter width="narrow">
         <span className="hidden text-xs text-[#64748B] lg:inline">{text.footnote}</span>
-        <Button type="submit" className={ONBOARDING_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+        <Button type="submit" className="flex-1 lg:flex-none" disabled={isSubmitting}>
           {isSubmitting ? onboardingFr.layout.saving : onboardingFr.layout.continue}
         </Button>
       </OnboardingFooter>
