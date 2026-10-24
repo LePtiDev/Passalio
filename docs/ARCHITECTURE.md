@@ -61,7 +61,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | `scheduling`    | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
 | `compliance`    | Attestations, signature, PDF, numérotation, versions                 |
 | `engagement`    | Échéances, relances, envois email/SMS                                |
-| `billing`       | Abonnement Stripe, état du compte                                    |
+| `billing`       | Abonnement Stripe (`docs/stripe.md`), état du compte                 |
 | `backoffice`    | Outils internes : support, impersonation, métriques                  |
 | `sales`         | Prospection de Passalio : entreprises, contacts, étapes, historique  |
 | `platform-team` | Équipe Passalio : membres, rôles plateforme, invitations             |
