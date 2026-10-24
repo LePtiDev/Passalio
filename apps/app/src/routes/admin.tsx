@@ -7,11 +7,13 @@ import {
   AccountScreen,
   AccountsScreen,
   AdminLayout,
+  canManageSettings,
   canManageTeam,
   canSeePlatform,
   JournalScreen,
   loadAdminAccess,
   OverviewScreen,
+  SettingsScreen,
   TeamScreen,
   type AccountFilter,
   type AccountTab,
@@ -89,7 +91,10 @@ export const adminOverviewRoute = createRoute({
   getParentRoute: () => adminShellRoute,
   path: "/",
   beforeLoad: requirePlatformArea,
-  component: OverviewScreen,
+  component: function AdminOverviewRouteScreen() {
+    const role = adminOverviewRoute.useRouteContext({ select: (context) => context.admin.role });
+    return <OverviewScreen canManageSettings={canManageSettings(role)} />;
+  },
 });
 
 const accountsSearch = z.object({
@@ -176,4 +181,15 @@ export const adminTeamRoute = createRoute({
     const userId = adminTeamRoute.useRouteContext({ select: (context) => context.admin.userId });
     return <TeamScreen currentUserId={userId} />;
   },
+});
+
+export const adminSettingsRoute = createRoute({
+  getParentRoute: () => adminShellRoute,
+  path: "/reglages",
+  beforeLoad: ({ context }) => {
+    if (!canManageSettings(context.admin.role)) {
+      throw redirect({ to: ADMIN_PATH });
+    }
+  },
+  component: () => <SettingsScreen />,
 });

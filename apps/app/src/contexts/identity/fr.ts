@@ -97,6 +97,16 @@ export const identityFr = {
     hasAccount: "Déjà un compte ?",
     signIn: "Se connecter",
   },
+  signUpClosed: {
+    title: "Les inscriptions sont fermées pour le moment",
+    text: "Passalio ouvre bientôt. Vous avez déjà un compte ? Connectez-vous. Vous avez reçu une invitation ? Ouvrez le lien de l'e-mail.",
+    signIn: "Se connecter",
+    discover: "Découvrir Passalio",
+    showcaseBadge: "Bientôt",
+    showcaseTitle: "Tout votre métier dans une seule application.",
+    showcaseText:
+      "Certificats signés sur le téléphone, relances automatiques, fonctionne sans réseau.",
+  },
   forgotPassword: {
     title: "Mot de passe oublié",
     subtitle:

@@ -105,6 +105,8 @@ export const fr = {
       invitation_expired: "Cette invitation a expiré. Demandez-en une nouvelle.",
       invalid_credentials: "Adresse email ou mot de passe incorrect.",
       email_already_used: "Un compte existe déjà avec cette adresse. Connectez-vous.",
+      sign_up_closed:
+        "Les inscriptions sont fermées pour le moment. Vous avez reçu une invitation ? Ouvrez le lien de l'e-mail.",
       weak_password: "Le mot de passe doit faire au moins 12 caractères.",
       invalid_reset_token: "Ce lien n'est plus valable. Demandez-en un nouveau.",
       captcha_failed: "La vérification anti-robot a échoué. Réessayez.",
