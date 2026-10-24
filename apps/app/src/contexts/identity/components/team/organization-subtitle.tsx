@@ -17,7 +17,7 @@ export const OrganizationLoadError = () => {
   const apiError = apiErrorOf(organization.error);
   const codeLine = errorCodeLine(apiError);
   return (
-    <p role="alert" className="flex flex-wrap gap-x-1.5 text-[13px] text-destructive">
+    <p className="flex flex-wrap gap-x-1.5 text-[13px] text-destructive">
       <span>{errorMessage(apiError.code)}</span>
       {codeLine === undefined ? null : (
         <span className="text-[#64748B] tabular-nums">{codeLine}</span>
