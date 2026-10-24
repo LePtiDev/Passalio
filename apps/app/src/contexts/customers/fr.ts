@@ -223,6 +223,10 @@ export const customersFr = {
     photos: "Photos",
     photosText: "La photo de la plaque remplit la marque, le modèle et le numéro de série.",
     removePhoto: "Retirer la photo",
+    photoProblems: {
+      wrong_type: "Ce fichier n'est pas une photo. Choisissez une photo JPEG, PNG ou WebP.",
+      too_large: "Cette photo dépasse 5 Mo. Choisissez une photo plus légère.",
+    },
     section: "L'appareil",
     kind: "Type d'appareil",
     kindGroups: {

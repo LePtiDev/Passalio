@@ -1,8 +1,9 @@
 import type { EquipmentPhotoKind } from "@passalio/shared";
 import { Camera, ScanText, X, type LucideIcon } from "lucide-react";
-import { useCallback, type ChangeEvent } from "react";
+import { useCallback, useState, type ChangeEvent } from "react";
 import { customersFr, PHOTO_KIND_LABELS } from "../../fr";
 import { Fieldset } from "../form/form-shell";
+import { photoFileProblemOf, type PhotoFileProblem } from "./photo-file-check";
 
 const text = customersFr.equipmentForm;
 
@@ -91,9 +92,15 @@ type EquipmentPhotoTilesProps = {
 };
 
 export const EquipmentPhotoTiles = ({ photos, onChange }: EquipmentPhotoTilesProps) => {
+  const [problem, setProblem] = useState<PhotoFileProblem | null>(null);
   const pick = useCallback(
-    (kind: EquipmentPhotoKind, file: File) =>
-      onChange({ ...photos, [kind]: { file, previewUrl: URL.createObjectURL(file) } }),
+    (kind: EquipmentPhotoKind, file: File) => {
+      const fileProblem = photoFileProblemOf(file);
+      setProblem(fileProblem);
+      if (fileProblem === null) {
+        onChange({ ...photos, [kind]: { file, previewUrl: URL.createObjectURL(file) } });
+      }
+    },
     [photos, onChange],
   );
   const remove = useCallback(
@@ -123,6 +130,11 @@ export const EquipmentPhotoTiles = ({ photos, onChange }: EquipmentPhotoTilesPro
           );
         })}
       </div>
+      {problem === null ? null : (
+        <p role="alert" className="text-[13px] font-medium text-destructive">
+          {text.photoProblems[problem]}
+        </p>
+      )}
     </Fieldset>
   );
 };
