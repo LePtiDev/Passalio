@@ -18,7 +18,7 @@ import {
 } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { formatEuros, schedulingFr, visitTypesLabel } from "../../fr";
+import { formatEuros, schedulingFr, visitServicesLabel } from "../../fr";
 import { longDayLabel } from "../../planning-dates";
 import type { PlanningVisit } from "../../planning-visits";
 import { visitTimeRange } from "./visit-block";
@@ -77,8 +77,8 @@ export const VisitPanel = ({
         </span>
       </div>
       <dl className="flex flex-col gap-3 text-[13px]">
-        {intervention.visitTypes.length === 0 ? null : (
-          <Fact icon={Timer}>{visitTypesLabel(intervention.visitTypes)}</Fact>
+        {visitServicesLabel(intervention) === "" ? null : (
+          <Fact icon={Timer}>{visitServicesLabel(intervention)}</Fact>
         )}
         {site === null ? null : <Fact icon={MapPin}>{fullAddressOf(site)}</Fact>}
         {visit.equipmentNames.length === 0 ? null : (

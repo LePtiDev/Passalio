@@ -15,19 +15,38 @@ export const MAX_INTERVENTION_EQUIPMENTS = 20;
 
 export const MAX_VISIT_TYPES = 10;
 
+export const MAX_SERVICE_LINES = 10;
+
+export const MAX_VISIT_TECHNICIANS = 10;
+
 const MAX_DURATION_MINUTES = 12 * 60;
 const MAX_PRICE_CENTS = 10_000_000;
 
 const priceCents = z.int().min(0).max(MAX_PRICE_CENTS).nullable().optional();
 
+const MAX_SERVICE_LINE_MINUTES = 10 * 24 * 60;
+
+export const serviceLine = z.object({
+  serviceId: z.uuid(),
+  name: z.string().trim().min(1).max(80),
+  durationMinutes: z.int().min(1).max(MAX_SERVICE_LINE_MINUTES),
+  priceCents: z.int().min(0).max(MAX_PRICE_CENTS).nullable(),
+});
+
+export type ServiceLine = z.infer<typeof serviceLine>;
+
+const technicianUserId = z.string().min(1).max(64);
+
 export const interventionFields = z.object({
   customerId: z.uuid(),
   siteId: z.uuid(),
-  technicianUserId: z.string().min(1).max(64),
+  technicianUserId,
+  technicianUserIds: z.array(technicianUserId).min(1).max(MAX_VISIT_TECHNICIANS).optional(),
   scheduledDate: requiredCalendarDate,
   startTime: z.string().regex(TIME_OF_DAY_PATTERN).nullable().optional(),
   durationMinutes: z.int().min(5).max(MAX_DURATION_MINUTES),
   visitTypes: z.array(z.string().min(1).max(40)).max(MAX_VISIT_TYPES).optional(),
+  serviceLines: z.array(serviceLine).max(MAX_SERVICE_LINES).optional(),
   equipmentIds: z.array(z.uuid()).max(MAX_INTERVENTION_EQUIPMENTS),
   announcedPriceCents: priceCents,
   notes: optionalText(NOTES_MAX_LENGTH),

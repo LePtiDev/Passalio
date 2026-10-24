@@ -32,9 +32,17 @@ export type TeamMembers = {
   readonly isMember: (organizationId: string, userId: string) => Promise<boolean>;
 };
 
+export type ServiceCatalog = {
+  readonly knownIds: (
+    organizationId: string,
+    serviceIds: readonly string[],
+  ) => Promise<readonly string[]>;
+};
+
 export type SchedulingDependencies = {
   readonly interventions: InterventionRepository;
   readonly places: InterventionPlaces;
   readonly team: TeamMembers;
+  readonly catalog: ServiceCatalog;
   readonly now: () => Date;
 };
