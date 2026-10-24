@@ -49,6 +49,10 @@ const CASES: readonly (readonly [AdminScreenName, CheckName])[] = [
   ["sign-in backup code", "touch targets of at least 48 px on mobile"],
   ["admin code", "touch targets of at least 48 px on mobile"],
   ["join the Passalio team", "touch targets of at least 48 px on mobile"],
+  ["customer accounts", "touch targets of at least 48 px on mobile"],
+  ["customer account file", "touch targets of at least 48 px on mobile"],
+  ["prospect companies", "touch targets of at least 48 px on mobile"],
+  ["prospect contacts", "touch targets of at least 48 px on mobile"],
 ];
 
 for (const [screen, checkName] of CASES) {
