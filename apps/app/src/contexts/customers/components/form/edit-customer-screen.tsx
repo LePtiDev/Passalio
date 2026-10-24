@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { customerChanges } from "@passalio/shared";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -17,6 +18,7 @@ import {
   toCustomerFields,
   type EditCustomerFormValues,
 } from "./customer-form-schema";
+import { changedFields } from "./changed-fields";
 import { BillingFields, CustomerFields, NotesField } from "./customer-fields";
 import { Fieldset, FormShell } from "./form-shell";
 
@@ -34,8 +36,15 @@ const EditCustomerForm = ({ customer }: { readonly customer: CustomerRecord }) =
   }, [navigate, customer.id]);
   const submit = form.handleSubmit(async (values) => {
     try {
-      const fields = toCustomerFields(values.customer);
-      await updateCustomer(database, customer.id, fields);
+      const changes = customerChanges.parse(
+        changedFields(
+          toCustomerFields(customerFormOf(customer)),
+          toCustomerFields(values.customer),
+        ),
+      );
+      if (Object.keys(changes).length > 0) {
+        await updateCustomer(database, customer.id, changes);
+      }
       toast.success(customersFr.toasts.customerUpdated);
       backToFile();
     } catch {
