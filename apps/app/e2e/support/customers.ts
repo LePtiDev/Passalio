@@ -70,6 +70,12 @@ export const openNewCustomerForm = async (page: Page) => {
   await expect(page.getByLabel("Nom", { exact: true })).toBeVisible();
 };
 
+export const chooseOption = async (page: Page, group: string, option: string) => {
+  const radioGroup = page.getByRole("radiogroup", { name: group });
+  await radioGroup.getByText(option, { exact: true }).click();
+  await expect(radioGroup.getByRole("radio", { name: option })).toBeChecked();
+};
+
 export const fillManualAddress = async (
   page: Page,
   { address, postalCode, city }: Pick<IndividualCustomer, "address" | "postalCode" | "city">,
