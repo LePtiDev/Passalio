@@ -8,12 +8,12 @@ Le point fort confirmé : aucune « attestation d'entretien » vue chez les conc
 
 ## Tarifs
 
-| Logiciel                                   | Base sans engagement    | À l'année                        | Utilisateur en plus              | 1 tech. (€/mois) | 3 tech. (€/mois) | 5 tech. (€/mois) | Essai                               | SMS                                      |
-| ------------------------------------------ | ----------------------- | -------------------------------- | -------------------------------- | ---------------- | ---------------- | ---------------- | ----------------------------------- | ---------------------------------------- |
-| Passalio                                   | 29,99 €                 | 299,90 €/an                      | inclus                           | 29,99            | 29,99            | 29,99            | gratuit                             | option (V2)                              |
-| [Ramio](https://www.ramio.fr/)             | 39 € HT                 | 35 € HT/mois                     | 19 € HT (16 € à l'année)         | 39 HT            | 77 HT            | 115 HT           | 14 jours, sans carte                | 0,05 € (packs de 5 € à 45 €), 20 offerts |
-| [Ramonia](https://ramonia.pro/)            | 79 € (franchise de TVA) | 67 €/mois, 804 € payés d'un coup | impossible (un seul utilisateur) | 79               | non proposé      | non proposé      | 14 jours, sans carte, sans le vocal | 100/mois inclus, puis 0,10 €             |
-| [OpenFire](https://openfire.fr/nos-tarifs) | 30 € HT (1 utilisateur) | engagement 12 mois possible      | 35 € HT par utilisateur (2 à 30) | 30 HT            | 105 HT           | 175 HT           | aucun, démo avec un commercial      | dès 0,10 €, signature Yousign dès 1 €    |
+| Logiciel                                   | Base sans engagement    | À l'année                                | Utilisateur en plus              | 1 tech. (€/mois) | 3 tech. (€/mois) | 5 tech. (€/mois) | Essai                               | SMS                                      |
+| ------------------------------------------ | ----------------------- | ---------------------------------------- | -------------------------------- | ---------------- | ---------------- | ---------------- | ----------------------------------- | ---------------------------------------- |
+| Passalio                                   | 29 € HT (Solo)          | 290 € HT/an (Solo), 490 € HT/an (Équipe) | Équipe 49 € HT, bureau inclus    | 29 HT            | 49 HT            | 49 HT            | 14 jours, sans carte                | option (V2)                              |
+| [Ramio](https://www.ramio.fr/)             | 39 € HT                 | 35 € HT/mois                             | 19 € HT (16 € à l'année)         | 39 HT            | 77 HT            | 115 HT           | 14 jours, sans carte                | 0,05 € (packs de 5 € à 45 €), 20 offerts |
+| [Ramonia](https://ramonia.pro/)            | 79 € (franchise de TVA) | 67 €/mois, 804 € payés d'un coup         | impossible (un seul utilisateur) | 79               | non proposé      | non proposé      | 14 jours, sans carte, sans le vocal | 100/mois inclus, puis 0,10 €             |
+| [OpenFire](https://openfire.fr/nos-tarifs) | 30 € HT (1 utilisateur) | engagement 12 mois possible              | 35 € HT par utilisateur (2 à 30) | 30 HT            | 105 HT           | 175 HT           | aucun, démo avec un commercial      | dès 0,10 €, signature Yousign dès 1 €    |
 
 - Passalio affiche ses prix hors taxes, comme Ramio et OpenFire (CGV de Ramio), et reste en franchise de TVA tant que le seuil n'est pas atteint (ADR 0014). Ramonia est en franchise de TVA : le prix affiché est le prix payé.
 - Ramonia : la secrétaire vocale ne fait pas partie de l'essai. 200 minutes par mois incluses, puis 0,25 €/min.
@@ -46,7 +46,7 @@ Le point fort confirmé : aucune « attestation d'entretien » vue chez les conc
 | Secrétaire vocale IA                        | Non                                      | Oui (abonnés seulement)         | Non            | Non                   | hors périmètre         |
 | Facture électronique (sept. 2027)           | Préparée (SIREN, TVA, IBAN)              | ?                               | Oui (annoncé)  | V2                    | à surveiller           |
 | Données hébergées en Europe                 | Oui                                      | Oui                             | ?              | V1                    | parité                 |
-| Utilisateurs illimités au prix de base      | Non                                      | Non                             | Non            | V1                    | **avance**             |
+| Techniciens illimités à prix fixe (49 € HT) | Non                                      | Non                             | Non            | V1                    | **avance**             |
 | Dictée des observations                     | Non                                      | Oui (bouton « Dicter »)         | Non            | V1.1                  | retard sur Ramonia     |
 | Photo de la plaque, carnet papier (IA)      | Non (photo du carnet envoyée à l'équipe) | Non                             | Non            | V1.1                  | avance                 |
 | Suivi d'arrivée                             | SMS « j'arrive »                         | Bouton « J'y vais »             | Non            | V1.1                  | parité à venir         |

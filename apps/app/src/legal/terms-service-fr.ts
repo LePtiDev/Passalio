@@ -102,8 +102,9 @@ export const TERMS_SERVICE_SECTIONS: readonly LegalSection[] = [
       {
         kind: "list",
         items: [
-          `Abonnement mensuel : 29,99 € par mois. Abonnement annuel : 299,90 € par an. Prix ${PUBLISHER.priceTaxBasis}.`,
-          "Le nombre d'utilisateurs est illimité dans l'espace du Client.",
+          `Formule Solo, pour un technicien : 29 € par mois ou 290 € par an. Formule Équipe, techniciens illimités : 49 € par mois ou 490 € par an. Prix ${PUBLISHER.priceTaxBasis}.`,
+          "Un technicien est une personne qui réalise les passages et signe les certificats. Les autres utilisateurs de l'espace du Client sont illimités dans les deux formules.",
+          "Le passage de la formule Solo à la formule Équipe prend effet immédiatement. Le prix est ajusté au prorata de la période en cours.",
           "Le paiement se fait d'avance, par carte ou prélèvement, via notre prestataire de paiement Stripe. Nous ne conservons pas vos numéros de carte.",
           "Une facture est disponible à chaque paiement.",
           "Nous pouvons changer les prix. Le nouveau prix vous est annoncé par email au moins 30 jours avant le renouvellement suivant. Si vous le refusez, vous pouvez résilier avant cette date.",
