@@ -1,7 +1,7 @@
 import { lastMonths, parisDay, parisDayBefore } from "@passalio/shared";
 
 export const USAGE_HISTORY_MONTHS = 6;
-export const TRIAL_DAYS = 14;
+export const TRIAL_DAYS = 7;
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 const WINDOW_DAYS = 30;

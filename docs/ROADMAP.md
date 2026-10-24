@@ -120,7 +120,9 @@ Dernière mise à jour : 2026-10-24.
 - [x] Grille de prix et fonctionnement du paiement décidés (ADR 0025, choix de Quentin du 2026-10-24)
 - [ ] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, lecture seule, emails (fin d'essai J-3 et J0, paiement refusé, lecture seule)
 - [ ] Abonnement, code : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures en lecture seule, passage Solo vers Équipe à l'invitation d'un deuxième technicien (ADR 0025)
-- [ ] Ouvrir le compte Stripe de production au nom de la SAS, mentions de la facture Stripe validées par la vérification réglementaire
+- [ ] Ouvrir le compte Stripe de production au nom de la micro-entreprise de Quentin (ADR 0025), mentions de la facture Stripe validées par la vérification réglementaire
+- [ ] Abonnement : écran bloquant en fin d'essai (7 jours), avec souscription, export et déconnexion
+- [ ] Espace admin : revoir « essais qui finissent cette semaine », qui couvre désormais tous les essais (7 jours)
 - [x] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
 - [ ] Poser le secret `RESEND_API_KEY` en staging et en production, puis tester un envoi sur chaque environnement
 - [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié

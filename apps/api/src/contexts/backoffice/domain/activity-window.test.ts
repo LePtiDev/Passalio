@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { activityWindow, TRIAL_DAYS, trialEndOf, USAGE_HISTORY_MONTHS } from "./activity-window";
 
 describe("activityWindow in Paris time", () => {
-  it("keeps a 14-day trial and six months of history", () => {
-    expect(TRIAL_DAYS).toBe(14);
+  it("keeps a 7-day trial and six months of history", () => {
+    expect(TRIAL_DAYS).toBe(7);
     expect(USAGE_HISTORY_MONTHS).toBe(6);
   });
 
@@ -39,13 +39,13 @@ describe("activityWindow in Paris time", () => {
     ]);
   });
 
-  it("starts the trial window exactly 14 days before now", () => {
+  it("starts the trial window exactly 7 days before now", () => {
     expect(activityWindow(new Date("2026-03-30T12:00:00Z")).trialStartedAfter).toEqual(
-      new Date("2026-03-16T12:00:00Z"),
+      new Date("2026-03-23T12:00:00Z"),
     );
   });
 
-  it("ends the trial 14 days of 24 hours after creation, whatever the daylight saving change", () => {
-    expect(trialEndOf(new Date("2026-03-20T12:00:00Z"))).toEqual(new Date("2026-04-03T12:00:00Z"));
+  it("ends the trial 7 days of 24 hours after creation, whatever the daylight saving change", () => {
+    expect(trialEndOf(new Date("2026-03-25T12:00:00Z"))).toEqual(new Date("2026-04-01T12:00:00Z"));
   });
 });
