@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useCallback } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { toastApiError } from "@/lib/errors";
+import { errorCodeLine, toastApiError } from "@/lib/errors";
 import { ROLE_LABELS } from "../../fr";
 import { ORGANIZATION_QUERY_KEY } from "../../hooks/use-organization";
 import { identityApi } from "../../identity-api";
@@ -28,7 +28,8 @@ const sendInvitations = async (invitations: TeamFormValues["invitations"]) => {
   const results = await Promise.all(
     invitations.map(({ email, role }) => identityApi.inviteMember(email, role)),
   );
-  return results.filter((result) => result.isOk).length;
+  const failures = results.flatMap((result) => (result.isOk ? [] : [result.error]));
+  return { sentCount: results.length - failures.length, firstFailure: failures[0] };
 };
 
 const RoleGuide = () => (
@@ -56,23 +57,29 @@ export const TeamStep = () => {
   const invitations = useWatch({ control: form.control, name: "invitations" });
   const filledCount = invitations.filter(({ email }) => email.trim() !== "").length;
 
-  const finish = useCallback(async () => {
-    const completed = await identityApi.completeOnboarding();
-    if (!completed.isOk) {
-      toastApiError(completed.error);
-      return;
-    }
-    await queryClient.invalidateQueries({ queryKey: ORGANIZATION_QUERY_KEY });
-    await navigate({ to: "/", search: { bienvenue: true } });
-  }, [navigate, queryClient]);
+  const completion = useMutation({
+    mutationFn: async () => {
+      const completed = await identityApi.completeOnboarding();
+      if (!completed.isOk) {
+        toastApiError(completed.error);
+        return;
+      }
+      await queryClient.invalidateQueries({ queryKey: ORGANIZATION_QUERY_KEY });
+      await navigate({ to: "/", search: { bienvenue: true } });
+    },
+  });
+  const finish = completion.mutateAsync;
 
   const submit = form.handleSubmit(async (values) => {
     const toSend = values.invitations.filter(({ email }) => email !== "");
     if (toSend.length > 0) {
-      const sentCount = await sendInvitations(toSend);
-      const failedCount = toSend.length - sentCount;
-      if (failedCount > 0) {
-        toast.warning(text.partlySent(sentCount, failedCount));
+      const { sentCount, firstFailure } = await sendInvitations(toSend);
+      if (firstFailure !== undefined) {
+        const description = errorCodeLine(firstFailure);
+        toast.warning(
+          text.partlySent(sentCount, toSend.length - sentCount),
+          description === undefined ? {} : { description },
+        );
       } else {
         toast.success(text.sent(sentCount));
       }
@@ -124,15 +131,15 @@ export const TeamStep = () => {
             type="button"
             variant="ghost"
             className={ONBOARDING_GHOST_BUTTON_CLASS}
-            onClick={finish}
-            disabled={isSubmitting}
+            onClick={() => completion.mutate()}
+            disabled={isSubmitting || completion.isPending}
           >
             {onboardingFr.layout.later}
           </Button>
           <Button
             type="submit"
             className={ONBOARDING_PRIMARY_BUTTON_CLASS}
-            disabled={isSubmitting || filledCount === 0}
+            disabled={isSubmitting || completion.isPending || filledCount === 0}
           >
             {isSubmitting ? text.sending : text.send(filledCount)}
           </Button>
