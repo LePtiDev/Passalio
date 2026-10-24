@@ -4,5 +4,11 @@
     "lib": ["ES2023", "DOM"],
     "types": ["node"]
   },
-  "include": ["e2e", "playwright.config.ts"]
+  "include": [
+    "e2e",
+    "e2e-pwa",
+    "playwright.config.ts",
+    "playwright.pwa.config.ts",
+    "vite.pwa-e2e.config.ts"
+  ]
 }

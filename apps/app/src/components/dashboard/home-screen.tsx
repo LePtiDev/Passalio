@@ -87,12 +87,11 @@ export const HomeScreen = ({ userName, isWelcome }: HomeScreenProps) => {
         <span className="min-w-0 flex-1">
           <OrganizationBadge placement="header" />
         </span>
-        <Link
-          to="/reglages"
-          aria-label={fr.shell.settings}
-          className="flex size-12 items-center justify-center"
-        >
-          <InitialsAvatar name={userName} tone="mint" size="medium" />
+        <Link to="/reglages" className="flex size-12 items-center justify-center">
+          <span aria-hidden="true">
+            <InitialsAvatar name={userName} tone="mint" size="medium" />
+          </span>
+          <span className="sr-only">{fr.shell.settings}</span>
         </Link>
       </MobileTopBar>
       <PageContent>

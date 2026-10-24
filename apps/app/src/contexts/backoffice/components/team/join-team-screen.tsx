@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiErrorOf, unwrap } from "@/lib/api-client";
 import { ADMIN_PATH } from "@/lib/session";
-import { useSignOut } from "@/lib/use-sign-out";
+import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { teamApi } from "../../team-api";
 import { PLATFORM_ROLE_LABELS, teamFr } from "../../team-fr";
 
@@ -64,7 +64,7 @@ type JoinTeamScreenProps = {
 
 export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTeamScreenProps) => {
   const navigate = useNavigate();
-  const switchAccount = useSignOut(returnTo);
+  const { signOut: switchAccount, isSigningOut } = useSignOutButton(returnTo);
   const goHome = useCallback(() => void navigate({ to: "/" }), [navigate]);
   const invitation = useQuery({
     queryKey: ["team-invitation", invitationId],
@@ -115,7 +115,7 @@ export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTea
       <JoinLayout isInvalid>
         <div className="flex flex-col gap-5">
           <Heading title={text.mismatchTitle}>{text.mismatchText(email, currentEmail)}</Heading>
-          <Button className={PRIMARY_CLASS} onClick={switchAccount}>
+          <Button className={PRIMARY_CLASS} onClick={switchAccount} disabled={isSigningOut}>
             {text.switchTo}
           </Button>
         </div>
@@ -139,7 +139,12 @@ export const JoinTeamScreen = ({ invitationId, currentEmail, returnTo }: JoinTea
         <Button className={PRIMARY_CLASS} disabled={accept.isPending} onClick={join}>
           {accept.isPending ? text.joining : text.submit}
         </Button>
-        <button type="button" className={LINK_CLASS} onClick={switchAccount}>
+        <button
+          type="button"
+          className={LINK_CLASS}
+          onClick={switchAccount}
+          disabled={isSigningOut}
+        >
           {text.switchAccount}
         </button>
       </div>

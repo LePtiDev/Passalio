@@ -1,6 +1,6 @@
 import { useCallback, useState, type ChangeEvent, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { useSignOut } from "@/lib/use-sign-out";
+import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
@@ -14,7 +14,7 @@ type PasswordConfirmationProps = {
 };
 
 export const PasswordConfirmation = ({ onConfirm }: PasswordConfirmationProps) => {
-  const signOut = useSignOut();
+  const { signOut, isSigningOut } = useSignOutButton();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,6 +59,7 @@ export const PasswordConfirmation = ({ onConfirm }: PasswordConfirmationProps) =
         <button
           type="button"
           onClick={signOut}
+          disabled={isSigningOut}
           className="min-h-12 text-sm text-[#475569] hover:text-[#0F2A44] lg:min-h-0 lg:text-[13px]"
         >
           {text.signOut}

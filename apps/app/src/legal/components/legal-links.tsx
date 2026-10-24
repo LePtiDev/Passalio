@@ -15,7 +15,7 @@ export const LegalLinks = ({ className }: { readonly className?: string }) => (
       <Link
         key={to}
         to={to}
-        className="inline-flex min-h-8 items-center px-1.5 underline-offset-2 hover:underline"
+        className="inline-flex min-h-12 items-center px-1.5 underline-offset-2 hover:underline lg:min-h-8"
       >
         {label}
       </Link>

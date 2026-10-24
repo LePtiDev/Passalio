@@ -3,6 +3,8 @@ import { prospectionFr } from "./fr-prospection";
 
 const plural = (count: number, one: string, many: string) => `${count} ${count <= 1 ? one : many}`;
 
+const OPEN = "Ouvrir";
+
 const STAGES: Readonly<Record<ProspectStage, string>> = {
   to_qualify: "À qualifier",
   qualified: "Qualifiée",
@@ -49,6 +51,7 @@ export const salesFr = {
   stageReached: (name: string, stage: ProspectStage) => `${name} ${STAGE_REACHED[stage]}.`,
   section: "Commercial",
   list: {
+    open: OPEN,
     filters: "Filtres",
     filtersActive: (count: number) =>
       count === 0 ? "Filtres" : `Filtres, ${plural(count, "actif", "actifs")}`,
@@ -83,7 +86,7 @@ export const salesFr = {
     create: "Nouvelle entreprise",
     searchLabel: "Rechercher une entreprise",
     searchPlaceholder: "Nom, ville, dirigeant",
-    open: (name: string) => `Ouvrir ${name}`,
+    open: (name: string) => `${OPEN} ${name}`,
     columns: {
       company: "Entreprise",
       mainContact: "Contact principal",
@@ -110,7 +113,7 @@ export const salesFr = {
     create: "Nouveau contact",
     searchLabel: "Rechercher un contact",
     searchPlaceholder: "Nom, téléphone, entreprise",
-    open: (name: string) => `Ouvrir ${name}`,
+    open: (name: string) => `${OPEN} ${name}`,
     columns: {
       contact: "Contact",
       company: "Entreprise",

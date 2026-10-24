@@ -58,7 +58,7 @@ export const identityFr = {
     passwordTooShort: "12 caractères minimum.",
     passwordTooLong: "128 caractères maximum.",
     strength: ["", "Trop faible.", "Correct.", "Bon.", "Solide."],
-    strengthHint: "12 caractères minimum. Une phrase facile à retenir fonctionne très bien.",
+    strengthHint: "Au moins 12 caractères.",
   },
   signIn: {
     title: "Connexion",
@@ -136,7 +136,7 @@ export const identityFr = {
     emptyTitle: "Vous êtes seul pour l'instant",
     emptyText: "Invitez vos techniciens et votre secrétariat. Ils recevront un lien par email.",
     emptyAction: "Inviter une personne",
-    roleLabel: (name: string) => `Rôle de ${name}`,
+    roleLabel: (name: string, role: OrganizationRole) => `${ROLE_LABELS[role]}, rôle de ${name}`,
     roleChanged: (name: string, role: string) => `${name} est maintenant ${role.toLowerCase()}.`,
     remove: "Retirer de l'équipe",
     removeTitle: (name: string) => `Retirer ${name} de l'équipe ?`,

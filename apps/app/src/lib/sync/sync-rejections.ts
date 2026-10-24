@@ -61,3 +61,5 @@ export const recordRejections = async (
       await database.syncState.delete("cursor");
     },
   );
+
+export const forgetRejections = (database: LocalDatabase) => database.rejections.clear();

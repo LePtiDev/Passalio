@@ -17,9 +17,9 @@ import { isTwoFactorRedirect, sendMagicLink } from "./sign-in-requests";
 import { AuthHeading } from "./auth-heading";
 import {
   AUTH_FIELD_CLASS,
-  AUTH_LINK_CLASS,
   AUTH_PRIMARY_BUTTON_CLASS,
   AUTH_SECONDARY_BUTTON_CLASS,
+  AUTH_TOUCH_LINK_CLASS,
 } from "./auth-styles";
 import { CheckboxField } from "./checkbox-field";
 import { MagicLinkSent } from "./magic-link-sent";
@@ -44,7 +44,7 @@ const FORGOT_PASSWORD_LINK = (
   <Link
     to={FORGOT_PASSWORD_PATH}
     aria-label={text.forgotPassword}
-    className={`text-sm lg:text-[13px] ${AUTH_LINK_CLASS}`}
+    className={`text-sm lg:text-[13px] ${AUTH_TOUCH_LINK_CLASS}`}
   >
     <span className="lg:hidden">{text.forgotPasswordShort}</span>
     <span className="hidden lg:inline">{text.forgotPassword}</span>
@@ -171,7 +171,7 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
             {isSubmitting ? text.submitting : text.submit}
           </Button>
         </div>
-        <div className="flex items-center gap-3 text-xs text-[#94A3B8]">
+        <div className="flex items-center gap-3 text-xs text-[#64748B]">
           <span className="h-px flex-1 bg-[#E3E8EF]" />
           {text.or}
           <span className="h-px flex-1 bg-[#E3E8EF]" />
@@ -189,7 +189,7 @@ export const SignInForm = ({ returnTo }: SignInFormProps) => {
       </div>
       <p className="text-center text-sm text-muted-foreground lg:text-[13px]">
         {text.noAccount}{" "}
-        <Link to={SIGN_UP_PATH} search={signUpSearch} className={AUTH_LINK_CLASS}>
+        <Link to={SIGN_UP_PATH} search={signUpSearch} className={AUTH_TOUCH_LINK_CLASS}>
           {text.createAccount}
         </Link>
       </p>

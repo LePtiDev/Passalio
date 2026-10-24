@@ -5,16 +5,18 @@ import { Button } from "@/components/ui/button";
 import { fr } from "@/fr";
 import { useCan } from "@/lib/permissions/use-can";
 import { identityFr } from "../../fr";
-import { useOrganization } from "../../hooks/use-organization";
 import { usePendingInvitations } from "../../hooks/use-pending-invitations";
 import { useTeam } from "../../hooks/use-team";
 import { InviteMemberDialog } from "./invite-member-dialog";
+import { OrganizationSubtitle } from "./organization-subtitle";
 import { TeamTabs, type TeamTab } from "./team-tabs";
 import { TEAM_PRIMARY_BUTTON_CLASS } from "./team-styles";
 
 const TRAIL = [{ label: fr.shell.settings, to: "/reglages" }, { label: fr.shell.team }] as const;
 
 const text = identityFr.team;
+
+const organizationNameOnly = (name: string) => name;
 
 const countOf = (pageLengths: readonly number[] | undefined, hasMore: boolean) =>
   pageLengths === undefined || hasMore
@@ -23,13 +25,11 @@ const countOf = (pageLengths: readonly number[] | undefined, hasMore: boolean) =
 
 export const TeamScreen = () => {
   const canManage = useCan("members:manage");
-  const { data: organization } = useOrganization();
   const team = useTeam();
   const pending = usePendingInvitations();
   const [tab, setTab] = useState<TeamTab>("members");
   const [isInviteOpen, setInviteOpen] = useState(false);
   const openInvite = useCallback(() => setInviteOpen(true), []);
-  const organizationName = organization?.name ?? "";
 
   const membersCount = countOf(
     team.data?.pages.map((page) => page.members.length),
@@ -46,7 +46,12 @@ export const TeamScreen = () => {
       <MobileTopBar backTo="/reglages" backLabel={text.backToSettings}>
         <span className="flex min-w-0 flex-1 flex-col">
           <h1 className="text-[17px] font-bold">{text.title}</h1>
-          <span className="truncate text-[13px] text-[#64748B]">{organizationName}</span>
+          <OrganizationSubtitle
+            isForDesktop={false}
+            className="truncate text-[13px] text-[#64748B]"
+            skeletonClassName="mt-1 h-3.5 w-32"
+            render={organizationNameOnly}
+          />
         </span>
         {canManage ? (
           <button
@@ -63,7 +68,12 @@ export const TeamScreen = () => {
         <div className="hidden flex-wrap items-end justify-between gap-4 lg:flex">
           <div className="flex flex-col gap-1">
             <h1 className="text-xl font-bold tracking-[-0.015em]">{text.title}</h1>
-            <p className="text-[13px] text-[#475569]">{text.subtitle(organizationName)}</p>
+            <OrganizationSubtitle
+              isForDesktop
+              className="text-[13px] text-[#475569]"
+              skeletonClassName="h-4 w-64"
+              render={text.subtitle}
+            />
           </div>
           {canManage ? (
             <Button className={TEAM_PRIMARY_BUTTON_CLASS} onClick={openInvite}>

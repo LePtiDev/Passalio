@@ -8,7 +8,7 @@ export const SECTION_TITLE_CLASS = "text-[15px] font-bold lg:text-sm";
 
 export const CARD_TITLE_CLASS = "px-3.5 pt-3.5 pb-1 text-[15px] font-bold lg:text-sm";
 
-export const MUTED_CLASS = "text-[#94A3B8]";
+export const MUTED_CLASS = "text-[#64748B]";
 
 export const NEUTRAL_BADGE_CLASS =
   "inline-flex items-center gap-1.5 rounded-[7px] bg-[#EEF3F8] px-2 py-0.5 text-xs font-medium whitespace-nowrap text-[#0F2A44]";

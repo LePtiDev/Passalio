@@ -69,11 +69,12 @@ export const CompanyFileScreen = ({ companyId }: { readonly companyId: string })
   const file = useCompanyFile(companyId);
   const { refetch } = file;
   const retry = useCallback(() => void refetch(), [refetch]);
-  const name = file.data?.company.name ?? salesFr.companies.title;
-  const trail = useMemo<readonly AdminTrailStep[]>(
-    () => [{ label: salesFr.companies.title, to: "/admin/entreprises" }, { label: name }],
-    [name],
-  );
+  const recordName = file.data?.company.name ?? null;
+  const name = recordName ?? salesFr.companies.title;
+  const trail = useMemo<readonly AdminTrailStep[]>(() => {
+    const parent: AdminTrailStep = { label: salesFr.companies.title, to: "/admin/entreprises" };
+    return recordName === null ? [parent] : [parent, { label: recordName }];
+  }, [recordName]);
   return (
     <AdminPage section="commercial" trail={trail} mobileTitle={name} mobileBack={BACK}>
       {file.isPending ? <FileSkeleton /> : null}

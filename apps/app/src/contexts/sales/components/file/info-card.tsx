@@ -26,26 +26,26 @@ export const InfoCard = ({
         <div
           key={key}
           className={cn(
-            "flex gap-3 border-t border-[#EEF2F6] px-3.5 py-3",
+            "relative flex min-w-0 flex-col border-t border-[#EEF2F6] px-3.5 py-3 lg:pl-[42px]",
             isMobileHidden === true && "hidden lg:flex",
           )}
         >
-          <Icon
-            aria-hidden="true"
-            className="mt-0.5 hidden size-4 shrink-0 text-[#94A3B8] lg:block"
-            strokeWidth={1.8}
-          />
-          <div className="flex min-w-0 flex-col">
-            <dt className="text-xs text-[#64748B]">{label}</dt>
-            <dd
-              className={cn(
-                "text-[15px] break-words lg:truncate lg:text-[13px]",
-                value === null && MUTED_CLASS,
-              )}
-            >
-              {value ?? missing}
-            </dd>
-          </div>
+          <dt className="text-xs text-[#64748B]">
+            <Icon
+              aria-hidden="true"
+              className="absolute top-3.5 left-3.5 hidden size-4 text-[#94A3B8] lg:block"
+              strokeWidth={1.8}
+            />
+            {label}
+          </dt>
+          <dd
+            className={cn(
+              "text-[15px] break-words lg:truncate lg:text-[13px]",
+              value === null && MUTED_CLASS,
+            )}
+          >
+            {value ?? missing}
+          </dd>
         </div>
       ))}
     </dl>

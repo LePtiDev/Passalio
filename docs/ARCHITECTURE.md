@@ -103,7 +103,7 @@ packages/
 ├── trades/                   # Un dossier par métier
 ├── pdf/                      # Rendu des attestations
 ├── emails/                   # Gabarits d'e-mail HTML et texte (ADR 0016)
-└── test-guard/               # pnpm test:guard : aucun test existant changé sans accord (ADR 0020)
+└── test-guard/               # pnpm test:guard : aucun test existant changé sans accord, aucun code sans test (ADR 0020, 0023)
 docs/
 ├── ARCHITECTURE.md
 ├── SECURITY.md

@@ -2,7 +2,7 @@ import { LogOut } from "lucide-react";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { OrganizationBadge } from "@/contexts/identity";
 import { fr } from "@/fr";
-import { useSignOut } from "@/lib/use-sign-out";
+import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { MAIN_NAVIGATION, SETTINGS_NAVIGATION } from "./navigation";
 import { SidebarLink } from "./sidebar-link";
 
@@ -12,7 +12,7 @@ export type SignedInUser = {
 };
 
 export const AppSidebar = ({ user }: { readonly user: SignedInUser }) => {
-  const signOut = useSignOut();
+  const { signOut, isSigningOut } = useSignOutButton();
   return (
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-5 border-r border-[#E3E8EF] bg-[#F7F9FB] px-3 py-4 lg:flex">
       <OrganizationBadge />
@@ -40,6 +40,7 @@ export const AppSidebar = ({ user }: { readonly user: SignedInUser }) => {
         <button
           type="button"
           onClick={signOut}
+          disabled={isSigningOut}
           aria-label={fr.app.signOut}
           title={fr.app.signOut}
           className="flex size-8 shrink-0 items-center justify-center rounded-md text-[#64748B] hover:bg-[#EEF3F8] hover:text-[#0F2A44]"

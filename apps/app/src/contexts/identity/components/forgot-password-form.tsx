@@ -14,7 +14,7 @@ import { identityFr } from "../fr";
 import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AuthHeading } from "./auth-heading";
-import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
+import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
 import { TurnstileSlot } from "./turnstile-slot";
 
 const text = identityFr.forgotPassword;
@@ -27,7 +27,7 @@ type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 const BackToSignIn = () => (
   <p className="text-center text-sm lg:text-[13px]">
-    <Link to={SIGN_IN_PATH} className={AUTH_LINK_CLASS}>
+    <Link to={SIGN_IN_PATH} className={AUTH_TOUCH_LINK_CLASS}>
       {text.backToSignIn}
     </Link>
   </p>

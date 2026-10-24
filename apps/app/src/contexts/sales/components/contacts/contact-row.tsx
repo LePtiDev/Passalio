@@ -4,6 +4,7 @@ import { InitialsAvatar, type AvatarTone } from "@/components/initials-avatar";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../../fr";
 import { ContactLink } from "../record-links";
+import { ScreenReaderText } from "../screen-reader-text";
 import { LIST_ROW_CLASS, MUTED_CLASS } from "../sales-styles";
 
 const text = salesFr.contacts;
@@ -22,11 +23,7 @@ export const ContactRow = ({ contact, index }: ContactRowProps) => {
   const place = `${contact.company.city ?? ""} (${contact.company.department})`.trim();
   return (
     <li className="border-b border-[#EEF2F6] last:border-b-0">
-      <ContactLink
-        id={contact.id}
-        ariaLabel={text.open(contact.name)}
-        className={cn(CONTACT_GRID_CLASS, LIST_ROW_CLASS)}
-      >
+      <ContactLink id={contact.id} className={cn(CONTACT_GRID_CLASS, LIST_ROW_CLASS)}>
         <span className="flex min-w-0 items-center gap-3">
           <InitialsAvatar
             name={contact.name}
@@ -35,9 +32,10 @@ export const ContactRow = ({ contact, index }: ContactRowProps) => {
           />
           <span className="flex min-w-0 flex-col gap-px">
             <span className="truncate text-[15px] font-semibold lg:text-[13px]">
+              <ScreenReaderText>{salesFr.list.open}</ScreenReaderText>
               {contact.name}
             </span>
-            <span className="truncate text-[13px] text-[#64748B]">
+            <span aria-hidden="true" className="truncate text-[13px] text-[#64748B]">
               <span className="lg:hidden">{contact.company.name}</span>
               <span className="hidden lg:inline">
                 {contact.jobTitle ?? (contact.isLeader ? text.leader : "")}
@@ -45,11 +43,12 @@ export const ContactRow = ({ contact, index }: ContactRowProps) => {
             </span>
           </span>
         </span>
-        <span className="hidden min-w-0 flex-col gap-px lg:flex">
+        <span aria-hidden="true" className="hidden min-w-0 flex-col gap-px lg:flex">
           <span className="truncate text-[13px]">{contact.company.name}</span>
           <span className="truncate text-[13px] text-[#64748B]">{place}</span>
         </span>
         <span
+          aria-hidden="true"
           className={cn(
             "text-[13px] whitespace-nowrap tabular-nums",
             contact.phone === null ? MUTED_CLASS : "text-[#475569]",
@@ -58,6 +57,7 @@ export const ContactRow = ({ contact, index }: ContactRowProps) => {
           {contact.phone ?? salesFr.list.noPhone}
         </span>
         <span
+          aria-hidden="true"
           className={cn(
             "hidden truncate text-[13px] lg:block",
             contact.email === null && MUTED_CLASS,

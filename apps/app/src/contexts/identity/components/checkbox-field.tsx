@@ -29,8 +29,9 @@ export const CheckboxField = <Values extends FieldValues>({
   );
   return (
     <div className="flex flex-col gap-1">
-      <label className="flex min-h-12 cursor-pointer items-center gap-2.5 py-1 text-sm leading-normal text-[#334155] lg:min-h-0 lg:gap-2 lg:text-[13px]">
+      <label className="flex cursor-pointer items-start gap-2.5 py-3.5 text-sm leading-normal text-[#334155] lg:gap-2 lg:py-1 lg:text-[13px]">
         <Checkbox
+          className="mt-0.5"
           checked={field.value === true}
           onCheckedChange={onCheckedChange}
           onBlur={field.onBlur}

@@ -42,7 +42,7 @@ const FilterButton = ({
       aria-pressed={isActive}
       onClick={select}
       className={cn(
-        "flex h-10 items-center justify-center gap-1.5 rounded-[9px] text-sm lg:-mb-px lg:h-auto lg:rounded-none lg:border-b-2 lg:py-2.5 lg:text-[13px]",
+        "flex h-12 items-center justify-center gap-1.5 rounded-[9px] text-sm lg:-mb-px lg:h-auto lg:rounded-none lg:border-b-2 lg:py-2.5 lg:text-[13px]",
         isActive
           ? "bg-white font-semibold text-[#0F2A44] shadow-[0_1px_2px_rgba(15,42,68,0.1)] lg:border-[#0F2A44] lg:bg-transparent lg:shadow-none"
           : "font-medium text-[#475569] lg:border-transparent lg:text-[#64748B]",

@@ -5,6 +5,8 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { NETWORK_ONLY_NAVIGATIONS } from "./src/lib/service-worker-routes";
 
+const API_PROXY_TARGET = process.env["API_PROXY_TARGET"] ?? "http://localhost:8787";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -35,11 +37,11 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      "/api": "http://localhost:8787",
-      "/mcp": "http://localhost:8787",
-      "/oauth": "http://localhost:8787",
-      "/.well-known/oauth-authorization-server": "http://localhost:8787",
-      "/.well-known/oauth-protected-resource": "http://localhost:8787",
+      "/api": API_PROXY_TARGET,
+      "/mcp": API_PROXY_TARGET,
+      "/oauth": API_PROXY_TARGET,
+      "/.well-known/oauth-authorization-server": API_PROXY_TARGET,
+      "/.well-known/oauth-protected-resource": API_PROXY_TARGET,
     },
   },
   resolve: {
