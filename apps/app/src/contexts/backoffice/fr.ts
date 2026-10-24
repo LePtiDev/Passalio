@@ -160,6 +160,7 @@ export const backofficeFr = {
     mobileSubtitle: "Actions de l'équipe Passalio",
     empty: "Rien dans le journal pour l'instant.",
     emptyText: "Chaque création d'entreprise et chaque action de l'équipe Passalio s'inscrit ici.",
+    emptyAction: "Voir les comptes clients",
     today: (date: string) => `Aujourd'hui · ${date}`,
     yesterday: (date: string) => `Hier · ${date}`,
     command: "La commande",
