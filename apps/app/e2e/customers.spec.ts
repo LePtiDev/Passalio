@@ -177,3 +177,139 @@ test.describe("plate reading", () => {
     await expect(page.getByLabel("Marque")).toHaveValue("");
   });
 });
+
+const answerPlateReading = (page: Page, answers: readonly object[]) => {
+  const remaining = [...answers];
+  return page.route("**/api/plate-readings", (route) =>
+    route.fulfill({ status: 200, json: remaining.shift() ?? answers.at(-1) }),
+  );
+};
+
+test.describe("plate reading outcomes", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route("**/api/auth/**", (route) =>
+      route.continue({
+        headers: { ...route.request().headers(), "cf-connecting-ip": "203.0.113.25" },
+      }),
+    );
+  });
+
+  test("an unreadable plate asks for a new photo, and the new photo fills the form", async ({
+    page,
+  }) => {
+    await onboard(page, "plaque-illisible@example.fr");
+    await createCustomer(page);
+    await answerPlateReading(page, [
+      { status: "unreadable", fields: {}, fieldCount: 0 },
+      {
+        status: "read",
+        fields: {
+          kind: "pellet_stove",
+          energy: "pellets",
+          brand: "MCZ",
+          model: "Ego 2.0 Air 8",
+          serialNumber: "MC-48213",
+          powerKw: 8,
+        },
+        fieldCount: 6,
+      },
+    ]);
+    await page.getByRole("link", { name: "Ajouter un appareil" }).click();
+
+    await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
+
+    await expect(page.getByText("Plaque illisible")).toBeVisible();
+    await expect(page.getByText("Illisible", { exact: true })).toBeVisible();
+    await expect(page.getByLabel("Marque")).toHaveValue("");
+
+    await page.getByLabel("Reprendre la photo").setInputFiles(PLATE_PHOTO);
+
+    await expect(page.getByText("6 champs lus sur la plaque")).toBeVisible();
+    await expect(page.getByText("Plaque illisible")).toBeHidden();
+    await expect(page.getByLabel("Marque")).toHaveValue("MCZ");
+    await expect(page.getByLabel("Numéro de série")).toHaveValue("MC-48213");
+  });
+
+  test("a heat pump plate fills the refrigerant and hides the fuel", async ({ page }) => {
+    await onboard(page, "plaque-pac@example.fr");
+    await createCustomer(page);
+    await answerPlateReading(page, [
+      {
+        status: "partial",
+        fields: {
+          kind: "air_to_water_heat_pump",
+          brand: "Atlantic",
+          model: "Alfea Excellia",
+          powerKw: 11,
+          refrigerant: "R32",
+          refrigerantChargeKg: 1.4,
+        },
+        fieldCount: 6,
+      },
+    ]);
+    await page.getByRole("link", { name: "Ajouter un appareil" }).click();
+
+    await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
+
+    await expect(page.getByText("6 champs lus sur la plaque")).toBeVisible();
+    await expect(page.getByLabel("Type d'appareil", { exact: true })).toContainText("PAC air/eau");
+    await expect(page.getByLabel("Combustible", { exact: true })).toBeHidden();
+    await expect(page.getByLabel("Fluide frigorigène")).toHaveValue("R32");
+    await expect(page.getByLabel("Charge (kg)")).toHaveValue("1,40");
+    await expect(page.getByLabel("Numéro de série")).toHaveValue("");
+  });
+
+  test("a failed reading shows its code and lets the technician fill the form by hand", async ({
+    page,
+  }) => {
+    await onboard(page, "plaque-panne@example.fr");
+    await createCustomer(page);
+    await page.route("**/api/plate-readings", (route) =>
+      route.fulfill({
+        status: 503,
+        json: { error: "plate_reader_unavailable", traceId: "5d7e91c0aa31" },
+      }),
+    );
+    await page.getByRole("link", { name: "Ajouter un appareil" }).click();
+
+    await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
+
+    await expect(
+      page.getByText("La plaque n'a pas pu être lue. Remplissez à la main."),
+    ).toBeVisible();
+    await expect(page.getByText("Code : 5d7e91c0")).toBeVisible();
+    await expect(page.getByRole("img", { name: "Plaque signalétique" })).toBeVisible();
+
+    await chooseOption(page, "Type d'appareil", "Chaudière");
+    await chooseOption(page, "Combustible", "Gaz");
+    await page.getByLabel("Marque").fill("Saunier Duval");
+    await page.getByRole("button", { name: "Ajouter l'appareil" }).click();
+    await expect(page.getByText("Chaudière gaz · Saunier Duval")).toBeVisible();
+  });
+
+  test("offline, the plate photo is kept and nothing is sent", async ({ page, context }) => {
+    await onboard(page, "plaque-hors-ligne@example.fr");
+    await createCustomer(page);
+    const readings: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/api/plate-readings")) {
+        readings.push(request.url());
+      }
+    });
+    await page.getByRole("link", { name: "Ajouter un appareil" }).click();
+    await expect(page.getByLabel("Plaque signalétique")).toBeAttached();
+    await context.setOffline(true);
+
+    await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
+
+    await expect(page.getByRole("img", { name: "Plaque signalétique" })).toBeVisible();
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByText("Lecture de la plaque…")).toBeHidden();
+    await expect(
+      page.getByText("La plaque n'a pas pu être lue. Remplissez à la main."),
+    ).toBeHidden();
+    await expect(page.getByLabel("Marque")).toHaveValue("");
+    expect(readings).toHaveLength(0);
+    await context.setOffline(false);
+  });
+});
