@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { EquipmentKind, EquipmentPhotoKind } from "@passalio/shared";
 import { useNavigate } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { FormSkeleton } from "@/components/page-skeleton";
@@ -12,8 +12,9 @@ import { addEquipment, addEquipmentPhoto } from "../../equipment-store";
 import { BUILDING_TYPE_LABELS, customersFr } from "../../fr";
 import { useCustomerFile, type CustomerFile } from "../../hooks/use-customer-file";
 import { useOfferedKinds } from "../../hooks/use-offered-kinds";
+import { usePlatePhotos } from "../../hooks/use-plate-photos";
 import { CustomerNotFound } from "../file/customer-not-found";
-import { Fieldset, FormShell } from "../form/form-shell";
+import { FieldRow, Fieldset, FormShell } from "../form/form-shell";
 import { FlueFields, HeatPumpFields, IdentityFields } from "./equipment-detail-fields";
 import {
   emptyEquipmentForm,
@@ -25,8 +26,10 @@ import {
   type EquipmentFormValues,
 } from "./equipment-form-schema";
 import { EnergyField, EquipmentKindField } from "./equipment-kind-field";
-import { EquipmentPhotoTiles, NO_PHOTOS, type EquipmentPhotos } from "./equipment-photo-tiles";
+import { EquipmentPhotoTiles } from "./equipment-photo-tiles";
 import { InstallationFields } from "./installation-fields";
+import { PlateReadingProvider } from "./plate-marks";
+import { PlateReadingBanner } from "./plate-reading-status";
 import { LastVisitFields } from "./last-visit-fields";
 
 const text = customersFr.equipmentForm;
@@ -59,11 +62,11 @@ const NewEquipmentForm = ({ file, site, replacesEquipmentId }: NewEquipmentFormP
   const { database, actor } = useLocalSession();
   const navigate = useNavigate();
   const kinds = useOfferedKinds();
-  const [photos, setPhotos] = useState<EquipmentPhotos>(NO_PHOTOS);
   const form = useForm<EquipmentFormValues>({
     resolver: zodResolver(equipmentFormSchema),
     defaultValues: emptyEquipmentForm(replacesEquipmentId),
   });
+  const { photos, plateReading, changePhotos, retakePlate } = usePlatePhotos(form, kinds);
   const [kind, isInstalledByUs, replacesEquipmentChoice] = useWatch({
     control: form.control,
     name: ["kind", "isInstalledByUs", "replacesEquipmentId"],
@@ -135,14 +138,27 @@ const NewEquipmentForm = ({ file, site, replacesEquipmentId }: NewEquipmentFormP
         onSubmit={submit}
         onCancel={backToFile}
       >
-        <EquipmentPhotoTiles photos={photos} onChange={setPhotos} />
-        <Fieldset title={text.section} text={siteLineOf(name, site)}>
-          <EquipmentKindField kinds={kinds} />
-          <EnergyField />
-          <IdentityFields />
-          {isHeatPumpKind(kind) ? <HeatPumpFields /> : null}
-        </Fieldset>
-        {kind === null || isHeatPumpKind(kind) ? null : <FlueFields />}
+        <PlateReadingBanner state={plateReading.state} onRetake={retakePlate} />
+        <EquipmentPhotoTiles
+          photos={photos}
+          plateReading={plateReading.state}
+          onChange={changePhotos}
+        />
+        <PlateReadingProvider value={plateReading.state}>
+          <Fieldset title={text.section} text={siteLineOf(name, site)}>
+            {isHeatPumpKind(kind) ? (
+              <EquipmentKindField kinds={kinds} />
+            ) : (
+              <FieldRow>
+                <EquipmentKindField kinds={kinds} />
+                <EnergyField />
+              </FieldRow>
+            )}
+            <IdentityFields />
+            {isHeatPumpKind(kind) ? <HeatPumpFields /> : null}
+          </Fieldset>
+        </PlateReadingProvider>
+        {isHeatPumpKind(kind) ? null : <FlueFields />}
         <InstallationFields candidates={candidates} />
         <LastVisitFields />
       </FormShell>

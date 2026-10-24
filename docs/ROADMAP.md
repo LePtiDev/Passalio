@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-23.
+Dernière mise à jour : 2026-10-24.
 
 ## Fait
 
@@ -51,6 +51,8 @@ Dernière mise à jour : 2026-10-23.
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                                                                   | `contexts/scheduling` (app)      |
 | Types de passage : durée par défaut par métier dans Réglages, type et durée modifiable sur le nouveau passage                                                                 | `contexts/scheduling`            |
+| Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)     |
+| Lecture de plaque, tests : réduction de la photo, bandeau, marques des champs, listes déroulantes, remplissage du formulaire, parcours illisible, PAC, panne, hors ligne      | `docs/TESTING.md`                |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
 
 ## Hors code (Quentin)
@@ -93,7 +95,10 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Modifier un lieu et un appareil depuis la fiche (le menu propose seulement Remplacer et Retirer)
 - [x] Lecture de plaque, API : route, modèle interchangeable, format imposé, quota de 200 par jour, outil de mesure (ADR 0022)
 - [ ] Lecture de plaque, mesure : comparer 4 ou 5 modèles sur le jeu de photos (clés de test OpenAI et Google à fournir), choisir le modèle, l'ajouter aux sous-traitants
-- [ ] Lecture de plaque, écran selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/47mxtXeueVzaQiqhSdCmwv) : listes déroulantes type et combustible, valeurs lues à vérifier, file hors ligne, téléphone seulement
+- [x] Lecture de plaque, écran en ligne selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/47mxtXeueVzaQiqhSdCmwv) : listes déroulantes type et combustible, champs vides remplis, « Lu sur la plaque », lue en partie, illisible, limite, erreur
+- [ ] Lecture de plaque hors ligne : photo gardée dans Dexie, lue au retour du réseau, seuls les champs vides remplis, « Plaque lue · à vérifier » et « C'est vérifié » sur la fiche (`equipments.plate_check_pending_since`)
+- [ ] Astérisque rouge sur « Type d'appareil » (obligatoire, sans astérisque aujourd'hui) dans le formulaire d'appareil
+- [ ] Retirer la mention « · facultatif » de `FormField` (formulaires client et appareil), contraire à la règle des formulaires
 - [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (fait pour le ramonage : 12 mois ; appareils collectifs à 6 mois et règles locales à faire)
 - [x] Métier ramonage dans `packages/trades` : schéma du certificat version 1 et règles bloquantes tirées de `docs/regulatory/`
 - [ ] Métier entretien d'appareil dans `packages/trades` (bloqué par les documents réels)
@@ -138,7 +143,9 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Matrices API, suite : réponses conformes aux schémas zod et `trace_id` sur les succès, cas 400 par route, isolation vue par chaque rôle
 - [ ] À confirmer par Quentin : `members:read` pour les 4 rôles, « Membres et rôles » = `members:manage`, fin de l'onboarding = `organization:update`
 - [x] Use cases sans tests unitaires : backoffice, équipe Passalio, prospection, clients, identité
-- [ ] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés
+- [x] Base de données : migrations depuis zéro, schéma Drizzle conforme, index réellement utilisés, catalogue de toutes les requêtes
+- [ ] Compteurs de la prospection (onglets d'étape, départements, contacts) : lecture complète acceptée tant que la liste reste de quelques milliers de lignes, compteurs à prévoir au-delà
+- [ ] À décider : `updated_at` sur `document_number_blocks` (table écrite une seule fois)
 - [x] Sécurité transverse (cookies, limites de débit, Turnstile, fichiers envoyés, lien de mot de passe, sessions) et aucune donnée personnelle dans les logs
 - [ ] En-têtes de sécurité (CSP stricte, HSTS, `X-Content-Type-Options`, `Referrer-Policy`) promis par `SECURITY.md` mais pas encore posés, puis leurs tests
 - [ ] Vérifier le type d'un fichier envoyé sur son contenu, pas seulement sur l'en-tête déclaré

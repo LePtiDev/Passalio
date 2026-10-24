@@ -133,13 +133,11 @@ export const createD1AccountReadModel = (
       .groupBy(members.organizationId, activityDays.userId, sql`substr(${activityDays.day}, 1, 7)`),
   countActivePeople: async (window) => {
     const result = await database
-      .select({ people: countDistinct(activityDays.userId) })
+      .select({ people: countDistinct(members.userId) })
       .from(activityDays)
+      .crossJoin(members)
       .where(
-        and(
-          gte(activityDays.day, window.recentStart),
-          inArray(activityDays.userId, database.select({ userId: members.userId }).from(members)),
-        ),
+        and(eq(members.userId, activityDays.userId), gte(activityDays.day, window.recentStart)),
       )
       .get();
     return result?.people ?? 0;
