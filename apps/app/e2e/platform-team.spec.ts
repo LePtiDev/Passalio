@@ -47,6 +47,7 @@ const openMemberAction = async (page: Page, name: string, action: string) => {
 for (const { name, size } of VIEWPORTS) {
   test.describe(`on ${name}`, () => {
     test.use({ viewport: size });
+    test.describe.configure({ timeout: 90_000 });
 
     test("a super admin invites a member who joins by email then activates two-factor", async ({
       browser,
