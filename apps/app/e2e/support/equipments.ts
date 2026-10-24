@@ -1,5 +1,4 @@
 import { expect, type Page } from "@playwright/test";
-import { chooseOption } from "./customers";
 
 export const openNewEquipment = async (page: Page) => {
   await page
@@ -8,8 +7,20 @@ export const openNewEquipment = async (page: Page) => {
     .first()
     .click();
   await expect(page.getByRole("heading", { name: "Nouvel appareil" })).toBeVisible();
-  await expect(page.getByRole("radiogroup", { name: "Ramonage et entretien" })).toBeVisible();
+  await expect(page.getByLabel("Type d'appareil", { exact: true })).toBeVisible();
 };
+
+const chooseSelectOption = async (page: Page, field: string, option: string) => {
+  await page.getByLabel(field, { exact: true }).click();
+  await page.getByRole("option", { name: option, exact: true }).click();
+  await expect(page.getByLabel(field, { exact: true })).toContainText(option);
+};
+
+export const chooseEquipmentKind = (page: Page, kind: string) =>
+  chooseSelectOption(page, "Type d'appareil", kind);
+
+export const chooseEnergy = (page: Page, energy: string) =>
+  chooseSelectOption(page, "Combustible", energy);
 
 export const chooseFlueType = async (page: Page, flueType: string) => {
   await page.getByRole("combobox", { name: /Type de conduit/ }).click();
@@ -24,7 +35,7 @@ export const saveEquipment = async (page: Page) => {
 
 export const addInsert = async (page: Page) => {
   await openNewEquipment(page);
-  await chooseOption(page, "Ramonage et entretien", "Insert");
+  await chooseEquipmentKind(page, "Insert");
   await page.getByLabel("Marque").fill("Invicta");
   await saveEquipment(page);
 };

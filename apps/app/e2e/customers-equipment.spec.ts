@@ -1,6 +1,5 @@
 import { expect, test } from "@playwright/test";
 import {
-  chooseOption,
   createIndividualCustomer,
   expectOnServer,
   expectUpToDate,
@@ -9,6 +8,8 @@ import {
 } from "./support/customers";
 import {
   addInsert,
+  chooseEnergy,
+  chooseEquipmentKind,
   chooseFlueType,
   openNewEquipment,
   photoInput,
@@ -31,12 +32,8 @@ for (const { name: viewportName, size } of VIEWPORTS) {
       await openNewEquipment(page);
       await page.getByRole("button", { name: "Ajouter l'appareil" }).click();
       await expect(page.getByText("Choisissez le type d'appareil.")).toBeVisible();
-      await chooseOption(page, "Ramonage et entretien", "Insert");
-      await expect(
-        page
-          .getByRole("radiogroup", { name: "Combustible" })
-          .getByRole("radio", { name: "Bûches" }),
-      ).toBeChecked();
+      await chooseEquipmentKind(page, "Insert");
+      await expect(page.getByLabel("Combustible", { exact: true })).toContainText("Bûches");
       await expect(page.getByLabel("Fluide frigorigène")).toHaveCount(0);
       await page.getByLabel("Marque").fill("Invicta");
       await page.getByLabel("Pièce").fill("Salon");
@@ -47,16 +44,16 @@ for (const { name: viewportName, size } of VIEWPORTS) {
       await expect(visible(page, "Salon · conduit maçonné tubé · souche côté rue")).toBeVisible();
 
       await openNewEquipment(page);
-      await chooseOption(page, "Ramonage et entretien", "Chaudière");
-      await chooseOption(page, "Combustible", "Fioul");
+      await chooseEquipmentKind(page, "Chaudière");
+      await chooseEnergy(page, "Fioul");
       await chooseFlueType(page, "Ventouse");
       await saveEquipment(page);
       await expect(visible(page, "Chaudière fioul")).toBeVisible();
       await expect(visible(page, "conduit ventouse")).toBeVisible();
 
       await openNewEquipment(page);
-      await chooseOption(page, "Pompe à chaleur et climatisation", "PAC air/eau");
-      await expect(page.getByRole("radiogroup", { name: "Combustible" })).toHaveCount(0);
+      await chooseEquipmentKind(page, "PAC air/eau");
+      await expect(page.getByLabel("Combustible", { exact: true })).toHaveCount(0);
       await expect(page.getByRole("combobox", { name: /Type de conduit/ })).toHaveCount(0);
       await expect(page.getByLabel("Pièce")).toHaveCount(0);
       await page.getByLabel("Marque").fill("Atlantic");
@@ -128,7 +125,7 @@ test("photos are offered on the phone and not on the computer", async ({ browser
   const customerId = await createIndividualCustomer(mobile.page, newIndividualCustomer());
   await openNewEquipment(mobile.page);
   await expect(mobile.page.getByRole("heading", { name: "Photos" })).toBeVisible();
-  await chooseOption(mobile.page, "Ramonage et entretien", "Poêle à granulés");
+  await chooseEquipmentKind(mobile.page, "Poêle à granulés");
   await photoInput(mobile.page, "Appareil").setInputFiles(PNG_PHOTO);
   await expect(mobile.page.getByRole("img", { name: "Appareil" })).toBeVisible();
   await saveEquipment(mobile.page);

@@ -1,13 +1,18 @@
 import { expect, test } from "@playwright/test";
 import {
-  chooseOption,
   createIndividualCustomer,
   expectOnServer,
   expectUpToDate,
   newIndividualCustomer,
   serverCustomerFile,
 } from "./support/customers";
-import { openNewEquipment, photoInput, PNG_PHOTO, saveEquipment } from "./support/equipments";
+import {
+  chooseEquipmentKind,
+  openNewEquipment,
+  photoInput,
+  PNG_PHOTO,
+  saveEquipment,
+} from "./support/equipments";
 import {
   FIELD_JOURNEY_TIMEOUT_MS,
   goOffline,
@@ -28,7 +33,7 @@ test("an equipment photo taken without network is kept on the phone and uploaded
 
   await goOffline(page);
   await openNewEquipment(page);
-  await chooseOption(page, "Ramonage et entretien", "Poêle à granulés");
+  await chooseEquipmentKind(page, "Poêle à granulés");
   await photoInput(page, "Appareil").setInputFiles(PNG_PHOTO);
   await expect(page.getByRole("img", { name: "Appareil" })).toBeVisible();
   await saveEquipment(page);

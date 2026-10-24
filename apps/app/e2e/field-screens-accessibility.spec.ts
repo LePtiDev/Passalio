@@ -5,13 +5,12 @@ import {
 } from "./support/accessibility";
 import { openEditCustomer, openNewSite } from "./support/customer-screens";
 import {
-  chooseOption,
   createIndividualCustomer,
   expectUpToDate,
   newIndividualCustomer,
   openNewCustomerForm,
 } from "./support/customers";
-import { addInsert, openNewEquipment } from "./support/equipments";
+import { addInsert, chooseEquipmentKind, openNewEquipment } from "./support/equipments";
 import {
   FIELD_JOURNEY_TIMEOUT_MS,
   goOffline,
@@ -103,7 +102,7 @@ const SCREENS: readonly FieldScreen[] = [
     open: async (page) => {
       await withCustomer(page);
       await openNewEquipment(page);
-      await chooseOption(page, "Ramonage et entretien", "Poêle à bûches");
+      await chooseEquipmentKind(page, "Poêle à bûches");
     },
   },
   {
@@ -111,7 +110,7 @@ const SCREENS: readonly FieldScreen[] = [
     open: async (page) => {
       await withCustomer(page);
       await openNewEquipment(page);
-      await chooseOption(page, "Pompe à chaleur et climatisation", "PAC air/air");
+      await chooseEquipmentKind(page, "PAC air/air");
     },
   },
 ];

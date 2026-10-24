@@ -4,13 +4,18 @@ import {
   seriousAccessibilityViolations,
 } from "./support/accessibility";
 import {
-  chooseOption,
   createIndividualCustomer,
   customerNameOf,
   expectUpToDate,
   newIndividualCustomer,
 } from "./support/customers";
-import { addInsert, openNewEquipment, photoInput, PNG_PHOTO } from "./support/equipments";
+import {
+  addInsert,
+  chooseEquipmentKind,
+  openNewEquipment,
+  photoInput,
+  PNG_PHOTO,
+} from "./support/equipments";
 import { FIELD_JOURNEY_TIMEOUT_MS, onboardFieldOwner } from "./support/field-context";
 import { smallTouchTargets } from "./support/touch-targets";
 import { DESKTOP, MOBILE } from "./support/viewports";
@@ -86,7 +91,7 @@ const STATES: readonly FieldState[] = [
     open: async (page) => {
       await withCustomer(page);
       await openNewEquipment(page);
-      await chooseOption(page, "Ramonage et entretien", "Poêle à granulés");
+      await chooseEquipmentKind(page, "Poêle à granulés");
       await photoInput(page, "Appareil").setInputFiles(PNG_PHOTO);
       await expect(page.getByRole("img", { name: "Appareil" })).toBeVisible();
     },

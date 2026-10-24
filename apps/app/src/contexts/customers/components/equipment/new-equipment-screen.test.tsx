@@ -14,6 +14,7 @@ import { newOrganizationId, outboxTypes, seedLocalDatabase } from "@/test-suppor
 import { renderScreen } from "@/test-support/render-screen";
 import { heldPushReply, SYNC_PUSH_ROUTE } from "@/test-support/sync-push-replies";
 import { pulledChangesReply, SYNC_PULL_ROUTE } from "@/test-support/sync-replies";
+import { chooseEquipmentKind, openEquipmentKinds } from "@/test-support/equipment-kind";
 import { dismissAllToasts } from "@/test-support/toasts";
 import { customersFr, EQUIPMENT_KIND_LABELS, PHOTO_KIND_LABELS } from "../../fr";
 import { NewEquipmentScreen } from "./new-equipment-screen";
@@ -107,19 +108,18 @@ describe("NewEquipmentScreen", () => {
     const rendered = renderNewEquipment(organizationId, { trades: ["chimney_sweeping"] });
     await waitForOrganization(rendered);
 
-    const flueKinds = await screen.findByRole("radiogroup", { name: text.kindGroups.flue });
+    const kinds = await openEquipmentKinds(rendered.user);
 
+    expect(within(kinds).getByText(text.kindGroups.flue)).toBeInTheDocument();
     expect(
-      within(flueKinds).getByRole("radio", { name: EQUIPMENT_KIND_LABELS.insert }),
+      within(kinds).getByRole("option", { name: EQUIPMENT_KIND_LABELS.insert }),
     ).toBeInTheDocument();
     expect(
-      within(flueKinds).getByRole("radio", { name: EQUIPMENT_KIND_LABELS.boiler }),
+      within(kinds).getByRole("option", { name: EQUIPMENT_KIND_LABELS.boiler }),
     ).toBeInTheDocument();
+    expect(within(kinds).queryByText(text.kindGroups.heatPump)).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("radiogroup", { name: text.kindGroups.heatPump }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("radio", { name: EQUIPMENT_KIND_LABELS.air_to_water_heat_pump }),
+      within(kinds).queryByRole("option", { name: EQUIPMENT_KIND_LABELS.air_to_water_heat_pump }),
     ).not.toBeInTheDocument();
   });
 
@@ -141,10 +141,8 @@ describe("NewEquipmentScreen", () => {
     const database = await seedSite(organizationId);
     const rendered = renderNewEquipment(organizationId);
     await waitForOrganization(rendered);
-    await rendered.user.click(
-      await screen.findByRole("radio", { name: EQUIPMENT_KIND_LABELS.log_stove }),
-    );
-    expect(screen.getByRole("radio", { name: "Bûches" })).toBeChecked();
+    await chooseEquipmentKind(rendered.user, EQUIPMENT_KIND_LABELS.log_stove);
+    expect(screen.getByRole("combobox", { name: text.energy })).toHaveTextContent("Bûches");
     await rendered.user.type(screen.getByLabelText(/^Marque/), "Invicta");
 
     await save(rendered);
@@ -173,9 +171,7 @@ describe("NewEquipmentScreen", () => {
     await waitForOrganization(rendered);
     expect(await screen.findByRole("radio", { name: text.installedByUs })).toBeChecked();
 
-    await rendered.user.click(
-      screen.getByRole("radio", { name: EQUIPMENT_KIND_LABELS.air_to_water_heat_pump }),
-    );
+    await chooseEquipmentKind(rendered.user, EQUIPMENT_KIND_LABELS.air_to_water_heat_pump);
 
     expect(
       screen.getAllByText(text.replaceNoteOf("air_to_water_heat_pump", "boiler")).length,
@@ -206,7 +202,7 @@ describe("NewEquipmentScreen", () => {
 
     await rendered.user.upload(await screen.findByLabelText(PHOTO_KIND_LABELS.plate), plate);
     expect(await screen.findByRole("img", { name: PHOTO_KIND_LABELS.plate })).toBeVisible();
-    await rendered.user.click(screen.getByRole("radio", { name: EQUIPMENT_KIND_LABELS.boiler }));
+    await chooseEquipmentKind(rendered.user, EQUIPMENT_KIND_LABELS.boiler);
     await save(rendered);
 
     expect(await screen.findByText(customersFr.toasts.equipmentCreated)).toBeVisible();

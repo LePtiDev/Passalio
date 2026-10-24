@@ -8,6 +8,7 @@ import {
 import { newOrganizationId, outboxTypes, seedLocalDatabase } from "@/test-support/local-seeds";
 import { goOffline } from "@/test-support/network";
 import { renderScreen } from "@/test-support/render-screen";
+import { chooseEquipmentKind } from "@/test-support/equipment-kind";
 import { dismissAllToasts } from "@/test-support/toasts";
 import { makeNetworkUnreachable } from "@/test-support/unreachable-network";
 import { customersFr, EQUIPMENT_KIND_LABELS, PHOTO_KIND_LABELS } from "../../fr";
@@ -49,7 +50,7 @@ describe("NewEquipmentScreen on the field", () => {
     const fetch = makeNetworkUnreachable();
     const { user, router } = renderNewEquipment(organizationId);
 
-    await user.click(await screen.findByRole("radio", { name: EQUIPMENT_KIND_LABELS.log_stove }));
+    await chooseEquipmentKind(user, EQUIPMENT_KIND_LABELS.log_stove);
     await user.click(screen.getByRole("button", { name: text.save }));
 
     expect(await screen.findByText(customersFr.toasts.equipmentCreated)).toBeVisible();
@@ -72,7 +73,7 @@ describe("NewEquipmentScreen on the field", () => {
     const plate = new File(["plate"], "plate.jpg", { type: "image/jpeg" });
 
     await user.upload(await screen.findByLabelText(PHOTO_KIND_LABELS.plate), plate);
-    await user.click(screen.getByRole("radio", { name: EQUIPMENT_KIND_LABELS.boiler }));
+    await chooseEquipmentKind(user, EQUIPMENT_KIND_LABELS.boiler);
     await user.click(screen.getByRole("button", { name: text.save }));
 
     expect(await screen.findByText(customersFr.toasts.equipmentCreated)).toBeVisible();
@@ -87,9 +88,7 @@ describe("NewEquipmentScreen on the field", () => {
     makeNetworkUnreachable();
     const { user, router } = renderNewEquipment(organizationId, BOILER_ID);
 
-    await user.click(
-      await screen.findByRole("radio", { name: EQUIPMENT_KIND_LABELS.air_to_water_heat_pump }),
-    );
+    await chooseEquipmentKind(user, EQUIPMENT_KIND_LABELS.air_to_water_heat_pump);
     await user.click(screen.getByRole("button", { name: text.save }));
 
     expect(await screen.findByText(customersFr.form.errors.saveFailed)).toBeVisible();
