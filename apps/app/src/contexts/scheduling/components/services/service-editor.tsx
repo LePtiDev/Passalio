@@ -30,8 +30,8 @@ export const ServiceEditor = ({
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={changeOpen}>
-        <DialogContent aria-describedby={undefined} className="gap-4 sm:max-w-[520px]">
-          <DialogTitle className="text-lg font-bold">{title}</DialogTitle>
+        <DialogContent aria-describedby={undefined} className="gap-4 p-5 sm:max-w-[480px]">
+          <DialogTitle className="text-[15px] font-bold">{title}</DialogTitle>
           <ServiceForm key={formKey} {...formProps} />
         </DialogContent>
       </Dialog>

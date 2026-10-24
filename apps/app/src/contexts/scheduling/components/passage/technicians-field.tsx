@@ -113,7 +113,7 @@ const Chips = ({
           chosen.map((technician) => (
             <span
               key={technician.userId}
-              className="flex items-center gap-1.5 rounded-full border border-[#E3E8EF] bg-white py-0.5 pr-2.5 pl-0.5 text-sm font-medium"
+              className="flex h-8 items-center gap-1.5 rounded-full border border-[#E3E8EF] bg-white pr-2.5 pl-1 text-[13px] font-medium"
             >
               <InitialsAvatar name={technician.name} tone="slate" size="small" />
               {technician.name}

@@ -159,6 +159,15 @@ const planSharedVisit = async (page: Page) => {
   await expect(page.getByRole("checkbox", { name: /^Tubage/ })).toHaveCount(0);
   await chooseOption(page, /^Ramonage/);
   await chooseOption(page, /^Débistrage/);
+  await expect(page.getByText(/^2 prestations · 2 h 30 · 200\s€$/)).toBeVisible();
+  await expect(page.getByRole("link", { name: "Gérer les prestations" })).toBeVisible();
+  const search = page.getByRole("searchbox", { name: "Rechercher une prestation" });
+  await search.fill("debis");
+  await expect(page.getByRole("checkbox", { name: /^Ramonage/ })).toHaveCount(0);
+  await expect(page.getByRole("checkbox", { name: /^Débistrage/ })).toBeChecked();
+  await search.fill("fosse");
+  await expect(page.getByText("Aucune prestation ne correspond.")).toBeVisible();
+  await search.fill("");
   await page.keyboard.press("Escape");
   await expect(services).toHaveText(/Ramonage, Débistrage/);
 
@@ -240,7 +249,8 @@ test.describe("on a phone", () => {
     await sheet.getByLabel("Prix TTC").fill("120");
     await sheet.getByRole("button", { name: "Enregistrer" }).click();
     await expect(page.getByText("Prestation ajoutée.")).toBeVisible();
-    await expect(serviceRow(page, "Débistrage")).toContainText(/1 h · 120\s€ · Aucun document/);
+    await expect(serviceRow(page, "Débistrage").getByText(/^1 h · 120\s€$/)).toBeVisible();
+    await expect(serviceRow(page, "Débistrage").getByText("Aucun document")).toBeHidden();
 
     await page.goto("/planning/nouveau?jour=2030-03-12");
     await page.getByLabel("Client").fill("garn");

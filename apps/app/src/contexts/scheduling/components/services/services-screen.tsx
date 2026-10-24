@@ -5,6 +5,7 @@ import {
   DASHED_CARD_CLASS,
   PRIMARY_BUTTON_CLASS,
   SECONDARY_BUTTON_CLASS,
+  SyncPill,
 } from "@/contexts/customers";
 import { useOrganization } from "@/contexts/identity";
 import { DesktopTopBar, MobileTopBar, PageContent } from "@/components/app-shell/page-bars";
@@ -22,7 +23,7 @@ import {
   type ServiceFormValues,
 } from "../../service-form-schema";
 import { ServiceEditor } from "./service-editor";
-import { ServiceRows } from "./service-rows";
+import { ServiceRows, SERVICES_WIDTH } from "./service-rows";
 
 const text = schedulingFr.services;
 
@@ -40,14 +41,17 @@ const ServicesSkeleton = () => (
   <ul
     aria-busy="true"
     aria-label={text.loading}
-    className="overflow-hidden rounded-[14px] border border-[#E3E8EF] bg-white lg:max-w-[860px] lg:rounded-xl"
+    className={cn(
+      "overflow-hidden rounded-[14px] border border-[#E3E8EF] bg-white lg:rounded-xl",
+      SERVICES_WIDTH,
+    )}
   >
     {SKELETON_ROWS.map((row) => (
       <li
         key={row}
-        className="flex min-h-[68px] items-center gap-3 border-b border-[#EEF2F6] px-3.5 last:border-b-0 lg:min-h-[60px] lg:px-4"
+        className="flex min-h-16 items-center gap-3 border-t border-[#EEF2F6] px-3.5 first:border-t-0 lg:min-h-[52px]"
       >
-        <Skeleton className="size-10 rounded-full lg:size-8" />
+        <Skeleton className="size-9 rounded-full lg:size-8" />
         <span className="flex flex-1 flex-col gap-2 lg:flex-row lg:items-center lg:gap-16">
           <Skeleton className="h-4 w-44" />
           <Skeleton className="h-3.5 w-36 lg:w-16" />
@@ -72,7 +76,7 @@ const EmptyServices = ({
   readonly onAddDefaults: () => void;
   readonly onCreate: () => void;
 }) => (
-  <div className={cn(DASHED_CARD_CLASS, "items-start lg:max-w-[860px]")}>
+  <div className={cn(DASHED_CARD_CLASS, "items-start", SERVICES_WIDTH)}>
     <span className="flex flex-col gap-1">
       <span className="text-[15px] font-semibold lg:text-sm">{text.emptyTitle}</span>
       <span className="text-sm text-[#64748B] lg:text-[13px]">
@@ -137,15 +141,17 @@ export const ServicesScreen = () => {
   const addTradeDefaults = useCallback(() => addDefaults.mutate(trades), [addDefaults, trades]);
   const retryLoad = useCallback(() => void query.refetch(), [query]);
   const addButton = canEdit ? (
-    <Button type="button" onClick={create} className={cn(PRIMARY_BUTTON_CLASS, "lg:h-9")}>
-      <Plus aria-hidden="true" className="size-4" />
+    <Button type="button" onClick={create} className={PRIMARY_BUTTON_CLASS}>
+      <Plus aria-hidden="true" className="size-3.5" />
       {text.add}
     </Button>
   ) : null;
 
   return (
     <>
-      <DesktopTopBar trail={TRAIL} />
+      <DesktopTopBar trail={TRAIL}>
+        <SyncPill />
+      </DesktopTopBar>
       <MobileTopBar backTo="/reglages" backLabel={text.backToSettings}>
         <span className="flex flex-1 flex-col">
           <h1 className="text-[17px] font-bold">{text.title}</h1>
@@ -163,7 +169,7 @@ export const ServicesScreen = () => {
         ) : null}
       </MobileTopBar>
       <PageContent>
-        <div className="flex items-start justify-between gap-4 lg:max-w-[860px]">
+        <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-1">
             <h1 className="hidden text-xl font-bold tracking-[-0.015em] lg:block">{text.title}</h1>
             <p className="text-[15px] text-[#475569] lg:text-[13px]">{text.intro}</p>
@@ -172,7 +178,7 @@ export const ServicesScreen = () => {
         </div>
         {query.isPending ? <ServicesSkeleton /> : null}
         {query.isError ? (
-          <div className="lg:max-w-[860px]">
+          <div className={SERVICES_WIDTH}>
             <ErrorState error={query.error} message={text.loadFailed} onRetry={retryLoad} />
           </div>
         ) : null}
@@ -188,9 +194,7 @@ export const ServicesScreen = () => {
         {services.length > 0 ? (
           <>
             <ServiceRows services={services} canEdit={canEdit} onOpen={setOpenId} />
-            <p className="text-sm text-[#64748B] lg:max-w-[860px] lg:text-[13px]">
-              {text.footnote}
-            </p>
+            <p className={cn("text-[13px] text-[#64748B]", SERVICES_WIDTH)}>{text.footnote}</p>
           </>
         ) : null}
       </PageContent>

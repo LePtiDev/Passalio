@@ -82,3 +82,18 @@ export const serviceLinesOf = (chosen: readonly ServiceRecord[]): ServiceLine[] 
 export const visitTypesOf = (chosen: readonly ServiceRecord[]) => [
   ...new Set(chosen.flatMap(({ trade }) => (trade === null ? [] : [trade]))),
 ];
+
+const searchKeyOf = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim();
+
+export const matchingServices = (
+  offered: readonly ServiceRecord[],
+  search: string,
+): readonly ServiceRecord[] => {
+  const key = searchKeyOf(search);
+  return key === "" ? offered : offered.filter(({ name }) => searchKeyOf(name).includes(key));
+};

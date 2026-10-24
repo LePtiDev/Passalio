@@ -214,6 +214,13 @@ export const schedulingFr = {
       price === null ? `Valider · ${duration}` : `Valider · ${duration} · ${price}`,
     servicesPlaceholder: "Choisir les prestations",
     servicesCount: (count: number) => `${count} prestations choisies`,
+    servicesSearch: "Rechercher une prestation",
+    servicesNoMatch: "Aucune prestation ne correspond.",
+    servicesTotal: (count: number, duration: string, price: string | null) =>
+      [plural(count, "prestation", "prestations"), duration, price]
+        .filter((part) => part !== null)
+        .join(" · "),
+    manageServices: "Gérer les prestations",
     durationHint: (parts: readonly { name: string; durationMinutes: number }[]) => {
       const [only] = parts;
       if (only === undefined) {
@@ -257,6 +264,7 @@ export const schedulingFr = {
     },
     summary: (duration: string, price: string, document: string) =>
       `${duration} · ${price} · ${document}`,
+    shortSummary: (duration: string, price: string) => `${duration} · ${price}`,
     open: (name: string) => `Modifier ${name}`,
     createTitle: "Nouvelle prestation",
     editTitle: "Modifier la prestation",

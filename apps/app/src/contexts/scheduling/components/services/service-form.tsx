@@ -142,30 +142,30 @@ export const ServiceForm = ({
           </SelectContent>
         </Select>
       </FormField>
-      {isExisting ? <p className="text-sm text-[#64748B]">{text.keepsPlanned}</p> : null}
+      {isExisting ? <p className="text-[13px] text-[#64748B]">{text.keepsPlanned}</p> : null}
       {saveError === null ? null : (
         <ErrorState error={saveError} message={text.saveFailed} onRetry={retry} />
       )}
-      <div className="flex flex-col gap-2 lg:flex-row-reverse">
-        <Button
-          type="submit"
-          disabled={isSaving}
-          className={cn(PRIMARY_BUTTON_CLASS, "w-full lg:w-auto")}
-        >
-          {text.save}
-        </Button>
+      <div className="flex flex-col gap-2 lg:flex-row lg:justify-between">
         {isExisting ? (
           <Button
             type="button"
             variant="outline"
             onClick={onArchive}
             disabled={isArchiving}
-            className={cn(SECONDARY_BUTTON_CLASS, "w-full text-[#B42318] lg:mr-auto lg:w-auto")}
+            className={cn(SECONDARY_BUTTON_CLASS, "w-full text-[#B42318] lg:w-auto")}
           >
-            <Archive aria-hidden="true" className="size-4" />
+            <Archive aria-hidden="true" className="size-4 lg:size-3.5" />
             {text.archive}
           </Button>
         ) : null}
+        <Button
+          type="submit"
+          disabled={isSaving}
+          className={cn(PRIMARY_BUTTON_CLASS, "w-full lg:ml-auto lg:w-auto lg:px-4")}
+        >
+          {text.save}
+        </Button>
       </div>
     </form>
   );
