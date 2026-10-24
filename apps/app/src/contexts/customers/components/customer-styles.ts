@@ -34,4 +34,4 @@ export const CUSTOMER_GRID_CLASS =
 export const ICON_BUTTON_CLASS =
   "flex size-12 shrink-0 items-center justify-center rounded-xl text-[#64748B] hover:bg-[#F1F5F9] lg:size-8 lg:rounded-[7px]";
 
-export const SELECT_TRIGGER_CLASS = `${FIELD_CLASS} w-full data-[size=default]:h-12 lg:data-[size=default]:h-10 data-[placeholder]:text-[#94A3B8] data-[state=open]:border-[#0E7C5A] data-[state=open]:ring-[3px] data-[state=open]:ring-[#0E7C5A]/20 [&>svg]:text-[#64748B] [&>svg]:opacity-100 data-[state=open]:[&>svg]:rotate-180`;
+export const SELECT_TRIGGER_CLASS = `${FIELD_CLASS} w-full data-[size=default]:h-12 lg:data-[size=default]:h-10 data-[placeholder]:text-[#64748B] data-[state=open]:border-[#0E7C5A] data-[state=open]:ring-[3px] data-[state=open]:ring-[#0E7C5A]/20 [&>svg]:text-[#64748B] [&>svg]:opacity-100 data-[state=open]:[&>svg]:rotate-180`;
