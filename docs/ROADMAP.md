@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-23.
+Dernière mise à jour : 2026-10-24.
 
 ## Fait
 
@@ -50,6 +50,7 @@ Dernière mise à jour : 2026-10-23.
 | Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois                                       | ADR 0021                         |
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
+| Tests de l'application : 560 tests de composants, 200 parcours Playwright (mobile et ordinateur, accessibilité), 18 bugs reproduits puis corrigés                             | PR_NUMBER                        |
 
 ## Hors code (Quentin)
 
@@ -140,10 +141,14 @@ Dernière mise à jour : 2026-10-23.
 - [ ] Vérifier le type d'un fichier envoyé sur son contenu, pas seulement sur l'en-tête déclaré
 - [ ] À décider : limite des codes de double authentification par compte (aujourd'hui par adresse IP) ; `retour` qui accepte `/\…`
 - [x] Synchronisation : tests de propriétés (fast-check), envoi rejoué, curseur, refus, photos
-- [ ] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest en mode navigateur)
-- [ ] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
-- [ ] Parcours Clients et hors ligne réel
-- [ ] Parcours Admin, Équipe Passalio, Commercial
+- [x] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest, happy-dom)
+- [x] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
+- [x] Parcours Clients et hors ligne réel
+- [x] Parcours Admin, Équipe Passalio, Commercial
+- [ ] Parcours restants : démarrer sans réseau avec la dernière session, nouvelle version sans perte des modifications hors ligne
+- [ ] Une personne retirée d'une entreprise garde une session qui pointe encore sur cette entreprise (comportement à décider)
+- [ ] Modifications refusées : dire laquelle a été refusée et pourquoi, pas seulement combien
+- [ ] Photos d'appareil : réduire la photo sur le téléphone avant l'envoi plutôt que refuser au-delà de 5 Mo
 - [ ] Régression visuelle : captures de référence de chaque état
 - [ ] Couverture avec seuils, tests de mutation, `test:all` obligatoire dans `release:*`, tests de fumée après déploiement
 

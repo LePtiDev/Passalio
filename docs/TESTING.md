@@ -18,7 +18,9 @@ Règles dans l'ADR 0020 et dans `CLAUDE.md`. Ce fichier est l'inventaire : chaqu
 | `pnpm test:e2e`   | Playwright : parcours, hors ligne, accessibilité, captures (familles 13 à 17) | Avant chaque fusion d'une PR qui touche l'app    |
 | `pnpm check`      | Format, lint, types, `test:guard`, `test`                                     | Chaque push, avant chaque fusion, dans `release` |
 
-Lancer avec Node 24 (`.nvmrc`). Playwright : `PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-browsers/chromium pnpm test:e2e` dans une session cloud.
+Lancer avec Node 24 (`.nvmrc`). Playwright : `PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-browsers/chromium pnpm test:e2e` dans une session cloud. Pour lancer deux suites en même temps, changer les ports avec `E2E_API_PORT`, `E2E_APP_PORT` et `E2E_INSPECTOR_PORT`.
+
+Dans `apps/app`, Vitest a deux projets : `unit` (fonctions, hooks, stores, Node) et `components` (écrans, happy-dom).
 
 ## Où vont les tests
 
@@ -29,8 +31,13 @@ Lancer avec Node 24 (`.nvmrc`). Playwright : `PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-b
 | Route API                                        | `apps/api/test/<ctx>-routes.test.ts`                  | Vitest, D1 locale (`test/test-platform.ts`) |
 | Matrices (permissions, isolation, impersonation) | `apps/api/test/matrices/`                             | Vitest, générées depuis les routes Hono     |
 | Fonction, hook, store de l'app                   | à côté du fichier                                     | Vitest, `fake-indexeddb`                    |
-| Composant, état d'écran                          | à côté du composant : `xxx.test.tsx`                  | Vitest en mode navigateur                   |
+| Composant, état d'écran                          | à côté du composant : `xxx.test.tsx`                  | Vitest, projet `components` (happy-dom)     |
 | Parcours                                         | `apps/app/e2e/<espace>.spec.ts`                       | Playwright                                  |
+
+Aides partagées :
+
+- `apps/app/src/test-support/` : `renderScreen` (routeur, client de requêtes, base locale), `installFakeApi` avec `jsonReply`, `errorReply`, `heldReply` (réponse retenue pour voir l'état de chargement), graines de la base locale, `showMobileViewport`.
+- `apps/app/e2e/support/` : comptes et entreprise prête (`signUpAndOnboardOwner`), liens des e-mails envoyés, adresse IP propre à chaque test (limite d'inscription), contrôle axe-core (`expectNoSeriousAccessibilityViolations`), zones tactiles de 48 px, tailles d'écran, réseau coupé ou rétabli, second appareil.
 
 Titres de test en anglais, qui décrivent le comportement attendu (`a technician cannot archive a customer`). Un test vérifie un comportement observable, pas un détail d'implémentation.
 
@@ -79,53 +86,59 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 
 ## Parcours de bout en bout
 
-| Espace          | Parcours                                                                                | Test                      |
-| --------------- | --------------------------------------------------------------------------------------- | ------------------------- |
-| Comptes         | Créer un compte, refusé sans accepter les conditions                                    | à écrire                  |
-| Comptes         | Créer un compte puis l'entreprise en 5 étapes jusqu'aux Premiers pas                    | `team-onboarding.spec.ts` |
-| Comptes         | Se connecter ; mauvais mot de passe ; trop d'essais                                     | à écrire                  |
-| Comptes         | Mot de passe oublié, nouveau mot de passe, connexion                                    | `team-onboarding.spec.ts` |
-| Comptes         | Lien de réinitialisation déjà utilisé ou expiré                                         | à écrire                  |
-| Comptes         | Se déconnecter : base locale effacée, retour à la connexion                             | à écrire                  |
-| Comptes         | Connecté, `/connexion` renvoie à l'accueil ; `retour` vers un site externe refusé       | à écrire                  |
-| Comptes         | Changer d'onglet sans attendre le serveur                                               | `customers.spec.ts`       |
-| Pages légales   | Liens du pied de page, conditions depuis l'inscription, sommaire mobile                 | `legal-pages.spec.ts`     |
-| Équipe          | Inviter un technicien qui rejoint l'équipe                                              | `team-onboarding.spec.ts` |
-| Équipe          | Invitation acceptée avec une autre adresse : refusée                                    | à écrire                  |
-| Équipe          | Renvoyer, annuler une invitation                                                        | à écrire                  |
-| Équipe          | Changer le rôle d'un membre ; le retirer                                                | à écrire                  |
-| Équipe          | Transférer la propriété à un administrateur                                             | à écrire                  |
-| Équipe          | Un technicien ne voit ni inviter, ni changer de rôle                                    | à écrire                  |
-| Équipe          | Une personne dans deux entreprises passe de l'une à l'autre                             | à écrire                  |
-| Réglages        | Modifier les informations de l'entreprise et le logo                                    | à écrire                  |
-| Clients         | Liste vide, créer un client particulier ; créer une entreprise cliente                  | à écrire                  |
-| Clients         | Erreurs du formulaire nouveau client                                                    | à écrire                  |
-| Clients         | Rechercher par nom, ville, téléphone ; filtres d'échéance ; pagination                  | à écrire                  |
-| Clients         | Modifier un client ; ajouter un lieu                                                    | à écrire                  |
-| Clients         | Ajouter un appareil de chaque famille avec ses champs propres                           | à écrire                  |
-| Clients         | Ajouter une chaudière puis la remplacer par une PAC                                     | `customers.spec.ts`       |
-| Clients         | Retirer un appareil, il reste dans l'historique                                         | à écrire                  |
-| Clients         | Ajouter une photo ; refus d'un fichier trop gros ou d'un mauvais type                   | à écrire                  |
-| Clients         | Archiver un client (secrétariat oui, technicien non)                                    | à écrire                  |
-| Hors ligne      | Créer un client sans réseau, recharger, rétablir le réseau, client sur le serveur       | à écrire                  |
-| Hors ligne      | Indicateur : modifications en attente, puis synchronisé                                 | à écrire                  |
-| Hors ligne      | Modification refusée par le serveur, visible pour l'utilisateur                         | à écrire                  |
-| Hors ligne      | Démarrer l'app sans réseau avec la dernière session                                     | à écrire                  |
-| Hors ligne      | Deux appareils modifient le même client                                                 | à écrire                  |
-| Admin           | Activer la double authentification : mot de passe, QR code, codes de secours            | à écrire                  |
-| Admin           | Se connecter avec le code ; avec un code de secours ; mauvais code                      | à écrire                  |
-| Admin           | Session admin de plus de 12 heures : code redemandé                                     | à écrire                  |
-| Admin           | Un client qui tape `/admin` arrive sur l'accueil                                        | à écrire                  |
-| Admin           | Vue d'ensemble ; comptes clients, filtres, recherche ; fiche et ses 3 onglets ; journal | à écrire                  |
-| Admin           | Le rôle Commercial ne voit que Commercial                                               | à écrire                  |
-| Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification         | à écrire                  |
-| Équipe Passalio | Changer un rôle, retirer un membre ; un super admin ne change pas son propre rôle       | à écrire                  |
-| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination | à écrire                  |
-| Commercial      | Créer, modifier, supprimer une entreprise prospectée                                    | à écrire                  |
-| Commercial      | Changer l'étape, ajouter une note, historique                                           | à écrire                  |
-| Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                          | à écrire                  |
-| Commercial      | Prospection : qualifier depuis la carte, sur ordinateur et sur mobile                   | à écrire                  |
-| Site            | Liens de la landing, environnement staging ou production                                | `apps/web` (unitaire)     |
-| Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne           | à écrire                  |
+Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.
+
+| Espace          | Parcours                                                                                | Test                                                                    |
+| --------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Comptes         | Créer un compte, refusé sans accepter les conditions                                    | `user-accounts.spec.ts`                                                 |
+| Comptes         | Créer un compte puis l'entreprise en 5 étapes jusqu'aux Premiers pas                    | `team-onboarding.spec.ts`                                               |
+| Comptes         | Se connecter ; mauvais mot de passe ; trop d'essais                                     | `user-accounts.spec.ts`, `user-accounts-errors.spec.ts`                 |
+| Comptes         | Mot de passe oublié, nouveau mot de passe, connexion                                    | `team-onboarding.spec.ts`                                               |
+| Comptes         | Lien de réinitialisation déjà utilisé ou expiré                                         | `user-accounts.spec.ts`                                                 |
+| Comptes         | Se déconnecter : base locale effacée, retour à la connexion                             | `user-accounts.spec.ts`, `settings.spec.ts`                             |
+| Comptes         | Connecté, `/connexion` renvoie à l'accueil ; `retour` vers un site externe refusé       | `user-accounts.spec.ts`                                                 |
+| Comptes         | Erreurs du serveur avec leur code, connexion en cours, retour à la page protégée        | `user-accounts-errors.spec.ts`                                          |
+| Comptes         | Changer d'onglet sans attendre le serveur                                               | `customers.spec.ts`                                                     |
+| Pages légales   | Liens du pied de page, conditions depuis l'inscription, sommaire mobile                 | `legal-pages.spec.ts`                                                   |
+| Équipe          | Inviter un technicien qui rejoint l'équipe                                              | `team-onboarding.spec.ts`                                               |
+| Équipe          | Invitation acceptée avec une autre adresse : refusée                                    | `team.spec.ts`                                                          |
+| Équipe          | Renvoyer, annuler une invitation                                                        | `team.spec.ts`                                                          |
+| Équipe          | Changer le rôle d'un membre ; le retirer                                                | `team.spec.ts`, `user-team-roles.spec.ts`                               |
+| Équipe          | Transférer la propriété à un administrateur                                             | `team.spec.ts`                                                          |
+| Équipe          | Un technicien ne voit ni inviter, ni changer de rôle                                    | `team.spec.ts`, `user-team-roles.spec.ts`                               |
+| Équipe          | Une personne dans deux entreprises passe de l'une à l'autre                             | `team.spec.ts`                                                          |
+| Réglages        | Adresse connectée, lien vers l'équipe, déconnexion                                      | `settings.spec.ts`                                                      |
+| Réglages        | Modifier les informations de l'entreprise et le logo                                    | à écrire (écran à venir)                                                |
+| Clients         | Liste vide, créer un client particulier ; créer une entreprise cliente                  | `customers-create.spec.ts`                                              |
+| Clients         | Erreurs du formulaire nouveau client ; du formulaire de modification                    | `customers-create.spec.ts`, `customers-edit-errors.spec.ts`             |
+| Clients         | Rechercher par nom, ville, téléphone ; filtres d'échéance ; pagination ; filtre vide    | `customers-search.spec.ts`, `customers-filter-empty.spec.ts`            |
+| Clients         | Modifier un client ; ajouter un lieu                                                    | `customers-edit.spec.ts`                                                |
+| Clients         | Ajouter un appareil de chaque famille avec ses champs propres                           | `customers-equipment.spec.ts`                                           |
+| Clients         | Ajouter une chaudière puis la remplacer par une PAC                                     | `customers.spec.ts`                                                     |
+| Clients         | Retirer un appareil, il reste dans l'historique                                         | `customers-equipment.spec.ts`                                           |
+| Clients         | Ajouter une photo ; refus d'un fichier trop gros ou d'un mauvais type                   | `offline-equipment-photo.spec.ts`, `customers-photo-refusal.spec.ts`    |
+| Clients         | Archiver un client (secrétariat oui, technicien non)                                    | `technician-secretary-archive.spec.ts`, `technician-field-work.spec.ts` |
+| Hors ligne      | Créer un client sans réseau, recharger, rétablir le réseau, client sur le serveur       | `offline-sync.spec.ts`                                                  |
+| Hors ligne      | Indicateur : modifications en attente, puis synchronisé ; échec avec son code           | `offline-field-changes.spec.ts`, `sync-failure-trace-id.spec.ts`        |
+| Hors ligne      | Modification refusée par le serveur, visible pour l'utilisateur                         | `offline-rejection.spec.ts`                                             |
+| Hors ligne      | Première synchronisation en échec sur un nouvel appareil                                | `customers-first-sync.spec.ts`                                          |
+| Hors ligne      | Démarrer l'app sans réseau avec la dernière session                                     | à écrire                                                                |
+| Hors ligne      | Deux appareils modifient le même client (même champ, champs différents)                 | `offline-sync.spec.ts`, `offline-two-devices.spec.ts`                   |
+| Admin           | Activer la double authentification : mot de passe, QR code, codes de secours            | `admin-two-factor.spec.ts`                                              |
+| Admin           | Se connecter avec le code ; avec un code de secours ; mauvais code ; trop d'essais      | `admin-two-factor.spec.ts`, `admin-two-factor-limits.spec.ts`           |
+| Admin           | Session admin de plus de 12 heures : code redemandé                                     | `admin-two-factor.spec.ts`, `admin-guards.spec.ts`                      |
+| Admin           | Un client qui tape `/admin` arrive sur l'accueil                                        | `admin-access.spec.ts`                                                  |
+| Admin           | Vue d'ensemble ; comptes clients, filtres, recherche ; fiche et ses 3 onglets ; journal | `admin-accounts.spec.ts`, `admin-empty-states.spec.ts`                  |
+| Admin           | Chargement, erreur avec son code et bouton réessayer sur chaque écran                   | `admin-screen-states.spec.ts`, `admin-action-errors.spec.ts`            |
+| Admin           | Le rôle Commercial ne voit que Commercial                                               | `admin-access.spec.ts`, `admin-guards.spec.ts`                          |
+| Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification         | `platform-team.spec.ts`                                                 |
+| Équipe Passalio | Changer un rôle, retirer un membre (ses sessions sont fermées) ; pas son propre rôle    | `platform-team.spec.ts`, `platform-team-sessions.spec.ts`               |
+| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination | `commercial-companies.spec.ts`                                          |
+| Commercial      | Créer, modifier, supprimer une entreprise prospectée                                    | `commercial-companies.spec.ts`                                          |
+| Commercial      | Changer l'étape, ajouter une note, historique                                           | `commercial-companies.spec.ts`                                          |
+| Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                          | `commercial-contacts.spec.ts`                                           |
+| Commercial      | Prospection : qualifier depuis la carte, sur ordinateur et sur mobile                   | `commercial-prospection.spec.ts`                                        |
+| Site            | Liens de la landing, environnement staging ou production                                | `apps/web` (unitaire)                                                   |
+| Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne           | à écrire                                                                |
 
 À ajouter avec leurs écrans : lecture de plaque (écran), attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.
