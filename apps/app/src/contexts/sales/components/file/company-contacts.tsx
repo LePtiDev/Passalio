@@ -95,7 +95,11 @@ export const CompanyContacts = ({ contacts, onAdd }: CompanyContactsProps) => (
     <section className={ADMIN_CARD_CLASS}>
       <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1 lg:hidden">
         <h2 className={SECTION_TITLE_CLASS}>{text.contacts}</h2>
-        <button type="button" onClick={onAdd} className={cn(ACTION_LINK_CLASS, "-my-3.5")}>
+        <button
+          type="button"
+          onClick={onAdd}
+          className={cn(ACTION_LINK_CLASS, "-my-3.5 min-w-12 justify-end")}
+        >
           {text.addContactShort}
         </button>
       </div>
