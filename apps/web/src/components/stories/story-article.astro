@@ -1,0 +1,73 @@
+---
+import type { Story } from "../../content/content-schema";
+import { storiesFr } from "../../copy/stories-fr";
+import CheckIcon from "../check-icon.astro";
+import VisualCard from "../marketing/visual-card.astro";
+
+interface Props {
+  story: Story;
+}
+
+const { story } = Astro.props;
+---
+
+<article class="border-t border-hairline pt-10 pb-10 sm:pb-16">
+  <div class="mx-auto flex max-w-170 flex-col gap-8 px-4 sm:gap-10 sm:px-6">
+    {
+      story.sections.map((section) => (
+        <section class="flex flex-col gap-3">
+          <h2 class="text-xl leading-snug font-bold tracking-[-0.015em] sm:text-[21px]">
+            {section.heading}
+          </h2>
+          {section.paragraphs.map((paragraph) => (
+            <p class="text-base leading-[1.75] text-navy sm:text-[15.5px]">{paragraph}</p>
+          ))}
+          {section.quote && (
+            <figure class="mt-2 flex flex-col gap-1.5 border-l-3 border-validated py-1 pl-4.5">
+              <blockquote class="text-lg leading-snug font-semibold tracking-[-0.01em] sm:text-xl">
+                « {section.quote.text} »
+              </blockquote>
+              <figcaption class="text-[12.5px] text-slate-text">{section.quote.author}</figcaption>
+            </figure>
+          )}
+        </section>
+      ))
+    }
+    <div class="grid gap-3 sm:grid-cols-2">
+      <div class="flex flex-col gap-2 rounded-xl border border-warning-line bg-warning-faint p-4">
+        <h2 class="text-[11px] font-semibold tracking-[0.08em] text-warning-dot uppercase">
+          {storiesFr.before}
+        </h2>
+        <ul class="flex flex-col gap-2">
+          {
+            story.before.map((item) => (
+              <li class="flex items-start gap-2 text-[13.5px] text-slate-text">
+                <span class="mt-2.25 size-1.25 shrink-0 rounded-full bg-warning-dot" aria-hidden="true" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-col gap-2 rounded-xl border border-validated/20 bg-validated-soft/50 p-4">
+        <h2 class="text-[11px] font-semibold tracking-[0.08em] text-validated uppercase">
+          {storiesFr.after}
+        </h2>
+        <ul class="flex flex-col gap-2">
+          {
+            story.after.map((item) => (
+              <li class="flex items-start gap-2 text-[13.5px]">
+                <CheckIcon class="mt-1 size-3.5 shrink-0 text-validated" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <figure class="m-0 flex flex-col gap-2">
+      <VisualCard card={story.visual} />
+      <figcaption class="text-center text-xs text-slate-text">{storiesFr.screenCaption}</figcaption>
+    </figure>
+  </div>
+</article>

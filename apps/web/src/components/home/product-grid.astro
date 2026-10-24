@@ -1,0 +1,28 @@
+---
+import { FEATURE_PAGES } from "../../content/catalog";
+import { homeFr } from "../../copy/home-fr";
+import FeatureTeaser from "./feature-teaser.astro";
+
+const pages = FEATURE_PAGES.toSorted(
+  (first, second) => Number(second.isPublished) - Number(first.isPublished),
+);
+---
+
+<section id="produit" class="scroll-mt-4 py-[clamp(56px,8vw,104px)]">
+  <div class="mx-auto max-w-270 px-4 sm:px-6">
+    <p class="text-[11px] font-semibold tracking-[0.08em] text-validated uppercase">
+      {homeFr.product.eyebrow}
+    </p>
+    <div class="mt-2 flex flex-wrap items-end justify-between gap-4">
+      <h2
+        class="max-w-[18em] text-[clamp(24px,3vw,32px)] leading-tight font-bold tracking-[-0.03em] text-balance"
+      >
+        {homeFr.product.title}
+      </h2>
+      <p class="max-w-[26em] text-slate-text">{homeFr.product.lead}</p>
+    </div>
+    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {pages.map((page) => <FeatureTeaser page={page} />)}
+    </ul>
+  </div>
+</section>

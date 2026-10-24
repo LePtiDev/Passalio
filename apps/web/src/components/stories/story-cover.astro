@@ -1,0 +1,32 @@
+---
+import type { StoryCard } from "../../content/content-schema";
+import { COVER_THEMES } from "./cover-themes";
+
+interface Props {
+  card: StoryCard;
+}
+
+const { card } = Astro.props;
+const theme = COVER_THEMES[card.theme];
+---
+
+<div
+  class:list={[
+    "relative flex min-h-55 min-w-0 flex-[1_1_380px] items-end rounded-2xl p-4.5 sm:min-h-85 sm:p-6",
+    theme.cover,
+  ]}
+  aria-hidden="true"
+>
+  <span
+    class:list={[
+      "absolute top-4.5 left-4.5 rounded-full px-2.5 py-0.5 text-xs font-semibold sm:top-6 sm:left-6",
+      theme.chip,
+    ]}>{card.moment}</span
+  >
+  <span
+    class:list={[
+      "text-[26px] leading-[1.15] font-bold tracking-[-0.02em] sm:text-[34px]",
+      theme.quote,
+    ]}>{card.quote}</span
+  >
+</div>

@@ -1,0 +1,22 @@
+---
+import type { StoryLink } from "../../content/catalog";
+import StoryCard from "./story-card.astro";
+
+interface Props {
+  stories: ReadonlyArray<StoryLink>;
+  hasSummary?: boolean;
+  headingLevel?: "h2" | "h3";
+}
+
+const { stories, hasSummary = true, headingLevel = "h3" } = Astro.props;
+---
+
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    stories.map((story) => (
+      <li class="flex" data-story-item={story.card.activity}>
+        <StoryCard story={story} hasSummary={hasSummary} headingLevel={headingLevel} />
+      </li>
+    ))
+  }
+</ul>

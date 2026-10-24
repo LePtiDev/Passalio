@@ -1,0 +1,244 @@
+---
+import { callbackFormFr } from "../../copy/callback-form-fr";
+import { apiUrl, appUrl } from "../../links";
+
+interface Props {
+  pagePath: string;
+}
+
+const { pagePath } = Astro.props;
+const fieldClass =
+  "h-12 w-full rounded-[7px] border border-line bg-white px-3 text-base font-normal text-navy placeholder:text-slate-400 aria-invalid:border-red-600 sm:h-10 sm:text-sm";
+const labelClass = "flex flex-col gap-1.5 text-[13px] font-semibold";
+const copy = {
+  failed: callbackFormFr.failed("CODE"),
+  failedWithoutCode: callbackFormFr.failedWithoutCode,
+  sending: callbackFormFr.sending,
+  submit: callbackFormFr.submit,
+  retry: callbackFormFr.retry,
+  successTitle: callbackFormFr.successTitle("NAME"),
+  successText: callbackFormFr.successText("SLOT", "PHONE"),
+  slots: Object.fromEntries(callbackFormFr.slots.map((slot) => [slot.value, slot.sentence])),
+};
+---
+
+<div class="min-w-0 flex-[1_1_380px]" data-callback>
+  <form
+    novalidate
+    class="flex flex-col gap-3.5 rounded-xl border border-card-line bg-white p-4.5 sm:p-6"
+    action={apiUrl("callbackRequests")}
+    method="post"
+    data-callback-form
+    data-endpoint={apiUrl("callbackRequests")}
+    data-page-path={pagePath}
+    data-copy={JSON.stringify(copy)}
+  >
+    <p
+      role="alert"
+      hidden
+      class="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-[13px] text-red-800"
+      data-callback-error
+    >
+    </p>
+    <div class="grid gap-3.5 sm:grid-cols-2">
+      <label class={labelClass}>
+        <span>
+          {callbackFormFr.firstName}
+          <span class="text-red-600" aria-hidden="true">*</span>
+        </span>
+        <input
+          type="text"
+          name="firstName"
+          autocomplete="given-name"
+          aria-required="true"
+          aria-describedby="callback-first-name-error"
+          placeholder={callbackFormFr.firstNamePlaceholder}
+          class={fieldClass}
+        />
+        <span id="callback-first-name-error" hidden class="text-xs font-medium text-red-700" data-error-for="firstName">
+          {callbackFormFr.missingFirstName}
+        </span>
+      </label>
+      <label class={labelClass}>
+        <span>{callbackFormFr.company}</span>
+        <input
+          type="text"
+          name="company"
+          autocomplete="organization"
+          placeholder={callbackFormFr.companyPlaceholder}
+          class={fieldClass}
+        />
+      </label>
+    </div>
+    <label class={labelClass}>
+      <span>
+        {callbackFormFr.phone}
+        <span class="text-red-600" aria-hidden="true">*</span>
+      </span>
+      <input
+        type="tel"
+        name="phone"
+        autocomplete="tel"
+        inputmode="tel"
+        aria-required="true"
+        aria-describedby="callback-phone-error"
+        placeholder={callbackFormFr.phonePlaceholder}
+        class={fieldClass}
+      />
+      <span id="callback-phone-error" hidden class="text-xs font-medium text-red-700" data-error-for="phone">
+        {callbackFormFr.invalidPhone}
+      </span>
+    </label>
+    <label class={labelClass}>
+      <span>
+        {callbackFormFr.slot}
+        <span class="text-red-600" aria-hidden="true">*</span>
+      </span>
+      <select name="slot" aria-required="true" class={fieldClass}>
+        {callbackFormFr.slots.map((slot) => <option value={slot.value}>{slot.label}</option>)}
+      </select>
+    </label>
+    <label class={labelClass}>
+      <span>{callbackFormFr.message}</span>
+      <textarea
+        name="message"
+        rows="3"
+        maxlength="1000"
+        placeholder={callbackFormFr.messagePlaceholder}
+        class="w-full rounded-[7px] border border-line bg-white px-3 py-2.5 text-base font-normal text-navy placeholder:text-slate-400 sm:text-sm"
+      ></textarea>
+    </label>
+    <button
+      type="submit"
+      class="h-12 rounded-[7px] bg-navy text-[15px] font-semibold text-white shadow-button hover:bg-navy-hover disabled:opacity-70 sm:h-10 sm:text-[13px]"
+      data-callback-submit
+    >
+      {callbackFormFr.submit}
+    </button>
+    <p class="text-xs text-slate-text">
+      {callbackFormFr.privacy}{" "}
+      <a href={appUrl("privacy")} class="font-medium text-validated underline underline-offset-2">
+        {callbackFormFr.privacyLink}
+      </a>
+    </p>
+  </form>
+  <div
+    hidden
+    role="status"
+    tabindex="-1"
+    class="flex flex-col gap-2 rounded-xl border border-card-line bg-white p-6"
+    data-callback-success
+  >
+    <p class="text-lg font-bold" data-callback-success-title></p>
+    <p class="text-slate-text" data-callback-success-text></p>
+    <p class="text-slate-text">{callbackFormFr.successHint}</p>
+  </div>
+</div>
+
+<script>
+  import {
+    callbackRequestBody,
+    formatPhone,
+    invalidCallbackFields,
+    shortTraceId,
+  } from "../../callback-form";
+
+  interface Copy {
+    failed: string;
+    failedWithoutCode: string;
+    sending: string;
+    submit: string;
+    retry: string;
+    successTitle: string;
+    successText: string;
+    slots: Record<string, string>;
+  }
+
+  const read = (form: HTMLFormElement, name: string): string => {
+    const value = new FormData(form).get(name);
+    return typeof value === "string" ? value : "";
+  };
+
+  const setBusy = (form: HTMLFormElement, isBusy: boolean) => {
+    form
+      .querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLButtonElement>(
+        "input, select, textarea, button",
+      )
+      .forEach((field) => {
+        field.disabled = isBusy;
+      });
+  };
+
+  type Outcome = { isSent: true } | { isSent: false; code: string | null };
+
+  const send = async (endpoint: string, body: unknown): Promise<Outcome> => {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      return response.ok
+        ? { isSent: true }
+        : { isSent: false, code: shortTraceId(response.headers.get("x-trace-id")) };
+    } catch {
+      return { isSent: false, code: null };
+    }
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-callback]").forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>("[data-callback-form]");
+    const submit = root.querySelector<HTMLButtonElement>("[data-callback-submit]");
+    const errorBox = root.querySelector<HTMLElement>("[data-callback-error]");
+    const success = root.querySelector<HTMLElement>("[data-callback-success]");
+    if (!form || !submit || !errorBox || !success) return;
+    const copy: Copy = JSON.parse(form.dataset["copy"] ?? "{}");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const draft = {
+        firstName: read(form, "firstName"),
+        company: read(form, "company"),
+        phone: read(form, "phone"),
+        slot: read(form, "slot"),
+        message: read(form, "message"),
+        pagePath: form.dataset["pagePath"] ?? "/",
+      };
+      const invalid = invalidCallbackFields(draft);
+      form.querySelectorAll<HTMLElement>("[data-error-for]").forEach((message) => {
+        const field = message.dataset["errorFor"] ?? "";
+        const isInvalid = invalid.some((name) => name === field);
+        message.hidden = !isInvalid;
+        form.querySelector(`[name="${field}"]`)?.setAttribute("aria-invalid", String(isInvalid));
+      });
+      if (invalid.length > 0) {
+        form.querySelector<HTMLInputElement>(`[name="${invalid[0]}"]`)?.focus();
+        return;
+      }
+
+      errorBox.hidden = true;
+      setBusy(form, true);
+      submit.textContent = copy.sending;
+      const body = callbackRequestBody(draft);
+      const outcome = await send(form.dataset["endpoint"] ?? "", body);
+      if (!outcome.isSent) {
+        errorBox.textContent =
+          outcome.code === null ? copy.failedWithoutCode : copy.failed.replace("CODE", outcome.code);
+        errorBox.hidden = false;
+        setBusy(form, false);
+        submit.textContent = copy.retry;
+        return;
+      }
+      form.hidden = true;
+      success.hidden = false;
+      const title = success.querySelector("[data-callback-success-title]");
+      const text = success.querySelector("[data-callback-success-text]");
+      if (title) title.textContent = copy.successTitle.replace("NAME", body.firstName);
+      if (text)
+        text.textContent = copy.successText
+          .replace("SLOT", copy.slots[body.slot] ?? "")
+          .replace("PHONE", formatPhone(body.phone));
+      success.focus();
+    });
+  });
+</script>

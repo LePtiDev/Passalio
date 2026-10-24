@@ -1,0 +1,37 @@
+---
+import { PATHS } from "../../content/catalog";
+import { homeFr } from "../../copy/home-fr";
+import { appUrl } from "../../links";
+import CallbackForm from "../marketing/callback-form.astro";
+
+const callback = homeFr.callback;
+---
+
+<section id="rappel" class="scroll-mt-4 py-[clamp(56px,8vw,96px)]">
+  <div class="mx-auto max-w-270 px-4 sm:px-6">
+    <div
+      class="flex flex-wrap items-center gap-8 rounded-2xl bg-navy p-5 text-white sm:p-10 lg:flex-nowrap"
+    >
+      <div class="flex min-w-0 flex-[1_1_380px] flex-col items-start gap-3">
+        <p class="text-[11px] font-semibold tracking-[0.08em] text-mint uppercase">
+          {callback.eyebrow}
+        </p>
+        <h2
+          class="text-[clamp(24px,3vw,34px)] leading-tight font-bold tracking-[-0.03em] text-balance"
+        >
+          {callback.title}
+        </h2>
+        <p class="text-on-navy">{callback.lead}</p>
+        <a
+          href={appUrl("signUp")}
+          class="mt-2 inline-flex h-12 items-center rounded-lg bg-white px-5 text-[15px] font-semibold text-navy hover:bg-mist sm:h-10 sm:text-sm"
+        >
+          {callback.action}
+        </a>
+      </div>
+      <div class="w-full text-navy lg:w-auto lg:flex-[1_1_420px]">
+        <CallbackForm pagePath={PATHS.home} />
+      </div>
+    </div>
+  </div>
+</section>

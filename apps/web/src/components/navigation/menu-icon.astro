@@ -1,0 +1,44 @@
+---
+import type { MenuIcon } from "../../content/content-schema";
+
+interface Props {
+  icon: MenuIcon;
+  class?: string;
+}
+
+const PATHS: Readonly<Record<MenuIcon, string>> = {
+  document: "M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M9 14l2 2 4-4",
+  flame: "M12 3c1 3 4 4.5 4 8.5a4 4 0 0 1-8 0C8 9 10 8 10 6M5 21h14",
+  calendar: "M4 6h16v14H4zM4 10h16M8 3v4M16 3v4",
+  offline: "M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 12.9a10 10 0 0 1 5.2-2.8M12 20h.01",
+  bell: "M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4",
+  home: "M3 11l9-7 9 7v9H3zM9 20v-6h6v6",
+  camera: "M4 7h3l2-3h6l2 3h3v13H4zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+  users:
+    "M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2 20a7 7 0 0 1 14 0M17 11.5a2.5 2.5 0 1 0 0-5M17 14a5 5 0 0 1 5 5",
+  user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0",
+  wrench:
+    "M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z",
+  swap: "M7 7h11l-3-3M17 17H6l3 3",
+};
+
+const { icon, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex shrink-0 items-center justify-center rounded-[7px] border border-card-line bg-white text-validated",
+    className,
+  ]}
+>
+  <svg
+    class="size-[15px]"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"><path d={PATHS[icon]}></path></svg
+  >
+</span>

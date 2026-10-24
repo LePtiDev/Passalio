@@ -1,0 +1,119 @@
+---
+import { PATHS, type StoryLink } from "../../content/catalog";
+import { navigationFr } from "../../copy/navigation-fr";
+import { appUrl } from "../../links";
+import type { MenuEntry } from "../../navigation";
+import MenuEntryLink from "./menu-entry-link.astro";
+import StoryMenuLink from "./story-menu-link.astro";
+
+interface Props {
+  currentPath: string;
+  products: ReadonlyArray<MenuEntry>;
+  activities: ReadonlyArray<MenuEntry>;
+  stories: ReadonlyArray<StoryLink>;
+}
+
+const { currentPath, products, activities, stories } = Astro.props;
+
+const sections = [
+  { label: navigationFr.product, entries: products },
+  { label: navigationFr.activity, entries: activities },
+] as const;
+---
+
+<dialog
+  id="menu-mobile"
+  aria-label={navigationFr.label}
+  class="m-0 h-dvh max-h-none w-full max-w-none bg-white p-0 text-navy backdrop:bg-navy/20 lg:hidden"
+>
+  <div class="flex h-full flex-col">
+    <div class="flex h-14 shrink-0 items-center justify-between border-b border-hairline pr-1 pl-4">
+      <img src="/passalio-logo.svg" alt="Passalio" width="86" height="17" class="h-4.25 w-auto" />
+      <button
+        type="button"
+        class="inline-flex size-12 items-center justify-center"
+        aria-label={navigationFr.closeMenu}
+        data-mobile-menu-close
+      >
+        <svg
+          class="size-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg
+        >
+      </button>
+    </div>
+    <nav class="flex flex-1 flex-col overflow-y-auto px-4 py-2" aria-label={navigationFr.label}>
+      {
+        sections.map((section) => (
+          <details
+            class="group border-b border-hairline"
+            open={section.entries.some((entry) => entry.href === currentPath)}
+          >
+            <summary class="flex h-13 cursor-pointer list-none items-center justify-between text-base font-semibold [&::-webkit-details-marker]:hidden">
+              {section.label}
+              <svg
+                class="size-4 transition-transform group-open:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </summary>
+            <div class="flex flex-col gap-0.5 pb-2">
+              {section.entries.map((entry) => (
+                <MenuEntryLink entry={entry} isCurrent={entry.href === currentPath} />
+              ))}
+            </div>
+          </details>
+        ))
+      }
+      <details class="group border-b border-hairline">
+        <summary
+          class="flex h-13 cursor-pointer list-none items-center justify-between text-base font-semibold [&::-webkit-details-marker]:hidden"
+        >
+          {navigationFr.stories}
+          <svg
+            class="size-4 transition-transform group-open:rotate-180"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg
+          >
+        </summary>
+        <div class="flex flex-col gap-0.5 pb-2">
+          {stories.map((story) => <StoryMenuLink story={story} />)}
+          <a
+            href={PATHS.stories}
+            class="inline-flex min-h-12 items-center px-2.5 text-[15px] font-semibold text-validated"
+          >
+            {navigationFr.allStories} →
+          </a>
+        </div>
+      </details>
+      <a
+        href={appUrl("signIn")}
+        class="flex h-13 items-center border-b border-hairline text-base font-semibold"
+      >
+        {navigationFr.signIn}
+      </a>
+    </nav>
+    <div class="shrink-0 border-t border-hairline px-4 pt-3 pb-6">
+      <a
+        href={appUrl("signUp")}
+        class="flex h-12 items-center justify-center rounded-lg bg-navy text-[15px] font-semibold text-white"
+      >
+        {navigationFr.tryFree}
+      </a>
+    </div>
+  </div>
+</dialog>

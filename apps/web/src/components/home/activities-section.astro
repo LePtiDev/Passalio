@@ -1,0 +1,45 @@
+---
+import { PATHS, publishedTargetPages } from "../../content/catalog";
+import { homeFr } from "../../copy/home-fr";
+import CheckIcon from "../check-icon.astro";
+
+const pages = publishedTargetPages();
+---
+
+<section class="bg-navy py-[clamp(56px,8vw,104px)] text-white">
+  <div class="mx-auto max-w-270 px-4 sm:px-6">
+    <p class="text-[11px] font-semibold tracking-[0.08em] text-mint uppercase">
+      {homeFr.activities.eyebrow}
+    </p>
+    <h2
+      class="mt-2 max-w-[22em] text-[clamp(24px,3vw,32px)] leading-tight font-bold tracking-[-0.03em] text-balance"
+    >
+      {homeFr.activities.title}
+    </h2>
+    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        pages.map((page) => (
+          <li class="relative flex flex-col gap-2 rounded-xl border border-navy-card-line bg-navy-hover p-5 has-[a:hover]:border-mint">
+            <p class="text-xs font-semibold text-mint">{page.menu.title}</p>
+            <h3 class="text-base leading-snug font-bold">
+              <a href={PATHS.target(page.slug)} class="after:absolute after:inset-0">
+                {page.title}
+              </a>
+            </h3>
+            <ul class="mt-1 flex flex-col gap-1 text-[13px] text-on-navy">
+              {page.features.slice(0, 3).map((feature) => (
+                <li class="flex items-center gap-1.5">
+                  <CheckIcon class="size-3 text-mint" />
+                  {feature.label}
+                </li>
+              ))}
+            </ul>
+            <p class="mt-auto pt-3 text-[13px] font-semibold text-mint" aria-hidden="true">
+              {homeFr.activities.action} →
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
