@@ -15,6 +15,8 @@ import { createD1MemberRepository } from "../../src/contexts/identity/infrastruc
 import { createD1OrganizationRepository } from "../../src/contexts/identity/infrastructure/d1-organization-repository";
 import { findMcpCaller } from "../../src/contexts/mcp/infrastructure/mcp-caller-repository";
 import { countMcpCall } from "../../src/contexts/mcp/infrastructure/mcp-rate-limit";
+import { createD1PendingInvitationLookup } from "../../src/contexts/platform-settings/infrastructure/d1-pending-invitation-lookup";
+import { createD1PlatformSettingsRepository } from "../../src/contexts/platform-settings/infrastructure/d1-platform-settings-repository";
 import { createD1TeamInvitationRepository } from "../../src/contexts/platform-team/infrastructure/d1-team-invitation-repository";
 import { createD1TeammateRepository } from "../../src/contexts/platform-team/infrastructure/d1-teammate-repository";
 import { createD1CallRepository } from "../../src/contexts/sales/infrastructure/d1-call-repository";
@@ -84,6 +86,8 @@ export const createRepositories = (database: Database) => {
     backofficeJournal: createD1JournalReadModel(database),
     teammates: createD1TeammateRepository(database),
     teamInvitations: createD1TeamInvitationRepository(database),
+    platformSettings: createD1PlatformSettingsRepository(database),
+    pendingInvitations: createD1PendingInvitationLookup(database),
     mcp: {
       findCaller: (userId: string) => findMcpCaller(database, userId),
       countCall: (userId: string, now: Date) => countMcpCall(database, userId, now),

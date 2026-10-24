@@ -45,8 +45,24 @@ const withAcceptedTerms = <User extends Readonly<Record<string, unknown>>>(user:
   return { ...user, termsAcceptedAt: new Date() };
 };
 
+export type SignUpGate = {
+  readonly canSignUp: (email: string) => Promise<boolean>;
+};
+
+const withOpenSignUp = async <User extends Readonly<Record<string, unknown>>>(
+  user: User,
+  signUpGate: SignUpGate,
+) => {
+  const email = user["email"];
+  if (typeof email !== "string" || !(await signUpGate.canSignUp(email))) {
+    throw new APIError("FORBIDDEN", { code: "SIGN_UP_CLOSED" });
+  }
+  return user;
+};
+
 export type AuthDependencies = {
   readonly database: Database;
+  readonly signUpGate: SignUpGate;
   readonly emailSender: EmailSender;
   readonly auditTrail: AuditTrail;
   readonly activityLog: ActivityLog;
@@ -72,6 +88,7 @@ const activityRecorder =
 
 export const createAuth = ({
   database,
+  signUpGate,
   emailSender,
   auditTrail,
   activityLog,
@@ -128,7 +145,9 @@ export const createAuth = ({
     databaseHooks: {
       user: {
         create: {
-          before: async (user) => ({ data: withAcceptedTerms(user) }),
+          before: async (user) => ({
+            data: withAcceptedTerms(await withOpenSignUp(user, signUpGate)),
+          }),
         },
       },
       session: {

@@ -39,6 +39,8 @@ const FILES_QUERYING_D1 = [
   "contexts/identity/infrastructure/d1-organization-repository.ts",
   "contexts/mcp/infrastructure/mcp-caller-repository.ts",
   "contexts/mcp/infrastructure/mcp-rate-limit.ts",
+  "contexts/platform-settings/infrastructure/d1-pending-invitation-lookup.ts",
+  "contexts/platform-settings/infrastructure/d1-platform-settings-repository.ts",
   "contexts/platform-team/infrastructure/d1-team-invitation-repository.ts",
   "contexts/platform-team/infrastructure/d1-teammate-repository.ts",
   "contexts/sales/infrastructure/d1-call-repository.ts",

@@ -165,6 +165,14 @@ export {
   type PlatformRole,
 } from "./platform-permissions";
 export {
+  changeSignUpSettingsBody,
+  signUpAvailabilityResponse,
+  signUpSettingsResponse,
+  type ChangeSignUpSettingsBody,
+  type SignUpAvailabilityResponse,
+  type SignUpSettingsResponse,
+} from "./platform-settings";
+export {
   changeTeammateRoleBody,
   inviteTeammateBody,
   pendingTeamInvitationResponse,

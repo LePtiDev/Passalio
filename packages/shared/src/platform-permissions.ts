@@ -15,16 +15,24 @@ export const PLATFORM_PERMISSIONS = [
   "prospects:read",
   "prospects:write",
   "team:manage",
+  "settings:manage",
   "mcp:connect",
 ] as const;
 
 export type PlatformPermission = (typeof PLATFORM_PERMISSIONS)[number];
 
+const SUPERADMIN_ONLY_PERMISSIONS: ReadonlySet<PlatformPermission> = new Set([
+  "team:manage",
+  "settings:manage",
+]);
+
 export const PLATFORM_ROLE_PERMISSIONS: Readonly<
   Record<PlatformRole, ReadonlySet<PlatformPermission>>
 > = {
   superadmin: new Set(PLATFORM_PERMISSIONS),
-  admin: new Set(PLATFORM_PERMISSIONS.filter((permission) => permission !== "team:manage")),
+  admin: new Set(
+    PLATFORM_PERMISSIONS.filter((permission) => !SUPERADMIN_ONLY_PERMISSIONS.has(permission)),
+  ),
   sales: new Set(["prospects:read", "prospects:write"]),
 };
 

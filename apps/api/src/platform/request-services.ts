@@ -1,4 +1,5 @@
 import { createMiddleware } from "hono/factory";
+import { canSignUp, createPlatformSettingsDependencies } from "../contexts/platform-settings";
 import type { AppEnv } from "../env";
 import { createActivityLog } from "./activity-log";
 import { createAuditTrail } from "./audit-trail";
@@ -20,6 +21,9 @@ export const requestServicesMiddleware = createMiddleware<AppEnv>(async (context
   );
   const auth = createAuth({
     database,
+    signUpGate: {
+      canSignUp: canSignUp(createPlatformSettingsDependencies({ database, auditTrail })),
+    },
     emailSender,
     auditTrail,
     activityLog: createActivityLog(database),
