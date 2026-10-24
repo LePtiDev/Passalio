@@ -51,7 +51,7 @@ Dernière mise à jour : 2026-10-24.
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)     |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
-| Tests de l'application : 560 tests de composants, 200 parcours Playwright (mobile et ordinateur, accessibilité), 18 bugs reproduits puis corrigés                             | PR_NUMBER                        |
+| Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | PR_NUMBER                        |
 
 ## Hors code (Quentin)
 
