@@ -1,4 +1,5 @@
 import type { InterventionStatus, PaymentMethod } from "@passalio/shared";
+import type { TradeId } from "@passalio/trades";
 
 export type Intervention = {
   readonly id: string;
@@ -9,6 +10,7 @@ export type Intervention = {
   readonly scheduledDate: string;
   readonly startTime: string | null;
   readonly durationMinutes: number;
+  readonly visitTypes: readonly TradeId[];
   readonly equipmentIds: readonly string[];
   readonly announcedPriceCents: number | null;
   readonly notes: string | null;

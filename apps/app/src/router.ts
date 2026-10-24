@@ -35,8 +35,9 @@ import {
   onboardingTeamRoute,
   onboardingTradesRoute,
 } from "./routes/onboarding";
+import { newVisitRoute, planningRoute, visitRoute } from "./routes/planning";
 import { resetPasswordRoute } from "./routes/reset-password";
-import { settingsRoute } from "./routes/settings";
+import { settingsRoute, visitTypesRoute } from "./routes/settings";
 import { rootRoute } from "./routes/root";
 import { signInRoute } from "./routes/sign-in";
 import { signInCodeRoute } from "./routes/sign-in-code";
@@ -81,12 +82,16 @@ const routeTree = rootRoute.addChildren([
     homeRoute,
     teamRoute,
     settingsRoute,
+    visitTypesRoute,
     customersRoute,
     newCustomerRoute,
     customerRoute,
     editCustomerRoute,
     newSiteRoute,
     newEquipmentRoute,
+    planningRoute,
+    newVisitRoute,
+    visitRoute,
   ]),
 ]);
 

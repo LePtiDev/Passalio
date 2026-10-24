@@ -3,6 +3,7 @@ import type { Intervention } from "../domain/intervention-models";
 import {
   assertCanManageInterventionOf,
   checkEquipmentsAtPlace,
+  checkVisitTypes,
   newIntervention,
 } from "../domain/intervention-rules";
 import type { SchedulingDependencies } from "../domain/scheduling-ports";
@@ -21,6 +22,10 @@ export const createIntervention =
   ): Promise<Result<Intervention, SchedulingError>> => {
     const fields = input.intervention;
     assertCanManageInterventionOf(actor, fields.technicianUserId);
+    const visitTypes = checkVisitTypes(fields.visitTypes ?? []);
+    if (!visitTypes.isOk) {
+      return visitTypes;
+    }
     const id = input.id ?? newId();
     if (await interventions.exists(id)) {
       return err("already_exists");
@@ -44,6 +49,7 @@ export const createIntervention =
       organizationId: actor.organizationId,
       createdByUserId: actor.userId,
       equipmentIds: equipmentIds.value,
+      visitTypes: visitTypes.value,
       at: now(),
     });
     await interventions.create(intervention);

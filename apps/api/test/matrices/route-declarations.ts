@@ -94,6 +94,8 @@ export const DECLARED_ROUTES: readonly DeclaredRoute[] = [
   member("GET", "/api/organization/logo", "organization:read"),
   member("POST", "/api/organization/onboarding-completion", "organization:update"),
   member("POST", "/api/document-number-blocks", "documents:sign"),
+  member("GET", "/api/visit-types", "schedule:read"),
+  member("PATCH", "/api/visit-types/durations", "organization:update"),
   member("GET", "/api/customers", "customers:read"),
   member("POST", "/api/customers", "customers:write"),
   member("GET", "/api/customers/:customerId", "customers:read", 404),

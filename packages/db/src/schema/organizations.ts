@@ -1,5 +1,5 @@
 import { BRAND_COLORS, ORGANIZATION_ROLES, TEAM_SIZES } from "@passalio/shared";
-import type { TradeId } from "@passalio/trades";
+import type { TradeId, VisitDurations } from "@passalio/trades";
 import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { defaultedTimestampColumns, idColumn, organizationIdColumn } from "../columns";
 import { users } from "./users";
@@ -20,6 +20,10 @@ export const organizations = sqliteTable("organizations", {
   brandColor: text("brand_color", { enum: BRAND_COLORS }).notNull().default("#0F2A44"),
   documentNumberPrefix: text("document_number_prefix").notNull().default(""),
   nextDocumentNumber: integer("next_document_number").notNull().default(1),
+  visitDurations: text("visit_durations", { mode: "json" })
+    .$type<VisitDurations>()
+    .notNull()
+    .default({}),
   onboardingCompletedAt: integer("onboarding_completed_at", { mode: "timestamp_ms" }),
   ...defaultedTimestampColumns(),
   deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),

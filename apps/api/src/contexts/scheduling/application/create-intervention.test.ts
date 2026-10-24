@@ -153,3 +153,54 @@ describe("createIntervention", () => {
     });
   });
 });
+
+describe("createIntervention with visit types", () => {
+  it("keeps the visit types of the new intervention", async () => {
+    const created = await create()(actorOf("secretary"), {
+      id: INTERVENTION_ID,
+      intervention: interventionFields({ visitTypes: ["chimney_sweeping", "stove_maintenance"] }),
+    });
+    expect(created).toMatchObject({
+      isOk: true,
+      value: { visitTypes: ["chimney_sweeping", "stove_maintenance"] },
+    });
+    expect(state.interventions[0]?.visitTypes).toEqual(["chimney_sweeping", "stove_maintenance"]);
+  });
+
+  it("gives no visit type to an intervention created without visit types", async () => {
+    const created = await create()(actorOf("secretary"), { intervention: interventionFields() });
+    expect(created).toMatchObject({ isOk: true, value: { visitTypes: [] } });
+    expect(state.interventions[0]?.visitTypes).toEqual([]);
+  });
+
+  it("keeps a single copy of a visit type listed twice", async () => {
+    const created = await create()(actorOf("secretary"), {
+      intervention: interventionFields({
+        visitTypes: ["chimney_sweeping", "boiler_maintenance", "chimney_sweeping"],
+      }),
+    });
+    expect(created).toMatchObject({
+      isOk: true,
+      value: { visitTypes: ["chimney_sweeping", "boiler_maintenance"] },
+    });
+  });
+
+  it("refuses an unknown visit type and creates nothing", async () => {
+    expect(
+      await create()(actorOf("secretary"), {
+        intervention: interventionFields({ visitTypes: ["chimney_sweeping", "plumbing"] }),
+      }),
+    ).toEqual({ isOk: false, error: "invalid_visit_type" });
+    expect(state.interventions).toHaveLength(0);
+  });
+
+  it("keeps the planned duration whatever the visit types", async () => {
+    const created = await create()(actorOf("secretary"), {
+      intervention: interventionFields({
+        durationMinutes: 40,
+        visitTypes: ["chimney_sweeping", "stove_maintenance"],
+      }),
+    });
+    expect(created).toMatchObject({ isOk: true, value: { durationMinutes: 40 } });
+  });
+});

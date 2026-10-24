@@ -12,6 +12,7 @@ export { useOrganization } from "./hooks/use-organization";
 export { useTeam } from "./hooks/use-team";
 export { identityFr, ROLE_LABELS } from "./fr";
 export { useActor } from "./hooks/use-actor";
+export { identityApi } from "./identity-api";
 export { OnboardingScreen } from "./components/onboarding/onboarding-screen";
 export { ONBOARDING_PATHS } from "./components/onboarding/onboarding-steps";
 export { TwoFactorCodeForm } from "./components/two-factor/two-factor-code-form";

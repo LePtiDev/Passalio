@@ -67,6 +67,37 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
+## Types de passage
+
+| Famille     | Ce qui est vérifié                                                                                                                                                                                                                                                                                          | Test                                                                                                                      |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 2           | Durées par défaut des 5 métiers, bornes de 15 min à 8 h par pas de 15 min, durée de l'entreprise ou par défaut, total des types d'un passage, types reconnus                                                                                                                                                | `packages/trades/src/visit-durations.test.ts`                                                                             |
+| 2           | Types d'un passage : type inconnu refusé, doublons retirés dans l'ordre donné, aucun type par défaut                                                                                                                                                                                                        | `scheduling/domain/intervention-rules.test.ts`                                                                            |
+| 4           | Lire les types : un par métier, tous les rôles, impersonation en lecture, entreprise du membre ; changer les durées : propriétaire et administrateur, fusion, refus, impersonation, autre entreprise                                                                                                        | `scheduling/application/get-visit-types.test.ts`, `update-visit-durations.test.ts`                                        |
+| 4           | Créer et modifier un passage avec `visitTypes` : gardés, `[]` sans types, doublons retirés, type inconnu refusé, passage clos, autre entreprise, impersonation                                                                                                                                              | `scheduling/application/create-intervention.test.ts`, `update-intervention.test.ts`                                       |
+| 5, 6, 7, 11 | `GET /api/visit-types` et `PATCH /api/visit-types/durations` : 401, rôles, 403, 422, 400, bornes, fusion relue, isolation, impersonation, passages prévus inchangés ; push et pull avec `visitTypes`                                                                                                        | `apps/api/test/visit-type-routes.test.ts`, `test/matrices`                                                                |
+| 2           | App : choix de durée de 15 min à 8 h, pas de 15 min, ordre des métiers, type proposé par appareil coché, type unique, cumul des durées, cocher et décocher                                                                                                                                                  | `scheduling/visit-types.test.ts`                                                                                          |
+| 2           | App : textes (durées, libellés des types, aide de durée simple, détaillée ou modifiée, « Remettre », réglages) ; lien « Types de passage » des réglages                                                                                                                                                     | `scheduling/visit-type-texts.test.ts`, `app-shell/navigation-visit-types.test.ts`                                         |
+| 2           | Formulaire : type obligatoire si l'entreprise a des types, absent hors ligne, type inconnu refusé, durée bornée, 1 h sans type, accepté par le serveur                                                                                                                                                      | `scheduling/visit-form-schema-visit-types.test.ts`                                                                        |
+| 11          | Types gardés dans Dexie (remplacés, vidés, gardés si le serveur échoue) ; passage local et `create_intervention` avec `visitTypes` ; Dexie version 3 : `visitTypes: []` sur les anciens passages                                                                                                            | `scheduling/visit-types-store.test.ts`, `intervention-store-visit-types.test.ts`, `lib/db/local-database-upgrade.test.ts` |
+| 3, 13       | Choix du type : préremplissage par appareils, durée de l'entreprise, plafond de 8 h, choix à la main qui arrête le préremplissage, durée changée gardée, type obligatoire, sans types connus ; réglages : propriétaire et administrateur seuls, impersonation en lecture, chargement, enregistrement, échec | `scheduling/hooks/use-visit-type-choice.test.tsx`, `use-visit-type-settings.test.tsx`                                     |
+| 13          | Champ Durée : obligatoire, aide d'un type, de plusieurs, durée modifiée et « Remettre », plafond de 8 h                                                                                                                                                                                                     | `scheduling/components/passage/duration-field.test.tsx`                                                                   |
+
+## Planning et passages dans l'app
+
+| Famille | Ce qui est vérifié                                                                                                                                                                                              | Test                                                                          |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 2       | Techniciens : utilisateur courant en premier et en bleu, autres triés par nom, 8 couleurs qui bouclent, agendas choisis                                                                                         | `scheduling/technicians.test.ts`, `scheduling/technician-colors.test.ts`      |
+| 2       | Dates : semaine du lundi au dimanche, jours en UTC, aujourd'hui et heure courante à Paris, changements d'heure                                                                                                  | `scheduling/planning-dates.test.ts`                                           |
+| 2       | Grille : 8 h à 19 h élargie, couloirs pour les chevauchements, « +N » au-delà du maximum, heures et positions                                                                                                   | `scheduling/planning-layout.test.ts`                                          |
+| 2       | Passages : annulés masqués, « fait » si terminé ou tout signé, tri par heure, total en centimes, prochain passage                                                                                               | `scheduling/planning-visits.test.ts`                                          |
+| 2       | Paramètres d'URL tolérants (jour, vue, agendas séparés par « . », passage, nouveau passage)                                                                                                                     | `scheduling/planning-search.test.ts`                                          |
+| 2       | Formulaire nouveau passage : champs obligatoires, prix en euros vers centimes, durée de 60 min, accepté par le serveur                                                                                          | `scheduling/visit-form-schema.test.ts`                                        |
+| 2       | Statut affiché d'un passage ; montants en euros                                                                                                                                                                 | `scheduling/components/passage/visit-status.test.ts`, `scheduling/fr.test.ts` |
+| 3, 13   | Technicien : son seul planning, même avec `agendas` ; propriétaire, administrateur, secrétariat : équipe, filtres, création ; impersonation : pas de création ; rôle en cache hors ligne ; vues jour et semaine | `scheduling/hooks/use-planning.test.tsx`                                      |
+| 11      | Créer, annuler un passage hors ligne : Dexie et outbox ; membres récupérés par pages de 50, cache remplacé                                                                                                      | `scheduling/intervention-store.test.ts`, `scheduling/members-store.test.ts`   |
+| 11      | Pull des passages et documents, suppressions, modification locale en attente gardée ; refus de `create_intervention` et `sign_document`                                                                         | `lib/sync/planning-sync.test.ts`                                              |
+
 ## Lecture de plaque (ADR 0022)
 
 | Famille | Ce qui est vérifié                                                                                                                                     | Test                                                                              |
@@ -88,53 +119,58 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 
 ## Parcours de bout en bout
 
-| Espace          | Parcours                                                                                | Test                      |
-| --------------- | --------------------------------------------------------------------------------------- | ------------------------- |
-| Comptes         | Créer un compte, refusé sans accepter les conditions                                    | à écrire                  |
-| Comptes         | Créer un compte puis l'entreprise en 5 étapes jusqu'aux Premiers pas                    | `team-onboarding.spec.ts` |
-| Comptes         | Se connecter ; mauvais mot de passe ; trop d'essais                                     | à écrire                  |
-| Comptes         | Mot de passe oublié, nouveau mot de passe, connexion                                    | `team-onboarding.spec.ts` |
-| Comptes         | Lien de réinitialisation déjà utilisé ou expiré                                         | à écrire                  |
-| Comptes         | Se déconnecter : base locale effacée, retour à la connexion                             | à écrire                  |
-| Comptes         | Connecté, `/connexion` renvoie à l'accueil ; `retour` vers un site externe refusé       | à écrire                  |
-| Comptes         | Changer d'onglet sans attendre le serveur                                               | `customers.spec.ts`       |
-| Pages légales   | Liens du pied de page, conditions depuis l'inscription, sommaire mobile                 | `legal-pages.spec.ts`     |
-| Équipe          | Inviter un technicien qui rejoint l'équipe                                              | `team-onboarding.spec.ts` |
-| Équipe          | Invitation acceptée avec une autre adresse : refusée                                    | à écrire                  |
-| Équipe          | Renvoyer, annuler une invitation                                                        | à écrire                  |
-| Équipe          | Changer le rôle d'un membre ; le retirer                                                | à écrire                  |
-| Équipe          | Transférer la propriété à un administrateur                                             | à écrire                  |
-| Équipe          | Un technicien ne voit ni inviter, ni changer de rôle                                    | à écrire                  |
-| Équipe          | Une personne dans deux entreprises passe de l'une à l'autre                             | à écrire                  |
-| Réglages        | Modifier les informations de l'entreprise et le logo                                    | à écrire                  |
-| Clients         | Liste vide, créer un client particulier ; créer une entreprise cliente                  | à écrire                  |
-| Clients         | Erreurs du formulaire nouveau client                                                    | à écrire                  |
-| Clients         | Rechercher par nom, ville, téléphone ; filtres d'échéance ; pagination                  | à écrire                  |
-| Clients         | Modifier un client ; ajouter un lieu                                                    | à écrire                  |
-| Clients         | Ajouter un appareil de chaque famille avec ses champs propres                           | à écrire                  |
-| Clients         | Ajouter une chaudière puis la remplacer par une PAC                                     | `customers.spec.ts`       |
-| Clients         | Retirer un appareil, il reste dans l'historique                                         | à écrire                  |
-| Clients         | Ajouter une photo ; refus d'un fichier trop gros ou d'un mauvais type                   | à écrire                  |
-| Clients         | Archiver un client (secrétariat oui, technicien non)                                    | à écrire                  |
-| Hors ligne      | Créer un client sans réseau, recharger, rétablir le réseau, client sur le serveur       | à écrire                  |
-| Hors ligne      | Indicateur : modifications en attente, puis synchronisé                                 | à écrire                  |
-| Hors ligne      | Modification refusée par le serveur, visible pour l'utilisateur                         | à écrire                  |
-| Hors ligne      | Démarrer l'app sans réseau avec la dernière session                                     | à écrire                  |
-| Hors ligne      | Deux appareils modifient le même client                                                 | à écrire                  |
-| Admin           | Activer la double authentification : mot de passe, QR code, codes de secours            | à écrire                  |
-| Admin           | Se connecter avec le code ; avec un code de secours ; mauvais code                      | à écrire                  |
-| Admin           | Session admin de plus de 12 heures : code redemandé                                     | à écrire                  |
-| Admin           | Un client qui tape `/admin` arrive sur l'accueil                                        | à écrire                  |
-| Admin           | Vue d'ensemble ; comptes clients, filtres, recherche ; fiche et ses 3 onglets ; journal | à écrire                  |
-| Admin           | Le rôle Commercial ne voit que Commercial                                               | à écrire                  |
-| Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification         | à écrire                  |
-| Équipe Passalio | Changer un rôle, retirer un membre ; un super admin ne change pas son propre rôle       | à écrire                  |
-| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination | à écrire                  |
-| Commercial      | Créer, modifier, supprimer une entreprise prospectée                                    | à écrire                  |
-| Commercial      | Changer l'étape, ajouter une note, historique                                           | à écrire                  |
-| Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                          | à écrire                  |
-| Commercial      | Prospection : qualifier depuis la carte, sur ordinateur et sur mobile                   | à écrire                  |
-| Site            | Liens de la landing, environnement staging ou production                                | `apps/web` (unitaire)     |
-| Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne           | à écrire                  |
+| Espace          | Parcours                                                                                                               | Test                      |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| Comptes         | Créer un compte, refusé sans accepter les conditions                                                                   | à écrire                  |
+| Comptes         | Créer un compte puis l'entreprise en 5 étapes jusqu'aux Premiers pas                                                   | `team-onboarding.spec.ts` |
+| Comptes         | Se connecter ; mauvais mot de passe ; trop d'essais                                                                    | à écrire                  |
+| Comptes         | Mot de passe oublié, nouveau mot de passe, connexion                                                                   | `team-onboarding.spec.ts` |
+| Comptes         | Lien de réinitialisation déjà utilisé ou expiré                                                                        | à écrire                  |
+| Comptes         | Se déconnecter : base locale effacée, retour à la connexion                                                            | à écrire                  |
+| Comptes         | Connecté, `/connexion` renvoie à l'accueil ; `retour` vers un site externe refusé                                      | à écrire                  |
+| Comptes         | Changer d'onglet sans attendre le serveur                                                                              | `customers.spec.ts`       |
+| Pages légales   | Liens du pied de page, conditions depuis l'inscription, sommaire mobile                                                | `legal-pages.spec.ts`     |
+| Équipe          | Inviter un technicien qui rejoint l'équipe                                                                             | `team-onboarding.spec.ts` |
+| Équipe          | Invitation acceptée avec une autre adresse : refusée                                                                   | à écrire                  |
+| Équipe          | Renvoyer, annuler une invitation                                                                                       | à écrire                  |
+| Équipe          | Changer le rôle d'un membre ; le retirer                                                                               | à écrire                  |
+| Équipe          | Transférer la propriété à un administrateur                                                                            | à écrire                  |
+| Équipe          | Un technicien ne voit ni inviter, ni changer de rôle                                                                   | à écrire                  |
+| Équipe          | Une personne dans deux entreprises passe de l'une à l'autre                                                            | à écrire                  |
+| Réglages        | Modifier les informations de l'entreprise et le logo                                                                   | à écrire                  |
+| Clients         | Liste vide, créer un client particulier ; créer une entreprise cliente                                                 | à écrire                  |
+| Clients         | Erreurs du formulaire nouveau client                                                                                   | à écrire                  |
+| Clients         | Rechercher par nom, ville, téléphone ; filtres d'échéance ; pagination                                                 | à écrire                  |
+| Clients         | Modifier un client ; ajouter un lieu                                                                                   | à écrire                  |
+| Clients         | Ajouter un appareil de chaque famille avec ses champs propres                                                          | à écrire                  |
+| Clients         | Ajouter une chaudière puis la remplacer par une PAC                                                                    | `customers.spec.ts`       |
+| Clients         | Retirer un appareil, il reste dans l'historique                                                                        | à écrire                  |
+| Clients         | Ajouter une photo ; refus d'un fichier trop gros ou d'un mauvais type                                                  | à écrire                  |
+| Clients         | Archiver un client (secrétariat oui, technicien non)                                                                   | à écrire                  |
+| Planning        | Planning vide, erreurs du formulaire, ajouter un passage, l'ouvrir, l'annuler                                          | `planning.spec.ts`        |
+| Planning        | Un technicien ne voit que son planning ; filtrer les agendas de l'équipe                                               | à écrire                  |
+| Réglages        | Changer la durée du ramonage sur ordinateur, nouveau passage prérempli, durée changée puis remise, type sur le passage | `visit-types.spec.ts`     |
+| Réglages        | Changer une durée sur mobile (feuille), technicien en lecture seule, échec d'enregistrement                            | à écrire                  |
+| Planning        | Plusieurs types sur mobile (feuille), type obligatoire, passage sans type hors ligne                                   | à écrire                  |
+| Hors ligne      | Créer un client sans réseau, recharger, rétablir le réseau, client sur le serveur                                      | à écrire                  |
+| Hors ligne      | Indicateur : modifications en attente, puis synchronisé                                                                | à écrire                  |
+| Hors ligne      | Modification refusée par le serveur, visible pour l'utilisateur                                                        | à écrire                  |
+| Hors ligne      | Démarrer l'app sans réseau avec la dernière session                                                                    | à écrire                  |
+| Hors ligne      | Deux appareils modifient le même client                                                                                | à écrire                  |
+| Admin           | Activer la double authentification : mot de passe, QR code, codes de secours                                           | à écrire                  |
+| Admin           | Se connecter avec le code ; avec un code de secours ; mauvais code                                                     | à écrire                  |
+| Admin           | Session admin de plus de 12 heures : code redemandé                                                                    | à écrire                  |
+| Admin           | Un client qui tape `/admin` arrive sur l'accueil                                                                       | à écrire                  |
+| Admin           | Vue d'ensemble ; comptes clients, filtres, recherche ; fiche et ses 3 onglets ; journal                                | à écrire                  |
+| Admin           | Le rôle Commercial ne voit que Commercial                                                                              | à écrire                  |
+| Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification                                        | à écrire                  |
+| Équipe Passalio | Changer un rôle, retirer un membre ; un super admin ne change pas son propre rôle                                      | à écrire                  |
+| Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination                                | à écrire                  |
+| Commercial      | Créer, modifier, supprimer une entreprise prospectée                                                                   | à écrire                  |
+| Commercial      | Changer l'étape, ajouter une note, historique                                                                          | à écrire                  |
+| Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                                                         | à écrire                  |
+| Commercial      | Prospection : qualifier depuis la carte, sur ordinateur et sur mobile                                                  | à écrire                  |
+| Site            | Liens de la landing, environnement staging ou production                                                               | `apps/web` (unitaire)     |
+| Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne                                          | à écrire                  |
 
 À ajouter avec leurs écrans : lecture de plaque (écran), attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.

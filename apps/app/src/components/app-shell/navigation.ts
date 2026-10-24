@@ -7,6 +7,7 @@ import {
   House,
   LayoutDashboard,
   Settings,
+  Timer,
   Users,
   UsersRound,
   type LucideIcon,
@@ -20,7 +21,9 @@ export type NavigationItem = {
     | "/"
     | "/equipe"
     | "/reglages"
+    | "/reglages/types-de-passage"
     | "/clients"
+    | "/planning"
     | "/admin"
     | "/admin/comptes"
     | "/admin/journal"
@@ -37,7 +40,12 @@ const text = fr.shell;
 
 export const MAIN_NAVIGATION: readonly NavigationItem[] = [
   { label: text.dashboard, icon: LayoutDashboard, to: "/", isExact: true },
-  { label: text.schedule, icon: CalendarDays, to: null },
+  {
+    label: text.schedule,
+    icon: CalendarDays,
+    to: "/planning",
+    activeFor: ["/planning", "/passages"],
+  },
   { label: text.customers, icon: Users, to: "/clients" },
   { label: text.documents, icon: FileCheck2, to: null },
   { label: text.reminders, icon: BellRing, to: null },
@@ -45,13 +53,19 @@ export const MAIN_NAVIGATION: readonly NavigationItem[] = [
 
 export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
   { label: text.team, icon: UsersRound, to: "/equipe" },
+  { label: text.visitTypes, icon: Timer, to: "/reglages/types-de-passage" },
   { label: text.company, icon: Building2, to: null },
   { label: text.subscription, icon: CreditCard, to: null },
 ];
 
 export const MOBILE_NAVIGATION: readonly NavigationItem[] = [
   { label: text.home, icon: House, to: "/", isExact: true },
-  { label: text.schedule, icon: CalendarDays, to: null },
+  {
+    label: text.schedule,
+    icon: CalendarDays,
+    to: "/planning",
+    activeFor: ["/planning", "/passages"],
+  },
   { label: text.customers, icon: Users, to: "/clients" },
   { label: text.settings, icon: Settings, to: "/reglages", activeFor: ["/reglages", "/equipe"] },
 ];

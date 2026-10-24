@@ -2,6 +2,7 @@ import { syncPushResult, type SyncPushBody } from "@passalio/shared";
 import * as z from "zod";
 import { apiRequest } from "../api-client";
 import { customerRecord, equipmentRecord, photoRecord, siteRecord } from "../db/local-records";
+import { documentRecord, interventionRecord } from "../db/planning-records";
 
 const pushResponse = z.object({ results: z.array(syncPushResult) });
 
@@ -11,6 +12,8 @@ const pullResponse = z.object({
     sites: z.array(siteRecord),
     equipments: z.array(equipmentRecord),
     photos: z.array(photoRecord),
+    interventions: z.array(interventionRecord).optional(),
+    documents: z.array(documentRecord).optional(),
   }),
   cursor: z.string(),
   hasMore: z.boolean(),

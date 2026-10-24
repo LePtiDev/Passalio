@@ -23,6 +23,7 @@ export const anIntervention = (
   startTime: "09:00",
   durationMinutes: 60,
   equipmentIds: [place.equipmentId],
+  visitTypes: ["chimney_sweeping"],
   announcedPriceCents: 8000,
   notes: "Sonner chez la voisine",
   status: "completed",

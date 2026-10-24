@@ -1,4 +1,5 @@
 import { reserveNumberBlockBody, syncPushBody } from "@passalio/shared";
+import { visitDurations } from "@passalio/trades";
 import {
   addEquipmentBody,
   addSiteBody,
@@ -62,6 +63,9 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     withJson("POST", "/api/document-number-blocks", reserveNumberBlockBody, {
       deviceId: crypto.randomUUID(),
     }),
+  "GET /api/visit-types": () => read("/api/visit-types"),
+  "PATCH /api/visit-types/durations": () =>
+    withJson("PATCH", "/api/visit-types/durations", visitDurations, {}),
   "GET /api/customers": () => read("/api/customers"),
   "POST /api/customers": () =>
     withJson("POST", "/api/customers", createCustomerBody, {

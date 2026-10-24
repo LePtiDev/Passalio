@@ -141,3 +141,87 @@ describe("updateIntervention", () => {
     },
   );
 });
+
+describe("updateIntervention with visit types", () => {
+  it("changes the visit types of the intervention", async () => {
+    expect(
+      await update(actorOf("secretary"), { visitTypes: ["stove_maintenance", "chimney_sweeping"] }),
+    ).toEqual({ isOk: true, value: undefined });
+    expect(stored()?.visitTypes).toEqual(["stove_maintenance", "chimney_sweeping"]);
+  });
+
+  it("keeps the visit types when the change does not mention them", async () => {
+    await update(actorOf("secretary"), { visitTypes: ["boiler_maintenance"] });
+    await update(actorOf("secretary"), { durationMinutes: 90 });
+    expect(stored()?.visitTypes).toEqual(["boiler_maintenance"]);
+    expect(stored()?.durationMinutes).toBe(90);
+  });
+
+  it("removes every visit type with an empty list", async () => {
+    await update(actorOf("secretary"), { visitTypes: ["boiler_maintenance"] });
+    await update(actorOf("secretary"), { visitTypes: [] });
+    expect(stored()?.visitTypes).toEqual([]);
+  });
+
+  it("keeps a single copy of a visit type listed twice", async () => {
+    await update(actorOf("secretary"), {
+      visitTypes: ["boiler_maintenance", "chimney_sweeping", "boiler_maintenance"],
+    });
+    expect(stored()?.visitTypes).toEqual(["boiler_maintenance", "chimney_sweeping"]);
+  });
+
+  it("refuses an unknown visit type and changes nothing", async () => {
+    expect(
+      await update(actorOf("secretary"), {
+        durationMinutes: 90,
+        visitTypes: ["chimney_sweeping", "plumbing"],
+      }),
+    ).toEqual({ isOk: false, error: "invalid_visit_type" });
+    expect(stored()?.visitTypes).toEqual([]);
+    expect(stored()?.durationMinutes).toBe(60);
+  });
+
+  it("lets a technician change the visit types of his own intervention", async () => {
+    expect((await update(actorOf("technician"), { visitTypes: ["chimney_sweeping"] })).isOk).toBe(
+      true,
+    );
+    expect(stored()?.visitTypes).toEqual(["chimney_sweeping"]);
+  });
+
+  it("forbids a technician to change the visit types of another technician's intervention", async () => {
+    await expect(
+      update(actorOf("technician", { userId: OTHER_TECHNICIAN_ID }), {
+        visitTypes: ["chimney_sweeping"],
+      }),
+    ).rejects.toThrow(ForbiddenError);
+    expect(stored()?.visitTypes).toEqual([]);
+  });
+
+  it("refuses to change the visit types during an impersonation", async () => {
+    await expect(
+      update(actorOf("owner", { isImpersonating: true }), { visitTypes: ["chimney_sweeping"] }),
+    ).rejects.toThrow(ForbiddenError);
+    expect(stored()?.visitTypes).toEqual([]);
+  });
+
+  it("refuses to change the visit types of a completed intervention", async () => {
+    await completeIntervention(dependencies)(actorOf("technician"), {
+      interventionId: INTERVENTION_ID,
+      completion: { completedOn: "2026-10-28" },
+    });
+    expect(await update(actorOf("secretary"), { visitTypes: ["chimney_sweeping"] })).toEqual({
+      isOk: false,
+      error: "intervention_closed",
+    });
+    expect(stored()?.visitTypes).toEqual([]);
+  });
+
+  it("does not change the visit types of an intervention of another organization", async () => {
+    expect(
+      await update(actorOf("owner", { organizationId: ORGANIZATION_B }), {
+        visitTypes: ["chimney_sweeping"],
+      }),
+    ).toEqual({ isOk: false, error: "intervention_not_found" });
+    expect(stored()?.visitTypes).toEqual([]);
+  });
+});
