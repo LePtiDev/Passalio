@@ -31,7 +31,7 @@ export const JournalSentence = ({ entry, isOrganizationShown }: JournalSentenceP
           {" "}
           <AccountLink
             accountId={entry.organization.id}
-            className="font-semibold text-[#0E7C5A] hover:text-[#0F2A44]"
+            className="inline-flex min-h-12 items-center font-semibold text-[#0E7C5A] hover:text-[#0F2A44] lg:inline lg:min-h-0"
           >
             {entry.organization.name}
           </AccountLink>

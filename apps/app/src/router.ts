@@ -1,4 +1,5 @@
 import { createRouter } from "@tanstack/react-router";
+import { parseSearchWithoutForeignReturn } from "./routes/parse-search";
 import {
   customerRoute,
   customersRoute,
@@ -95,7 +96,7 @@ const routeTree = rootRoute.addChildren([
   ]),
 ]);
 
-export const router = createRouter({ routeTree });
+export const router = createRouter({ routeTree, parseSearch: parseSearchWithoutForeignReturn });
 
 declare module "@tanstack/react-router" {
   interface Register {

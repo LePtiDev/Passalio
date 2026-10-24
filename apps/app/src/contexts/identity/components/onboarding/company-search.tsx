@@ -3,6 +3,8 @@ import { useCallback, useState, type ChangeEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { apiErrorOf } from "@/lib/api-client";
+import { errorCodeLine } from "@/lib/errors";
 import { cn } from "@/lib/utils";
 import { useCompanySearch } from "../../hooks/use-company-search";
 import type { CompanySummary } from "../../identity-api";
@@ -48,12 +50,18 @@ const SearchResults = ({
   query,
   onSelect,
 }: { readonly query: string } & Pick<CompanySearchProps, "onSelect">) => {
-  const { data, isFetching, isError } = useCompanySearch(query);
+  const { data, isFetching, isError, error } = useCompanySearch(query);
   if (query.trim().length < 3) {
     return null;
   }
   if (isError) {
-    return <p className="text-sm text-muted-foreground lg:text-[13px]">{text.searchUnavailable}</p>;
+    const codeLine = errorCodeLine(apiErrorOf(error));
+    return (
+      <p className="flex flex-col gap-0.5 text-sm text-muted-foreground lg:text-[13px]">
+        <span>{text.searchUnavailable}</span>
+        {codeLine === undefined ? null : <span className="tabular-nums">{codeLine}</span>}
+      </p>
+    );
   }
   if (data === undefined || isFetching) {
     return (

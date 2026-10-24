@@ -2,6 +2,7 @@ import { createRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar, type SignedInUser } from "@/components/app-shell/app-sidebar";
 import { MobileTabBar } from "@/components/app-shell/mobile-tab-bar";
 import { FormSkeleton } from "@/components/page-skeleton";
+import { MobileRejectionNotice } from "@/contexts/customers";
 import { LocalDatabaseProvider } from "@/lib/db/local-database-context";
 import { createRememberedCheck } from "@/lib/remembered-check";
 import { loadSignedInSession } from "@/lib/session";
@@ -34,6 +35,7 @@ const SignedInLayout = () => {
         <main className="flex min-h-dvh min-w-0 flex-1 flex-col pb-[84px] lg:pb-0">
           <Outlet />
         </main>
+        <MobileRejectionNotice />
         <MobileTabBar />
       </div>
     </LocalDatabaseProvider>

@@ -35,9 +35,9 @@ export const MemberRoleMenu = ({ name, role, isDisabled, onChange }: MemberRoleM
     [onChange, role],
   );
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
-        aria-label={identityFr.team.roleLabel(name)}
+        aria-label={identityFr.team.roleLabel(name, role)}
         disabled={isDisabled}
         className="flex h-12 items-center rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring lg:h-auto"
       >

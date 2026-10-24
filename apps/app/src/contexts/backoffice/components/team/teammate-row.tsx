@@ -45,9 +45,11 @@ type TeammateRowProps = {
 const Identity = ({
   teammate,
   subtitle,
+  labelPrefix,
 }: {
   readonly teammate: TeammateResponse;
   readonly subtitle: string;
+  readonly labelPrefix?: string;
 }) => (
   <span className="flex min-w-0 items-center gap-3 text-left">
     <InitialsAvatar
@@ -57,12 +59,18 @@ const Identity = ({
     />
     <span className={IDENTITY_TEXT_CLASS}>
       <span className="flex min-w-0 items-center gap-2">
-        <span className="truncate text-[15px] font-bold lg:text-[13px]">{teammate.name}</span>
-        <span className="lg:hidden">
+        <span className="truncate text-[15px] font-bold lg:text-[13px]">
+          {labelPrefix === undefined ? null : <span className="sr-only">{`${labelPrefix} `}</span>}
+          {teammate.name}
+        </span>
+        <span aria-hidden={labelPrefix === undefined ? undefined : true} className="lg:hidden">
           <RoleBadge role={teammate.role} />
         </span>
       </span>
-      <span className="truncate text-[13px] text-[#64748B]">
+      <span
+        aria-hidden={labelPrefix === undefined ? undefined : true}
+        className="truncate text-[13px] text-[#64748B]"
+      >
         <span className="lg:hidden">{subtitle}</span>
         <span className="hidden lg:inline">{teammate.email}</span>
       </span>
@@ -91,11 +99,12 @@ export const TeammateRow = ({
             <Identity teammate={teammate} subtitle={mobileSubtitle} />
           </span>
           <DropdownMenu>
-            <DropdownMenuTrigger
-              aria-label={teamFr.memberActions(teammate.name)}
-              className="col-span-2 -mx-2 flex min-h-12 min-w-0 rounded-lg px-2 outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
-            >
-              <Identity teammate={teammate} subtitle={mobileSubtitle} />
+            <DropdownMenuTrigger className="col-span-2 -mx-2 flex min-h-12 min-w-0 rounded-lg px-2 outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden">
+              <Identity
+                teammate={teammate}
+                subtitle={mobileSubtitle}
+                labelPrefix={teamFr.memberActionsPrefix}
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="min-w-56">
               <DropdownMenuItem className={MENU_ITEM_CLASS} onSelect={changeRole}>

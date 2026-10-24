@@ -17,7 +17,7 @@ const STAFF_TONES: readonly AvatarTone[] = ["mint", "slate", "amber"];
 const MAX_AVATARS = 3;
 
 const StaffAvatars = ({ account }: { readonly account: AccountSummaryResponse }) => (
-  <span className="hidden items-center gap-2 lg:flex">
+  <span aria-hidden="true" className="hidden items-center gap-2 lg:flex">
     <span className="flex">
       {account.staff.slice(0, MAX_AVATARS).map((person, index) => (
         <span
@@ -49,7 +49,6 @@ export const AccountRow = ({
     <li className="border-b border-[#EEF2F6] last:border-b-0">
       <AccountLink
         accountId={account.id}
-        ariaLabel={backofficeFr.accounts.open(account.name)}
         className={cn(
           ACCOUNT_GRID_CLASS,
           "min-h-[72px] px-4 py-2.5 hover:bg-[#F7F9FB] lg:min-h-[52px]",
@@ -61,9 +60,10 @@ export const AccountRow = ({
           </span>
           <span className="flex min-w-0 flex-col gap-0.5">
             <span className="line-clamp-2 text-[15px] font-semibold lg:truncate lg:text-[13px]">
+              <span className="sr-only">{`${backofficeFr.accounts.openPrefix} `}</span>
               {account.name}
             </span>
-            <span className="truncate text-[13px] text-[#64748B] lg:text-xs">
+            <span aria-hidden="true" className="truncate text-[13px] text-[#64748B] lg:text-xs">
               <span className="lg:hidden">
                 {account.isInTrial ? backofficeFr.status.trial : backofficeFr.status.trialEnded} ·{" "}
                 {backofficeFr.usage.staff(account.staffCount)}
@@ -72,15 +72,15 @@ export const AccountRow = ({
             </span>
           </span>
         </span>
-        <span className="hidden lg:block">
+        <span aria-hidden="true" className="hidden lg:block">
           <TrialStatus isInTrial={account.isInTrial} trialEndsAt={account.trialEndsAt} />
         </span>
         <StaffAvatars account={account} />
-        <span className="flex items-center justify-end gap-3 lg:justify-start">
+        <span aria-hidden="true" className="flex items-center justify-end gap-3 lg:justify-start">
           <Sparkline months={account.monthlyActivity} isDown={account.trend.isDropping} />
           <TrendBadge trend={account.trend} className="min-w-14 text-right lg:text-left" />
         </span>
-        <span className="hidden min-w-0 flex-col lg:flex">
+        <span aria-hidden="true" className="hidden min-w-0 flex-col lg:flex">
           <span className="text-[13px]">{lastSeenLabel(account.lastActive?.day ?? null, now)}</span>
           <span className="truncate text-xs text-[#64748B]">{account.lastActive?.name ?? ""}</span>
         </span>

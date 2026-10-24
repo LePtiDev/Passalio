@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { departmentName } from "../../department-names";
 import { salesFr } from "../../fr";
 import { MUTED_CLASS } from "../sales-styles";
+import { ScreenReaderText } from "../screen-reader-text";
 
 const text = salesFr.prospection;
 
@@ -25,7 +26,6 @@ const LeadRow = ({ company, isSelected, onSelect }: LeadRowProps) => {
       <button
         type="button"
         aria-pressed={isSelected}
-        aria-label={text.select(company.name)}
         onClick={select}
         className={cn(
           "flex w-full items-center gap-3 px-3.5 py-2.5 text-left",
@@ -36,12 +36,17 @@ const LeadRow = ({ company, isSelected, onSelect }: LeadRowProps) => {
       >
         <InitialsAvatar name={company.name} tone="amber" size="small" />
         <span className="flex min-w-0 flex-1 flex-col gap-px">
-          <span className="truncate font-semibold">{company.name}</span>
-          <span className="truncate text-[#64748B]">
+          <span className="truncate font-semibold">
+            <ScreenReaderText>{text.selectBefore}</ScreenReaderText>
+            {company.name}
+            <ScreenReaderText>{text.selectAfter}</ScreenReaderText>
+          </span>
+          <span aria-hidden="true" className="truncate text-[#64748B]">
             {company.city ?? departmentName(company.department)}
           </span>
         </span>
         <span
+          aria-hidden="true"
           className={cn(
             "whitespace-nowrap tabular-nums",
             company.phone === null ? MUTED_CLASS : "text-[#475569]",

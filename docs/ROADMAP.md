@@ -6,56 +6,59 @@ Dernière mise à jour : 2026-10-24.
 
 ## Fait
 
-| Quoi                                                                                                                                                                          | Où                               |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                                                                                                 | `CLAUDE.md`, `docs/`             |
-| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`                                                                                    | PR #1                            |
-| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                                                                                       | PR #2                            |
-| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                                                                                       | hors dépôt                       |
-| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                                                                                        | `docs/competitor-parity.md`      |
-| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                                                                                         | `docs/competitor-parity.md`      |
-| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste                                                                                    | PR #5                            |
-| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                                                                                          | `docs/regulatory/`               |
-| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                                                                                           | `CLAUDE.md`, skill `new-screen`  |
-| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)                                                                                     | `docs/adr/`                      |
-| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base                                                                                | PR #13                           |
-| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe                                                                               | PR #14                           |
-| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas                                                                                | PR #15                           |
-| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com                                                                                    | PR #16                           |
-| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation                                                                       | PR #18                           |
-| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation                                                                        | PR #19                           |
-| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau                                                                           | PR #20                           |
-| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié                                                                                     | PR #17                           |
-| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                                                                                          | `apps/web`                       |
-| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro                                                                            | PR #21                           |
-| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                                                                                           | ADR 0014, `docs/company.md`      |
-| Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                                                                                      | PR #24                           |
-| Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin`                                                                      | ADR 0015                         |
-| Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux                                                                            | ADR 0015                         |
-| Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification                                             | ADR 0015                         |
-| E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                                                            | ADR 0016                         |
-| Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                                                                    | `auth-routes.ts`                 |
-| Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                                                                | `lib/session.ts`                 |
-| Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage                                                       | ADR 0017                         |
-| Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »                                               | `contexts/sales` (app)           |
-| Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                                                                     | PR #36                           |
-| Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche                                                          | `components/prospection` (app)   |
-| Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement                                                      | `components/pagination.tsx`      |
-| Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                                                      | ADR 0018                         |
-| Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                                                             | ADR 0019                         |
-| Serveur MCP : page d'autorisation jamais servie depuis un ancien cache, nom et icône Passalio dans Claude, `favicon.ico`                                                      | `service-worker-routes.ts`       |
-| Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug`                                      | ADR 0020, `docs/TESTING.md`      |
-| Filtres en cascade avec recherche (sous-menus sur ordinateur, panneau du bas sur mobile), coche à droite dans tous les menus                                                  | `components/list` (app)          |
-| Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                                                              | `CLAUDE.md`                      |
-| Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois                                       | ADR 0021                         |
-| Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
-| Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                                                                   | `contexts/scheduling` (app)      |
-| Types de passage : durée par défaut par métier dans Réglages, type et durée modifiable sur le nouveau passage                                                                 | `contexts/scheduling`            |
-| Prestations : liste par entreprise (durée, prix, document remis), plusieurs prestations et plusieurs techniciens par passage, prix annoncé prérempli                          | ADR 0024                         |
-| Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)     |
-| Lecture de plaque, tests : réduction de la photo, bandeau, marques des champs, listes déroulantes, remplissage du formulaire, parcours illisible, PAC, panne, hors ligne      | `docs/TESTING.md`                |
-| Lecture de plaque, note d'exploitation de l'IA : fonctionnement, coût estimé, choix du modèle, activation, incidents                                                          | `docs/ai-plate-reading.md`       |
-| Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx` |
+| Quoi                                                                                                                                                                          | Où                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Décisions, architecture, sécurité, 10 ADR, skills Claude Code                                                                                                                 | `CLAUDE.md`, `docs/`                                |
+| Monorepo : Astro, React PWA, API Hono sur Workers, paquets `shared`, `db`, `trades`, `pdf`                                                                                    | PR #1                                               |
+| Logger JSON avec `trace_id`, rôles et `assertCan`, erreurs 403/500, scripts `release:*`                                                                                       | PR #2                                               |
+| Cloudflare : D1 et R2 staging et production en UE, jeton de déploiement                                                                                                       | hors dépôt                                          |
+| Parité concurrents, essai de Ramonia (attestations, facture, captures)                                                                                                        | `docs/competitor-parity.md`                         |
+| Parité concurrents, essai de Ramio (certificat, facture, équipe, SMS)                                                                                                         | `docs/competitor-parity.md`                         |
+| Hook de session cloud : Node 24, pnpm, dépendances, pour développer et déployer sans poste                                                                                    | PR #5                                               |
+| Mentions obligatoires par document et par métier, vérifiées sur les textes officiels                                                                                          | `docs/regulatory/`                                  |
+| Règle : maquette validée par Quentin avant de coder un écran, captures avant fusion                                                                                           | `CLAUDE.md`, skill `new-screen`                     |
+| Maquette des écrans comptes validée, ADR mot de passe (0012) et espace particulier (0013)                                                                                     | `docs/adr/`                                         |
+| Connexion email et mot de passe, inscription, mot de passe oublié, limitation de débit en base                                                                                | PR #13                                              |
+| Onboarding : entreprise (recherche Sirene), métiers, documents (logo, couleur, numéros), équipe                                                                               | PR #14                                              |
+| Barre latérale, navigation mobile, Équipe pleine largeur, invitations en attente, Premiers pas                                                                                | PR #15                                              |
+| Application et API servies par un Worker, sur app.staging.passalio.com et app.passalio.com                                                                                    | PR #16                                              |
+| Conditions générales, accord de sous-traitance, confidentialité, mentions légales, preuve d'acceptation                                                                       | PR #18                                              |
+| Clients, lieux, appareils, photos : tables, API, remplacement d'appareil, archivage, tests d'isolation                                                                        | PR #19                                              |
+| Hors ligne : base Dexie, file de modifications, `/sync/push` et `/sync/pull`, démarrage sans réseau                                                                           | PR #20                                              |
+| Anti-robot Cloudflare Turnstile sur l'inscription, la connexion et le mot de passe oublié                                                                                     | PR #17                                              |
+| Landing page passalio.com (première version) selon la maquette validée le 2026-10-23                                                                                          | `apps/web`                                          |
+| Écrans clients : liste, fiche, nouveau client, lieu, appareil, remplacement, indicateur de synchro                                                                            | PR #21                                              |
+| Statut juridique : SAS à deux associés 50/50, TVA, comptabilité, étapes de création                                                                                           | ADR 0014, `docs/company.md`                         |
+| Champ de recherche partagé (`components/search-field.tsx`), 32 px de haut sur ordinateur                                                                                      | PR #24                                              |
+| Espace admin, socle : rôles plateforme, commande `platform:grant`, double authentification, `/api/admin`                                                                      | ADR 0015                                            |
+| Espace admin, données : vue d'ensemble, comptes clients, personnel, utilisation par mois, journaux                                                                            | ADR 0015                                            |
+| Espace admin, écrans : vue d'ensemble, comptes clients, fiche (personnel, utilisation, journal), journal, double authentification                                             | ADR 0015                                            |
+| E-mails par Resend : lien de connexion, mot de passe oublié, invitation, selon la maquette validée                                                                            | ADR 0016                                            |
+| Mise à jour automatique de l'app, admin sans entreprise envoyé vers l'admin, motif des refus dans les logs                                                                    | `auth-routes.ts`                                    |
+| Gardes de route : pas de connexion ni d'inscription une fois connecté, admin plateforme toujours vers `/admin`                                                                | `lib/session.ts`                                    |
+| Prospection, données : rôle `sales`, entreprises, contacts, étapes, historique, carte, import des fiches avec géocodage                                                       | ADR 0017                                            |
+| Commercial, écrans : entreprises, contacts, fiches, formulaires, historique, rôle `sales` limité à Commercial, « Outil actuel »                                               | `contexts/sales` (app)                              |
+| Changement d'onglet instantané : session vérifiée une fois, puis revérifiée en arrière-plan chaque minute                                                                     | PR #36                                              |
+| Commercial, Prospection : carte IGN (Leaflet), qualifier depuis la carte, mini-carte et tuile « Carte » sur la fiche                                                          | `components/prospection` (app)                      |
+| Pagination de toutes les listes : autant de lignes que l'écran en affiche, pages précédente et suivante, sans défilement                                                      | `components/pagination.tsx`                         |
+| Équipe Passalio : inviter un membre (Super admin, Admin, Commercial), changer son rôle, le retirer, rejoindre par e-mail                                                      | ADR 0018                                            |
+| Serveur MCP admin : OAuth, écran d'autorisation, outils lecture et prospection pour Claude, journal, `mcp:revoke`                                                             | ADR 0019                                            |
+| Serveur MCP : page d'autorisation jamais servie depuis un ancien cache, nom et icône Passalio dans Claude, `favicon.ico`                                                      | `service-worker-routes.ts`                          |
+| Stratégie de tests : règles de Quentin, garde-fou `test:guard`, lint des tests, agents `test-writer` et `test-reviewer`, skill `fix-bug`                                      | ADR 0020, `docs/TESTING.md`                         |
+| Filtres en cascade avec recherche (sous-menus sur ordinateur, panneau du bas sur mobile), coche à droite dans tous les menus                                                  | `components/list` (app)                             |
+| Règle d'interface : astérisque rouge sur les champs obligatoires, plus de mention « facultatif »                                                                              | `CLAUDE.md`                                         |
+| Passages et certificats, données : tables, synchronisation, numérotation par blocs, certificat de ramonage immuable, échéance à 12 mois                                       | ADR 0021                                            |
+| Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                                            |
+| Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                                                                   | `contexts/scheduling` (app)                         |
+| Types de passage : durée par défaut par métier dans Réglages, type et durée modifiable sur le nouveau passage                                                                 | `contexts/scheduling`                               |
+| Prestations : liste par entreprise (durée, prix, document remis), plusieurs prestations et plusieurs techniciens par passage, prix annoncé prérempli                          | ADR 0025                                            |
+| Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)                        |
+| Lecture de plaque, tests : réduction de la photo, bandeau, marques des champs, listes déroulantes, remplissage du formulaire, parcours illisible, PAC, panne, hors ligne      | `docs/TESTING.md`                                   |
+| Lecture de plaque, note d'exploitation de l'IA : fonctionnement, coût estimé, choix du modèle, activation, incidents                                                          | `docs/ai-plate-reading.md`                          |
+| Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx`                    |
+| Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
+| ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
+| Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                      | ADR 0024                                            |
 
 ## Hors code (Quentin)
 
@@ -109,7 +112,7 @@ Dernière mise à jour : 2026-10-24.
 - [ ] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé, historique sur la fiche client
 - [x] Types de passage : durée par défaut par métier (Réglages › Types de passage), type et durée modifiable sur le nouveau passage (maquette validée le 2026-10-23)
 - [ ] Planning : modifier un passage (date, heure, techniciens, prestations, durée), le marquer terminé sans certificat
-- [x] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable ; plusieurs prestations et plusieurs techniciens par passage (maquette validée le 2026-10-24, ADR 0024)
+- [x] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable ; plusieurs prestations et plusieurs techniciens par passage (maquette validée le 2026-10-24, ADR 0025)
 - [ ] Chantiers sur plusieurs jours : un jour par passage, techniciens différents par jour, bloc « Chantier · jour 1 sur 3 » au planning, fiche chantier (maquette validée le 2026-10-24)
 - [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
 - [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
@@ -133,6 +136,12 @@ Dernière mise à jour : 2026-10-24.
 - [x] Serveur MCP admin : Claude lit l'admin et écrit dans la prospection, écran d'autorisation selon la maquette validée le 2026-10-23 (ADR 0019)
 - [x] Serveur MCP : KV `passalio-oauth-staging` et `passalio-oauth-production`, `MCP_ENABLED` activé en staging et en production
 - [ ] Serveur MCP : outil d'import en lot de fiches prospects (100 lignes, simulation d'abord)
+- [x] Prospection, appels, données et API : appels, rappels, qualification, Ma journée, séries (ADR 0024)
+- [ ] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
+- [ ] Prospection, configuration de la boîte mail dans le profil (admin pour un autre membre), envoi SMTP, rappels par e-mail
+- [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
+- [ ] Prospection, campagnes : envoi programmé, montée progressive de 5 à 25 par jour, créneau 8 h à 11 h
+- [ ] Prospection, statistiques : réponses, rendez-vous, taux de décroché par heure
 - [ ] Espace admin : créer un compte client, créer un accès, se connecter à la place (lecture seule)
 - [ ] Espace admin : abonnement et mois offerts (avec Stripe Billing)
 - [ ] Sauvegardes externes chiffrées (ADR 0008)
@@ -141,6 +150,7 @@ Dernière mise à jour : 2026-10-24.
 ## Tests (ADR 0020, inventaire dans `docs/TESTING.md`)
 
 - [x] Règles, garde-fou `test:guard`, lint des tests, agents, skill `fix-bug`
+- [x] Tests obligatoires (ADR 0023) : aucun code de production sans test, sauf `Tests-Not-Needed`
 - [ ] Synchronisation : rejouer une modification ou un retrait après archivage, doublons dans un même lot (comportement à décider)
 - [x] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
 - [ ] Matrices API, suite : réponses conformes aux schémas zod et `trace_id` sur les succès, cas 400 par route, isolation vue par chaque rôle
@@ -154,10 +164,16 @@ Dernière mise à jour : 2026-10-24.
 - [ ] Vérifier le type d'un fichier envoyé sur son contenu, pas seulement sur l'en-tête déclaré
 - [ ] À décider : limite des codes de double authentification par compte (aujourd'hui par adresse IP) ; `retour` qui accepte `/\…`
 - [x] Synchronisation : tests de propriétés (fast-check), envoi rejoué, curseur, refus, photos
-- [ ] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest en mode navigateur)
-- [ ] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
-- [ ] Parcours Clients et hors ligne réel
-- [ ] Parcours Admin, Équipe Passalio, Commercial
+- [x] Composants : états vide, chargement, erreur, succès de chaque écran (Vitest, happy-dom)
+- [x] Parcours Comptes, Équipe, Réglages (mobile et ordinateur, accessibilité)
+- [x] Parcours Clients et hors ligne réel
+- [x] Parcours Admin, Équipe Passalio, Commercial
+- [ ] Parcours restants : démarrer sans réseau avec la dernière session, nouvelle version sans perte des modifications hors ligne
+- [ ] Une personne retirée d'une entreprise garde une session qui pointe encore sur cette entreprise (comportement à décider)
+- [ ] Listes paginées à la hauteur de l'écran : si la hauteur change pendant le chargement, la requête repart de zéro avec ses nouvelles tentatives
+- [ ] Erreurs définitives (403, 404) : ne pas refaire 3 tentatives avant d'afficher l'erreur
+- [ ] Modifications refusées : dire laquelle a été refusée et pourquoi, pas seulement combien
+- [ ] Photos d'appareil : réduire la photo sur le téléphone avant l'envoi plutôt que refuser au-delà de 5 Mo
 - [ ] Régression visuelle : captures de référence de chaque état
 - [ ] Couverture avec seuils, tests de mutation, `test:all` obligatoire dans `release:*`, tests de fumée après déploiement
 

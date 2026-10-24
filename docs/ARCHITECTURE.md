@@ -30,24 +30,27 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 2. Glossaire métier
 
-| Terme                 | Code              | Définition                                                                                   |
-| --------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
-| Entreprise            | `Organization`    | Le client payant (l'artisan et son équipe)                                                   |
-| Membre                | `Member`          | Utilisateur rattaché à une entreprise avec un rôle                                           |
-| Client                | `Customer`        | Particulier ou entreprise chez qui l'artisan intervient                                      |
-| Lieu                  | `Site`            | Adresse d'intervention d'un client                                                           |
-| Équipement            | `Equipment`       | Appareil ou conduit entretenu                                                                |
-| Métier                | `Trade`           | Configuration d'une activité (ramonage, PAC…)                                                |
-| Intervention          | `Intervention`    | Passage planifié ou réalisé                                                                  |
-| Tournée               | `Route`           | Suite ordonnée des interventions d'un technicien sur une journée                             |
-| Attestation           | `Document`        | Document réglementaire signé, immuable                                                       |
-| Échéance              | `DueDate`         | Date du prochain entretien obligatoire                                                       |
-| Relance               | `Reminder`        | Message envoyé au client à l'approche de l'échéance                                          |
-| Espace particulier    | `CustomerAccount` | Compte Passalio d'un particulier, commun à tous ses prestataires (ADR 0013)                  |
-| Lien client           | `CustomerLink`    | Lien consenti entre un espace particulier et une fiche client                                |
-| Entreprise prospectée | `ProspectCompany` | Ramoneur que l'équipe Passalio démarche (contexte `sales`)                                   |
-| Contact               | `ProspectContact` | Personne d'une entreprise prospectée                                                         |
-| Étape                 | `ProspectStage`   | Où en est la prospection : à qualifier, qualifiée, intéressée, démo, cliente, pas intéressée |
+| Terme                 | Code               | Définition                                                                                   |
+| --------------------- | ------------------ | -------------------------------------------------------------------------------------------- |
+| Entreprise            | `Organization`     | Le client payant (l'artisan et son équipe)                                                   |
+| Membre                | `Member`           | Utilisateur rattaché à une entreprise avec un rôle                                           |
+| Client                | `Customer`         | Particulier ou entreprise chez qui l'artisan intervient                                      |
+| Lieu                  | `Site`             | Adresse d'intervention d'un client                                                           |
+| Équipement            | `Equipment`        | Appareil ou conduit entretenu                                                                |
+| Métier                | `Trade`            | Configuration d'une activité (ramonage, PAC…)                                                |
+| Intervention          | `Intervention`     | Passage planifié ou réalisé                                                                  |
+| Tournée               | `Route`            | Suite ordonnée des interventions d'un technicien sur une journée                             |
+| Attestation           | `Document`         | Document réglementaire signé, immuable                                                       |
+| Échéance              | `DueDate`          | Date du prochain entretien obligatoire                                                       |
+| Relance               | `Reminder`         | Message envoyé au client à l'approche de l'échéance                                          |
+| Espace particulier    | `CustomerAccount`  | Compte Passalio d'un particulier, commun à tous ses prestataires (ADR 0013)                  |
+| Lien client           | `CustomerLink`     | Lien consenti entre un espace particulier et une fiche client                                |
+| Entreprise prospectée | `ProspectCompany`  | Ramoneur que l'équipe Passalio démarche (contexte `sales`)                                   |
+| Contact               | `ProspectContact`  | Personne d'une entreprise prospectée                                                         |
+| Étape                 | `ProspectStage`    | Où en est la prospection : à qualifier, qualifiée, intéressée, démo, cliente, pas intéressée |
+| Appel                 | `ProspectCall`     | Appel passé à une entreprise prospectée : résultat, prochaine action, notes                  |
+| Suivi                 | `ProspectFollowUp` | Dernier appel et qualification d'une entreprise prospectée                                   |
+| Rappel                | `ProspectTask`     | Rappel ou démo prévu à une date pour une personne de l'équipe, avec sa notification          |
 
 ## 3. Contextes métier (DDD léger)
 
@@ -103,7 +106,7 @@ packages/
 ├── trades/                   # Un dossier par métier
 ├── pdf/                      # Rendu des attestations
 ├── emails/                   # Gabarits d'e-mail HTML et texte (ADR 0016)
-└── test-guard/               # pnpm test:guard : aucun test existant changé sans accord (ADR 0020)
+└── test-guard/               # pnpm test:guard : aucun test existant changé sans accord, aucun code sans test (ADR 0020, 0023)
 docs/
 ├── ARCHITECTURE.md
 ├── SECURITY.md
@@ -183,7 +186,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Permissions : `schedule:write` (propriétaire, administrateur, secrétariat) pour tous les passages, `interventions:write-own` pour ceux du technicien lui-même ; `documents:sign` pour réserver des numéros et signer (jamais pendant une impersonation, jamais le secrétariat) ; `documents:read-all` ou `documents:read-own` (le technicien ne reçoit que ses certificats).
 - Certificat de ramonage : schéma `chimneySweepingCertificate` (version 1) et règles `checkCertificate` dans `packages/trades/src/chimney-sweeping/`. Bloquent la signature : au moins un conduit identifié, vacuité sur toute la longueur ou ramonage partiel avec la partie non ramonée, aucune vacuité pour un appareil gaz étanche (conduit concentrique), conseils d'utilisation pour un appareil à combustible solide hors chaudière, capital social d'une SARL ou société par actions, signature du client ou « client absent ». À la signature, l'appareil reçoit `last_sweeping_on` et `next_due_date` (+12 mois).
 - Route : `POST /api/document-number-blocks` (`{ deviceId }` → `{ id, deviceId, numberPrefix, firstNumber, lastNumber }`).
-- Prestations (ADR 0024) : table `services` (nom, durée de 15 min à 8 h ou de 1 à 10 jours, prix TTC ou vide « sur devis », document remis, métier facultatif, `archived_at`). Routes : `GET /api/services` (`schedule:read`) → `{ services }` ; `POST /api/services`, `PATCH /api/services/:serviceId`, `POST /api/services/:serviceId/archive` (`organization:update`). Un passage garde la copie des prestations choisies ; modifier ou retirer une prestation ne change pas les passages déjà prévus. Un technicien gère un passage dès qu'il fait partie de ses techniciens.
+- Prestations (ADR 0025) : table `services` (nom, durée de 15 min à 8 h ou de 1 à 10 jours, prix TTC ou vide « sur devis », document remis, métier facultatif, `archived_at`). Routes : `GET /api/services` (`schedule:read`) → `{ services }` ; `POST /api/services`, `PATCH /api/services/:serviceId`, `POST /api/services/:serviceId/archive` (`organization:update`). Un passage garde la copie des prestations choisies ; modifier ou retirer une prestation ne change pas les passages déjà prévus. Un technicien gère un passage dès qu'il fait partie de ses techniciens.
 - Écrans (terrain, hors ligne, `apps/app/src/contexts/scheduling/`) : `/planning?jour=&vue=jour|semaine&agendas=&passage=`, `/planning/nouveau?jour=&client=&technicien=`, `/passages/:interventionId`, `/reglages/prestations` (liste des prestations, modifiable par propriétaire et administrateur). Ils lisent et écrivent dans Dexie (tables locales `interventions`, `documents`, `members`, `services`). Le technicien ne voit que son planning ; avec `schedule:write`, on voit l'équipe, on choisit les agendas affichés (séparés par « . » dans l'URL) et on crée des passages. Une couleur par technicien, la personne connectée en premier et en bleu. Les passages qui se chevauchent sont placés côte à côte ; au-delà de 2 (semaine), 3 (mobile) ou 4 (jour), un « +N » ouvre la vue jour. Heure actuelle : trait rouge horizontal. Nouveau passage : « Prestations » (plusieurs choix, présélectionnées d'après les appareils cochés) remplissent « Durée » (somme, plafonnée à 8 h) et « Prix annoncé » (somme des prix connus), modifiables pour ce passage ; sans prestation connue sur le téléphone, 1 h. « Techniciens » : un ou plusieurs, le premier est le technicien principal ; le passage apparaît dans l'agenda de chacun.
 
 ### Prospection (contexte `sales`, ADR 0017)
@@ -191,6 +194,7 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Tables : `prospect_companies` (entreprise, adresse, département, coordonnées, outil actuel `current_tool`, étape, suivi par `owner_user_id`), `prospect_contacts` (un seul contact principal par entreprise), `prospect_events` (notes et changements d'étape, jamais modifiés). Pas d'`organization_id` : ce sont les données de Passalio.
 - Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `admin`, `sales`).
 - Routes sous `/api/admin/prospects` : `GET /filters` (départements, personnes de l'équipe), `GET /map?department=&stage=`, `GET` et `POST /companies` (`stage`, `department`, `owner`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /companies/:companyId`, `POST /companies/:companyId/stage`, `/notes`, `/contacts`, `GET /contacts` (`filter=all|leaders|no_phone`, `department`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /contacts/:contactId`. Réponses décrites par `packages/shared/src/prospect-responses.ts`.
+- Appels et rappels (ADR 0024) : tables `prospect_calls` (appels, jamais modifiés), `prospect_follow_ups` (dernier appel et qualification, une ligne par entreprise), `prospect_tasks` (rappels et démos, notification calculée en heure de Paris). Routes `POST /companies/:companyId/calls`, `PATCH /companies/:companyId/qualification`, `GET /companies/:companyId/follow-up`, `GET /my-day`, `GET /call-series?target=never_called|not_reached&department=&cursor=`, `PATCH /tasks/:taskId`. Réponses décrites par `packages/shared/src/prospect-call-responses.ts`.
 - Écrans (espace admin, `apps/app/src/contexts/sales/`) : `/admin/entreprises?etape=&departement=&suivi=&recherche=`, `/admin/entreprises/:companyId`, `/admin/contacts?onglet=&departement=&recherche=`, `/admin/contacts/:contactId`. Onglets par étape, filtres actifs à gauche, recherche et menu « Filtres » à droite. Le menu « Filtres » est en cascade : sur ordinateur, un sous-menu par filtre, ouvert à gauche avec sa flèche vers la gauche ; sur mobile, un panneau du bas à deux niveaux. Au-delà de 7 choix, une recherche filtre la liste (taper « 94 » ou « marne »). Dans tous les menus et listes déroulantes, la coche du choix actif est à droite. Le rôle `sales`, sans `platform:read`, ne voit que Commercial : les pages Plateforme le renvoient vers `/admin/entreprises`.
 - Prospection (`/admin/prospection?etape=&departement=&recherche=&entreprise=`) : onglets À qualifier, Qualifiées, Pas intéressées ; liste à gauche, carte Leaflet (dépendance `leaflet`) sur le fond Plan IGN v2 servi par `data.geopf.fr` (WMTS, sans clé, attribution « © IGN »), points colorés par étape, fiche flottante pour qualifier sans quitter la carte. Sur mobile, carte plein écran, recherche flottante et feuille en bas. La fiche entreprise montre une mini-carte et un lien « Voir sur la carte » (tuile « Carte » sur mobile).
 - Import : `pnpm prospects:import --env <local|staging|production> --file <csv>` (géocodage IGN, relançable sans perdre étapes et notes).
@@ -258,6 +262,8 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `prospect_companies`     | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)`                                          |
 | `prospect_contacts`      | `(company_id)`, `(search_name)`                                                                                                                                          |
 | `prospect_events`        | `(company_id, created_at)`, `(contact_id, created_at)`                                                                                                                   |
+| `prospect_calls`         | `(company_id, called_at)`, `(author_user_id, called_at)` pour les appels du jour, `(contact_id)`                                                                         |
+| `prospect_tasks`         | `(owner_user_id, status, due_at)` pour Ma journée, `(company_id, status)`, `(contact_id)`                                                                                |
 | `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                 |
 | `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                |
 

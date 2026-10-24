@@ -8,8 +8,8 @@ import { backofficeFr } from "../../fr";
 const text = backofficeFr.accounts;
 
 const BADGE_CLASS: Readonly<Record<AccountFilter, string>> = {
-  all: "text-[#64748B] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
-  trial: "text-[#64748B] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
+  all: "text-[#475569] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
+  trial: "text-[#475569] lg:bg-[#EEF3F8] lg:text-[#0F2A44]",
   dropping: "bg-[#FEF3E2] text-[#B45309]",
 };
 
@@ -28,7 +28,7 @@ const FilterButton = ({ id, isActive, count, onSelect }: FilterButtonProps) => {
       aria-pressed={isActive}
       onClick={select}
       className={cn(
-        "flex h-10 items-center justify-center gap-1.5 rounded-[9px] text-sm whitespace-nowrap lg:-mb-px lg:h-auto lg:rounded-none lg:border-b-2 lg:py-2.5 lg:text-[13px]",
+        "flex h-12 items-center justify-center gap-1.5 rounded-[9px] text-sm whitespace-nowrap lg:-mb-px lg:h-auto lg:rounded-none lg:border-b-2 lg:py-2.5 lg:text-[13px]",
         isActive
           ? "bg-white font-semibold text-[#0F2A44] shadow-[0_1px_2px_rgba(15,42,68,0.1)] lg:border-[#0F2A44] lg:bg-transparent lg:shadow-none"
           : "font-medium text-[#475569] lg:border-transparent lg:text-[#64748B]",

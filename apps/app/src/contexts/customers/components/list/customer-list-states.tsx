@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { Plus, Upload, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { CustomerFilter } from "../../hooks/use-customer-list";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fr } from "@/fr";
 import type { ApiError } from "@/lib/api-client";
@@ -110,6 +111,24 @@ export const CustomerSearchEmpty = ({
         {text.clearSearch}
       </Button>
     </span>
+  </div>
+);
+
+export const CustomerFilterEmpty = ({
+  filter,
+  onShowAll,
+}: {
+  readonly filter: Exclude<CustomerFilter, "all">;
+  readonly onShowAll: () => void;
+}) => (
+  <div className={DASHED_CARD_CLASS}>
+    <span className="flex flex-col gap-1">
+      <h2 className="text-[17px] font-bold lg:text-[15px]">{text.filterEmptyTitle[filter]}</h2>
+      <p className="text-[15px] text-[#475569] lg:text-[13px]">{text.filterEmptyText}</p>
+    </span>
+    <Button variant="outline" className={SECONDARY_BUTTON_CLASS} onClick={onShowAll}>
+      {text.showAll}
+    </Button>
   </div>
 );
 

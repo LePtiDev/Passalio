@@ -66,7 +66,9 @@ Avant toute tâche, lire `docs/ARCHITECTURE.md`. Pour tout ce qui touche aux don
 
 ## Tests
 
-Stratégie dans l'ADR 0020, inventaire dans `docs/TESTING.md`.
+Stratégie dans les ADR 0020 et 0023, inventaire dans `docs/TESTING.md`.
+
+- Écrire des tests est obligatoire : tout comportement ajouté ou changé arrive avec ses tests dans la même PR (ADR 0023). Exception (documentation, configuration, formatage, refactorisation déjà couverte) : ligne `Tests-Not-Needed: <raison>` dans le commit. `pnpm test:guard` refuse sinon.
 
 - Un test est une exigence. Ne jamais modifier ni supprimer un test existant (ni une capture de référence) sans l'accord écrit de Quentin. Seule exception : l'exigence qu'il vérifie a changé à la demande de Quentin.
 - Dans les deux cas, le commit porte la ligne `Test-Change-Approved: <lien vers le message de Quentin>`. `pnpm test:guard` refuse sinon.
@@ -99,6 +101,7 @@ Stratégie dans l'ADR 0020, inventaire dans `docs/TESTING.md`.
 - Fonctionne hors ligne si c'est un écran terrain.
 - Skeletons, état vide et erreurs gérés.
 - Écran conforme à la maquette que j'ai validée, captures montrées.
+- Chaque comportement ajouté ou changé a ses tests (ADR 0023).
 - Permissions vérifiées et testées.
 - Index ajoutés si nouvelles requêtes.
 - `docs/` mis à jour si la structure, les données ou une décision ont changé.

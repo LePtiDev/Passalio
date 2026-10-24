@@ -114,6 +114,8 @@ export const customersFr = {
         : `Vous pouvez continuer. ${plural(pending, "modification sera envoyée", "modifications seront envoyées")} dès le retour du réseau.`,
     rejected: (count: number) =>
       `${plural(count, "modification refusée", "modifications refusées")} par le serveur.`,
+    rejectedShort: (count: number) => plural(count, "refusée", "refusées"),
+    acknowledgeRejections: "Compris",
     pendingBadge: "À envoyer",
   },
   list: {
@@ -150,6 +152,12 @@ export const customersFr = {
     searchEmptyText: "Vérifiez l'orthographe, ou cherchez par ville ou par téléphone.",
     createFromSearch: (query: string) => `Créer le client « ${query} »`,
     clearSearch: "Effacer la recherche",
+    filterEmptyTitle: {
+      near: "Aucun client avec une échéance proche",
+      overdue: "Aucun client en retard",
+    },
+    filterEmptyText: "Les autres clients restent dans la liste complète.",
+    showAll: "Voir tous les clients",
     loadError: "Impossible de récupérer vos clients. Vérifiez votre connexion puis réessayez.",
   },
   form: {
@@ -222,6 +230,10 @@ export const customersFr = {
     photos: "Photos",
     photosText: "La photo de la plaque remplit la marque, le modèle et le numéro de série.",
     removePhoto: "Retirer la photo",
+    photoProblems: {
+      wrong_type: "Ce fichier n'est pas une photo. Choisissez une photo JPEG, PNG ou WebP.",
+      too_large: "Cette photo dépasse 5 Mo. Choisissez une photo plus légère.",
+    },
     section: "L'appareil",
     kind: "Type d'appareil",
     kindGroups: {

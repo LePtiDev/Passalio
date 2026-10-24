@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { createTraceRecorder } from "@/lib/auth-errors";
 import { errorMessage, toastApiError } from "@/lib/errors";
-import { useSignOut } from "@/lib/use-sign-out";
+import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
@@ -26,7 +26,7 @@ const verify = (code: string, isBackup: boolean, trace: ReturnType<typeof create
     : authClient.twoFactor.verifyTotp({ code }, { onResponse: trace.onResponse });
 
 export const TwoFactorCodeForm = ({ subtitle, onVerified }: TwoFactorCodeFormProps) => {
-  const signOut = useSignOut();
+  const { signOut, isSigningOut } = useSignOutButton();
   const [code, setCode] = useState("");
   const [isBackup, setIsBackup] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -108,6 +108,7 @@ export const TwoFactorCodeForm = ({ subtitle, onVerified }: TwoFactorCodeFormPro
           <button
             type="button"
             onClick={signOut}
+            disabled={isSigningOut}
             className="min-h-12 text-[#475569] hover:text-[#0F2A44] lg:min-h-0"
           >
             {text.changeAccount}

@@ -1,4 +1,5 @@
 import { useLocalSession } from "@/lib/db/local-database-context";
+import { errorCodeLine } from "@/lib/errors";
 import { useSyncStatus } from "@/lib/sync/use-sync-status";
 import { customersFr } from "../fr";
 
@@ -20,5 +21,7 @@ export const useSyncIndicator = () => {
     }
     return status.lastSyncedAt === null ? text.neverSynced : text.upToDate;
   })();
-  return { ...status, isOffline, label };
+  const errorCode =
+    status.phase === "error" && status.error !== null ? errorCodeLine(status.error) : undefined;
+  return { ...status, isOffline, label, errorCode };
 };

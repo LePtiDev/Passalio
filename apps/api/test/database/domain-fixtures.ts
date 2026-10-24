@@ -12,6 +12,7 @@ import type {
   ProspectContact,
   ProspectEvent,
 } from "../../src/contexts/sales/domain/prospect-models";
+import type { ProspectCall, ProspectTask } from "../../src/contexts/sales/domain/call-models";
 
 export const AT = new Date("2026-10-20T08:30:00.000Z");
 export const LATER = new Date("2026-10-22T16:45:00.000Z");
@@ -189,4 +190,38 @@ export const aProspectEvent = (
   fromStage: null,
   toStage: null,
   createdAt: AT,
+});
+
+export const aProspectCall = (
+  companyId: string,
+  contactId: string | null,
+  authorUserId: string,
+): ProspectCall => ({
+  id: newId(),
+  companyId,
+  contactId,
+  authorUserId,
+  outcome: "answered",
+  nextAction: "callback",
+  notes: "Rappeler mardi matin",
+  calledAt: AT,
+});
+
+export const aProspectTask = (
+  companyId: string,
+  contactId: string | null,
+  ownerUserId: string,
+): ProspectTask => ({
+  id: newId(),
+  companyId,
+  contactId,
+  ownerUserId,
+  kind: "callback",
+  dueAt: LATER,
+  notify: "minutes_15",
+  notifyAt: LATER,
+  notifiedAt: null,
+  status: "open",
+  createdAt: AT,
+  updatedAt: AT,
 });

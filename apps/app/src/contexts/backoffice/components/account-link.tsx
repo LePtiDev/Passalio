@@ -4,19 +4,13 @@ import { useMemo, type ReactNode } from "react";
 type AccountLinkProps = {
   readonly accountId: string;
   readonly className: string;
-  readonly ariaLabel?: string;
   readonly children: ReactNode;
 };
 
-export const AccountLink = ({ accountId, className, ariaLabel, children }: AccountLinkProps) => {
+export const AccountLink = ({ accountId, className, children }: AccountLinkProps) => {
   const params = useMemo(() => ({ accountId }), [accountId]);
   return (
-    <Link
-      to="/admin/comptes/$accountId"
-      params={params}
-      aria-label={ariaLabel}
-      className={className}
-    >
+    <Link to="/admin/comptes/$accountId" params={params} className={className}>
       {children}
     </Link>
   );

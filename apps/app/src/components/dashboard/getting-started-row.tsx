@@ -73,7 +73,7 @@ export const GettingStartedRow = ({ task, isNext }: GettingStartedRowProps) => {
       <StatusDot isDone={isDone} />
       <TaskText task={task} />
       {task.status === "soon" ? (
-        <span className="rounded-full bg-[#EEF3F8] px-2 py-0.5 text-[11px] font-semibold text-[#64748B]">
+        <span className="rounded-full bg-[#EEF3F8] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">
           {fr.shell.soon}
         </span>
       ) : null}

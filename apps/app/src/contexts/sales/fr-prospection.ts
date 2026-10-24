@@ -9,6 +9,10 @@ const TAB_SUBTITLES: Readonly<Record<ProspectionTab, (count: number) => string>>
     plural(count, "entreprise pas intéressée", "entreprises pas intéressées"),
 };
 
+const SELECT_BEFORE = "Afficher";
+
+const SELECT_AFTER = "sur la carte";
+
 const TAB_SHORT: Readonly<Record<ProspectionTab, string>> = {
   to_qualify: "à qualifier",
   qualified: "qualifiées",
@@ -35,7 +39,9 @@ export const prospectionFr = {
       ? "Carte des entreprises"
       : `Carte des entreprises dans le département ${department}`,
   selectedLabel: "Entreprise sélectionnée",
-  select: (name: string) => `Afficher ${name} sur la carte`,
+  select: (name: string) => `${SELECT_BEFORE} ${name} ${SELECT_AFTER}`,
+  selectBefore: SELECT_BEFORE,
+  selectAfter: SELECT_AFTER,
   zoomIn: "Zoomer",
   zoomOut: "Dézoomer",
   legend: "Légende",

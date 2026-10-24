@@ -1,4 +1,5 @@
 import type { ContactFilter, ProspectStage } from "@passalio/shared";
+import type { CallRepository, FollowUpRepository, TaskRepository } from "./call-ports";
 import type {
   CompanyRow,
   ContactRow,
@@ -89,6 +90,9 @@ export type SalesDependencies = {
   readonly companies: CompanyRepository;
   readonly contacts: ContactRepository;
   readonly events: EventRepository;
+  readonly calls: CallRepository;
+  readonly followUps: FollowUpRepository;
+  readonly tasks: TaskRepository;
   readonly people: PlatformPeople;
   readonly audit: DeletionAudit;
   readonly now: () => Date;
