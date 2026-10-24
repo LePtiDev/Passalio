@@ -106,3 +106,21 @@ describe("AcceptInvitationCard repeated clicks", () => {
     expect(api.requestsTo(ACCEPT_ROUTE)).toHaveLength(1);
   });
 });
+
+describe("AcceptInvitationCard company switch", () => {
+  afterEach(forgetToasts);
+
+  it("shows the short trace id instead of a welcome when the new company cannot be opened", async () => {
+    installFakeApi({
+      ...signedOutRoutes(),
+      [ACCEPT_ROUTE]: jsonReply({ memberId: "member-9" }),
+      [SET_ACTIVE_ORGANIZATION_ROUTE]: errorReply("internal", TRACE_ID),
+    });
+    const { user } = renderCard();
+
+    await user.click(await screen.findByRole("button", { name: text.accept }));
+
+    expect(await screen.findByText(fr.errors.code(SHORT_TRACE_ID))).toBeVisible();
+    expect(screen.queryByText(text.accepted)).not.toBeInTheDocument();
+  });
+});
