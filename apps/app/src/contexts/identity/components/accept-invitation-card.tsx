@@ -3,8 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { unwrap } from "@/lib/api-client";
+import { ApiRequestError, unwrap } from "@/lib/api-client";
 import { authClient } from "@/lib/auth-client";
+import { createTraceRecorder } from "@/lib/auth-errors";
 import { forgetRememberedChecks } from "@/lib/remembered-check";
 import { identityFr } from "../fr";
 import { identityApi } from "../identity-api";
@@ -20,10 +21,18 @@ export const AcceptInvitationCard = ({
 }: AcceptInvitationCardProps) => {
   const navigate = useNavigate();
   const accept = useMutation({
-    mutationFn: async () =>
-      unwrap(await identityApi.acceptInvitation(organizationId, invitationId)),
+    mutationFn: async () => {
+      unwrap(await identityApi.acceptInvitation(organizationId, invitationId));
+      const trace = createTraceRecorder();
+      const { error } = await authClient.organization.setActive(
+        { organizationId },
+        { onResponse: trace.onResponse },
+      );
+      if (error !== null) {
+        throw new ApiRequestError(trace.toApiError(error));
+      }
+    },
     onSuccess: async () => {
-      await authClient.organization.setActive({ organizationId });
       forgetRememberedChecks();
       toast.success(identityFr.invitation.accepted);
       await navigate({ to: "/equipe" });
