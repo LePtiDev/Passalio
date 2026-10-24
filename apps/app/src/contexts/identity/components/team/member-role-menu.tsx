@@ -35,7 +35,7 @@ export const MemberRoleMenu = ({ name, role, isDisabled, onChange }: MemberRoleM
     [onChange, role],
   );
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         aria-label={identityFr.team.roleLabel(name)}
         disabled={isDisabled}

@@ -41,7 +41,7 @@ export const MemberActionsMenu = ({
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger
           aria-label={text.actionsFor(name)}
           disabled={isDisabled}
