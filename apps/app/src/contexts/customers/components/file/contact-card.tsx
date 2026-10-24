@@ -81,17 +81,18 @@ export const ContactCard = ({ customer, firstSite }: ContactCardProps) => {
         {linesOf(customer, firstSite).map(({ icon: Icon, label, value, isMuted }) => (
           <div
             key={label}
-            className="flex items-start gap-3 border-t border-[#EEF2F6] px-3.5 py-3 first:border-t-0"
+            className="relative flex min-w-0 flex-col border-t border-[#EEF2F6] py-3 pr-3.5 pl-[42px] first:border-t-0"
           >
-            <Icon aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-[#94A3B8]" />
-            <div className="flex min-w-0 flex-col">
-              <dt className="text-xs text-[#64748B]">{label}</dt>
-              <dd
-                className={cn("truncate text-[15px] lg:text-[13px]", isMuted && "text-[#94A3B8]")}
-              >
-                {value}
-              </dd>
-            </div>
+            <dt className="text-xs text-[#64748B]">
+              <Icon
+                aria-hidden="true"
+                className="absolute top-3.5 left-3.5 size-4 shrink-0 text-[#94A3B8]"
+              />
+              {label}
+            </dt>
+            <dd className={cn("truncate text-[15px] lg:text-[13px]", isMuted && "text-[#94A3B8]")}>
+              {value}
+            </dd>
           </div>
         ))}
       </dl>
