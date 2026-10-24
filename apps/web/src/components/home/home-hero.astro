@@ -1,0 +1,73 @@
+---
+import { homeFr } from "../../copy/home-fr";
+import { appUrl } from "../../links";
+import CheckIcon from "../check-icon.astro";
+import ProductVisual from "./product-visual.astro";
+
+const hero = homeFr.hero;
+const actionClass =
+  "inline-flex h-12 items-center justify-center gap-2 rounded-lg px-5 text-[15px] font-semibold sm:h-10 sm:text-sm";
+---
+
+<section id="haut" class="hero-glow overflow-hidden pt-[clamp(40px,6vw,80px)]">
+  <div class="mx-auto flex max-w-205 flex-col items-center px-4 text-center">
+    <p
+      class="inline-flex items-center gap-2 rounded-full border border-card-line bg-white py-1 pr-3 pl-1 text-xs font-medium text-slate-text shadow-card"
+    >
+      <span class="rounded-full bg-validated-soft px-2 py-0.5 text-[11px] font-semibold text-validated">
+        {hero.badge}
+      </span>
+      {hero.news}
+    </p>
+    <h1
+      class="mt-5 text-[clamp(34px,5vw,58px)] leading-[1.04] font-extrabold tracking-[-0.04em] text-balance"
+    >
+      {hero.titleStart}{" "}
+      <span class="block text-validated">{hero.titleEnd}</span>
+    </h1>
+    <p class="mt-4 max-w-[36em] text-base leading-relaxed text-slate-text sm:text-[17px]">
+      {hero.lead}
+    </p>
+    <div class="mt-6 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
+      <a
+        href={appUrl("signUp")}
+        class:list={[actionClass, "bg-navy text-white shadow-button hover:bg-navy-hover"]}
+      >
+        {hero.primary}
+      </a>
+      <a
+        href="#rappel"
+        class:list={[actionClass, "border border-input bg-white text-navy hover:border-slate-400"]}
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"
+          ></path>
+        </svg>
+        {hero.secondary}
+      </a>
+    </div>
+    <ul class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-slate-text">
+      {
+        hero.highlights.map((highlight) => (
+          <li class="inline-flex items-center gap-1.5">
+            <CheckIcon class="size-3.5 text-validated" />
+            {highlight}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="mx-auto mt-10 max-w-290 px-4 sm:mt-12 sm:px-6">
+    <ProductVisual />
+  </div>
+</section>

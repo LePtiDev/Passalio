@@ -200,6 +200,7 @@ Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans 
 | Site            | Barre de navigation : menus au clic, au survol, Échap, clic ailleurs ; menu mobile ; zones tactiles de 48 px                 | `apps/web/e2e/navigation.spec.ts`                                       |
 | Site            | « Être rappelé » : champs invalides, envoi, confirmation, erreur avec code, réseau coupé                                     | `callback-form.test.ts`, `apps/web/e2e/callback-form.spec.ts`           |
 | Site            | Histoires : filtre par activité, mention « personnes inventées » ; page 404                                                  | `apps/web/e2e/stories.spec.ts`, `pages.spec.ts`                         |
+| Site            | Accueil : accroche, essai et rappel, grille des fonctions (liens ou « Bientôt »), cartes par activité publiée                | `apps/web/e2e/home.spec.ts`                                             |
 | Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne                                                | à écrire                                                                |
 
 À ajouter avec leurs écrans : lecture de plaque (écran), attestation (signature, PDF, numérotation, immuable), planning, relances, abonnement, export, impersonation, espace particulier, serveur MCP admin.

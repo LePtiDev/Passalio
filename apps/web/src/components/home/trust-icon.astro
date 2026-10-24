@@ -1,0 +1,32 @@
+---
+import type { TrustIcon } from "../../copy/home-fr";
+
+interface Props {
+  icon: TrustIcon;
+}
+
+const { icon } = Astro.props;
+const PATHS: Readonly<Record<TrustIcon, string>> = {
+  europe: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20",
+  export: "M12 3v12M7 10l5 5 5-5M5 21h14",
+  lock: "M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4",
+  france: "M4 21V4M4 4h12l-2 4 2 4H4",
+};
+---
+
+<span
+  class="inline-flex size-9 items-center justify-center rounded-lg border border-panel-line bg-panel"
+  aria-hidden="true"
+>
+  <svg
+    class="size-4"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d={PATHS[icon]}></path>
+  </svg>
+</span>

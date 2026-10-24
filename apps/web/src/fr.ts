@@ -1,35 +1,10 @@
 export const fr = {
   meta: {
-    title: "Passalio, logiciel de ramonage : attestations et relances",
+    title: "Passalio, logiciel de ramonage et d’entretien",
     description:
-      "Remplissez l'attestation de ramonage chez le client, faites-la signer sur le téléphone, envoyez-la par email. Passalio relance le client l'année suivante.",
+      "Le logiciel des ramoneurs, poêliers et chauffagistes : planning des tournées, fiches clients et équipe. Sur le téléphone, même sans réseau.",
   },
   brand: "Passalio",
-  hero: {
-    eyebrow: "Pour les ramoneurs, seuls ou en équipe",
-    title: "Chaque passage, en règle.",
-    lead: "Vous remplissez l'attestation chez le client, sur votre téléphone. Il signe sur l'écran et la reçoit par email. Un an plus tard, Passalio lui rappelle de vous rappeler.",
-    primary: "Essayer gratuitement",
-    secondary: "Voir comment ça se passe",
-    highlights: ["Sans engagement", "Fonctionne sans réseau", "iPhone et Android"],
-    phone: {
-      label: "Aperçu d'une attestation remplie sur le téléphone",
-      customer: "Mme Durand · Saint-Maur",
-      title: "Attestation de ramonage",
-      flueLabel: "Conduit",
-      flue: "Poêle à bois, salon",
-      flueDetail: "Tubé inox Ø 150, 7 m",
-      checks: [
-        "Ramonage mécanique par le haut",
-        "Vacuité vérifiée sur toute la longueur",
-        "2 photos jointes",
-      ],
-      signature: "Signature du client",
-      submit: "Signer et envoyer",
-    },
-    toastTitle: "Attestation envoyée à Mme Durand.",
-    toastText: "Prochain passage prévu en octobre 2027.",
-  },
   pains: {
     eyebrow: "Le constat",
     title: "Ce qui vous prend du temps, ce n'est pas le conduit.",
@@ -158,20 +133,6 @@ export const fr = {
       },
     ],
   },
-  reassurance: [
-    {
-      title: "Pas de réseau, pas de problème",
-      text: "Cave, grenier, campagne : vous remplissez et faites signer quand même. Les envois partent dès que le téléphone capte, et vous voyez ce qui attend.",
-    },
-    {
-      title: "Vos clients actuels",
-      text: "Votre fichier Excel ou CSV s'importe en une fois. Les échéances repartent de la date du dernier passage.",
-    },
-    {
-      title: "Vos données restent à vous",
-      text: "Hébergées en Europe. Vous exportez vos clients et vos attestations quand vous voulez, y compris si vous partez.",
-    },
-  ],
   faq: {
     title: "Vos questions",
     items: [
@@ -186,10 +147,5 @@ export const fr = {
           "Non. Passalio s'ouvre dans le navigateur de votre téléphone et s'ajoute à l'écran d'accueil, comme une application. iPhone et Android.",
       },
     ],
-  },
-  finalCall: {
-    title: "Essayez-le sur votre prochaine intervention.",
-    lead: "Créez votre compte, ajoutez un client, faites signer une première attestation, sur votre propre téléphone.",
-    action: "Essayer gratuitement",
   },
 } as const;
