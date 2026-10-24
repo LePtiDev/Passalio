@@ -58,7 +58,7 @@ export const identityFr = {
     passwordTooShort: "12 caractères minimum.",
     passwordTooLong: "128 caractères maximum.",
     strength: ["", "Trop faible.", "Correct.", "Bon.", "Solide."],
-    strengthHint: "12 caractères minimum. Une phrase facile à retenir fonctionne très bien.",
+    strengthHint: "Au moins 12 caractères.",
   },
   signIn: {
     title: "Connexion",
