@@ -49,3 +49,16 @@ export {
   chimneySweepingTrade,
   nextSweepingDueDate,
 } from "./chimney-sweeping/trade";
+export {
+  DEFAULT_VISIT_MINUTES,
+  isVisitType,
+  MAX_VISIT_DURATION_MINUTES,
+  MIN_VISIT_DURATION_MINUTES,
+  totalVisitMinutes,
+  VISIT_DURATION_STEP_MINUTES,
+  visitDurationMinutes,
+  visitDurations,
+  visitMinutesOf,
+  visitTypes,
+  type VisitDurations,
+} from "./visit-durations";

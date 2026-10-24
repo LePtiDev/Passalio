@@ -9,6 +9,7 @@ import {
   type InterventionFields,
   type Result,
 } from "@passalio/shared";
+import { isVisitType, type TradeId } from "@passalio/trades";
 import type { Intervention, InterventionChangeSet } from "./intervention-models";
 import type { InterventionPlace } from "./scheduling-ports";
 import type { SchedulingError } from "./scheduling-error";
@@ -31,6 +32,11 @@ export const checkEquipmentsAtPlace = (
     ? ok([...new Set(equipmentIds)])
     : err("equipment_not_found");
 
+export const checkVisitTypes = (
+  visitTypes: readonly string[],
+): Result<readonly TradeId[], SchedulingError> =>
+  visitTypes.every(isVisitType) ? ok([...new Set(visitTypes)]) : err("invalid_visit_type");
+
 export const newIntervention = (
   fields: InterventionFields,
   context: {
@@ -38,6 +44,7 @@ export const newIntervention = (
     readonly organizationId: string;
     readonly createdByUserId: string;
     readonly equipmentIds: readonly string[];
+    readonly visitTypes?: readonly TradeId[];
     readonly at: Date;
   },
 ): Intervention => ({
@@ -49,6 +56,7 @@ export const newIntervention = (
   scheduledDate: fields.scheduledDate,
   startTime: fields.startTime ?? null,
   durationMinutes: fields.durationMinutes,
+  visitTypes: context.visitTypes ?? [],
   equipmentIds: context.equipmentIds,
   announcedPriceCents: fields.announcedPriceCents ?? null,
   notes: fields.notes ?? null,
@@ -63,7 +71,7 @@ export const newIntervention = (
 
 export const plannedChanges = (
   current: Intervention,
-  changes: InterventionChanges,
+  { visitTypes: _visitTypes, ...changes }: InterventionChanges,
   at: Date,
 ): Result<InterventionChangeSet, SchedulingError> =>
   current.status === "planned" ? ok({ ...changes, updatedAt: at }) : err("intervention_closed");

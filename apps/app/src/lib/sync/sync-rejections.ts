@@ -1,4 +1,4 @@
-import type { CustomerMutation } from "@passalio/shared";
+import type { SyncMutation } from "@passalio/shared";
 import type { LocalDatabase } from "../db/local-database";
 import type { OutboxEntry } from "../db/local-records";
 
@@ -7,7 +7,7 @@ export type RejectedEntry = {
   readonly error: string;
 };
 
-const removeLocalCreation = async (database: LocalDatabase, mutation: CustomerMutation) => {
+const removeLocalCreation = async (database: LocalDatabase, mutation: SyncMutation) => {
   switch (mutation.type) {
     case "create_customer":
       return database.customers.delete(mutation.customerId);
@@ -15,6 +15,10 @@ const removeLocalCreation = async (database: LocalDatabase, mutation: CustomerMu
       return database.sites.delete(mutation.siteId);
     case "add_equipment":
       return database.equipments.delete(mutation.equipmentId);
+    case "create_intervention":
+      return database.interventions.delete(mutation.interventionId);
+    case "sign_document":
+      return database.documents.delete(mutation.documentId);
     default:
       return undefined;
   }
@@ -33,6 +37,8 @@ export const recordRejections = async (
       database.customers,
       database.sites,
       database.equipments,
+      database.interventions,
+      database.documents,
       database.syncState,
     ],
     async () => {

@@ -27,6 +27,8 @@ export const applyPulledChanges = async (database: LocalDatabase, pulled: Pulled
       database.sites,
       database.equipments,
       database.photos,
+      database.interventions,
+      database.documents,
       database.outbox,
       database.syncState,
     ],
@@ -36,6 +38,8 @@ export const applyPulledChanges = async (database: LocalDatabase, pulled: Pulled
       await applyTo(database.sites, pulled.changes.sites, pending);
       await applyTo(database.equipments, pulled.changes.equipments, pending);
       await applyTo(database.photos, pulled.changes.photos, pending);
+      await applyTo(database.interventions, pulled.changes.interventions ?? [], pending);
+      await applyTo(database.documents, pulled.changes.documents ?? [], pending);
       await database.syncState.put({ key: "cursor", value: pulled.cursor });
     },
   );

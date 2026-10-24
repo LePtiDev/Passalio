@@ -1,4 +1,4 @@
-import { newId, type CustomerMutation } from "@passalio/shared";
+import { newId, type SyncMutation } from "@passalio/shared";
 import type { LocalDatabase } from "./local-database";
 
 const ENTITY_KEYS: ReadonlySet<string> = new Set([
@@ -6,14 +6,16 @@ const ENTITY_KEYS: ReadonlySet<string> = new Set([
   "siteId",
   "equipmentId",
   "replacesEquipmentId",
+  "interventionId",
+  "documentId",
 ]);
 
-const entityIdsOf = (mutation: CustomerMutation): string[] =>
+const entityIdsOf = (mutation: SyncMutation): string[] =>
   Object.entries(mutation).flatMap(([key, value]) =>
     ENTITY_KEYS.has(key) && typeof value === "string" ? [value] : [],
   );
 
-export const enqueue = async (database: LocalDatabase, mutation: CustomerMutation) => {
+export const enqueue = async (database: LocalDatabase, mutation: SyncMutation) => {
   await database.outbox.add({
     id: newId(),
     mutation,

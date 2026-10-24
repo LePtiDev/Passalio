@@ -16,9 +16,11 @@ export const createD1InterventionRepository = (database: Database): Intervention
       .where(eq(interventions.id, id))
       .get()) !== undefined,
   create: async (intervention) => {
-    await database
-      .insert(interventions)
-      .values({ ...intervention, equipmentIds: [...intervention.equipmentIds] });
+    await database.insert(interventions).values({
+      ...intervention,
+      equipmentIds: [...intervention.equipmentIds],
+      visitTypes: [...intervention.visitTypes],
+    });
   },
   findById: async (organizationId, interventionId) =>
     database
@@ -26,12 +28,13 @@ export const createD1InterventionRepository = (database: Database): Intervention
       .from(interventions)
       .where(and(activeInOrganization(organizationId), eq(interventions.id, interventionId)))
       .get(),
-  update: async (organizationId, interventionId, { equipmentIds, ...changes }) => {
+  update: async (organizationId, interventionId, { equipmentIds, visitTypes, ...changes }) => {
     await database
       .update(interventions)
       .set({
         ...changes,
         ...(equipmentIds === undefined ? {} : { equipmentIds: [...equipmentIds] }),
+        ...(visitTypes === undefined ? {} : { visitTypes: [...visitTypes] }),
       })
       .where(and(activeInOrganization(organizationId), eq(interventions.id, interventionId)));
   },

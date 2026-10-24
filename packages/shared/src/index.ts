@@ -68,6 +68,7 @@ export {
   interventionCompletion,
   interventionFields,
   MAX_INTERVENTION_EQUIPMENTS,
+  MAX_VISIT_TYPES,
   PAYMENT_METHODS,
   schedulingMutation,
   TIME_OF_DAY_PATTERN,

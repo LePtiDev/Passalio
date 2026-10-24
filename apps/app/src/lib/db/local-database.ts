@@ -1,13 +1,17 @@
 import { Dexie, type EntityTable } from "dexie";
 import type {
   CustomerRecord,
+  DocumentRecord,
   EquipmentRecord,
+  InterventionRecord,
+  MemberRecord,
   OutboxEntry,
   PendingPhoto,
   PhotoRecord,
   SiteRecord,
   SyncRejection,
   SyncStateEntry,
+  VisitTypeRecord,
 } from "./local-records";
 
 export const LOCAL_DATABASE_PREFIX = "passalio-";
@@ -17,6 +21,10 @@ export class LocalDatabase extends Dexie {
   declare sites: EntityTable<SiteRecord, "id">;
   declare equipments: EntityTable<EquipmentRecord, "id">;
   declare photos: EntityTable<PhotoRecord, "id">;
+  declare interventions: EntityTable<InterventionRecord, "id">;
+  declare documents: EntityTable<DocumentRecord, "id">;
+  declare members: EntityTable<MemberRecord, "userId">;
+  declare visitTypes: EntityTable<VisitTypeRecord, "type">;
   declare outbox: EntityTable<OutboxEntry, "seq">;
   declare pendingPhotos: EntityTable<PendingPhoto, "id">;
   declare rejections: EntityTable<SyncRejection, "id">;
@@ -34,6 +42,21 @@ export class LocalDatabase extends Dexie {
       rejections: "id",
       syncState: "key",
     });
+    this.version(2).stores({
+      interventions: "id, scheduledDate, siteId",
+      documents: "id, interventionId, equipmentId",
+      members: "userId",
+    });
+    this.version(3)
+      .stores({ visitTypes: "type" })
+      .upgrade((transaction) =>
+        transaction
+          .table("interventions")
+          .toCollection()
+          .modify((intervention: { visitTypes?: unknown }) => {
+            intervention.visitTypes ??= [];
+          }),
+      );
   }
 }
 

@@ -58,4 +58,14 @@ export const SCHEDULING_QUERIES: readonly CatalogedQuery[] = [
     query: "assigned technician belongs to the organization",
     run: (r, s) => r.teamMembers.isMember(s.organization.id, s.technician.id),
   },
+  {
+    method: "visitTypeSettings.find",
+    query: "trades and visit durations of the organization",
+    run: (r, s) => r.visitTypeSettings.find(s.organization.id),
+  },
+  {
+    method: "visitTypeSettings.saveDurations",
+    query: "save the visit durations of the organization",
+    run: (r, s) => r.visitTypeSettings.saveDurations(s.organization.id, { chimney_sweeping: 75 }),
+  },
 ];
