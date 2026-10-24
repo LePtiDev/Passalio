@@ -24,7 +24,7 @@ const NavigationGroup = ({
   readonly items: readonly NavigationItem[];
 }) => (
   <div className="flex flex-col gap-0.5">
-    <span className="px-2.5 pb-0.5 text-[11px] leading-4 font-medium text-[#94A3B8]">{title}</span>
+    <span className="px-2.5 pb-0.5 text-[11px] leading-4 font-medium text-[#64748B]">{title}</span>
     {items.map((item) => (
       <SidebarLink key={item.label} item={item} />
     ))}
