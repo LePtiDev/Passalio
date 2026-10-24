@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronRight, LogOut } from "lucide-react";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { fr } from "@/fr";
-import { useSignOut } from "@/lib/use-sign-out";
+import { useSignOutButton } from "@/lib/use-sign-out-button";
 import type { SignedInUser } from "./app-sidebar";
 import { SETTINGS_NAVIGATION } from "./navigation";
 import { DesktopTopBar, MobileTopBar, PageContent } from "./page-bars";
@@ -16,7 +16,7 @@ const CARD_CLASS =
   "overflow-hidden rounded-[14px] border border-[#E3E8EF] bg-white lg:max-w-xl lg:rounded-[10px]";
 
 export const SettingsScreen = ({ user }: { readonly user: SignedInUser }) => {
-  const signOut = useSignOut();
+  const { signOut, isSigningOut } = useSignOutButton();
   return (
     <>
       <DesktopTopBar trail={TRAIL} />
@@ -65,6 +65,7 @@ export const SettingsScreen = ({ user }: { readonly user: SignedInUser }) => {
           <button
             type="button"
             onClick={signOut}
+            disabled={isSigningOut}
             className="flex min-h-14 w-full items-center gap-3 px-3.5 text-[15px] font-semibold text-destructive hover:bg-[#FEF3F2] lg:min-h-11 lg:px-4 lg:text-[13px]"
           >
             <LogOut aria-hidden="true" className="size-5 lg:size-4" />

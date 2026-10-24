@@ -1,11 +1,8 @@
-import { useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import { useCallback } from "react";
 import logo from "@/assets/passalio-logo.svg";
 import { fr } from "@/fr";
 import { authClient } from "@/lib/auth-client";
-import { forgetRememberedChecks } from "@/lib/remembered-check";
-import { SIGN_IN_PATH } from "@/lib/session";
+import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { cn } from "@/lib/utils";
 import { onboardingFr } from "../../onboarding-fr";
 import type { OnboardingStep } from "./onboarding-steps";
@@ -35,13 +32,8 @@ const StepMarker = ({ number, current }: { readonly number: number; readonly cur
 };
 
 export const OnboardingSidebar = ({ step }: { readonly step: OnboardingStep }) => {
-  const navigate = useNavigate();
   const { data: session } = authClient.useSession();
-  const signOut = useCallback(async () => {
-    await authClient.signOut();
-    forgetRememberedChecks();
-    await navigate({ to: SIGN_IN_PATH });
-  }, [navigate]);
+  const { signOut, isSigningOut } = useSignOutButton();
 
   return (
     <aside className="hidden w-[280px] shrink-0 flex-col gap-7 border-r border-[#E3E8EF] bg-[#F7F9FB] px-5 py-6 lg:flex">
@@ -91,6 +83,7 @@ export const OnboardingSidebar = ({ step }: { readonly step: OnboardingStep }) =
         <button
           type="button"
           onClick={signOut}
+          disabled={isSigningOut}
           className="self-start font-semibold text-muted-foreground hover:text-foreground"
         >
           {text.signOut}
