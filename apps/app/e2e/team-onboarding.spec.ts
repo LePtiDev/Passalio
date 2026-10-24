@@ -88,6 +88,7 @@ test("a user who forgot the password sets a new one and signs in with it", async
 
   await page.goto("/connexion");
   await page.getByRole("link", { name: "Mot de passe oublié ?" }).click();
+  await expect(page.getByRole("heading", { name: "Mot de passe oublié" })).toBeVisible();
   await page.getByLabel("Adresse email").fill("oubli@example.fr");
   await page.getByRole("button", { name: "Recevoir le lien" }).click();
   await expect(page.getByText("Si un compte existe pour cette adresse")).toBeVisible();
