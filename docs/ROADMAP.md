@@ -96,6 +96,7 @@ Dernière mise à jour : 2026-10-24.
 - [x] Lecture de plaque, écran en ligne selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/47mxtXeueVzaQiqhSdCmwv) : listes déroulantes type et combustible, champs vides remplis, « Lu sur la plaque », lue en partie, illisible, limite, erreur
 - [ ] Lecture de plaque hors ligne : photo gardée dans Dexie, lue au retour du réseau, seuls les champs vides remplis, « Plaque lue · à vérifier » et « C'est vérifié » sur la fiche (`equipments.plate_check_pending_since`)
 - [ ] Astérisque rouge sur « Type d'appareil » (obligatoire, sans astérisque aujourd'hui) dans le formulaire d'appareil
+- [ ] Retirer la mention « · facultatif » de `FormField` (formulaires client et appareil), contraire à la règle des formulaires
 - [ ] Calcul de `next_due_date` selon la périodicité de chaque métier (fait pour le ramonage : 12 mois ; appareils collectifs à 6 mois et règles locales à faire)
 - [x] Métier ramonage dans `packages/trades` : schéma du certificat version 1 et règles bloquantes tirées de `docs/regulatory/`
 - [ ] Métier entretien d'appareil dans `packages/trades` (bloqué par les documents réels)

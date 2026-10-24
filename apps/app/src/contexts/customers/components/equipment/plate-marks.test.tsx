@@ -88,9 +88,6 @@ const tagOf = (name: FieldName) => {
   return (row.textContent ?? "").slice(label.length);
 };
 
-const isMarkedOptional = (name: FieldName) =>
-  (labelRowOf(name).querySelector("label")?.textContent ?? "").includes(customersFr.form.optional);
-
 const setInputValue = (input: HTMLInputElement, value: string) => {
   Reflect.get(
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value") ?? {},
@@ -129,12 +126,11 @@ afterEach(() => {
 });
 
 describe("plate marks on the equipment fields", () => {
-  it("shows plain optional fields without any mark before a reading", () => {
+  it("shows the fields without any mark before a reading", () => {
     renderForm({ step: "idle" });
     for (const { name } of FIELDS) {
       expect(inputOf(name)).not.toBeNull();
       expect(tagOf(name)).toBe("");
-      expect(isMarkedOptional(name)).toBe(true);
     }
   });
 
@@ -171,12 +167,10 @@ describe("plate marks on the equipment fields", () => {
     expect(tagOf("powerKw")).toBe(plateFr.readTag);
   });
 
-  it("marks a missing identity field as unreadable, with an orange border and no optional hint", () => {
+  it("marks a missing identity field as unreadable, with an orange border", () => {
     renderForm(READ, { brand: "MCZ", powerKw: "8" });
     expect(tagOf("serialNumber")).toBe(plateFr.unreadableTag);
     expect(presentInputOf("serialNumber").className).toContain(UNREADABLE_BORDER);
-    expect(isMarkedOptional("serialNumber")).toBe(false);
-    expect(isMarkedOptional("model")).toBe(true);
     expect(presentInputOf("model").className).not.toContain(UNREADABLE_BORDER);
   });
 
@@ -185,7 +179,6 @@ describe("plate marks on the equipment fields", () => {
     await typeInto("serialNumber", "SN-4421");
     expect(tagOf("serialNumber")).toBe("");
     expect(presentInputOf("serialNumber").className).not.toContain(UNREADABLE_BORDER);
-    expect(isMarkedOptional("serialNumber")).toBe(true);
   });
 
   it("does not mark the fields once the reading is unreadable or paused", () => {

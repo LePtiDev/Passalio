@@ -303,7 +303,11 @@ test.describe("plate reading outcomes", () => {
     await page.getByLabel("Plaque signalétique").setInputFiles(PLATE_PHOTO);
 
     await expect(page.getByRole("img", { name: "Plaque signalétique" })).toBeVisible();
+    await page.waitForLoadState("networkidle");
     await expect(page.getByText("Lecture de la plaque…")).toBeHidden();
+    await expect(
+      page.getByText("La plaque n'a pas pu être lue. Remplissez à la main."),
+    ).toBeHidden();
     await expect(page.getByLabel("Marque")).toHaveValue("");
     expect(readings).toHaveLength(0);
     await context.setOffline(false);
