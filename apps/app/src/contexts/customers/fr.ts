@@ -151,6 +151,12 @@ export const customersFr = {
     searchEmptyText: "Vérifiez l'orthographe, ou cherchez par ville ou par téléphone.",
     createFromSearch: (query: string) => `Créer le client « ${query} »`,
     clearSearch: "Effacer la recherche",
+    filterEmptyTitle: {
+      near: "Aucun client avec une échéance proche",
+      overdue: "Aucun client en retard",
+    },
+    filterEmptyText: "Les autres clients restent dans la liste complète.",
+    showAll: "Voir tous les clients",
     loadError: "Impossible de récupérer vos clients. Vérifiez votre connexion puis réessayez.",
   },
   form: {

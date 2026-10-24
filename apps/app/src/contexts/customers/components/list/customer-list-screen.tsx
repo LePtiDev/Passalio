@@ -16,6 +16,7 @@ import { CARD_CLASS, PRIMARY_BUTTON_CLASS } from "../customer-styles";
 import { MobileSyncLine, OfflineBanner, SyncPill } from "../sync-indicator";
 import { CustomerListToolbar } from "./customer-list-toolbar";
 import {
+  CustomerFilterEmpty,
   CustomerListEmpty,
   CustomerListError,
   CustomerListSkeleton,
@@ -43,13 +44,17 @@ const subtitleOf = (list: ListState | undefined, hasFailed: boolean) => {
 const ListBody = ({
   list,
   query,
+  filter,
   pageSize,
   onClear,
+  onShowAll,
 }: {
   readonly list: ListState;
   readonly query: string;
+  readonly filter: CustomerFilter;
   readonly pageSize: number;
   readonly onClear: () => void;
+  readonly onShowAll: () => void;
 }) => {
   const pages = usePageNumber(`${query}:${pageSize}`);
   const lastPage = Math.max(0, Math.ceil(list.rows.length / pageSize) - 1);
@@ -59,6 +64,9 @@ const ListBody = ({
   }
   if (list.rows.length === 0 && query.trim() !== "") {
     return <CustomerSearchEmpty query={query.trim()} onClear={onClear} />;
+  }
+  if (list.rows.length === 0 && filter !== "all") {
+    return <CustomerFilterEmpty filter={filter} onShowAll={onShowAll} />;
   }
   const visible = list.rows.slice(page * pageSize, (page + 1) * pageSize);
   return (
@@ -91,6 +99,7 @@ export const CustomerListScreen = () => {
   const { measureList, pageSize } = useFittingRows(CUSTOMER_ROW_HEIGHTS);
   const list = useCustomerList(query, filter);
   const clear = useCallback(() => setQuery(""), []);
+  const showAll = useCallback(() => setFilter("all"), []);
   const retry = useCallback(() => {
     void runSync(database);
   }, [database]);
@@ -165,7 +174,15 @@ export const CustomerListScreen = () => {
           {hasFailed ? <CustomerListError error={sync.error} onRetry={retry} /> : null}
           {isLoading || pageSize === null ? <CustomerListSkeleton /> : null}
           {!isLoading && !hasFailed && list !== undefined && pageSize !== null ? (
-            <ListBody key={filter} list={list} query={query} pageSize={pageSize} onClear={clear} />
+            <ListBody
+              key={filter}
+              list={list}
+              query={query}
+              filter={filter}
+              pageSize={pageSize}
+              onClear={clear}
+              onShowAll={showAll}
+            />
           ) : null}
         </div>
       </PageContent>
