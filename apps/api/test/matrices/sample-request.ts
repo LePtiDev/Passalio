@@ -12,6 +12,7 @@ export type SampleIds = {
   readonly contactId: string;
   readonly teammateUserId: string;
   readonly teamInvitationId: string;
+  readonly taskId: string;
 };
 
 export type SampleRequest = { readonly path: string; readonly init: RequestInit };
@@ -30,6 +31,7 @@ export const randomSampleIds = (): SampleIds => ({
   contactId: crypto.randomUUID(),
   teammateUserId: crypto.randomUUID(),
   teamInvitationId: crypto.randomUUID(),
+  taskId: crypto.randomUUID(),
 });
 
 export const read = (path: string): SampleRequest => ({ path, init: { method: "GET" } });

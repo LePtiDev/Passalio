@@ -18,6 +18,9 @@ export const GROWING_TABLES = [
   "prospect_companies",
   "prospect_contacts",
   "prospect_events",
+  "prospect_calls",
+  "prospect_follow_ups",
+  "prospect_tasks",
   "sessions",
 ] as const;
 

@@ -7,9 +7,11 @@ import {
   anEquipment,
   anInvitation,
   aPhoto,
+  aProspectCall,
   aProspectCompany,
   aProspectContact,
   aProspectEvent,
+  aProspectTask,
   aSite,
   AT,
   aTeamInvitation,
@@ -112,6 +114,18 @@ export const seedDatabase = async (database: Database, repositories: Repositorie
   await repositories.prospectCompanies.create(company);
   await repositories.prospectContacts.create(contact);
   await repositories.prospectEvents.add(aProspectEvent(company.id, contact.id, salesperson.id));
+  const prospectCall = aProspectCall(company.id, contact.id, salesperson.id);
+  const prospectTask = aProspectTask(company.id, contact.id, salesperson.id);
+  await repositories.prospectCalls.record(
+    prospectCall,
+    {
+      companyId: company.id,
+      lastCallAt: prospectCall.calledAt,
+      lastCallOutcome: prospectCall.outcome,
+      lastCallByUserId: salesperson.id,
+    },
+    prospectTask,
+  );
 
   const teamInvitation = aTeamInvitation(superadmin.id);
   await repositories.teamInvitations.create(teamInvitation);
@@ -156,6 +170,7 @@ export const seedDatabase = async (database: Database, repositories: Repositorie
     document,
     company,
     contact,
+    prospectTask,
     teamInvitation,
   };
 };

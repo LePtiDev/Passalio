@@ -3,12 +3,15 @@ import {
   inviteTeammateBody,
   mcpApprovalBody,
   mcpDenialBody,
+  prospectCallLog,
   prospectCompanyChanges,
   prospectCompanyFields,
   prospectContactChanges,
   prospectContactFields,
   prospectNote,
+  prospectQualification,
   prospectStageChange,
+  prospectTaskChange,
 } from "@passalio/shared";
 import { read, withJson, withoutBody, type SampleBuilder } from "./sample-request";
 
@@ -63,6 +66,25 @@ export const PLATFORM_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     }),
   [`DELETE ${PROSPECTS}/contacts/:contactId`]: (ids) =>
     withoutBody("DELETE", `${PROSPECTS}/contacts/${ids.contactId}`),
+  [`GET ${PROSPECTS}/my-day`]: () => read(`${PROSPECTS}/my-day`),
+  [`GET ${PROSPECTS}/call-series`]: () => read(`${PROSPECTS}/call-series?target=not_reached`),
+  [`GET ${PROSPECTS}/companies/:companyId/follow-up`]: (ids) =>
+    read(`${PROSPECTS}/companies/${ids.companyId}/follow-up`),
+  [`POST ${PROSPECTS}/companies/:companyId/calls`]: (ids) =>
+    withJson("POST", `${PROSPECTS}/companies/${ids.companyId}/calls`, prospectCallLog, {
+      outcome: "answered",
+      nextAction: "callback",
+      schedule: { dueAt: "2026-10-27T09:30:00.000Z", notify: "minutes_15" },
+    }),
+  [`PATCH ${PROSPECTS}/companies/:companyId/qualification`]: (ids) =>
+    withJson(
+      "PATCH",
+      `${PROSPECTS}/companies/${ids.companyId}/qualification`,
+      prospectQualification,
+      { interest: "hot" },
+    ),
+  [`PATCH ${PROSPECTS}/tasks/:taskId`]: (ids) =>
+    withJson("PATCH", `${PROSPECTS}/tasks/${ids.taskId}`, prospectTaskChange, { status: "done" }),
   "GET /api/admin/team": () => read("/api/admin/team"),
   "POST /api/admin/team/invitations": () =>
     withJson("POST", "/api/admin/team/invitations", inviteTeammateBody, {

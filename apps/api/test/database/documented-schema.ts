@@ -56,6 +56,12 @@ export const ARCHITECTURE_INDEXES: readonly DocumentedIndex[] = [
   index("prospect_contacts", ["search_name"]),
   index("prospect_events", ["company_id", "created_at"]),
   index("prospect_events", ["contact_id", "created_at"]),
+  index("prospect_calls", ["company_id", "called_at"]),
+  index("prospect_calls", ["author_user_id", "called_at"]),
+  index("prospect_calls", ["contact_id"]),
+  index("prospect_tasks", ["owner_user_id", "status", "due_at"]),
+  index("prospect_tasks", ["company_id", "status"]),
+  index("prospect_tasks", ["contact_id"]),
   uniqueIndex("users", ["email"]),
   index("users", ["role"]),
   index("platform_invitations", ["status", "created_at"]),
@@ -88,10 +94,20 @@ export const TABLES_WITHOUT_ORGANIZATION: Readonly<Record<string, string>> = {
   prospect_companies: "Passalio data, see docs/ARCHITECTURE.md",
   prospect_contacts: "Passalio data, see docs/ARCHITECTURE.md",
   prospect_events: "Passalio data, see docs/ARCHITECTURE.md",
+  prospect_calls: "Passalio data, see docs/ARCHITECTURE.md",
+  prospect_follow_ups: "Passalio data, see docs/ARCHITECTURE.md",
+  prospect_tasks: "Passalio data, see docs/ARCHITECTURE.md",
   platform_invitations: "Passalio team",
 };
 
-export const PASSALIO_TABLES = ["prospect_companies", "prospect_contacts", "prospect_events"];
+export const PASSALIO_TABLES = [
+  "prospect_companies",
+  "prospect_contacts",
+  "prospect_events",
+  "prospect_calls",
+  "prospect_follow_ups",
+  "prospect_tasks",
+];
 
 export const SYNCHRONIZED_TABLES = [
   "customers",

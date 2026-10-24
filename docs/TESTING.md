@@ -125,6 +125,15 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 14      | Photo de plaque : illisible puis nouvelle photo, PAC (fluide, charge, combustible caché), panne avec code puis saisie à la main, hors ligne sans envoi | `apps/app/e2e/customers.spec.ts`                                                  |
 | Mesure  | Précision par modèle sur le jeu de photos annoté, valeurs inventées, jetons (hors `pnpm check`)                                                        | `apps/api/eval/`, `pnpm --filter @passalio/api plate-reading:eval`                |
 
+## Appels et rappels de prospection (ADR 0024)
+
+| Famille | Ce qui est vérifié                                                                                                                                    | Test                                                                          |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 2       | Étape après l'appel (démo, pas intéressé, premier décroché, cliente figée) ; notification 15 min avant, à l'heure, la veille à 18 h en heure de Paris | `sales/domain/call-rules.test.ts`, `packages/shared/src/paris-time.test.ts`   |
+| 4       | Noter un appel, qualifier, fiche de suivi, Ma journée, série d'appels, déplacer ou clore un rappel : rôles, erreurs, rien d'écrit en cas de refus     | `sales/application/*call*.test.ts`, `get-my-day`, `get-follow-up`, `update-*` |
+| 5, 6    | Routes : 201, 204, 400, 404, 409, 422, réponses conformes aux schémas zod, rappel dans Ma journée, suppression en cascade avec l'entreprise           | `apps/api/test/prospect-call-routes.test.ts`                                  |
+| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes et index des nouvelles requêtes                                        | `apps/api/test/matrices`, `apps/api/test/database`                            |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.

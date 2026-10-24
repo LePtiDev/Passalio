@@ -4,9 +4,12 @@ import { and, asc, eq, inArray } from "drizzle-orm";
 import type { AuditTrail } from "../../../platform/audit-trail";
 import type { Database } from "../../../platform/database";
 import type { SalesDependencies } from "../domain/prospect-ports";
+import { createD1CallRepository } from "./d1-call-repository";
 import { createD1CompanyRepository } from "./d1-company-repository";
 import { createD1ContactRepository } from "./d1-contact-repository";
 import { createD1EventRepository } from "./d1-event-repository";
+import { createD1FollowUpRepository } from "./d1-follow-up-repository";
+import { createD1TaskRepository } from "./d1-task-repository";
 
 const isPlatformUser = inArray(users.role, [...PLATFORM_ROLES]);
 
@@ -17,6 +20,9 @@ export const createSalesDependencies = (
   companies: createD1CompanyRepository(database),
   contacts: createD1ContactRepository(database),
   events: createD1EventRepository(database),
+  calls: createD1CallRepository(database),
+  followUps: createD1FollowUpRepository(database),
+  tasks: createD1TaskRepository(database),
   people: {
     owners: async () =>
       database
