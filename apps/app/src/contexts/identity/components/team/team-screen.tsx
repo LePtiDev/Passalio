@@ -8,7 +8,7 @@ import { identityFr } from "../../fr";
 import { usePendingInvitations } from "../../hooks/use-pending-invitations";
 import { useTeam } from "../../hooks/use-team";
 import { InviteMemberDialog } from "./invite-member-dialog";
-import { OrganizationLoadError, OrganizationSubtitle } from "./organization-subtitle";
+import { OrganizationSubtitle } from "./organization-subtitle";
 import { TeamTabs, type TeamTab } from "./team-tabs";
 import { TEAM_PRIMARY_BUTTON_CLASS } from "./team-styles";
 
@@ -47,6 +47,7 @@ export const TeamScreen = () => {
         <span className="flex min-w-0 flex-1 flex-col">
           <h1 className="text-[17px] font-bold">{text.title}</h1>
           <OrganizationSubtitle
+            isForDesktop={false}
             className="truncate text-[13px] text-[#64748B]"
             skeletonClassName="mt-1 h-3.5 w-32"
             render={organizationNameOnly}
@@ -64,11 +65,11 @@ export const TeamScreen = () => {
         ) : null}
       </MobileTopBar>
       <PageContent>
-        <OrganizationLoadError />
         <div className="hidden flex-wrap items-end justify-between gap-4 lg:flex">
           <div className="flex flex-col gap-1">
             <h1 className="text-xl font-bold tracking-[-0.015em]">{text.title}</h1>
             <OrganizationSubtitle
+              isForDesktop
               className="text-[13px] text-[#475569]"
               skeletonClassName="h-4 w-64"
               render={text.subtitle}

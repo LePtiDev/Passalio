@@ -147,6 +147,8 @@ Dernière mise à jour : 2026-10-24.
 - [x] Parcours Admin, Équipe Passalio, Commercial
 - [ ] Parcours restants : démarrer sans réseau avec la dernière session, nouvelle version sans perte des modifications hors ligne
 - [ ] Une personne retirée d'une entreprise garde une session qui pointe encore sur cette entreprise (comportement à décider)
+- [ ] Listes paginées à la hauteur de l'écran : si la hauteur change pendant le chargement, la requête repart de zéro avec ses nouvelles tentatives
+- [ ] Erreurs définitives (403, 404) : ne pas refaire 3 tentatives avant d'afficher l'erreur
 - [ ] Modifications refusées : dire laquelle a été refusée et pourquoi, pas seulement combien
 - [ ] Photos d'appareil : réduire la photo sur le téléphone avant l'envoi plutôt que refuser au-delà de 5 Mo
 - [ ] Régression visuelle : captures de référence de chaque état
