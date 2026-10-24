@@ -48,6 +48,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 - Webhooks Stripe vérifiés par signature.
 - Fichiers envoyés : type et taille vérifiés, stockés dans R2 hors du domaine de l'application.
 - `audit_logs` : connexions, changements de rôle, exports, suppressions, impersonations.
+- Inscriptions (ADR 0029) : un super admin peut les fermer depuis Plateforme › Réglages (`settings:manage`). Le serveur refuse alors la création de compte (`SIGN_UP_CLOSED`) et d'entreprise (`sign_up_closed`), sauf pour une adresse qui a une invitation en attente non expirée. La connexion des comptes existants n'est jamais bloquée. `GET /api/sign-up-availability` est public et ne renvoie qu'un booléen.
 - Espace admin (ADR 0015) : rôles plateforme donnés par un super admin depuis la page Équipe (invitation par e-mail, permission `team:manage`, ADR 0018) ou en urgence par `pnpm platform:grant`. Un super admin ne change pas son propre rôle ; un changement de rôle ou un retrait ferme les sessions de la personne. Double authentification TOTP obligatoire, codes vérifiés 5 fois par minute au plus. `/api/admin/*` répond 404 à qui n'est pas admin (et pendant une impersonation), 403 sans double authentification, 401 si la session n'a pas passé le code depuis moins de 12 heures (une connexion par lien magique doit aussi saisir le code).
 
 ## 6. Dépendances

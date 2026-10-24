@@ -54,19 +54,20 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 3. Contextes métier (DDD léger)
 
-| Contexte        | Responsabilité                                                       |
-| --------------- | -------------------------------------------------------------------- |
-| `identity`      | Comptes, entreprises, membres, rôles, permissions, impersonation     |
-| `customers`     | Clients, lieux, équipements, historique                              |
-| `scheduling`    | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
-| `compliance`    | Attestations, signature, PDF, numérotation, versions                 |
-| `engagement`    | Échéances, relances, envois email/SMS                                |
-| `billing`       | Abonnement Stripe (`docs/stripe.md`), état du compte                 |
-| `backoffice`    | Outils internes : support, impersonation, métriques                  |
-| `sales`         | Prospection de Passalio : entreprises, contacts, étapes, historique  |
-| `platform-team` | Équipe Passalio : membres, rôles plateforme, invitations             |
-| `mcp`           | Serveur MCP admin : OAuth, consentement, outils pour Claude          |
-| `sync`          | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
+| Contexte            | Responsabilité                                                           |
+| ------------------- | ------------------------------------------------------------------------ |
+| `identity`          | Comptes, entreprises, membres, rôles, permissions, impersonation         |
+| `customers`         | Clients, lieux, équipements, historique                                  |
+| `scheduling`        | Interventions, tournées, confirmation J-1, suivi d'arrivée               |
+| `compliance`        | Attestations, signature, PDF, numérotation, versions                     |
+| `engagement`        | Échéances, relances, envois email/SMS                                    |
+| `billing`           | Abonnement Stripe (`docs/stripe.md`), état du compte                     |
+| `backoffice`        | Outils internes : support, impersonation, métriques                      |
+| `sales`             | Prospection de Passalio : entreprises, contacts, étapes, historique      |
+| `platform-team`     | Équipe Passalio : membres, rôles plateforme, invitations                 |
+| `platform-settings` | Réglages de la plateforme : ouvrir ou fermer les inscriptions (ADR 0029) |
+| `mcp`               | Serveur MCP admin : OAuth, consentement, outils pour Claude              |
+| `sync`              | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes     |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
 
@@ -136,13 +137,13 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 
 ### Rôles plateforme (équipe interne)
 
-- `superadmin` (Super admin) : tout le backoffice, y compris l'équipe Passalio (`team:manage`).
-- `admin` (Admin) : tout le backoffice sauf l'équipe (ADR 0018, remplace `support`).
+- `superadmin` (Super admin) : tout le backoffice, y compris l'équipe Passalio (`team:manage`) et les réglages de la plateforme (`settings:manage`, ADR 0029).
+- `admin` (Admin) : tout le backoffice sauf l'équipe et les réglages (ADR 0018, remplace `support`).
 - `sales` (Commercial) : seulement la prospection, pas les comptes clients (ADR 0017).
 
 Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne depuis la page « Équipe Passalio » par invitation (ADR 0018), ou en urgence avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|admin|sales>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Lecture des comptes clients : `GET /api/admin/overview`, `/accounts`, `/accounts/:id` (et `/members`, `/usage`, `/journal`), `/journal`, réponses décrites par les schémas zod de `packages/shared/src/backoffice-responses.ts`. L'utilisation se mesure en jours d'utilisation par personne (`activity_days`). Voir ADR 0015.
 
-Écrans de l'espace admin (`apps/app/src/contexts/backoffice/`) : `/admin` (vue d'ensemble), `/admin/comptes?filtre=&recherche=`, `/admin/comptes/:accountId?onglet=personnel|utilisation|journal`, `/admin/journal`, `/admin/equipe` (super admin seulement : membres, invitations, changer un rôle, retirer). L'invitation s'accepte sur `/equipe-passalio/invitations/:id` après connexion ou création de compte avec la même adresse. Avant d'entrer, le garde de route appelle `/api/admin/me` : 404 renvoie à l'accueil, 403 à `/admin/securite` (activation de la double authentification : mot de passe, QR code, codes de secours), 401 à `/admin/code`. Une connexion par mot de passe d'un compte à double authentification passe par `/connexion/code`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
+Écrans de l'espace admin (`apps/app/src/contexts/backoffice/`) : `/admin` (vue d'ensemble), `/admin/comptes?filtre=&recherche=`, `/admin/comptes/:accountId?onglet=personnel|utilisation|journal`, `/admin/journal`, `/admin/equipe` (super admin seulement : membres, invitations, changer un rôle, retirer), `/admin/reglages` (super admin seulement : ouvrir ou fermer les inscriptions, `GET` et `PUT /api/admin/settings/sign-up`, ADR 0029 ; sur mobile, depuis l'icône de la vue d'ensemble). L'invitation s'accepte sur `/equipe-passalio/invitations/:id` après connexion ou création de compte avec la même adresse. Avant d'entrer, le garde de route appelle `/api/admin/me` : 404 renvoie à l'accueil, 403 à `/admin/securite` (activation de la double authentification : mot de passe, QR code, codes de secours), 401 à `/admin/code`. Une connexion par mot de passe d'un compte à double authentification passe par `/connexion/code`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
 
 Un seul propriétaire par entreprise. Il peut transférer ce rôle à un administrateur, qui devient propriétaire pendant que l'ancien devient administrateur. Personne ne peut inviter, nommer ou retirer un propriétaire. Une même personne peut être membre de plusieurs entreprises, avec un rôle par entreprise.
 
@@ -271,6 +272,7 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `prospect_tasks`         | `(owner_user_id, status, due_at)` pour Ma journée, `(company_id, status)`, `(contact_id)`                                                                                |
 | `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                 |
 | `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                |
+| `platform_settings`      | une seule ligne, lue par sa clé primaire ; l'inscription fermée lit `invitations (email)` et `platform_invitations (email, status)`                                      |
 
 Règles :
 
