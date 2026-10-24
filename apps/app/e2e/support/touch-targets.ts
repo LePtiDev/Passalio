@@ -39,7 +39,13 @@ export const smallTouchTargets = (page: Page, minSize = MIN_TOUCH_TARGET_PX) =>
           box.height <= 1 ||
           style.visibility === "hidden" ||
           element.closest("[aria-hidden='true'], [inert]") !== null;
-        if (isHidden) {
+        const isLinkInSentence =
+          element.tagName === "A" &&
+          style.display === "inline" &&
+          Array.from(element.parentElement?.childNodes ?? []).some(
+            (node) => node.nodeType === Node.TEXT_NODE && (node.textContent ?? "").trim() !== "",
+          );
+        if (isHidden || isLinkInSentence) {
           return [];
         }
         const labels =

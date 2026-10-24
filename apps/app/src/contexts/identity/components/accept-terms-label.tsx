@@ -1,10 +1,10 @@
 import { LEGAL_PATHS, legalFr } from "@/legal";
-import { AUTH_INLINE_LINK_CLASS } from "./auth-styles";
+import { AUTH_LINK_CLASS } from "./auth-styles";
 
 const text = legalFr.acceptTerms;
 
 const NewTabLink = ({ href, label }: { readonly href: string; readonly label: string }) => (
-  <a href={href} target="_blank" rel="noopener" className={AUTH_INLINE_LINK_CLASS}>
+  <a href={href} target="_blank" rel="noopener" className={AUTH_LINK_CLASS}>
     {label}
     <span className="sr-only"> {text.opensInNewTab}</span>
   </a>
