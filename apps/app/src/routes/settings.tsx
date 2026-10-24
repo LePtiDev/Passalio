@@ -1,6 +1,6 @@
 import { createRoute } from "@tanstack/react-router";
 import { SettingsScreen } from "@/components/app-shell/settings-screen";
-import { VisitTypesScreen } from "@/contexts/scheduling";
+import { ServicesScreen } from "@/contexts/scheduling";
 import { signedInRoute } from "./signed-in-layout";
 
 export const settingsRoute = createRoute({
@@ -12,8 +12,8 @@ export const settingsRoute = createRoute({
   },
 });
 
-export const visitTypesRoute = createRoute({
+export const servicesRoute = createRoute({
   getParentRoute: () => signedInRoute,
-  path: "/reglages/types-de-passage",
-  component: VisitTypesScreen,
+  path: "/reglages/prestations",
+  component: ServicesScreen,
 });

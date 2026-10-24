@@ -27,7 +27,10 @@ import {
   createD1TeamMembers,
 } from "../../src/contexts/scheduling/infrastructure/d1-intervention-places";
 import { createD1InterventionRepository } from "../../src/contexts/scheduling/infrastructure/d1-intervention-repository";
-import { createD1VisitTypeSettings } from "../../src/contexts/scheduling/infrastructure/d1-visit-type-settings";
+import {
+  createD1ServiceCatalog,
+  createD1ServiceRepository,
+} from "../../src/contexts/scheduling/infrastructure/d1-service-repository";
 import { createActivityLog } from "../../src/platform/activity-log";
 import { createAuditTrail } from "../../src/platform/audit-trail";
 import type { Database } from "../../src/platform/database";
@@ -52,7 +55,8 @@ export const createRepositories = (database: Database) => {
     interventions: createD1InterventionRepository(database),
     interventionPlaces: createD1InterventionPlaces(database),
     teamMembers: createD1TeamMembers(database),
-    visitTypeSettings: createD1VisitTypeSettings(database),
+    services: createD1ServiceRepository(database),
+    serviceCatalog: createD1ServiceCatalog(database),
     documents: createD1DocumentRepository(database),
     numberBlocks: createD1NumberBlockRepository(database),
     signingTargets: createD1SigningTargets(database),

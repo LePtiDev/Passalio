@@ -8,21 +8,69 @@ import {
   type InterventionCompletion,
   type InterventionFields,
   type Result,
+  type ServiceLine,
 } from "@passalio/shared";
 import { isVisitType, type TradeId } from "@passalio/trades";
 import type { Intervention, InterventionChangeSet } from "./intervention-models";
 import type { InterventionPlace } from "./scheduling-ports";
 import type { SchedulingError } from "./scheduling-error";
 
-export const canManageInterventionOf = (actor: Actor, technicianUserId: string): boolean =>
-  can(actor, "schedule:write") ||
-  (can(actor, "interventions:write-own") && technicianUserId === actor.userId);
+type Technicians = string | readonly string[];
 
-export const assertCanManageInterventionOf = (actor: Actor, technicianUserId: string): void => {
-  if (!canManageInterventionOf(actor, technicianUserId)) {
+const listOf = (technicians: Technicians): readonly string[] =>
+  typeof technicians === "string" ? [technicians] : technicians;
+
+export const canManageInterventionOf = (actor: Actor, technicians: Technicians): boolean =>
+  can(actor, "schedule:write") ||
+  (can(actor, "interventions:write-own") && listOf(technicians).includes(actor.userId));
+
+export const assertCanManageInterventionOf = (actor: Actor, technicians: Technicians): void => {
+  if (!canManageInterventionOf(actor, technicians)) {
     throw new ForbiddenError("schedule:write");
   }
 };
+
+export type VisitTeam = {
+  readonly technicianUserId: string;
+  readonly technicianUserIds: readonly string[];
+};
+
+const teamLedBy = (lead: string, others: readonly string[]): VisitTeam => ({
+  technicianUserId: lead,
+  technicianUserIds: [...new Set([lead, ...others])],
+});
+
+export const teamOf = (fields: InterventionFields): VisitTeam =>
+  teamLedBy(fields.technicianUserId, fields.technicianUserIds ?? []);
+
+export const changedTeam = (
+  current: VisitTeam,
+  changes: InterventionChanges,
+): VisitTeam | undefined => {
+  const { technicianUserId, technicianUserIds } = changes;
+  if (technicianUserId === undefined && technicianUserIds === undefined) {
+    return undefined;
+  }
+  const lead = technicianUserId ?? technicianUserIds?.[0] ?? current.technicianUserId;
+  return teamLedBy(
+    lead,
+    technicianUserIds ??
+      current.technicianUserIds.filter((userId) => userId !== current.technicianUserId),
+  );
+};
+
+export const checkServiceLines = (
+  lines: readonly ServiceLine[],
+  knownIds: readonly string[],
+): Result<readonly ServiceLine[], SchedulingError> =>
+  lines.every(({ serviceId }) => knownIds.includes(serviceId))
+    ? ok(
+        lines.filter(
+          (line, index) =>
+            lines.findIndex(({ serviceId }) => serviceId === line.serviceId) === index,
+        ),
+      )
+    : err("service_not_found");
 
 export const checkEquipmentsAtPlace = (
   equipmentIds: readonly string[],
@@ -45,6 +93,8 @@ export const newIntervention = (
     readonly createdByUserId: string;
     readonly equipmentIds: readonly string[];
     readonly visitTypes?: readonly TradeId[];
+    readonly serviceLines?: readonly ServiceLine[];
+    readonly team?: VisitTeam;
     readonly at: Date;
   },
 ): Intervention => ({
@@ -52,11 +102,12 @@ export const newIntervention = (
   organizationId: context.organizationId,
   customerId: fields.customerId,
   siteId: fields.siteId,
-  technicianUserId: fields.technicianUserId,
+  ...(context.team ?? teamOf(fields)),
   scheduledDate: fields.scheduledDate,
   startTime: fields.startTime ?? null,
   durationMinutes: fields.durationMinutes,
   visitTypes: context.visitTypes ?? [],
+  serviceLines: context.serviceLines ?? [],
   equipmentIds: context.equipmentIds,
   announcedPriceCents: fields.announcedPriceCents ?? null,
   notes: fields.notes ?? null,
@@ -71,7 +122,13 @@ export const newIntervention = (
 
 export const plannedChanges = (
   current: Intervention,
-  { visitTypes: _visitTypes, ...changes }: InterventionChanges,
+  {
+    visitTypes: _visitTypes,
+    technicianUserId: _technicianUserId,
+    technicianUserIds: _technicianUserIds,
+    serviceLines: _serviceLines,
+    ...changes
+  }: InterventionChanges,
   at: Date,
 ): Result<InterventionChangeSet, SchedulingError> =>
   current.status === "planned" ? ok({ ...changes, updatedAt: at }) : err("intervention_closed");

@@ -1,4 +1,4 @@
-import { TIME_OF_DAY_PATTERN, type InterventionFields } from "@passalio/shared";
+import { serviceLine, TIME_OF_DAY_PATTERN, type InterventionFields } from "@passalio/shared";
 import { TRADE_IDS, visitDurationMinutes } from "@passalio/trades";
 import * as z from "zod";
 import { schedulingFr } from "./fr";
@@ -21,7 +21,7 @@ export const priceCentsOf = (value: string): number | null => {
   return Math.round(Number(text.replace(",", ".")) * 100);
 };
 
-const isPrice = (value: string) => {
+export const isPrice = (value: string) => {
   const text = priceTextOf(value);
   return (
     text === "" || (PRICE_PATTERN.test(text) && Number(text.replace(",", ".")) <= MAX_PRICE_EUROS)
@@ -34,7 +34,9 @@ export const visitFormSchema = z.object({
   scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { error: errors.date }),
   startTime: z.string().regex(TIME_OF_DAY_PATTERN, { error: errors.time }),
   technicianUserId: z.string().min(1, { error: errors.technician }),
-  visitTypes: z.array(z.enum(TRADE_IDS)).min(1, { error: errors.visitType }).optional(),
+  technicianUserIds: z.array(z.string()).optional(),
+  serviceLines: z.array(serviceLine).min(1, { error: errors.services }).optional(),
+  visitTypes: z.array(z.enum(TRADE_IDS)).optional(),
   durationMinutes: visitDurationMinutes.optional(),
   equipmentIds: z.array(z.string()),
   price: z.string().trim().refine(isPrice, { error: errors.price }),
@@ -60,10 +62,12 @@ export const toInterventionFields = (values: VisitFormValues): InterventionField
   customerId: values.customerId,
   siteId: values.siteId,
   technicianUserId: values.technicianUserId,
+  technicianUserIds: values.technicianUserIds ?? [values.technicianUserId],
   scheduledDate: values.scheduledDate,
   startTime: values.startTime,
   durationMinutes: values.durationMinutes ?? DEFAULT_DURATION_MINUTES,
   visitTypes: values.visitTypes ?? [],
+  serviceLines: values.serviceLines ?? [],
   equipmentIds: values.equipmentIds,
   announcedPriceCents: priceCentsOf(values.price),
   notes: values.notes === "" ? null : values.notes,

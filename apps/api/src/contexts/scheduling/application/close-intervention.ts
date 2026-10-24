@@ -19,7 +19,7 @@ export const completeIntervention =
     if (current === undefined) {
       return err("intervention_not_found");
     }
-    assertCanManageInterventionOf(actor, current.technicianUserId);
+    assertCanManageInterventionOf(actor, current.technicianUserIds);
     const changes = completionChanges(current, input.completion, now());
     if (!changes.isOk) {
       return changes;
@@ -38,7 +38,7 @@ export const cancelIntervention =
     if (current === undefined) {
       return err("intervention_not_found");
     }
-    assertCanManageInterventionOf(actor, current.technicianUserId);
+    assertCanManageInterventionOf(actor, current.technicianUserIds);
     const changes = cancellationChanges(current, now());
     if (!changes.isOk) {
       return changes;

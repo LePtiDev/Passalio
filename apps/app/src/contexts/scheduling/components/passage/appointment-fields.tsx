@@ -13,7 +13,6 @@ import {
 import type { SiteRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import { schedulingFr } from "../../fr";
-import type { Technician } from "../../technicians";
 import type { VisitFormValues } from "../../visit-form-schema";
 import { siteLabelOf } from "./site-label";
 
@@ -60,42 +59,6 @@ const IconInput = ({
           className={cn(FIELD_CLASS, PICKER_INPUT_CLASS)}
         />
       </div>
-    </FormField>
-  );
-};
-
-export const TechnicianSelect = ({
-  control,
-  technicians,
-}: {
-  readonly control: Control<VisitFormValues>;
-  readonly technicians: readonly Technician[];
-}) => {
-  const { field, fieldState } = useController({ control, name: "technicianUserId" });
-  const error = fieldState.error?.message;
-  return (
-    <FormField id="visit-technician" label={text.technician} isRequired error={error}>
-      <Select value={field.value} onValueChange={field.onChange}>
-        <SelectTrigger
-          id="visit-technician"
-          aria-required="true"
-          aria-invalid={error === undefined ? undefined : true}
-          className={SELECT_TRIGGER_CLASS}
-        >
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {technicians.map((technician) => (
-            <SelectItem
-              key={technician.userId}
-              value={technician.userId}
-              className="min-h-12 lg:min-h-8"
-            >
-              {technician.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
     </FormField>
   );
 };

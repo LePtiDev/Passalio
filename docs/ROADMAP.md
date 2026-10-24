@@ -51,6 +51,7 @@ Dernière mise à jour : 2026-10-24.
 | Lecture de plaque, API : modèle interchangeable (OpenAI, Google, Anthropic, Mistral) avec secours, format imposé, quota, outil de mesure                                      | ADR 0022                         |
 | Planning : jour, semaine, équipe, choix des agendas, nouveau passage, fiche passage, annulation, hors ligne                                                                   | `contexts/scheduling` (app)      |
 | Types de passage : durée par défaut par métier dans Réglages, type et durée modifiable sur le nouveau passage                                                                 | `contexts/scheduling`            |
+| Prestations : liste par entreprise (durée, prix, document remis), plusieurs prestations et plusieurs techniciens par passage, prix annoncé prérempli                          | ADR 0024                         |
 | Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)     |
 | Lecture de plaque, tests : réduction de la photo, bandeau, marques des champs, listes déroulantes, remplissage du formulaire, parcours illisible, PAC, panne, hors ligne      | `docs/TESTING.md`                |
 | Lecture de plaque, note d'exploitation de l'IA : fonctionnement, coût estimé, choix du modèle, activation, incidents                                                          | `docs/ai-plate-reading.md`       |
@@ -107,8 +108,9 @@ Dernière mise à jour : 2026-10-24.
 - [x] Planning, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, fiche passage
 - [ ] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé, historique sur la fiche client
 - [x] Types de passage : durée par défaut par métier (Réglages › Types de passage), type et durée modifiable sur le nouveau passage (maquette validée le 2026-10-23)
-- [ ] Planning : modifier un passage (date, heure, technicien, type, durée), le marquer terminé sans certificat
-- [ ] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable
+- [ ] Planning : modifier un passage (date, heure, techniciens, prestations, durée), le marquer terminé sans certificat
+- [x] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable ; plusieurs prestations et plusieurs techniciens par passage (maquette validée le 2026-10-24, ADR 0024)
+- [ ] Chantiers sur plusieurs jours : un jour par passage, techniciens différents par jour, bloc « Chantier · jour 1 sur 3 » au planning, fiche chantier (maquette validée le 2026-10-24)
 - [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
 - [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC

@@ -1,12 +1,14 @@
 import { err, ok, type Actor, type InterventionChanges, type Result } from "@passalio/shared";
 import {
   assertCanManageInterventionOf,
+  changedTeam,
   checkEquipmentsAtPlace,
   checkVisitTypes,
   plannedChanges,
 } from "../domain/intervention-rules";
 import type { SchedulingDependencies } from "../domain/scheduling-ports";
 import type { SchedulingError } from "../domain/scheduling-error";
+import { allMembers, checkedServiceLines } from "./check-visit-details";
 
 export type UpdateInterventionInput = {
   readonly interventionId: string;
@@ -29,16 +31,16 @@ const checkedEquipments = async (
 export const updateIntervention =
   (dependencies: SchedulingDependencies) =>
   async (actor: Actor, input: UpdateInterventionInput): Promise<Result<void, SchedulingError>> => {
-    const { interventions, team, now } = dependencies;
+    const { interventions, now } = dependencies;
     const current = await interventions.findById(actor.organizationId, input.interventionId);
     if (current === undefined) {
       return err("intervention_not_found");
     }
-    assertCanManageInterventionOf(actor, current.technicianUserId);
-    const { technicianUserId } = input.changes;
-    if (technicianUserId !== undefined) {
-      assertCanManageInterventionOf(actor, technicianUserId);
-      if (!(await team.isMember(actor.organizationId, technicianUserId))) {
+    assertCanManageInterventionOf(actor, current.technicianUserIds);
+    const team = changedTeam(current, input.changes);
+    if (team !== undefined) {
+      assertCanManageInterventionOf(actor, team.technicianUserIds);
+      if (!(await allMembers(dependencies, actor.organizationId, team.technicianUserIds))) {
         return err("technician_not_member");
       }
     }
@@ -58,14 +60,24 @@ export const updateIntervention =
     if (!visitTypes.isOk) {
       return visitTypes;
     }
+    const serviceLines = await checkedServiceLines(
+      dependencies,
+      actor.organizationId,
+      input.changes.serviceLines,
+    );
+    if (!serviceLines.isOk) {
+      return serviceLines;
+    }
     const changes = plannedChanges(current, input.changes, now());
     if (!changes.isOk) {
       return changes;
     }
     await interventions.update(actor.organizationId, current.id, {
       ...changes.value,
+      ...team,
       ...(equipmentIds.value === undefined ? {} : { equipmentIds: equipmentIds.value }),
       ...(visitTypes.value === undefined ? {} : { visitTypes: visitTypes.value }),
+      ...(serviceLines.value === undefined ? {} : { serviceLines: serviceLines.value }),
     });
     return ok(undefined);
   };
