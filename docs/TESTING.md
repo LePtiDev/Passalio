@@ -1,11 +1,12 @@
 # Tests
 
-Règles dans l'ADR 0020 et dans `CLAUDE.md`. Ce fichier est l'inventaire : chaque nouvelle route, permission, requête fréquente ou écran y ajoute ses lignes dans la même PR.
+Règles dans les ADR 0020 et 0023 et dans `CLAUDE.md`. Ce fichier est l'inventaire : chaque nouvelle route, permission, requête fréquente ou écran y ajoute ses lignes dans la même PR.
 
 ## Règles en bref
 
 - Un test existant ne se modifie ni ne se supprime sans l'accord de Quentin, sauf si l'exigence a changé à sa demande. Le commit porte `Test-Change-Approved: <lien vers son message>`. `pnpm test:guard` bloque sinon.
 - On ne change jamais un test pour le faire passer.
+- Pas de code sans tests : tout comportement ajouté ou changé arrive avec ses tests dans la même PR. Sinon le commit porte `Tests-Not-Needed: <raison>`, et `pnpm test:guard` bloque sans elle (ADR 0023).
 - Un bug : commit `test: reproduce …` (rouge), puis commit `fix: …`. Skill `fix-bug`.
 - Interdits par le lint : `.only`, `.skip`, `.todo`, `fixme`, `expect` conditionnel, test sans assertion.
 
@@ -14,7 +15,7 @@ Règles dans l'ADR 0020 et dans `CLAUDE.md`. Ce fichier est l'inventaire : chaqu
 | Commande          | Ce qui tourne                                                                 | Quand                                            |
 | ----------------- | ----------------------------------------------------------------------------- | ------------------------------------------------ |
 | `pnpm test`       | Vitest de tous les paquets (familles 2 à 12)                                  | Chaque push (hook), `pnpm check`                 |
-| `pnpm test:guard` | Aucun test existant changé sans accord                                        | Chaque push (hook), `pnpm check`                 |
+| `pnpm test:guard` | Aucun test existant changé sans accord, aucun code de production sans test    | Chaque push (hook), `pnpm check`                 |
 | `pnpm test:e2e`   | Playwright : parcours, hors ligne, accessibilité, captures (familles 13 à 17) | Avant chaque fusion d'une PR qui touche l'app    |
 | `pnpm check`      | Format, lint, types, `test:guard`, `test`                                     | Chaque push, avant chaque fusion, dans `release` |
 

@@ -52,6 +52,7 @@ Dernière mise à jour : 2026-10-24.
 | Lecture de plaque, écran : photo de la plaque qui remplit les champs vides, listes déroulantes type et combustible, unité collée à la valeur                                  | `components/equipment` (app)                        |
 | Code de double authentification en 6 cases (Input OTP) ; barre latérale admin : badge « Admin », titres de section plus petits ; encart des rôles retiré de l'Équipe Passalio | `two-factor/totp-code-input.tsx`                    |
 | Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
+| ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
 
 ## Hors code (Quentin)
 
@@ -130,6 +131,7 @@ Dernière mise à jour : 2026-10-24.
 ## Tests (ADR 0020, inventaire dans `docs/TESTING.md`)
 
 - [x] Règles, garde-fou `test:guard`, lint des tests, agents, skill `fix-bug`
+- [x] Tests obligatoires (ADR 0023) : aucun code de production sans test, sauf `Tests-Not-Needed`
 - [ ] Synchronisation : rejouer une modification ou un retrait après archivage, doublons dans un même lot (comportement à décider)
 - [x] Matrices API générées : complétude des routes, permissions par rôle, isolation entre entreprises, impersonation
 - [ ] Matrices API, suite : réponses conformes aux schémas zod et `trace_id` sur les succès, cas 400 par route, isolation vue par chaque rôle
