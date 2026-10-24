@@ -13,7 +13,7 @@ export default mergeConfig(
           test: {
             name: "unit",
             environment: "node",
-            exclude: [...configDefaults.exclude, "e2e/**", COMPONENT_TESTS],
+            exclude: [...configDefaults.exclude, "e2e/**", "e2e-pwa/**", COMPONENT_TESTS],
           },
         },
         {
