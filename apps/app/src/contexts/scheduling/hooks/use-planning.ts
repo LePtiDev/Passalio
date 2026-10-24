@@ -7,6 +7,7 @@ import { agendasOf, type PlanningSearch, type PlanningView } from "../planning-s
 import { totalAnnouncedCents, type PlanningVisit } from "../planning-visits";
 import { colorAt, type TechnicianColor } from "../technician-colors";
 import { selectedTechnicians, type Technician } from "../technicians";
+import { isAssignedTo, assignedTechniciansOf } from "../visit-team";
 import { useNow } from "./use-now";
 import { usePlanningVisits } from "./use-planning-visits";
 import { useTechnicians } from "./use-technicians";
@@ -40,14 +41,12 @@ export type PlanningState =
   | { readonly status: "ready"; readonly model: PlanningModel };
 
 const countBy = (visits: readonly PlanningVisit[]) =>
-  visits.reduce(
-    (counts, { intervention }) =>
-      counts.set(
-        intervention.technicianUserId,
-        (counts.get(intervention.technicianUserId) ?? 0) + 1,
-      ),
-    new Map<string, number>(),
-  );
+  visits
+    .flatMap(({ intervention }) => assignedTechniciansOf(intervention))
+    .reduce(
+      (counts, userId) => counts.set(userId, (counts.get(userId) ?? 0) + 1),
+      new Map<string, number>(),
+    );
 
 export const usePlanning = (search: PlanningSearch) => {
   const { actor } = useLocalSession();
@@ -75,7 +74,7 @@ export const usePlanning = (search: PlanningSearch) => {
     const shownTechnicians = selectedTechnicians(team.technicians, selection);
     const colors = new Map(team.technicians.map(({ userId, color }) => [userId, color]));
     const visits = allVisits.filter(({ intervention }) =>
-      selection.includes(intervention.technicianUserId),
+      selection.some((userId) => isAssignedTo(intervention, userId)),
     );
     const step = view === "semaine" ? 7 : 1;
     return {
@@ -102,7 +101,7 @@ export const usePlanning = (search: PlanningSearch) => {
         visitsOn: (visitDay) =>
           visits.filter(({ intervention }) => intervention.scheduledDate === visitDay),
         visitsOf: (userId) =>
-          visits.filter(({ intervention }) => intervention.technicianUserId === userId),
+          visits.filter(({ intervention }) => isAssignedTo(intervention, userId)),
         colorOf: ({ intervention }) => colors.get(intervention.technicianUserId) ?? colorAt(0),
         visitCounts: countBy(allVisits),
         previousDay: addDays(day, -step),

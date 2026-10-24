@@ -14,7 +14,7 @@ export const fr = {
     reminders: "Relances",
     settings: "Réglages",
     team: "Équipe",
-    visitTypes: "Types de passage",
+    services: "Prestations",
     company: "Entreprise",
     subscription: "Abonnement",
     soon: "Bientôt",

@@ -68,9 +68,12 @@ export {
   interventionCompletion,
   interventionFields,
   MAX_INTERVENTION_EQUIPMENTS,
+  MAX_SERVICE_LINES,
+  MAX_VISIT_TECHNICIANS,
   MAX_VISIT_TYPES,
   PAYMENT_METHODS,
   schedulingMutation,
+  serviceLine,
   TIME_OF_DAY_PATTERN,
   type InterventionChanges,
   type InterventionCompletion,
@@ -78,6 +81,7 @@ export {
   type InterventionStatus,
   type PaymentMethod,
   type SchedulingMutation,
+  type ServiceLine,
 } from "./scheduling";
 export {
   isComplianceMutation,
