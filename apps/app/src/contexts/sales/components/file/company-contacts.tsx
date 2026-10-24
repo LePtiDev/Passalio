@@ -5,6 +5,7 @@ import { ADMIN_CARD_CLASS } from "@/contexts/backoffice";
 import { cn } from "@/lib/utils";
 import { salesFr } from "../../fr";
 import { ContactLink } from "../record-links";
+import { ScreenReaderText } from "../screen-reader-text";
 import { ACTION_LINK_CLASS, MUTED_CLASS, SECTION_TITLE_CLASS } from "../sales-styles";
 
 const text = salesFr.file;
@@ -26,7 +27,6 @@ const ContactLine = ({
     <li className="border-t border-[#EEF2F6] first:border-t-0 lg:border-t-0 lg:border-b lg:last:border-b-0">
       <ContactLink
         id={contact.id}
-        ariaLabel={salesFr.contacts.open(contact.name)}
         className="grid min-h-16 grid-cols-[minmax(0,1fr)_18px] items-center gap-3 px-3.5 py-2 hover:bg-[#F7F9FB] lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_140px_140px_24px] lg:gap-4 lg:py-2.5"
       >
         <span className="flex min-w-0 items-center gap-3">
@@ -37,12 +37,16 @@ const ContactLine = ({
           />
           <span className="flex min-w-0 flex-col gap-px">
             <span className="truncate text-[15px] font-semibold lg:text-[13px]">
+              <ScreenReaderText>{salesFr.list.open}</ScreenReaderText>
               {contact.name}
             </span>
-            <span className="truncate text-[13px] text-[#64748B]">{roleOf(contact) ?? ""}</span>
+            <span aria-hidden="true" className="truncate text-[13px] text-[#64748B]">
+              {roleOf(contact) ?? ""}
+            </span>
           </span>
         </span>
         <span
+          aria-hidden="true"
           className={cn(
             "hidden text-[13px] whitespace-nowrap tabular-nums lg:block",
             phone === null ? MUTED_CLASS : "text-[#475569]",
@@ -51,6 +55,7 @@ const ContactLine = ({
           {phone ?? salesFr.list.noPhone}
         </span>
         <span
+          aria-hidden="true"
           className={cn(
             "hidden truncate text-[13px] lg:block",
             contact.email === null && MUTED_CLASS,
@@ -95,7 +100,11 @@ export const CompanyContacts = ({ contacts, onAdd }: CompanyContactsProps) => (
     <section className={ADMIN_CARD_CLASS}>
       <div className="flex items-center justify-between px-3.5 pt-3.5 pb-1 lg:hidden">
         <h2 className={SECTION_TITLE_CLASS}>{text.contacts}</h2>
-        <button type="button" onClick={onAdd} className={cn(ACTION_LINK_CLASS, "-my-3.5")}>
+        <button
+          type="button"
+          onClick={onAdd}
+          className={cn(ACTION_LINK_CLASS, "-my-3.5 min-w-12 justify-end")}
+        >
           {text.addContactShort}
         </button>
       </div>

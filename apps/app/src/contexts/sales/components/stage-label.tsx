@@ -29,11 +29,20 @@ export const StageDot = ({
 type StageLabelProps = {
   readonly stage: ProspectStage;
   readonly isShort?: boolean;
+  readonly isHiddenFromScreenReaders?: boolean;
   readonly className?: string;
 };
 
-export const StageLabel = ({ stage, isShort = false, className }: StageLabelProps) => (
-  <span className={cn("inline-flex items-center gap-2 whitespace-nowrap", className)}>
+export const StageLabel = ({
+  stage,
+  isShort = false,
+  isHiddenFromScreenReaders = false,
+  className,
+}: StageLabelProps) => (
+  <span
+    aria-hidden={isHiddenFromScreenReaders ? true : undefined}
+    className={cn("inline-flex items-center gap-2 whitespace-nowrap", className)}
+  >
     <StageDot stage={stage} />
     {isShort ? salesFr.stageShort[stage] : salesFr.stages[stage]}
   </span>

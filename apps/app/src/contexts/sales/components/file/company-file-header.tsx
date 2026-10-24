@@ -55,7 +55,6 @@ export const CompanyFileHeader = ({ company, phone, now, onEdit }: CompanyFileHe
             className="inline-flex h-8 items-center gap-1.5 rounded-[7px] border border-[#E3E8EF] bg-white pr-2 pl-3 text-[13px] font-semibold hover:bg-[#F7F9FB]"
           >
             {text.stage}
-            <span>{salesFr.stages[company.stage]}</span>
             <ChevronDown aria-hidden="true" className="size-3.5 text-[#64748B]" />
           </button>
         </StageMenu>
