@@ -1,9 +1,13 @@
 import type { EquipmentPhotoKind } from "@passalio/shared";
 import { Camera, ScanText, X, type LucideIcon } from "lucide-react";
 import { useCallback, useState, type ChangeEvent } from "react";
+import type { PlateReadingState } from "../../hooks/use-plate-reading";
 import { customersFr, PHOTO_KIND_LABELS } from "../../fr";
 import { Fieldset } from "../form/form-shell";
 import { photoFileProblemOf, type PhotoFileProblem } from "./photo-file-check";
+import { PlateTileOverlay } from "./plate-reading-status";
+
+const IDLE_READING: PlateReadingState = { step: "idle" };
 
 const text = customersFr.equipmentForm;
 
@@ -23,10 +27,12 @@ const PHOTO_KINDS: readonly EquipmentPhotoKind[] = ["plate", "overview"];
 const FilledTile = ({
   kind,
   photo,
+  plateReading,
   onRemove,
 }: {
   readonly kind: EquipmentPhotoKind;
   readonly photo: PickedPhoto;
+  readonly plateReading: PlateReadingState;
   readonly onRemove: (kind: EquipmentPhotoKind) => void;
 }) => {
   const remove = useCallback(() => onRemove(kind), [kind, onRemove]);
@@ -38,6 +44,7 @@ const FilledTile = ({
           alt={PHOTO_KIND_LABELS[kind]}
           className="size-full object-cover"
         />
+        <PlateTileOverlay state={plateReading} />
         <button
           type="button"
           onClick={remove}
@@ -88,10 +95,15 @@ const EmptyTile = ({
 
 type EquipmentPhotoTilesProps = {
   readonly photos: EquipmentPhotos;
+  readonly plateReading: PlateReadingState;
   readonly onChange: (photos: EquipmentPhotos) => void;
 };
 
-export const EquipmentPhotoTiles = ({ photos, onChange }: EquipmentPhotoTilesProps) => {
+export const EquipmentPhotoTiles = ({
+  photos,
+  plateReading,
+  onChange,
+}: EquipmentPhotoTilesProps) => {
   const [problem, setProblem] = useState<PhotoFileProblem | null>(null);
   const pick = useCallback(
     (kind: EquipmentPhotoKind, file: File) => {
@@ -126,7 +138,13 @@ export const EquipmentPhotoTiles = ({ photos, onChange }: EquipmentPhotoTilesPro
           return photo === null ? (
             <EmptyTile key={kind} kind={kind} onPick={pick} />
           ) : (
-            <FilledTile key={kind} kind={kind} photo={photo} onRemove={remove} />
+            <FilledTile
+              key={kind}
+              kind={kind}
+              photo={photo}
+              plateReading={kind === "plate" ? plateReading : IDLE_READING}
+              onRemove={remove}
+            />
           );
         })}
       </div>
