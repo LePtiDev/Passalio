@@ -7,6 +7,8 @@ export const backofficeFr = {
     space: "Espace admin",
     badge: "Admin",
     commercial: "Commercial",
+    myDay: "Ma journée",
+    calls: "Appels",
     platform: "Plateforme",
     companies: "Entreprises",
     contacts: "Contacts",

@@ -168,6 +168,28 @@ export const ADMIN_SCREENS = {
       await expect(page.getByRole("region", { name: "Entreprise sélectionnée" })).toBeVisible();
     },
   }),
+  "my day": openStored({
+    path: () => "/admin/journee",
+    heading: () => "Ma journée",
+    ready: async (page) => {
+      await expect(page.getByRole("region", { name: "À faire maintenant" })).toBeVisible();
+    },
+  }),
+  calls: openStored({
+    path: () => "/admin/appels",
+    heading: () => "Appels",
+    ready: async (page) => {
+      await expect(page.getByRole("region", { name: "Rappels du jour" })).toBeVisible();
+    },
+  }),
+  "call session": openStored({
+    path: ({ companyPath }) =>
+      `/admin/appels/serie?entreprise=${companyPath.split("/").at(-1) ?? ""}`,
+    heading: () => "Appel",
+    ready: async (page) => {
+      await expect(page.getByRole("form", { name: "Résultat" })).toBeVisible();
+    },
+  }),
 } as const satisfies Readonly<Record<string, OpenScreen>>;
 
 export type AdminScreenName = keyof typeof ADMIN_SCREENS;

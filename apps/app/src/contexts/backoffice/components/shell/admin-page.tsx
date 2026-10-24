@@ -10,7 +10,9 @@ type AdminPath =
   | "/admin/comptes"
   | "/admin/entreprises"
   | "/admin/contacts"
-  | "/admin/prospection";
+  | "/admin/prospection"
+  | "/admin/journee"
+  | "/admin/appels";
 
 export type AdminTrailStep = {
   readonly label: string;

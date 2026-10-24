@@ -127,12 +127,14 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 
 ## Appels et rappels de prospection (ADR 0024)
 
-| Famille | Ce qui est vérifié                                                                                                                                    | Test                                                                          |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| 2       | Étape après l'appel (démo, pas intéressé, premier décroché, cliente figée) ; notification 15 min avant, à l'heure, la veille à 18 h en heure de Paris | `sales/domain/call-rules.test.ts`, `packages/shared/src/paris-time.test.ts`   |
-| 4       | Noter un appel, qualifier, fiche de suivi, Ma journée, série d'appels, déplacer ou clore un rappel : rôles, erreurs, rien d'écrit en cas de refus     | `sales/application/*call*.test.ts`, `get-my-day`, `get-follow-up`, `update-*` |
-| 5, 6    | Routes : 201, 204, 400, 404, 409, 422, réponses conformes aux schémas zod, rappel dans Ma journée, suppression en cascade avec l'entreprise           | `apps/api/test/prospect-call-routes.test.ts`                                  |
-| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes et index des nouvelles requêtes                                        | `apps/api/test/matrices`, `apps/api/test/database`                            |
+| Famille | Ce qui est vérifié                                                                                                                                     | Test                                                                                 |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| 2       | Étape après l'appel (démo, pas intéressé, premier décroché, cliente figée) ; notification 15 min avant, à l'heure, la veille à 18 h en heure de Paris  | `sales/domain/call-rules.test.ts`, `packages/shared/src/paris-time.test.ts`          |
+| 4       | Noter un appel, qualifier, fiche de suivi, Ma journée, série d'appels, déplacer ou clore un rappel : rôles, erreurs, rien d'écrit en cas de refus      | `sales/application/*call*.test.ts`, `get-my-day`, `get-follow-up`, `update-*`        |
+| 5, 6    | Routes : 201, 204, 400, 404, 409, 422, réponses conformes aux schémas zod, rappel dans Ma journée, suppression en cascade avec l'entreprise            | `apps/api/test/prospect-call-routes.test.ts`                                         |
+| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes et index des nouvelles requêtes                                         | `apps/api/test/matrices`, `apps/api/test/database`                                   |
+| 3       | Formulaires d'appel et de série (champs requis selon le résultat, 5 à 30 appels), progression d'une série, contact et numéro appelés, rappel à clore   | `call-form-schema`, `call-series-form-schema`, `session-progress`, `call-desk-model` |
+| 3       | Écrans Ma journée, Appels, série : compteurs, liens, enregistrement, passer, terminer, mobile, vide, chargement, erreur avec code ; « Noter un appel » | `my-day-screen`, `calls-screen`, `call-session-screen`, `company-file-call-note`     |
 
 ## Parcours de bout en bout
 
@@ -193,6 +195,7 @@ Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans 
 | Commercial      | Changer l'étape, ajouter une note, historique                                                                          | `commercial-companies.spec.ts`                                          |
 | Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                                                         | `commercial-contacts.spec.ts`                                           |
 | Commercial      | Prospection : qualifier depuis la carte, sur ordinateur et sur mobile                                                  | `commercial-prospection.spec.ts`                                        |
+| Commercial      | Série d'appels : résultat, intérêt, rappel promis ; le rappel apparaît dans Ma journée puis disparaît une fois appelé  | `commercial-calls.spec.ts`                                              |
 | Site            | Liens de la landing, environnement staging ou production                                                               | `apps/web` (unitaire)                                                   |
 | Mises à jour    | Nouvelle version : l'app se recharge sans perdre les modifications hors ligne                                          | à écrire                                                                |
 

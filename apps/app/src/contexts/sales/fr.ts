@@ -132,6 +132,7 @@ export const salesFr = {
     back: "Retour aux entreprises",
     backToContacts: "Retour aux contacts",
     call: "Appeler",
+    noteCall: "Noter un appel",
     edit: "Modifier",
     stage: "Étape",
     stageLabel: "Changer l'étape",

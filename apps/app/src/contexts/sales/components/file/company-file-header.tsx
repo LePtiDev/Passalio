@@ -7,6 +7,7 @@ import { NEUTRAL_BADGE_CLASS } from "../sales-styles";
 import { StageDot, StageLabel } from "../stage-label";
 import { ProspectionLink } from "./company-map-card";
 import { CallLink, CallTile, SECONDARY_ACTION_CLASS, TILE_CLASS, TileButton } from "./file-actions";
+import { NoteCallLink } from "./note-call-link";
 import { StageMenu } from "./stage-menu";
 
 const text = salesFr.file;
@@ -44,6 +45,7 @@ export const CompanyFileHeader = ({ company, phone, now, onEdit }: CompanyFileHe
       </div>
       <div className="flex gap-2">
         <CallLink phone={phone} className={SECONDARY_ACTION_CLASS} />
+        <NoteCallLink companyId={company.id} className={SECONDARY_ACTION_CLASS} />
         <Button variant="outline" className={SECONDARY_ACTION_CLASS} onClick={onEdit}>
           <Pencil aria-hidden="true" className="size-3.5" strokeWidth={1.8} />
           {text.edit}
@@ -83,6 +85,7 @@ export const CompanyFileHeader = ({ company, phone, now, onEdit }: CompanyFileHe
         </StageMenu>
         <TileButton icon={Pencil} label={text.edit} onClick={onEdit} />
       </div>
+      <NoteCallLink companyId={company.id} className={SECONDARY_ACTION_CLASS} />
     </div>
   </>
 );
