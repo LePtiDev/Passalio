@@ -1,0 +1,66 @@
+---
+import { noNetworkCampaign } from "../../content/campaigns/no-network";
+import CheckIcon from "../check-icon.astro";
+
+const phone = noNetworkCampaign.phone;
+---
+
+<figure
+  class="dot-grid relative m-0 flex min-w-0 flex-[1_1_380px] justify-center rounded-2xl border border-panel-line bg-panel px-4 pt-6 pb-16 sm:pt-8"
+  aria-label={phone.label}
+>
+  <div
+    class="flex aspect-[9/19.5] w-57.5 flex-col overflow-hidden rounded-[32px] border-6 border-navy bg-white shadow-phone sm:w-67.5 sm:rounded-[38px] sm:border-7"
+  >
+    <div class="flex h-5.5 items-center justify-center" aria-hidden="true">
+      <span class="h-1.5 w-16 rounded-full bg-navy"></span>
+    </div>
+    <div class="flex items-center justify-between border-b border-hairline px-3.5 pt-1.5 pb-2.5">
+      <span class="text-[11px] text-slate-text">‹ {phone.backLabel}</span>
+      <span class="rounded-full bg-amber-soft px-2 py-0.5 text-[10px] font-semibold text-amber-text">
+        {phone.status}
+      </span>
+    </div>
+    <div class="flex min-h-0 flex-1 flex-col gap-2.5 px-3.5 py-3 text-xs">
+      <div>
+        <p class="text-[15px] leading-snug font-bold">{phone.customer}</p>
+        <p class="text-[11px] text-slate-text">{phone.address}</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <p class="rounded-[10px] border border-card-line px-2.5 py-2">
+          <span class="block text-[10px] text-slate-text">{phone.accessCodeLabel}</span>
+          <span class="block text-sm font-bold tracking-wide">{phone.accessCode}</span>
+        </p>
+        <p class="rounded-[10px] border border-card-line px-2.5 py-2">
+          <span class="block text-[10px] text-slate-text">{phone.floorLabel}</span>
+          <span class="block font-semibold">{phone.floor}</span>
+        </p>
+      </div>
+      <p class="rounded-[10px] border border-card-line px-2.5 py-2">
+        <span class="block text-[10px] text-slate-text">{phone.occupantLabel}</span>
+        <span class="block font-semibold">{phone.occupant}</span>
+      </p>
+      <p class="rounded-[10px] border border-card-line px-2.5 py-2">
+        <span class="block text-[10px] text-slate-text">{phone.equipmentLabel}</span>
+        <span class="block font-semibold">{phone.equipment}</span>
+        <span class="block text-[10.5px] text-slate-text">{phone.lastSweep}</span>
+      </p>
+      <span class="flex-1"></span>
+      <p class="mb-1.5 rounded-[9px] bg-amber-soft px-2.5 py-2 text-center text-[11px] font-semibold text-amber-text">
+        {phone.pending}
+      </p>
+    </div>
+  </div>
+  <figcaption
+    class="absolute inset-x-4 bottom-4 mx-auto flex max-w-60 items-center gap-2.5 rounded-xl border border-card-line bg-white px-3 py-2.5 shadow-card"
+  >
+    <span class="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-validated-soft">
+      <CheckIcon class="size-3.25 text-validated" />
+    </span>
+    <span class="text-xs leading-snug">
+      <strong class="font-semibold">{phone.toastTitle}</strong>
+      <br />
+      <span class="text-slate-text">{phone.toastText}</span>
+    </span>
+  </figcaption>
+</figure>

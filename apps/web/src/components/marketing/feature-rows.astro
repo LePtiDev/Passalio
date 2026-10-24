@@ -1,0 +1,49 @@
+---
+import type { MarketingPage } from "../../content/content-schema";
+import { marketingFr } from "../../copy/marketing-fr";
+import CheckIcon from "../check-icon.astro";
+import SectionHeading from "../section-heading.astro";
+import VisualCard from "./visual-card.astro";
+
+interface Props {
+  title: string;
+  features: MarketingPage["features"];
+}
+
+const { title, features } = Astro.props;
+---
+
+<section id="fonctions" class="border-y border-panel-line bg-panel py-10 sm:py-18">
+  <div class="mx-auto flex max-w-270 flex-col gap-11 px-4 sm:gap-16 sm:px-6">
+    <SectionHeading eyebrow={marketingFr.featuresEyebrow} title={title} />
+    {
+      features.map((feature, index) => (
+        <div
+          class:list={[
+            "flex flex-col items-center gap-6 sm:gap-14",
+            index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse",
+          ]}
+        >
+          <div class="flex w-full min-w-0 flex-1 flex-col gap-3">
+            <p class="text-xs font-semibold text-validated">{feature.label}</p>
+            <h3 class="text-[19px] leading-snug font-bold tracking-[-0.015em] sm:text-[21px]">
+              {feature.title}
+            </h3>
+            <p class="text-slate-text">{feature.text}</p>
+            <ul class="flex flex-col gap-1.75 pt-0.5">
+              {feature.bullets.map((bullet) => (
+                <li class="flex items-start gap-2">
+                  <CheckIcon class="mt-1 size-3.5 shrink-0 text-validated" />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="w-full min-w-0 flex-1">
+            <VisualCard card={feature.visual} />
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

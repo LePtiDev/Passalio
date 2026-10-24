@@ -1,0 +1,20 @@
+---
+import type { Tone } from "../../content/content-schema";
+import { TONE_STYLES } from "./tone-styles";
+
+interface Props {
+  label: string;
+  tone: Tone;
+  class?: string;
+}
+
+const { label, tone, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 font-semibold",
+    TONE_STYLES[tone],
+    className,
+  ]}>{label}</span
+>

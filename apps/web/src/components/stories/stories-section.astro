@@ -1,0 +1,23 @@
+---
+import { PATHS, storyLinks } from "../../content/catalog";
+import { storiesFr } from "../../copy/stories-fr";
+import SectionHeading from "../section-heading.astro";
+import StoryGrid from "./story-grid.astro";
+
+const stories = storyLinks().slice(0, 3);
+---
+
+<section id="histoires" class="scroll-mt-4 border-t border-hairline py-[clamp(56px,7vw,96px)]">
+  <div class="mx-auto flex max-w-270 flex-col gap-7 px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading eyebrow={storiesFr.eyebrow} title={storiesFr.homeTitle} />
+      <a
+        href={PATHS.stories}
+        class="inline-flex h-12 items-center rounded-md border border-line px-3 text-[13px] font-semibold text-navy hover:border-input sm:h-8"
+      >
+        {storiesFr.allStories}
+      </a>
+    </div>
+    <StoryGrid stories={stories} />
+  </div>
+</section>

@@ -1,0 +1,67 @@
+---
+import ButtonLink from "../components/button-link.astro";
+import SiteHeader from "../components/navigation/site-header.astro";
+import SiteFooter from "../components/site-footer.astro";
+import StoryFilters from "../components/stories/story-filters.astro";
+import StoryGrid from "../components/stories/story-grid.astro";
+import { PATHS, storyLinks } from "../content/catalog";
+import { marketingFr } from "../copy/marketing-fr";
+import { storiesFr } from "../copy/stories-fr";
+import BaseLayout from "../layouts/base-layout.astro";
+import { appUrl } from "../links";
+import { breadcrumbJsonLd } from "../seo";
+
+const stories = storyLinks();
+const activities = [...new Set(stories.map((story) => story.card.activity))];
+---
+
+<BaseLayout
+  title={storiesFr.indexSeo.title}
+  description={storiesFr.indexSeo.description}
+  path={PATHS.stories}
+  structuredData={[
+    breadcrumbJsonLd([
+      { name: marketingFr.breadcrumbHome, path: PATHS.home },
+      { name: storiesFr.eyebrow, path: PATHS.stories },
+    ]),
+  ]}
+>
+  <SiteHeader currentPath={PATHS.stories} />
+  <main>
+    <section class="pt-7 pb-5 sm:pt-14 sm:pb-7">
+      <div class="mx-auto flex max-w-270 flex-col gap-3.5 px-4 sm:px-6">
+        <p class="text-[11px] font-semibold tracking-[0.08em] text-validated uppercase">
+          {storiesFr.eyebrow}
+        </p>
+        <h1
+          class="max-w-180 text-[29px] leading-[1.15] font-bold tracking-[-0.03em] text-balance sm:text-[38px]"
+        >
+          {storiesFr.indexTitle}
+        </h1>
+        <p class="max-w-155 text-base text-slate-text sm:text-[15px]">{storiesFr.indexLead}</p>
+      </div>
+    </section>
+    <section class="pb-10 sm:pb-16">
+      <div class="mx-auto flex max-w-270 flex-col gap-5 px-4 sm:px-6" data-story-list>
+        {activities.length > 1 && <StoryFilters activities={activities} />}
+        <StoryGrid stories={stories} headingLevel="h2" />
+      </div>
+    </section>
+    <section class="border-t border-panel-line bg-panel py-10 sm:py-16">
+      <div
+        class="mx-auto flex max-w-270 flex-wrap items-center justify-between gap-6 px-4 sm:px-6"
+      >
+        <h2 class="max-w-140 text-[23px] leading-tight font-bold tracking-[-0.02em] sm:text-[27px]">
+          {storiesFr.indexCallToAction}
+        </h2>
+        <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+          <ButtonLink href={appUrl("signUp")}>{marketingFr.tryFree}</ButtonLink>
+          <ButtonLink href={`${PATHS.noNetwork}#rappel`} variant="outline">
+            {marketingFr.callMeBack}
+          </ButtonLink>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

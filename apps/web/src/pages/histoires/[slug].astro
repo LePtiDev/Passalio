@@ -1,0 +1,85 @@
+---
+import type { GetStaticPaths } from "astro";
+import SiteHeader from "../../components/navigation/site-header.astro";
+import SiteFooter from "../../components/site-footer.astro";
+import CallbackSection from "../../components/marketing/callback-section.astro";
+import StoryArticle from "../../components/stories/story-article.astro";
+import StoryCallToAction from "../../components/stories/story-call-to-action.astro";
+import StoryGrid from "../../components/stories/story-grid.astro";
+import StoryHero from "../../components/stories/story-hero.astro";
+import {
+  PATHS,
+  featureLinksFor,
+  publishedStories,
+  relatedStoryLinks,
+} from "../../content/catalog";
+import type { Story } from "../../content/content-schema";
+import { marketingFr } from "../../copy/marketing-fr";
+import { storiesFr } from "../../copy/stories-fr";
+import BaseLayout from "../../layouts/base-layout.astro";
+import { articleJsonLd, breadcrumbJsonLd } from "../../seo";
+
+export const getStaticPaths = (() =>
+  publishedStories().map((story) => ({ params: { slug: story.slug }, props: { story } }))) satisfies GetStaticPaths;
+
+interface Props {
+  story: Story;
+}
+
+const { story } = Astro.props;
+const path = PATHS.story(story.slug);
+const related = relatedStoryLinks(story);
+---
+
+<BaseLayout
+  title={story.seo.title}
+  description={story.seo.description}
+  path={path}
+  ogType="article"
+  structuredData={[
+    breadcrumbJsonLd([
+      { name: marketingFr.breadcrumbHome, path: PATHS.home },
+      { name: storiesFr.eyebrow, path: PATHS.stories },
+      { name: story.card.title, path },
+    ]),
+    articleJsonLd({
+      title: story.title,
+      description: story.seo.description,
+      path,
+      publishedOn: story.publishedOn,
+    }),
+  ]}
+>
+  <SiteHeader currentPath={path} />
+  <main>
+    <StoryHero story={story} />
+    <StoryArticle story={story} />
+    <StoryCallToAction
+      title={story.callToAction}
+      links={featureLinksFor(story)}
+      callbackHref="#rappel"
+    />
+    {
+      related.length > 0 && (
+        <section class="py-10 sm:py-16">
+          <div class="mx-auto flex max-w-270 flex-col gap-6 px-4 sm:px-6">
+            <div class="flex flex-wrap items-end justify-between gap-4">
+              <h2 class="text-[23px] leading-tight font-bold tracking-[-0.02em] sm:text-[27px]">
+                {storiesFr.related}
+              </h2>
+              <a
+                href={PATHS.stories}
+                class="inline-flex min-h-12 items-center text-[13px] font-semibold text-validated hover:text-navy sm:min-h-8"
+              >
+                {storiesFr.allStories} →
+              </a>
+            </div>
+            <StoryGrid stories={related} hasSummary={false} />
+          </div>
+        </section>
+      )
+    }
+    <CallbackSection title={marketingFr.callbackTitle} lead={marketingFr.callbackLead} pagePath={path} />
+  </main>
+  <SiteFooter />
+</BaseLayout>

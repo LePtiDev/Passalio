@@ -1,0 +1,44 @@
+---
+import { marketingFr } from "../../copy/marketing-fr";
+import { appUrl } from "../../links";
+import ButtonLink from "../button-link.astro";
+
+interface Props {
+  title: string;
+  links: ReadonlyArray<{ title: string; href: string | undefined }>;
+  callbackHref: string;
+}
+
+const { title, links, callbackHref } = Astro.props;
+const linkedFeatures = links.filter(
+  (link): link is { title: string; href: string } => link.href !== undefined,
+);
+---
+
+<section class="border-y border-panel-line bg-panel py-10 sm:py-16">
+  <div class="mx-auto flex max-w-270 flex-wrap items-center gap-6 px-4 sm:gap-12 sm:px-6">
+    <div class="flex min-w-0 flex-[1_1_420px] flex-col gap-3">
+      <h2 class="text-[23px] leading-tight font-bold tracking-[-0.02em] sm:text-[27px]">{title}</h2>
+      {
+        linkedFeatures.length > 0 && (
+          <ul class="flex flex-wrap gap-x-4">
+            {linkedFeatures.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-12 items-center text-[13px] font-semibold text-validated hover:text-navy sm:min-h-8"
+                >
+                  {link.title} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+      <ButtonLink href={appUrl("signUp")}>{marketingFr.tryFree}</ButtonLink>
+      <ButtonLink href={callbackHref} variant="outline">{marketingFr.callMeBack}</ButtonLink>
+    </div>
+  </div>
+</section>

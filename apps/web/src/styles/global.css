@@ -29,8 +29,12 @@
   --color-section: #f8fafc;
   --color-row-head: #fafbfd;
   --color-navy-card-line: #24476b;
+  --color-amber-soft: #fef3e2;
+  --color-amber-text: #8a4b08;
+  --color-sun: #fcd34d;
   --shadow-card: 0 1px 2px rgb(15 42 68 / 0.04), 0 8px 24px -12px rgb(15 42 68 / 0.12);
   --shadow-button: 0 1px 2px rgb(15 42 68 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --shadow-menu: 0 12px 32px -12px rgb(15 42 68 / 0.22), 0 2px 6px rgb(15 42 68 / 0.06);
   --shadow-phone: 0 24px 48px -24px rgb(15 42 68 / 0.4);
 }
 

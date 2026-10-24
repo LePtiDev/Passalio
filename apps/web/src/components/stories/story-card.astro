@@ -1,0 +1,43 @@
+---
+import type { StoryLink } from "../../content/catalog";
+import { storiesFr } from "../../copy/stories-fr";
+import { COVER_THEMES } from "./cover-themes";
+
+interface Props {
+  story: StoryLink;
+  headingLevel?: "h2" | "h3";
+  hasSummary?: boolean;
+}
+
+const { story, headingLevel = "h3", hasSummary = true } = Astro.props;
+const theme = COVER_THEMES[story.card.theme];
+const Heading = headingLevel;
+---
+
+<article
+  class="relative flex w-full flex-col overflow-hidden rounded-xl border border-card-line bg-white shadow-card"
+>
+  <div class:list={["relative flex h-38 items-end p-4 sm:h-42", theme.cover]}>
+    <span
+      class:list={[
+        "absolute top-3.5 left-4 rounded-full px-2.25 py-0.5 text-[11px] font-semibold",
+        theme.chip,
+      ]}>{story.card.moment}</span
+    >
+    <p class:list={["text-[21px] leading-tight font-bold tracking-[-0.02em]", theme.quote]}>
+      {story.card.quote}
+    </p>
+  </div>
+  <div class="flex flex-1 flex-col gap-1.5 p-4">
+    <Heading class="text-[15px] leading-snug font-bold">
+      <a href={story.href} class="after:absolute after:inset-0 hover:text-validated">
+        {story.card.title}
+      </a>
+    </Heading>
+    {hasSummary && <p class="text-[13px] text-slate-text">{story.card.summary}</p>}
+    <span class="flex-1"></span>
+    <p class="pt-1 text-xs text-slate-text">
+      {story.card.activity} · {storiesFr.readingTime(story.card.minutes)}
+    </p>
+  </div>
+</article>

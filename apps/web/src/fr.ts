@@ -1,17 +1,10 @@
 export const fr = {
   meta: {
-    title: "Passalio, le logiciel des ramoneurs pour les attestations et les relances",
+    title: "Passalio, logiciel de ramonage : attestations et relances",
     description:
       "Remplissez l'attestation de ramonage chez le client, faites-la signer sur le téléphone, envoyez-la par email. Passalio relance le client l'année suivante.",
   },
   brand: "Passalio",
-  nav: {
-    label: "Navigation principale",
-    passage: "Comment ça se passe",
-    questions: "Questions",
-    signIn: "Se connecter",
-    tryFree: "Essayer gratuitement",
-  },
   hero: {
     eyebrow: "Pour les ramoneurs, seuls ou en équipe",
     title: "Chaque passage, en règle.",
@@ -198,13 +191,5 @@ export const fr = {
     title: "Essayez-le sur votre prochaine intervention.",
     lead: "Créez votre compte, ajoutez un client, faites signer une première attestation, sur votre propre téléphone.",
     action: "Essayer gratuitement",
-  },
-  footer: {
-    label: "Liens du pied de page",
-    signIn: "Se connecter",
-    terms: "Conditions",
-    privacy: "Confidentialité",
-    legalNotice: "Mentions légales",
-    copyright: (year: number) => `© ${year} Passalio`,
   },
 } as const;

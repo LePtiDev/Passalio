@@ -58,6 +58,7 @@ Dernière mise à jour : 2026-10-24.
 | Tests de l'application : 585 tests Vitest, 403 parcours Playwright (mobile et ordinateur, accessibilité), 43 bugs reproduits puis corrigés                                    | [#55](https://github.com/LePtiDev/Passalio/pull/55) |
 | ADR 0023 : tests obligatoires, `test:guard` refuse du code de production sans test                                                                                            | ADR 0023, `packages/test-guard`                     |
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                      | ADR 0024                                            |
+| Site : navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100                   | PR à venir                                          |
 
 ## Hors code (Quentin)
 
@@ -184,7 +185,11 @@ Dernière mise à jour : 2026-10-24.
 - [ ] Landing : section prix, une fois le prix tranché, en hors taxes (ADR 0014)
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
-- [ ] Pages par métier et pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement
+- [x] Barre de navigation commune, pages par activité, pages fonction, histoires de terrain, page Sans réseau, SEO complet (maquette : https://claude.ai/artifact/6LZhtqB84KkzXpjxumRoqt)
+- [ ] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com) et comptage des visites par page et par jour, sans donnée personnelle
+- [ ] Publier les pages Certificat, Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et leurs histoires quand la fonction est en production (`isPublished`)
+- [ ] Remplacer les histoires inventées par de vrais témoignages dès les premiers clients
+- [ ] Pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement
 
 Avant le premier client payant : informations de l'éditeur dans les pages légales, relecture juridique, SPF/DKIM/DMARC.
 
