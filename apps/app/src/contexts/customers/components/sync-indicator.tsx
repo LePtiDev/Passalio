@@ -1,14 +1,16 @@
 import { CloudOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { customersFr } from "../fr";
 import { useSyncIndicator } from "../hooks/use-sync-indicator";
 
 export const SyncPill = () => {
-  const { isOffline, label, phase } = useSyncIndicator();
+  const { isOffline, label, phase, rejectedCount } = useSyncIndicator();
+  const hasRejections = rejectedCount > 0;
   return (
     <output
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
-        isOffline || phase === "error"
+        isOffline || phase === "error" || hasRejections
           ? "bg-[#FEF3E2] text-[#B45309]"
           : "bg-[#E6F4EE] text-[#0E7C5A]",
       )}
@@ -18,18 +20,24 @@ export const SyncPill = () => {
       ) : (
         <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
       )}
-      {label}
+      <span>{label}</span>
+      {hasRejections ? (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>{customersFr.sync.rejected(rejectedCount)}</span>
+        </>
+      ) : null}
     </output>
   );
 };
 
 export const MobileSyncLine = ({ prefix }: { readonly prefix?: string | undefined }) => {
-  const { isOffline, label, phase } = useSyncIndicator();
-  if (phase === "error") {
+  const { isOffline, label, phase, rejectedCount } = useSyncIndicator();
+  if (phase === "error" || (!isOffline && rejectedCount > 0)) {
     return (
       <span className="flex items-center gap-1.5 truncate text-[13px] font-semibold text-[#B45309]">
         <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-[#D97706]" />
-        {label}
+        {phase === "error" ? label : `${label} · ${customersFr.sync.rejectedShort(rejectedCount)}`}
       </span>
     );
   }

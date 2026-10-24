@@ -114,6 +114,7 @@ export const customersFr = {
         : `Vous pouvez continuer. ${plural(pending, "modification sera envoyée", "modifications seront envoyées")} dès le retour du réseau.`,
     rejected: (count: number) =>
       `${plural(count, "modification refusée", "modifications refusées")} par le serveur.`,
+    rejectedShort: (count: number) => plural(count, "refusée", "refusées"),
     pendingBadge: "À envoyer",
   },
   list: {
