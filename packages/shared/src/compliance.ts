@@ -41,3 +41,8 @@ export const numberBlockResponse = z.object({
 });
 
 export type NumberBlockResponse = z.infer<typeof numberBlockResponse>;
+
+export const DOCUMENT_NUMBER_WIDTH = 4;
+
+export const documentNumberLabel = (prefix: string, number: number) =>
+  `${prefix}${String(number).padStart(DOCUMENT_NUMBER_WIDTH, "0")}`;

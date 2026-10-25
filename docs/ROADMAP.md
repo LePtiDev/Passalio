@@ -69,6 +69,7 @@ Dernière mise à jour : 2026-10-25.
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                                | PR #62                                              |
 | PDF du certificat de ramonage : modèles Bandeau et Sobre, cinq couleurs, page de conseils, mentions obligatoires, rendu déterministe et empreinte                                                                         | ADR 0027, `packages/pdf`                            |
 | Réglages › Entreprise (mentions légales du certificat) et Réglages › Documents (modèle, couleur, logo, coordonnées, textes, numérotation, aperçu du PDF) ; le prochain numéro ne redescend plus sous les numéros réservés | `contexts/identity/components/settings`             |
+| Certificat signé hors ligne, sans écran : réglages figés dans le certificat (version 2), copie des réglages et numéros réservés sur le téléphone, signature dans la file d'envoi, PDF refait sur le téléphone             | ADR 0031, `contexts/compliance` (app)               |
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                                       | ADR 0028                                            |
 | Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                               | ADR 0028                                            |
 | Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                          | ADR 0030                                            |
@@ -131,8 +132,9 @@ Dernière mise à jour : 2026-10-25.
 - [x] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
 - [x] PDF du certificat : mise en page selon la maquette validée, conseils, empreinte (ADR 0027)
 - [x] Réglages › Entreprise et Réglages › Documents (modèle, couleur, logo, coordonnées, message)
-- [ ] Copier les réglages Documents dans le certificat signé (schéma version 2) et bloquer la signature tant que des mentions légales manquent
-- [ ] Réglages hors ligne : lire les réglages Documents depuis Dexie pour l'aperçu et le certificat sur le terrain
+- [x] Copier les réglages Documents dans le certificat signé (schéma version 2) et bloquer la signature tant que des mentions légales manquent (ADR 0031)
+- [x] Réglages hors ligne pour le certificat sur le terrain (copie dans Dexie, ADR 0031)
+- [ ] Aperçu des réglages Documents hors ligne (lire la copie de Dexie dans Réglages › Documents)
 - [ ] PDF du certificat sur le téléphone après signature, envoi sur R2 avec son empreinte, partage au client (table `document_deliveries`, permission `documents:send`)
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)

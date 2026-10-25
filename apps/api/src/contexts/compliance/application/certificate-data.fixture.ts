@@ -1,4 +1,7 @@
-import type { ChimneySweepingCertificate } from "@passalio/trades";
+import type {
+  BrandedChimneySweepingCertificate,
+  ChimneySweepingCertificate,
+} from "@passalio/trades";
 
 const SIGNATURE = "data:image/png;base64,iVBORw0KGgo=";
 
@@ -60,3 +63,18 @@ export const sealedBoilerCertificateData = (
     isAdviceAttached: false,
     ...overrides,
   });
+
+export const validBrandedCertificateData = (
+  overrides: Partial<BrandedChimneySweepingCertificate> = {},
+): BrandedChimneySweepingCertificate => ({
+  ...validCertificateData(),
+  branding: {
+    template: "plain",
+    brandColor: "#0E7C5A",
+    logo: { format: "png", base64: "iVBORw0KGgo=" },
+    contact: { phone: "01 45 00 00 00", email: null, website: "ramonage-dupont.fr" },
+    customerMessage: "Merci de votre confiance.",
+    footerText: null,
+  },
+  ...overrides,
+});

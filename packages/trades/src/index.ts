@@ -26,6 +26,8 @@ export {
   type HeatPumpDetails,
 } from "./equipment-details";
 export {
+  BRANDED_CERTIFICATE_TEMPLATE_VERSION,
+  brandedChimneySweepingCertificate,
   CERTIFICATE_TEMPLATE_VERSION,
   CHIMNEY_STACK_STATES,
   chimneySweepingCertificate,
@@ -35,6 +37,7 @@ export {
   REGISTRY_KINDS,
   SIGNATURE_MAX_LENGTH,
   SWEEPING_EXTENTS,
+  type BrandedChimneySweepingCertificate,
   type CertificateCompany,
   type ChimneySweepingCertificate,
   type LegalForm,
@@ -49,6 +52,7 @@ export {
   type LegalMention,
 } from "./company-legal-mentions";
 export {
+  checkBrandedCertificate,
   checkCertificate,
   isSealedAppliance,
   requiresShareCapital,
@@ -56,11 +60,21 @@ export {
   type CertificateError,
   type SweptEquipment,
 } from "./chimney-sweeping/certificate-rules";
+export {
+  BRANDING_TEXT_MAX_LENGTH,
+  documentBranding,
+  LOGO_FORMATS,
+  LOGO_MAX_BASE64_LENGTH,
+  type DocumentBranding,
+  type DocumentLogo,
+  type LogoFormat,
+} from "./document-branding";
 export { addMonths } from "./chimney-sweeping/due-date";
 export {
   CHIMNEY_SWEEPING_PERIODICITY_MONTHS,
   chimneySweepingTrade,
   nextSweepingDueDate,
+  sweepingDatesAfter,
 } from "./chimney-sweeping/trade";
 export {
   DEFAULT_VISIT_MINUTES,

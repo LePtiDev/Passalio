@@ -75,6 +75,17 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
+## Signature hors ligne du certificat (ADR 0031)
+
+| Famille | Ce qui est vérifié                                                                                                                               | Test                                                                                                                                     |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 2       | Certificat version 2 : réglages figés gardés, version 1 refusée sans réglages, modèle, couleur et taille du logo, mêmes règles bloquantes        | `packages/trades/src/chimney-sweeping/branded-certificate-rules.test.ts`, `sweeping-dates.test.ts`                                       |
+| 4       | Le serveur signe un certificat version 2 avec ses réglages, refuse une version 2 sans réglages ou qui enfreint une règle                         | `apps/api/src/contexts/compliance/application/sign-branded-document.test.ts`                                                             |
+| 2, 12   | Entrée du PDF depuis les données signées (réglages figés, numéro complet) ; PDF refait sur le téléphone, mêmes octets                            | `packages/pdf/src/signed-certificate-input.test.ts`, `apps/app/src/lib/pdf/signed-certificate-pdf.test.ts`                               |
+| 4, 6    | Numéros libres par personne, réservation sous 5 numéros, une seule à la fois, erreur réseau ; identifiant du téléphone                           | `apps/app/src/contexts/compliance/number-blocks.test.ts`, `signing-device.test.ts`                                                       |
+| 4, 6    | Copie des réglages (mentions manquantes, textes vides, logo) ; signature locale : numéro, réglages figés, file d'envoi, dates, refus sans écrire | `apps/app/src/contexts/compliance/document-issuer.test.ts`, `issuer-store.test.ts`, `sign-certificate.test.ts`                           |
+| 6, 13   | Préparation du téléphone : copie des réglages et du logo, réservation, retour du réseau, rien pour qui ne signe pas ; base locale version 5      | `apps/app/src/contexts/compliance/components/signing-preparation.test.tsx`, `apps/app/src/lib/db/local-database-signing-upgrade.test.ts` |
+
 ## PDF du certificat (ADR 0027)
 
 | Famille | Ce qui est vérifié                                                                                                   | Test                                                                                              |

@@ -1,4 +1,5 @@
-import type { ChimneySweepingCertificate } from "./certificate";
+import type { DocumentBranding } from "../document-branding";
+import type { BrandedChimneySweepingCertificate, ChimneySweepingCertificate } from "./certificate";
 
 const SIGNATURE = "data:image/png;base64,iVBORw0KGgo=";
 
@@ -41,5 +42,23 @@ export const validCertificate = (
   technicianSignature: SIGNATURE,
   customerSignature: SIGNATURE,
   isCustomerAbsent: false,
+  ...overrides,
+});
+
+export const sampleBranding = (overrides: Partial<DocumentBranding> = {}): DocumentBranding => ({
+  template: "banner",
+  brandColor: "#0F2A44",
+  logo: null,
+  contact: { phone: "01 45 00 00 00", email: "contact@ramonage-dupont.fr", website: null },
+  customerMessage: null,
+  footerText: null,
+  ...overrides,
+});
+
+export const validBrandedCertificate = (
+  overrides: Partial<BrandedChimneySweepingCertificate> = {},
+): BrandedChimneySweepingCertificate => ({
+  ...validCertificate(),
+  branding: sampleBranding(),
   ...overrides,
 });

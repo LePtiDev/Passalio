@@ -1,4 +1,5 @@
-import { Dexie, type EntityTable } from "dexie";
+import { Dexie, type EntityTable, type Table } from "dexie";
+import type { LocalSetting, NumberBlockRecord } from "./compliance-records";
 import type {
   CustomerRecord,
   DocumentRecord,
@@ -29,6 +30,8 @@ export class LocalDatabase extends Dexie {
   declare pendingPhotos: EntityTable<PendingPhoto, "id">;
   declare rejections: EntityTable<SyncRejection, "id">;
   declare syncState: EntityTable<SyncStateEntry, "key">;
+  declare numberBlocks: EntityTable<NumberBlockRecord, "id">;
+  declare localSettings: Table<LocalSetting, LocalSetting["key"]>;
 
   constructor(organizationId: string) {
     super(`${LOCAL_DATABASE_PREFIX}${organizationId}`);
@@ -74,6 +77,11 @@ export class LocalDatabase extends Dexie {
             },
           ),
       );
+    this.version(5).stores({
+      documents: "id, interventionId, equipmentId, number",
+      numberBlocks: "id, userId",
+      localSettings: "key",
+    });
   }
 }
 
