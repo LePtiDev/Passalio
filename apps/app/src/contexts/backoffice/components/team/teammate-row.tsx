@@ -11,7 +11,6 @@ import {
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { cn } from "@/lib/utils";
 import { teamFr } from "../../team-fr";
-import { ADMIN_SECONDARY_BUTTON_CLASS } from "../admin-styles";
 import type { TeammateSummary } from "./change-role-dialog";
 import { RoleBadge } from "./role-badge";
 import { lastSignInLabel } from "./team-labels";
@@ -129,12 +128,12 @@ export const TeammateRow = ({
           <span className="text-[13px] text-[#64748B]">{teamFr.you}</span>
         ) : (
           <>
-            <Button variant="outline" className={ADMIN_SECONDARY_BUTTON_CLASS} onClick={changeRole}>
+            <Button variant="secondary" onClick={changeRole}>
               {teamFr.changeRole}
             </Button>
             <Button
-              variant="outline"
-              className={cn(ADMIN_SECONDARY_BUTTON_CLASS, "text-[#B42318] hover:text-[#B42318]")}
+              variant="secondary"
+              className="text-[#B42318] hover:text-[#B42318]"
               onClick={remove}
             >
               {teamFr.remove}

@@ -101,11 +101,6 @@ export const PROSPECT_CALL_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.prospectTasks.openOfOwnerDueBefore(s.salesperson.id, LATER, 100),
   },
   {
-    method: "prospectTasks.openUnownedDueBefore",
-    query: "open website callbacks nobody owns, due by tonight",
-    run: (r) => r.prospectTasks.openUnownedDueBefore(LATER, 100),
-  },
-  {
     method: "prospectTasks.createFromWebsite",
     query: "callback asked from the website",
     run: (r, s) =>

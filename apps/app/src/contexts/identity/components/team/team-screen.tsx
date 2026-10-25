@@ -10,7 +10,6 @@ import { useTeam } from "../../hooks/use-team";
 import { InviteMemberDialog } from "./invite-member-dialog";
 import { OrganizationSubtitle } from "./organization-subtitle";
 import { TeamTabs, type TeamTab } from "./team-tabs";
-import { TEAM_PRIMARY_BUTTON_CLASS } from "./team-styles";
 
 const TRAIL = [{ label: fr.shell.settings, to: "/reglages" }, { label: fr.shell.team }] as const;
 
@@ -76,7 +75,7 @@ export const TeamScreen = () => {
             />
           </div>
           {canManage ? (
-            <Button className={TEAM_PRIMARY_BUTTON_CLASS} onClick={openInvite}>
+            <Button onClick={openInvite}>
               <Plus aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
               {identityFr.invite.title}
             </Button>

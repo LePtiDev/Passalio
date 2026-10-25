@@ -11,7 +11,7 @@ import { dayKeyOf, journalDayLabel, timeOf } from "../../calendar-labels";
 import { backofficeFr } from "../../fr";
 import { useJournalPage } from "../../hooks/use-backoffice-queries";
 import { useNow } from "../../hooks/use-now";
-import { ADMIN_CARD_CLASS, ADMIN_SECONDARY_BUTTON_CLASS } from "../admin-styles";
+import { ADMIN_CARD_CLASS } from "../admin-styles";
 import { JournalSentence } from "./journal-sentence";
 
 const text = backofficeFr.journal;
@@ -96,10 +96,7 @@ const JournalEmpty = () => (
   <div className="flex flex-col items-center gap-2 rounded-[14px] border border-dashed border-[#D5DDE6] bg-white px-6 py-8 text-center lg:rounded-xl">
     <p className="text-[15px] font-bold">{text.empty}</p>
     <p className="max-w-md text-[13px] text-[#475569]">{text.emptyText}</p>
-    <Link
-      to="/admin/comptes"
-      className={cn(buttonVariants({ variant: "outline" }), ADMIN_SECONDARY_BUTTON_CLASS, "mt-2")}
-    >
+    <Link to="/admin/comptes" className={cn(buttonVariants({ variant: "secondary" }), "mt-2")}>
       {text.emptyAction}
     </Link>
   </div>

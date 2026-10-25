@@ -1,12 +1,7 @@
 import type { TradeId } from "@passalio/trades";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
-import {
-  DASHED_CARD_CLASS,
-  PRIMARY_BUTTON_CLASS,
-  SECONDARY_BUTTON_CLASS,
-  SyncPill,
-} from "@/contexts/customers";
+import { DASHED_CARD_CLASS, SyncPill } from "@/contexts/customers";
 import { useOrganization } from "@/contexts/identity";
 import { DesktopTopBar, MobileTopBar, PageContent } from "@/components/app-shell/page-bars";
 import { ErrorState } from "@/components/error-state";
@@ -90,17 +85,12 @@ const EmptyServices = ({
             type="button"
             onClick={onAddDefaults}
             disabled={isAddingDefaults}
-            className={cn(PRIMARY_BUTTON_CLASS, "w-full lg:w-auto")}
+            className="w-full lg:w-auto"
           >
             {text.addDefaults}
           </Button>
         ) : null}
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCreate}
-          className={cn(SECONDARY_BUTTON_CLASS, "w-full lg:w-auto")}
-        >
+        <Button type="button" variant="secondary" onClick={onCreate} className="w-full lg:w-auto">
           <Plus aria-hidden="true" className="size-4" />
           {text.add}
         </Button>
@@ -141,7 +131,7 @@ export const ServicesScreen = () => {
   const addTradeDefaults = useCallback(() => addDefaults.mutate(trades), [addDefaults, trades]);
   const retryLoad = useCallback(() => void query.refetch(), [query]);
   const addButton = canEdit ? (
-    <Button type="button" onClick={create} className={PRIMARY_BUTTON_CLASS}>
+    <Button type="button" onClick={create}>
       <Plus aria-hidden="true" className="size-3.5" />
       {text.add}
     </Button>
@@ -158,12 +148,7 @@ export const ServicesScreen = () => {
           <span className="text-[13px] text-[#64748B]">{text.subtitle}</span>
         </span>
         {canEdit ? (
-          <Button
-            type="button"
-            onClick={create}
-            aria-label={text.add}
-            className={cn(PRIMARY_BUTTON_CLASS, "size-12 px-0")}
-          >
+          <Button type="button" onClick={create} aria-label={text.add} size="icon">
             <Plus aria-hidden="true" className="size-5" />
           </Button>
         ) : null}

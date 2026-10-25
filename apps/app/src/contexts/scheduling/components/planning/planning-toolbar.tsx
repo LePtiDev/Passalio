@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { useCallback, type ReactNode } from "react";
-import { PRIMARY_BUTTON_CLASS, SECONDARY_BUTTON_CLASS } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { schedulingFr } from "../../fr";
 import type { PlanningView } from "../../planning-search";
@@ -45,13 +44,7 @@ export const PlanningToolbar = ({
         <span className="shrink-0 text-[13px] text-[#64748B]">{subtitle}</span>
       </div>
       <div className="flex shrink-0 items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          disabled={day === today}
-          onClick={goToToday}
-          className={SECONDARY_BUTTON_CLASS}
-        >
+        <Button type="button" variant="secondary" disabled={day === today} onClick={goToToday}>
           {text.today}
         </Button>
         <button
@@ -73,7 +66,7 @@ export const PlanningToolbar = ({
         {teamPicker}
         <ViewSwitch view={view} onChange={setView} isLarge={false} />
         {canPlan ? (
-          <Button asChild className={PRIMARY_BUTTON_CLASS}>
+          <Button asChild>
             <NewVisitLink day={day}>
               <Plus aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
               {text.newVisit}

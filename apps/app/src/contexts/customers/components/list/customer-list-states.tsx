@@ -13,8 +13,6 @@ import {
   CARD_CLASS,
   CUSTOMER_GRID_CLASS,
   DASHED_CARD_CLASS,
-  PRIMARY_BUTTON_CLASS,
-  SECONDARY_BUTTON_CLASS,
   SOON_BADGE_CLASS,
 } from "../customer-styles";
 import { CustomerListHeader } from "./customer-row";
@@ -60,7 +58,7 @@ export const CustomerListSkeleton = () => (
 const NewCustomerLink = ({ label, name }: { readonly label: string; readonly name?: string }) => {
   const search = useMemo(() => (name === undefined ? {} : { nom: name }), [name]);
   return (
-    <Button asChild className={cn(PRIMARY_BUTTON_CLASS, "lg:px-3")}>
+    <Button asChild>
       <Link to="/clients/nouveau" search={search}>
         <Plus aria-hidden="true" className="size-4 lg:size-3.5" strokeWidth={2.2} />
         {label}
@@ -80,11 +78,7 @@ export const CustomerListEmpty = () => (
     </span>
     <span className="flex w-full flex-col gap-2 lg:w-auto lg:flex-row">
       <NewCustomerLink label={text.newCustomer} />
-      <Button
-        variant="outline"
-        disabled
-        className={cn(SECONDARY_BUTTON_CLASS, "text-[#94A3B8] disabled:opacity-100")}
-      >
+      <Button variant="secondary" disabled className="text-[#94A3B8] disabled:opacity-100">
         <Upload aria-hidden="true" className="size-4 lg:size-3.5" />
         {text.import}
         <span className={SOON_BADGE_CLASS}>{fr.shell.soon}</span>
@@ -107,7 +101,7 @@ export const CustomerSearchEmpty = ({
     </span>
     <span className="flex w-full flex-col gap-2 lg:w-auto lg:flex-row">
       <NewCustomerLink label={text.createFromSearch(query)} name={query} />
-      <Button variant="outline" className={SECONDARY_BUTTON_CLASS} onClick={onClear}>
+      <Button variant="secondary" onClick={onClear}>
         {text.clearSearch}
       </Button>
     </span>
@@ -126,7 +120,7 @@ export const CustomerFilterEmpty = ({
       <h2 className="text-[17px] font-bold lg:text-[15px]">{text.filterEmptyTitle[filter]}</h2>
       <p className="text-[15px] text-[#475569] lg:text-[13px]">{text.filterEmptyText}</p>
     </span>
-    <Button variant="outline" className={SECONDARY_BUTTON_CLASS} onClick={onShowAll}>
+    <Button variant="secondary" onClick={onShowAll}>
       {text.showAll}
     </Button>
   </div>
@@ -149,11 +143,7 @@ export const CustomerListError = ({
       {codeLine === undefined ? null : (
         <span className="text-xs text-[#64748B] tabular-nums">{codeLine}</span>
       )}
-      <Button
-        variant="outline"
-        className={cn(SECONDARY_BUTTON_CLASS, "mt-2 px-4")}
-        onClick={onRetry}
-      >
+      <Button variant="secondary" className="mt-2" onClick={onRetry}>
         {fr.errors.retry}
       </Button>
     </div>

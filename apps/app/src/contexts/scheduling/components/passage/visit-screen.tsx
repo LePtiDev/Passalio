@@ -23,9 +23,7 @@ import {
 import {
   ConfirmDialog,
   customerNameOf,
-  PRIMARY_BUTTON_CLASS,
   routeUrlOf,
-  SECONDARY_BUTTON_CLASS,
   SOON_BADGE_CLASS,
   SyncPill,
 } from "@/contexts/customers";
@@ -95,7 +93,7 @@ const ActionTile = ({
 };
 
 const CertificateButton = ({ className }: { readonly className: string }) => (
-  <Button type="button" disabled className={cn(PRIMARY_BUTTON_CLASS, className)}>
+  <Button type="button" disabled className={className}>
     <FilePenLine aria-hidden="true" className="size-5 lg:size-3.5" />
     {text.fillCertificate}
     <span className={SOON_BADGE_CLASS}>{schedulingFr.visit.soon}</span>
@@ -204,7 +202,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
           </div>
           <div className="flex items-center gap-2">
             {phoneHref === undefined ? null : (
-              <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+              <Button asChild variant="secondary">
                 <a href={phoneHref}>
                   <Phone aria-hidden="true" className="size-3.5" />
                   {text.call}
@@ -212,7 +210,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
               </Button>
             )}
             {routeHref === undefined ? null : (
-              <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+              <Button asChild variant="secondary">
                 <a href={routeHref} target="_blank" rel="noreferrer">
                   <Navigation aria-hidden="true" className="size-3.5" />
                   {text.route}
@@ -220,12 +218,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
               </Button>
             )}
             {canCancel ? (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={askCancel}
-                className={SECONDARY_BUTTON_CLASS}
-              >
+              <Button type="button" variant="secondary" onClick={askCancel}>
                 {text.cancel}
               </Button>
             ) : null}

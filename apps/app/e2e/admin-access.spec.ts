@@ -42,6 +42,8 @@ for (const { name, size } of VIEWPORTS) {
       await expect(page.getByRole("heading", { name: "Entreprises" })).toBeVisible();
       const navigation = page.getByRole("navigation", { name: ADMIN_NAVIGATION });
       await expect(navigation.getByRole("link")).toHaveText([
+        "Ma journée",
+        "Appels",
         "Entreprises",
         "Contacts",
         "Prospection",

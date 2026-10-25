@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { DesktopTopBar } from "@/components/app-shell/page-bars";
 import { Button } from "@/components/ui/button";
 import { customersFr } from "../../fr";
-import { DASHED_CARD_CLASS, SECONDARY_BUTTON_CLASS } from "../customer-styles";
+import { DASHED_CARD_CLASS } from "../customer-styles";
 import { SyncPill } from "../sync-indicator";
 
 const text = customersFr.file;
@@ -20,7 +20,7 @@ export const CustomerNotFound = () => (
           <h1 className="text-[17px] font-bold lg:text-[15px]">{text.notFoundTitle}</h1>
           <p className="text-[15px] text-[#475569] lg:text-[13px]">{text.notFoundText}</p>
         </span>
-        <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+        <Button asChild variant="secondary">
           <Link to="/clients">{text.backToList}</Link>
         </Button>
       </div>

@@ -1,7 +1,6 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { identityFr } from "../../fr";
-import { TEAM_PRIMARY_BUTTON_CLASS } from "./team-styles";
 
 type TeamEmptyStateProps = {
   readonly title: string;
@@ -16,7 +15,7 @@ export const TeamEmptyState = ({ title, text, onInvite }: TeamEmptyStateProps) =
       <span className="text-sm text-[#475569] lg:text-[13px]">{text}</span>
     </span>
     {onInvite === null ? null : (
-      <Button className={TEAM_PRIMARY_BUTTON_CLASS} onClick={onInvite}>
+      <Button onClick={onInvite}>
         <Plus aria-hidden="true" className="size-3.5" strokeWidth={2.4} />
         {identityFr.team.emptyAction}
       </Button>

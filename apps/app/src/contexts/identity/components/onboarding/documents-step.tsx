@@ -22,10 +22,6 @@ import { DocumentPreview } from "./document-preview";
 import { LogoPicker } from "./logo-picker";
 import { OnboardingBody, OnboardingFooter, OnboardingHeading } from "./onboarding-layout";
 import { ONBOARDING_PATHS } from "./onboarding-steps";
-import {
-  ONBOARDING_GHOST_BUTTON_CLASS,
-  ONBOARDING_PRIMARY_BUTTON_CLASS,
-} from "./onboarding-styles";
 
 const text = onboardingFr.documents;
 
@@ -156,10 +152,10 @@ export const DocumentsStep = ({ organization }: { readonly organization: Organiz
       <OnboardingFooter width="wide">
         <BackButton to={3} />
         <span className="flex flex-1 items-center justify-end gap-2 lg:flex-none">
-          <Button asChild variant="ghost" className={ONBOARDING_GHOST_BUTTON_CLASS}>
+          <Button asChild variant="secondary">
             <Link to={ONBOARDING_PATHS[5]}>{onboardingFr.layout.skip}</Link>
           </Button>
-          <Button type="submit" className={ONBOARDING_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+          <Button type="submit" className="flex-1 lg:flex-none" disabled={isSubmitting}>
             {isSubmitting ? onboardingFr.layout.saving : onboardingFr.layout.continue}
           </Button>
         </span>

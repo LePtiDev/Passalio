@@ -1,10 +1,10 @@
 import { PLATE_READING_DAILY_LIMIT } from "@passalio/shared";
 import { Camera, Check, CirclePause, ScanText, TriangleAlert, type LucideIcon } from "lucide-react";
 import { useCallback, type ChangeEvent, type ReactNode } from "react";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { PlateReadingState } from "../../hooks/use-plate-reading";
 import { plateFr } from "../../plate-fr";
-import { SECONDARY_BUTTON_CLASS } from "../customer-styles";
 
 type Tone = "mint" | "amber" | "slate";
 
@@ -59,8 +59,8 @@ const RetakeButton = ({ onRetake }: { readonly onRetake: (file: File) => void })
   return (
     <label
       className={cn(
-        SECONDARY_BUTTON_CLASS,
-        "inline-flex w-full cursor-pointer items-center justify-center border bg-white focus-within:ring-[3px] focus-within:ring-[#0E7C5A]/20",
+        buttonVariants({ variant: "secondary" }),
+        "w-full cursor-pointer focus-within:ring-[3px] focus-within:ring-[#0E7C5A]/20",
       )}
     >
       <Camera aria-hidden="true" className="size-4" />

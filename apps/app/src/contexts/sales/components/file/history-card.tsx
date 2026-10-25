@@ -82,11 +82,7 @@ const NoteForm = ({ companyId, contactId }: NoteFormProps) => {
         placeholder={text.notePlaceholder}
         className={`${FIELD_CLASS} min-w-0 flex-1`}
       />
-      <Button
-        type="submit"
-        disabled={addNote.isPending}
-        className="h-12 shrink-0 rounded-[10px] px-4 text-[15px] font-semibold lg:h-8 lg:rounded-[7px] lg:px-3 lg:text-[13px]"
-      >
+      <Button type="submit" disabled={addNote.isPending}>
         {text.add}
       </Button>
     </form>

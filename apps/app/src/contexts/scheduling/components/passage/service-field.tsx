@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
 import { useCallback, useState } from "react";
-import { describedBy, FIELD_CLASS, FormField, PRIMARY_BUTTON_CLASS } from "@/contexts/customers";
+import { describedBy, FIELD_CLASS, FormField } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -118,7 +118,7 @@ const MobileServicePicker = ({ offered, value, error, onChange }: ServiceFieldPr
           <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto">
             <ServiceList offered={offered} value={draft} isLarge onChange={changeDraft} />
           </div>
-          <Button type="button" onClick={confirm} className={cn(PRIMARY_BUTTON_CLASS, "w-full")}>
+          <Button type="button" onClick={confirm} className="w-full">
             {draft.length === 0 ? text.confirm : confirmLabelOf(offered, draft)}
           </Button>
         </SheetContent>

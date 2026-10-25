@@ -1,7 +1,7 @@
 import { Check, ChevronDown } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useController, type Control } from "react-hook-form";
-import { describedBy, FIELD_CLASS, FormField, PRIMARY_BUTTON_CLASS } from "@/contexts/customers";
+import { describedBy, FIELD_CLASS, FormField } from "@/contexts/customers";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -172,7 +172,7 @@ const MobilePicker = ({ technicians, value, error, onChange }: PickerProps) => {
               onChange={changeDraft}
             />
           </div>
-          <Button type="button" onClick={confirm} className={cn(PRIMARY_BUTTON_CLASS, "w-full")}>
+          <Button type="button" onClick={confirm} className="w-full">
             {text.confirm}
           </Button>
         </SheetContent>

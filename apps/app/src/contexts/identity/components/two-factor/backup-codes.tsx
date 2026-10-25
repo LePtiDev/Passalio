@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthHeading } from "../auth-heading";
-import { AUTH_PRIMARY_BUTTON_CLASS, AUTH_SECONDARY_BUTTON_CLASS } from "../auth-styles";
 
 const text = twoFactorFr.backupCodes;
 
@@ -32,13 +31,11 @@ export const BackupCodes = ({ codes, onDone }: BackupCodesProps) => {
         ))}
       </ul>
       <div className="flex flex-col gap-3">
-        <Button variant="outline" className={AUTH_SECONDARY_BUTTON_CLASS} onClick={copy}>
+        <Button variant="secondary" onClick={copy}>
           <Copy aria-hidden="true" />
           {text.copy}
         </Button>
-        <Button className={AUTH_PRIMARY_BUTTON_CLASS} onClick={onDone}>
-          {text.done}
-        </Button>
+        <Button onClick={onDone}>{text.done}</Button>
       </div>
     </div>
   );

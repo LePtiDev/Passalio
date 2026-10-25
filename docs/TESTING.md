@@ -75,6 +75,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
+## PDF du certificat (ADR 0027)
+
+| Famille | Ce qui est vérifié                                                                                                   | Test                                                                                              |
+| ------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 2       | Dates, SIREN, ligne légale (forme, capital, RCS ou RNE, siège), conseils joints selon l'appareil                     | `packages/pdf/src/format.test.ts`, `certificate-legal-line.test.ts`, `certificate-advice.test.ts` |
+| 2       | Entrée refusée : données invalides, règles du certificat, gaz étanche, image illisible                               | `packages/pdf/src/certificate-content.test.ts`                                                    |
+| 12      | Mentions obligatoires relues dans le PDF, variantes (partiel, conduit à ne pas utiliser, client absent), métadonnées | `packages/pdf/src/render-certificate.test.ts`                                                     |
+| 12      | Mêmes données, mêmes octets et même empreinte ; un mot changé, une autre empreinte                                   | `packages/pdf/src/pdf-fingerprint.test.ts`                                                        |
+| 17      | Chaque page conforme aux captures de référence (2 modèles × 5 couleurs, conseils, 3 conduits et logo, textes longs)  | `packages/pdf/src/render-certificate-pages.test.ts`                                               |
+
 ## Prestations et techniciens d'un passage
 
 | Famille     | Ce qui est vérifié                                                                                                                                                                                                                                                                                                                                               | Test                                                                                                                                                      |
@@ -133,22 +143,24 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 
 ## Appels et rappels de prospection (ADR 0024)
 
-| Famille | Ce qui est vérifié                                                                                                                                    | Test                                                                          |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| 2       | Étape après l'appel (démo, pas intéressé, premier décroché, cliente figée) ; notification 15 min avant, à l'heure, la veille à 18 h en heure de Paris | `sales/domain/call-rules.test.ts`, `packages/shared/src/paris-time.test.ts`   |
-| 4       | Noter un appel, qualifier, fiche de suivi, Ma journée, série d'appels, déplacer ou clore un rappel : rôles, erreurs, rien d'écrit en cas de refus     | `sales/application/*call*.test.ts`, `get-my-day`, `get-follow-up`, `update-*` |
-| 5, 6    | Routes : 201, 204, 400, 404, 409, 422, réponses conformes aux schémas zod, rappel dans Ma journée, suppression en cascade avec l'entreprise           | `apps/api/test/prospect-call-routes.test.ts`                                  |
-| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes et index des nouvelles requêtes                                        | `apps/api/test/matrices`, `apps/api/test/database`                            |
+| Famille | Ce qui est vérifié                                                                                                                                     | Test                                                                                 |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| 2       | Étape après l'appel (démo, pas intéressé, premier décroché, cliente figée) ; notification 15 min avant, à l'heure, la veille à 18 h en heure de Paris  | `sales/domain/call-rules.test.ts`, `packages/shared/src/paris-time.test.ts`          |
+| 4       | Noter un appel, qualifier, fiche de suivi, Ma journée, série d'appels, déplacer ou clore un rappel : rôles, erreurs, rien d'écrit en cas de refus      | `sales/application/*call*.test.ts`, `get-my-day`, `get-follow-up`, `update-*`        |
+| 5, 6    | Routes : 201, 204, 400, 404, 409, 422, réponses conformes aux schémas zod, rappel dans Ma journée, suppression en cascade avec l'entreprise            | `apps/api/test/prospect-call-routes.test.ts`                                         |
+| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes et index des nouvelles requêtes                                         | `apps/api/test/matrices`, `apps/api/test/database`                                   |
+| 3       | Formulaires d'appel et de série (champs requis selon le résultat, 5 à 30 appels), progression d'une série, contact et numéro appelés, rappel à clore   | `call-form-schema`, `call-series-form-schema`, `session-progress`, `call-desk-model` |
+| 3       | Écrans Ma journée, Appels, série : compteurs, liens, enregistrement, passer, terminer, mobile, vide, chargement, erreur avec code ; « Noter un appel » | `my-day-screen`, `calls-screen`, `call-session-screen`, `company-file-call-note`     |
 
 ## Demande de rappel depuis le site (ADR 0028)
 
-| Famille | Ce qui est vérifié                                                                                                                            | Test                                                                                             |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| 1       | Formulaire : prénom, téléphone français, code postal, créneau, message, page, jeton                                                           | `packages/shared/src/public-callback.test.ts`                                                    |
-| 2       | Département du code postal (Corse, outre-mer), heure du rappel en heure de Paris (heure d'hiver), téléphone écrit par paires                  | `sales/domain/website-callback-rules.test.ts`                                                    |
-| 4       | Entreprise retrouvée par son téléphone ou celui d'un contact, ou créée ; rappel et note ; refus robot ou limite sans rien écrire ; Ma journée | `sales/application/request-website-callback.test.ts`, `get-my-day`                               |
-| 5, 6    | Route : 201 sans session, 400, 403, 429 après 5 demandes, CORS réservé au site, entreprise inconnue créée une seule fois                      | `apps/api/test/website-callback-routes.test.ts`, `apps/api/test/matrices/website-routes.test.ts` |
-| 9       | Plans de requêtes et index des recherches par téléphone, des rappels sans propriétaire et de la limite par visiteur                           | `apps/api/test/database`                                                                         |
+| Famille | Ce qui est vérifié                                                                                                               | Test                                                                                             |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 1       | Formulaire : prénom, téléphone français, code postal, créneau, message, page, jeton                                              | `packages/shared/src/public-callback.test.ts`                                                    |
+| 2       | Département du code postal (Corse, outre-mer), heure du rappel en heure de Paris (heure d'hiver), téléphone écrit par paires     | `sales/domain/website-callback-rules.test.ts`                                                    |
+| 4       | Entreprise retrouvée par son téléphone ou celui d'un contact, ou créée ; rappel et note ; refus robot ou limite sans rien écrire | `sales/application/request-website-callback.test.ts`                                             |
+| 5, 6    | Route : 201 sans session, 400, 403, 429 après 5 demandes, CORS réservé au site, entreprise inconnue créée une seule fois         | `apps/api/test/website-callback-routes.test.ts`, `apps/api/test/matrices/website-routes.test.ts` |
+| 9       | Plans de requêtes et index des recherches par téléphone, de l'ajout du rappel et de la limite par visiteur                       | `apps/api/test/database`                                                                         |
 
 ## Parcours de bout en bout
 
@@ -211,6 +223,7 @@ Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans 
 | Commercial      | Changer l'étape, ajouter une note, historique                                                                                                                                                     | `commercial-companies.spec.ts`                                           |
 | Commercial      | Contacts : onglets, recherche, fiche, contact principal unique                                                                                                                                    | `commercial-contacts.spec.ts`                                            |
 | Commercial      | Prospection : qualifier depuis la carte, sur ordinateur et sur mobile                                                                                                                             | `commercial-prospection.spec.ts`                                         |
+| Commercial      | Série d'appels : résultat, intérêt, rappel promis ; le rappel apparaît dans Ma journée puis disparaît une fois appelé                                                                             | `commercial-calls.spec.ts`                                               |
 | Site            | Liens de la landing et de l’API publique, environnement staging ou production                                                                                                                     | `apps/web` (unitaire)                                                    |
 | Site            | Contenus : slugs uniques, aucun texte entre crochets publié, pages non en production exclues, titres et descriptions uniques                                                                      | `apps/web/src/content/catalog.test.ts`                                   |
 | Site            | SEO : URL absolues, image de partage par page, fil d’Ariane, FAQ, article, plan du site et robots.txt                                                                                             | `seo.test.ts`, `sitemap.test.ts`                                         |

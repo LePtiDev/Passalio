@@ -63,6 +63,9 @@ Dernière mise à jour : 2026-10-24.
 | Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                                                                | ADR 0025                                            |
 | Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                              | `docs/stripe.md`                                    |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100 | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
+| Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                           | `contexts/sales/components/calls`                   |
+| Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                        | PR #62                                              |
+| PDF du certificat de ramonage : modèles Bandeau et Sobre, cinq couleurs, page de conseils, mentions obligatoires, rendu déterministe et empreinte                                                                 | ADR 0027, `packages/pdf`                            |
 | Site : API de la demande de rappel (Turnstile, limite par IP, CORS, rappel dans Ma journée)                                                                                                                       | ADR 0028                                            |
 
 ## Hors code (Quentin)
@@ -120,7 +123,9 @@ Dernière mise à jour : 2026-10-24.
 - [x] Liste de prestations avec prix présélectionnés (demande de Quentin du 2026-10-23) : le prix annoncé se remplit depuis la prestation choisie, modifiable ; plusieurs prestations et plusieurs techniciens par passage (maquette validée le 2026-10-24, ADR 0026)
 - [ ] Chantiers sur plusieurs jours : un jour par passage, techniciens différents par jour, bloc « Chantier · jour 1 sur 3 » au planning, fiche chantier (maquette validée le 2026-10-24)
 - [ ] Informations légales de l'entreprise (forme, capital, RCS ou RNE, qualification) demandées avant le premier certificat
-- [ ] PDF du certificat sur le téléphone (pdf-lib), envoi sur R2 avec son empreinte, partage au client
+- [x] PDF du certificat : mise en page selon la maquette validée, conseils, empreinte (ADR 0027)
+- [ ] Réglages › Entreprise et Réglages › Documents (modèle, couleur, logo, coordonnées, message), copiés dans le certificat signé (schéma version 2)
+- [ ] PDF du certificat sur le téléphone après signature, envoi sur R2 avec son empreinte, partage au client (table `document_deliveries`, permission `documents:send`)
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [x] Grille de prix et fonctionnement du paiement décidés (ADR 0025, choix de Quentin du 2026-10-24)
@@ -145,7 +150,9 @@ Dernière mise à jour : 2026-10-24.
 - [x] Serveur MCP : KV `passalio-oauth-staging` et `passalio-oauth-production`, `MCP_ENABLED` activé en staging et en production
 - [ ] Serveur MCP : outil d'import en lot de fiches prospects (100 lignes, simulation d'abord)
 - [x] Prospection, appels, données et API : appels, rappels, qualification, Ma journée, séries (ADR 0024)
-- [ ] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
+- [x] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
+- [ ] Prospection, écrans : tuiles Mails, Campagnes, Ma semaine et conseils de Ma journée ; onglets Prioritaires et Faits aujourd'hui des Appels ; nombre d'entreprises qui correspondent à une série (avec les PR mails, campagnes, statistiques)
+- [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
 - [ ] Prospection, configuration de la boîte mail dans le profil (admin pour un autre membre), envoi SMTP, rappels par e-mail
 - [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
 - [ ] Prospection, campagnes : envoi programmé, montée progressive de 5 à 25 par jour, créneau 8 h à 11 h

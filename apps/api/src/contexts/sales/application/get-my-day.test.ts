@@ -126,50 +126,25 @@ describe("getMyDay", () => {
   });
 });
 
-describe("getMyDay with website callbacks", () => {
-  it("adds the open callbacks nobody owns yet, in due order with my tasks", async () => {
+describe("getMyDay for the whole team", () => {
+  it("also lists the open tasks nobody follows yet, such as a callback asked on a landing page", async () => {
     state.tasks.push(
       inMemoryTask({
-        id: "task-mine",
+        id: "task-unowned",
         companyId: "company-1",
-        ownerUserId: owner,
-        dueAt: new Date("2026-10-24T10:00:00Z"),
-      }),
-      inMemoryTask({
-        id: "task-unowned-early",
-        companyId: "company-1",
-        dueAt: new Date("2026-10-24T07:00:00Z"),
+        ownerUserId: null,
+        dueAt: new Date("2026-10-24T09:00:00Z"),
       }),
       inMemoryTask({
         id: "task-unowned-tomorrow",
         companyId: "company-1",
-        dueAt: new Date("2026-10-25T07:00:00Z"),
-      }),
-      inMemoryTask({
-        id: "task-unowned-done",
-        companyId: "company-1",
-        dueAt: new Date("2026-10-24T07:00:00Z"),
-        status: "done",
+        ownerUserId: null,
+        dueAt: new Date("2026-10-25T09:00:00Z"),
       }),
     );
-    expect((await run()(sales)).tasks.map(({ id }) => id)).toEqual([
-      "task-unowned-early",
-      "task-mine",
+    expect((await run()(sales)).tasks.map(({ id }) => id)).toEqual(["task-unowned"]);
+    expect((await run()(platformActorWith("admin"))).tasks.map(({ id }) => id)).toEqual([
+      "task-unowned",
     ]);
-  });
-
-  it(`keeps at most ${MY_DAY_TASKS_LIMIT} tasks once both lists are merged`, async () => {
-    state.tasks.push(
-      ...Array.from({ length: MY_DAY_TASKS_LIMIT }, (_, index) =>
-        inMemoryTask({
-          id: `task-mine-${String(index).padStart(3, "0")}`,
-          companyId: "company-1",
-          ownerUserId: owner,
-          dueAt: new Date(NOW.getTime() - index * 1000),
-        }),
-      ),
-      inMemoryTask({ id: "task-unowned", companyId: "company-1", dueAt: NOW }),
-    );
-    expect((await run()(sales)).tasks).toHaveLength(MY_DAY_TASKS_LIMIT);
   });
 });

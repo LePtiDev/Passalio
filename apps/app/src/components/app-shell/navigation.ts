@@ -31,6 +31,8 @@ export type NavigationItem = {
     | "/admin/entreprises"
     | "/admin/contacts"
     | "/admin/prospection"
+    | "/admin/journee"
+    | "/admin/appels"
     | null;
   readonly activeFor?: readonly string[];
   readonly isExact?: boolean;
