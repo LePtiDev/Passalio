@@ -48,6 +48,7 @@ const FILES_QUERYING_D1 = [
   "contexts/sales/infrastructure/d1-follow-up-repository.ts",
   "contexts/sales/infrastructure/d1-mail-member-directory.ts",
   "contexts/sales/infrastructure/d1-mail-settings-repository.ts",
+  "contexts/sales/infrastructure/d1-reminder-repository.ts",
   "contexts/sales/infrastructure/d1-task-repository.ts",
   "contexts/sales/infrastructure/main-contacts.ts",
   "contexts/sales/infrastructure/sales-dependencies.ts",

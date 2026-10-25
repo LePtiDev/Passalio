@@ -67,6 +67,7 @@ Dernière mise à jour : 2026-10-25.
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                        | PR #62                                              |
 | PDF du certificat de ramonage : modèles Bandeau et Sobre, cinq couleurs, page de conseils, mentions obligatoires, rendu déterministe et empreinte                                                                 | ADR 0027, `packages/pdf`                            |
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                               | ADR 0028                                            |
+| Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                       | ADR 0028                                            |
 
 ## Hors code (Quentin)
 
@@ -154,7 +155,7 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Prospection, écrans : tuiles Mails, Campagnes, Ma semaine et conseils de Ma journée ; onglets Prioritaires et Faits aujourd'hui des Appels ; nombre d'entreprises qui correspondent à une série (avec les PR mails, campagnes, statistiques)
 - [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
 - [x] Prospection, boîte mail : données et API (réglages, mot de passe chiffré, test d'envoi SMTP, journal, e-mail récapitulatif) (ADR 0028)
-- [ ] Prospection, rappels par e-mail : cron toutes les 5 minutes sur `notify_at`, index partiel, envoi par Resend (ADR 0028)
+- [x] Prospection, rappels par e-mail : cron toutes les 5 minutes sur `notify_at`, index partiel, envoi par Resend (ADR 0028)
 - [ ] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
 - [ ] Créer le secret `MAIL_SECRET_KEY` en staging et en production avant le déploiement de la boîte mail (sur demande de Quentin)
 - [ ] Prospection, boîte mail : récapitulatif quotidien, vérification nocturne du domaine (SPF, DKIM, DMARC), historique des changements à l'écran

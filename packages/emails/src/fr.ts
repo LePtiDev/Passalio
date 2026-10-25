@@ -70,4 +70,29 @@ export const fr = {
     when: (at: string) => `Envoyé le ${at}`,
     safety: "Vous n'avez pas lancé ce test ? Changez le mot de passe de votre boîte.",
   },
+  prospectReminder: {
+    title: "Rappel",
+    eyebrows: {
+      minutes_15: "Rappel dans 15 minutes",
+      at_time: "C'est l'heure",
+      day_before: "Rappel pour demain",
+    },
+    tasks: {
+      callback: (who: string, time: string) => `Appeler ${who} à ${time}`,
+      demo: (who: string, time: string) => `Démo avec ${who} à ${time}`,
+    },
+    subject: (task: string) => `Rappel : ${task}`,
+    note: (day: string, text: string) => `Note du ${day} : « ${text} »`,
+    interest: { hot: "Qualifié chaud", warm: "Qualifié tiède", cold: "Qualifié froid" },
+    teamSizes: { solo: "seul", two_to_three: "2 à 3 ramoneurs", four_plus: "4 ramoneurs et plus" },
+    toolKinds: {
+      paper: "gère sur papier",
+      spreadsheet: "gère sur tableur",
+      software: "a déjà un logiciel",
+    },
+    call: "Appeler",
+    open: "Ouvrir la fiche",
+    footer:
+      "Vous recevez ce mail parce que vous avez programmé ce rappel dans Passalio. Changez l'heure ou le mode de rappel depuis la fiche.",
+  },
 } as const;

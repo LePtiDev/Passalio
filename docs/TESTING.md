@@ -163,6 +163,17 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes de la table                                              | `apps/api/test/matrices`, `apps/api/test/database`           |
 | 3       | Gabarits de l'e-mail récapitulatif et de l'e-mail de test                                                                               | `packages/emails/src/mail-settings-emails.test.ts`           |
 
+## Rappels par e-mail (ADR 0028)
+
+| Famille | Ce qui est vérifié                                                                                                                                               | Test                                                  |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 2       | Envoyer avant, à l'heure et jusqu'à une heure après ; ne plus envoyer trop tard, sans responsable ou sans notification                                           | `sales/domain/reminder-rules.test.ts`                 |
+| 4       | Un envoi par rappel dû, marqué notifié ; rappels écartés marqués aussi ; envoi refusé gardé pour la prochaine fois                                               | `sales/application/send-due-reminders.test.ts`        |
+| 3       | Gabarit selon la maquette : quand, qui, entreprise, note, qualification, boutons Appeler et Ouvrir la fiche, heure de Paris, échappement                         | `packages/emails/src/prospect-reminder-email.test.ts` |
+| 5       | Envoi par Resend, log local sans le prospect, envoi refusé sans configuration                                                                                    | `apps/api/src/platform/resend-email-sender.test.ts`   |
+| 6       | Cron de bout en bout : rappel trouvé avec contact, note, téléphone et adresse des rappels, envoyé une seule fois, trace, aucune donnée personnelle dans les logs | `apps/api/test/prospect-reminder-job.test.ts`         |
+| 9       | Plan de requête : index partiel `prospect_tasks_pending_notify_at_idx`                                                                                           | `apps/api/test/database`                              |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.

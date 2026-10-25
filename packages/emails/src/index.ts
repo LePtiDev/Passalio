@@ -17,3 +17,9 @@ export {
   type MailSettingsChangedEmailInput,
   type MailSettingsField,
 } from "./mail-settings-emails";
+export {
+  prospectReminderEmail,
+  type ProspectReminderEmailInput,
+  type ReminderNotify,
+  type ReminderTaskKind,
+} from "./prospect-reminder-email";

@@ -10,6 +10,7 @@ import {
   PROSPECT_TEAM_SIZES,
   TOOL_KINDS,
 } from "@passalio/shared";
+import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { idColumn, timestampColumns } from "../columns";
 import { prospectCompanies, prospectContacts } from "./prospects";
@@ -82,5 +83,8 @@ export const prospectTasks = sqliteTable(
     ),
     index("prospect_tasks_company_id_status_idx").on(table.companyId, table.status),
     index("prospect_tasks_contact_id_idx").on(table.contactId),
+    index("prospect_tasks_pending_notify_at_idx")
+      .on(table.notifyAt)
+      .where(sql`status = 'open' AND notified_at IS NULL`),
   ],
 );

@@ -1,7 +1,7 @@
 import type { EmailContent, EmailHero, RenderedEmail } from "./email-content";
 import { fr } from "./fr";
 
-const COLORS = {
+export const COLORS = {
   night: "#0F2A44",
   validated: "#0E7C5A",
   mint: "#34D399",
@@ -11,7 +11,7 @@ const COLORS = {
   white: "#FFFFFF",
 } as const;
 
-const FONT_STACK =
+export const FONT_STACK =
   "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
 const HTML_ESCAPES: Readonly<Record<string, string>> = {
