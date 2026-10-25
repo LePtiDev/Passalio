@@ -49,6 +49,6 @@ export const callbackFormFr = {
     `Votre demande n’est pas partie. Réessayez dans un instant. Code : ${code}`,
   failedWithoutCode: "Votre demande n’est pas partie. Vérifiez votre connexion, puis réessayez.",
   successTitle: (firstName: string) => `C’est noté, ${firstName}.`,
-  successText: (slot: string, phone: string) => `On vous appelle ${slot}, au ${phone}.`,
+  successText: (slot: string, phone: string) => `On vous appelle ${slot},\nau ${phone}.`,
   successHint: "En attendant, gardez votre téléphone à portée : on installera Passalio ensemble.",
 } as const;
