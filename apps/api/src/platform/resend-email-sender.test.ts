@@ -86,3 +86,62 @@ describe("createEmailSender", () => {
     expect(entries).toEqual([{ event: "email_logged", kind: "magic_link", url: "https://x" }]);
   });
 });
+
+describe("prospect reminder email", () => {
+  const reminder = {
+    email: "antho@passalio.fr",
+    kind: "callback" as const,
+    notify: "minutes_15" as const,
+    dueAt: new Date("2026-11-05T16:30:00.000Z"),
+    companyName: "KH Ramonage",
+    companyCity: "Ivry-sur-Seine",
+    contactName: "Karim Haddad",
+    phone: "06 12 34 56 78",
+    lastNote: null,
+    interest: null,
+    teamSize: null,
+    toolKind: null,
+    companyUrl: "https://app.passalio.com/admin/entreprises/kh",
+  };
+
+  it("sends the reminder through Resend to the salesperson", async () => {
+    const fetcher = vi.fn<typeof fetch>(async () => Response.json({ id: "email_2" }));
+    const { logger, entries } = fakeLogger();
+
+    await createResendEmailSender(SETTINGS, logger, fetcher).sendProspectReminder(reminder);
+
+    const body = parseRequestBody(fetcher.mock.calls[0]?.[1]);
+    expect(body.to).toEqual(["antho@passalio.fr"]);
+    expect(body.subject).toBe("Rappel : Appeler Karim Haddad à 17 h 30");
+    expect(body.tags).toEqual([{ name: "kind", value: "prospect_reminder" }]);
+    expect(entries).toEqual([
+      { event: "email_sent", kind: "prospect_reminder", emailId: "email_2" },
+    ]);
+  });
+
+  it("logs only the company link in local mode, never the prospect", async () => {
+    const { logger, entries } = fakeLogger();
+    const sender = createEmailSender(
+      { delivery: "log", resendApiKey: undefined, from: SETTINGS.from, assetsUrl: "" },
+      logger,
+    );
+
+    await sender.sendProspectReminder(reminder);
+
+    expect(entries).toEqual([
+      { event: "email_logged", kind: "prospect_reminder", url: reminder.companyUrl },
+    ]);
+  });
+
+  it("refuses to send when delivery is not configured", async () => {
+    const { logger } = fakeLogger();
+    const sender = createEmailSender(
+      { delivery: "resend", resendApiKey: undefined, from: SETTINGS.from, assetsUrl: "" },
+      logger,
+    );
+
+    await expect(sender.sendProspectReminder(reminder)).rejects.toBeInstanceOf(
+      EmailDeliveryDisabledError,
+    );
+  });
+});

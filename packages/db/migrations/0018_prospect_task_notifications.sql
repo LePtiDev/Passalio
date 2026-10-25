@@ -1,0 +1,1 @@
+CREATE INDEX `prospect_tasks_pending_notify_at_idx` ON `prospect_tasks` (`notify_at`) WHERE status = 'open' AND notified_at IS NULL;

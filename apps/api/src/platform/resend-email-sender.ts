@@ -3,6 +3,7 @@ import {
   magicLinkEmail,
   mailSettingsChangedEmail,
   passwordResetEmail,
+  prospectReminderEmail,
   teamInvitationEmail,
   type RenderedEmail,
 } from "@passalio/emails";
@@ -23,7 +24,8 @@ type EmailKind =
   | "password_reset"
   | "invitation"
   | "team_invitation"
-  | "mail_settings_changed";
+  | "mail_settings_changed"
+  | "prospect_reminder";
 
 const resendResponseSchema = z.object({ id: z.string() });
 
@@ -75,5 +77,7 @@ export const createResendEmailSender = (
         email,
         mailSettingsChangedEmail({ editorName, fields, at, url }, assetsUrl),
       ),
+    sendProspectReminder: ({ email, ...reminder }) =>
+      send("prospect_reminder", email, prospectReminderEmail(reminder, assetsUrl)),
   };
 };
