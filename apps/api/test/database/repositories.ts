@@ -22,6 +22,8 @@ import { createD1CompanyRepository } from "../../src/contexts/sales/infrastructu
 import { createD1ContactRepository } from "../../src/contexts/sales/infrastructure/d1-contact-repository";
 import { createD1EventRepository } from "../../src/contexts/sales/infrastructure/d1-event-repository";
 import { createD1FollowUpRepository } from "../../src/contexts/sales/infrastructure/d1-follow-up-repository";
+import { createD1MailMemberDirectory } from "../../src/contexts/sales/infrastructure/d1-mail-member-directory";
+import { createD1MailSettingsRepository } from "../../src/contexts/sales/infrastructure/d1-mail-settings-repository";
 import { createD1TaskRepository } from "../../src/contexts/sales/infrastructure/d1-task-repository";
 import { mainContactsOf } from "../../src/contexts/sales/infrastructure/main-contacts";
 import { createSalesDependencies } from "../../src/contexts/sales/infrastructure/sales-dependencies";
@@ -69,6 +71,8 @@ export const createRepositories = (database: Database) => {
     prospectCalls: createD1CallRepository(database),
     prospectFollowUps: createD1FollowUpRepository(database),
     prospectTasks: createD1TaskRepository(database),
+    mailSettings: createD1MailSettingsRepository(database),
+    mailMembers: createD1MailMemberDirectory(database),
     prospectMainContacts: {
       of: (companyIds: readonly string[]) => mainContactsOf(database, companyIds),
     },

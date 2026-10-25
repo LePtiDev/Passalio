@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-24.
+Dernière mise à jour : 2026-10-25.
 
 ## Fait
 
@@ -66,6 +66,7 @@ Dernière mise à jour : 2026-10-24.
 | Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                           | `contexts/sales/components/calls`                   |
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                        | PR #62                                              |
 | PDF du certificat de ramonage : modèles Bandeau et Sobre, cinq couleurs, page de conseils, mentions obligatoires, rendu déterministe et empreinte                                                                 | ADR 0027, `packages/pdf`                            |
+| Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                               | ADR 0028                                            |
 
 ## Hors code (Quentin)
 
@@ -152,7 +153,11 @@ Dernière mise à jour : 2026-10-24.
 - [x] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
 - [ ] Prospection, écrans : tuiles Mails, Campagnes, Ma semaine et conseils de Ma journée ; onglets Prioritaires et Faits aujourd'hui des Appels ; nombre d'entreprises qui correspondent à une série (avec les PR mails, campagnes, statistiques)
 - [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
-- [ ] Prospection, configuration de la boîte mail dans le profil (admin pour un autre membre), envoi SMTP, rappels par e-mail
+- [x] Prospection, boîte mail : données et API (réglages, mot de passe chiffré, test d'envoi SMTP, journal, e-mail récapitulatif) (ADR 0028)
+- [ ] Prospection, rappels par e-mail : cron toutes les 5 minutes sur `notify_at`, index partiel, envoi par Resend (ADR 0028)
+- [ ] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
+- [ ] Créer le secret `MAIL_SECRET_KEY` en staging et en production avant le déploiement de la boîte mail (sur demande de Quentin)
+- [ ] Prospection, boîte mail : récapitulatif quotidien, vérification nocturne du domaine (SPF, DKIM, DMARC), historique des changements à l'écran
 - [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
 - [ ] Prospection, campagnes : envoi programmé, montée progressive de 5 à 25 par jour, créneau 8 h à 11 h
 - [ ] Prospection, statistiques : réponses, rendez-vous, taux de décroché par heure

@@ -283,6 +283,25 @@ export {
   type ProspectTaskResponse,
 } from "./prospect-call-responses";
 export {
+  MAIL_PROVIDER_PRESETS,
+  MAIL_PROVIDERS,
+  MAIL_SIGNATURE_MAX_LENGTH,
+  mailboxTestResponse,
+  mailSettingsChange,
+  mailSettingsResponse,
+  SECURITY_OF_PORT,
+  SMTP_PASSWORD_MAX_LENGTH,
+  SMTP_PORTS,
+  SMTP_SECURITIES,
+  type MailboxTestResponse,
+  type MailProvider,
+  type MailSettingsChange,
+  type MailSettingsResponse,
+  type SmtpPort,
+  type SmtpPreset,
+  type SmtpSecurity,
+} from "./mail-settings";
+export {
   PLATE_READING_DAILY_LIMIT,
   PLATE_READING_FIELDS,
   PLATE_READING_STATUSES,

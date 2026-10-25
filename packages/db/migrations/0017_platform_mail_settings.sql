@@ -1,0 +1,21 @@
+CREATE TABLE `platform_mail_settings` (
+	`user_id` text PRIMARY KEY NOT NULL,
+	`sender_name` text NOT NULL,
+	`sender_address` text NOT NULL,
+	`reply_to` text,
+	`provider` text NOT NULL,
+	`smtp_host` text NOT NULL,
+	`smtp_port` integer NOT NULL,
+	`smtp_username` text NOT NULL,
+	`smtp_password_cipher` text NOT NULL,
+	`password_updated_at` integer NOT NULL,
+	`verified_at` integer,
+	`signature` text,
+	`reminder_notify` text NOT NULL,
+	`reminder_address` text,
+	`updated_by_user_id` text,
+	`created_at` integer NOT NULL,
+	`updated_at` integer NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`updated_by_user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE set null
+);

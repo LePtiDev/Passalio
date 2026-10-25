@@ -152,6 +152,17 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 3       | Formulaires d'appel et de série (champs requis selon le résultat, 5 à 30 appels), progression d'une série, contact et numéro appelés, rappel à clore   | `call-form-schema`, `call-series-form-schema`, `session-progress`, `call-desk-model` |
 | 3       | Écrans Ma journée, Appels, série : compteurs, liens, enregistrement, passer, terminer, mobile, vide, chargement, erreur avec code ; « Noter un appel » | `my-day-screen`, `calls-screen`, `call-session-screen`, `company-file-call-note`     |
 
+## Boîte mail des membres (ADR 0028)
+
+| Famille | Ce qui est vérifié                                                                                                                      | Test                                                         |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 2       | Champs changés, changement de connexion qui efface le test réussi, droit sur sa boîte ou celle d'un autre membre                        | `sales/application/save-mail-settings.test.ts`               |
+| 4       | Lire, enregistrer, tester : mot de passe exigé la première fois, gardé ensuite, rien d'écrit sans changement, journal, e-mail au membre | `save-mail-settings`, `get-mail-settings`, `test-mailbox`    |
+| 2       | Chiffrement AES-GCM aller-retour, clé invalide, texte chiffré illisible ; erreurs SMTP classées (identifiants, connexion, refus)        | `aes-password-cipher.test.ts`, `smtp-mail-transport.test.ts` |
+| 5, 6    | Routes : 200, 204, 400, 404, 409, 422, mot de passe jamais renvoyé, réponses conformes aux schémas zod                                  | `apps/api/test/mail-settings-routes.test.ts`                 |
+| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes de la table                                              | `apps/api/test/matrices`, `apps/api/test/database`           |
+| 3       | Gabarits de l'e-mail récapitulatif et de l'e-mail de test                                                                               | `packages/emails/src/mail-settings-emails.test.ts`           |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.

@@ -14,6 +14,7 @@ export type Bindings = {
   readonly EMAIL_DELIVERY: EmailDelivery;
   readonly EMAIL_FROM: string;
   readonly RESEND_API_KEY?: string;
+  readonly MAIL_SECRET_KEY?: string;
   readonly MCP_ENABLED?: string;
   readonly OAUTH_KV?: KVNamespace;
   readonly PLATE_READER_MODEL?: string;
