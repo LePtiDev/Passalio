@@ -7,7 +7,13 @@ export type ForeignResourceStatus = 403 | 404;
 type RouteLocation = { readonly method: RouteMethod; readonly path: string };
 
 export type InfrastructureRoute = RouteLocation & {
-  readonly access: "middleware" | "public" | "website" | "auth-proxy" | "mcp-bearer";
+  readonly access:
+    | "middleware"
+    | "public"
+    | "website"
+    | "auth-proxy"
+    | "mcp-bearer"
+    | "stripe-signature";
 };
 
 export type UserRoute = RouteLocation & {
@@ -70,6 +76,8 @@ export const DECLARED_ROUTES: readonly DeclaredRoute[] = [
   infrastructure("GET", "/api/sign-up-availability", "public"),
   infrastructure("ALL", "/api/admin/mcp/authorization/*", "middleware"),
   infrastructure("ALL", "/api/team-invitations/*", "middleware"),
+  infrastructure("ALL", "/api/billing/*", "middleware"),
+  infrastructure("POST", "/api/billing/stripe-webhook", "stripe-signature"),
   infrastructure("ALL", "/api/public/*", "middleware"),
   infrastructure("GET", "/health", "public"),
   infrastructure("POST", "/api/public/callback-requests", "website"),
@@ -119,6 +127,9 @@ export const DECLARED_ROUTES: readonly DeclaredRoute[] = [
   member("GET", "/api/photos/:photoId", "customers:read", 404),
   member("POST", "/api/plate-readings", "customers:write"),
   member("POST", "/api/sync/push", "customers:write"),
+  member("GET", "/api/billing/subscription", "organization:read"),
+  member("POST", "/api/billing/checkout", "billing:manage"),
+  member("POST", "/api/billing/portal", "billing:manage"),
   member("GET", "/api/sync/pull", "customers:read"),
 
   platform("GET", "/api/admin/me", null),

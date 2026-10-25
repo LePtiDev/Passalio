@@ -23,10 +23,19 @@ const captchaTokenOf = (init: RequestInit | undefined): unknown => {
   return typeof body === "object" && body !== null && "response" in body ? body.response : null;
 };
 
-const stubTurnstileSiteverify = () => {
+export type ExternalService = (
+  url: string,
+  init: RequestInit | undefined,
+) => Promise<Response> | undefined;
+
+const stubExternalServices = (externalService: ExternalService | undefined) => {
   const realFetch = globalThis.fetch;
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const url = input instanceof Request ? input.url : String(input);
+    const external = externalService?.(url, init);
+    if (external !== undefined) {
+      return external;
+    }
     if (!url.startsWith(TURNSTILE_SITEVERIFY_URL)) {
       return realFetch(input, init);
     }
@@ -76,7 +85,15 @@ const sessionCookieOf = (response: Response) =>
 
 export type TestPlatform = Awaited<ReturnType<typeof startTestPlatform>>;
 
-export const startTestPlatform = async () => {
+export type TestPlatformOptions = {
+  readonly bindings?: Partial<Bindings>;
+  readonly externalService?: ExternalService;
+};
+
+export const startTestPlatform = async ({
+  bindings = {},
+  externalService,
+}: TestPlatformOptions = {}) => {
   const proxy = await getPlatformProxy<Bindings>({ persist: false });
   await applyMigrations(proxy.env.DB);
   const env: Bindings = {
@@ -88,8 +105,9 @@ export const startTestPlatform = async () => {
     EMAIL_DELIVERY: "log",
     EMAIL_FROM: "Passalio <ne-pas-repondre@passalio.com>",
     TURNSTILE_SECRET_KEY: "test-turnstile-secret",
+    ...bindings,
   };
-  stubTurnstileSiteverify();
+  stubExternalServices(externalService);
   const logs = vi.spyOn(console, "info").mockImplementation(() => undefined);
   vi.spyOn(console, "warn").mockImplementation(() => undefined);
 

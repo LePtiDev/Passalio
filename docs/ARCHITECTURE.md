@@ -54,20 +54,20 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 3. Contextes métier (DDD léger)
 
-| Contexte            | Responsabilité                                                           |
-| ------------------- | ------------------------------------------------------------------------ |
-| `identity`          | Comptes, entreprises, membres, rôles, permissions, impersonation         |
-| `customers`         | Clients, lieux, équipements, historique                                  |
-| `scheduling`        | Interventions, tournées, confirmation J-1, suivi d'arrivée               |
-| `compliance`        | Attestations, signature, PDF, numérotation, versions                     |
-| `engagement`        | Échéances, relances, envois email/SMS                                    |
-| `billing`           | Abonnement Stripe (`docs/stripe.md`), état du compte                     |
-| `backoffice`        | Outils internes : support, impersonation, métriques                      |
-| `sales`             | Prospection de Passalio : entreprises, contacts, étapes, historique      |
-| `platform-team`     | Équipe Passalio : membres, rôles plateforme, invitations                 |
-| `platform-settings` | Réglages de la plateforme : ouvrir ou fermer les inscriptions (ADR 0029) |
-| `mcp`               | Serveur MCP admin : OAuth, consentement, outils pour Claude              |
-| `sync`              | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes     |
+| Contexte            | Responsabilité                                                             |
+| ------------------- | -------------------------------------------------------------------------- |
+| `identity`          | Comptes, entreprises, membres, rôles, permissions, impersonation           |
+| `customers`         | Clients, lieux, équipements, historique                                    |
+| `scheduling`        | Interventions, tournées, confirmation J-1, suivi d'arrivée                 |
+| `compliance`        | Attestations, signature, PDF, numérotation, versions                       |
+| `engagement`        | Échéances, relances, envois email/SMS                                      |
+| `billing`           | Abonnement Stripe (`docs/stripe.md`), état de l'espace, blocage (ADR 0031) |
+| `backoffice`        | Outils internes : support, impersonation, métriques                        |
+| `sales`             | Prospection de Passalio : entreprises, contacts, étapes, historique        |
+| `platform-team`     | Équipe Passalio : membres, rôles plateforme, invitations                   |
+| `platform-settings` | Réglages de la plateforme : ouvrir ou fermer les inscriptions (ADR 0029)   |
+| `mcp`               | Serveur MCP admin : OAuth, consentement, outils pour Claude                |
+| `sync`              | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes       |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
 
@@ -276,6 +276,8 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                       |
 | `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                      |
 | `platform_settings`      | une seule ligne, lue par sa clé primaire ; l'inscription fermée lit `invitations (email)` et `platform_invitations (email, status)`                                            |
+| `subscriptions`          | `(organization_id)` unique : l'état de l'espace se lit à chaque écriture, par entreprise                                                                                       |
+| `stripe_events`          | lu par sa clé primaire, l'identifiant de l'événement Stripe                                                                                                                    |
 
 Règles :
 

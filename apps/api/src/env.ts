@@ -24,6 +24,9 @@ export type Bindings = {
   readonly GOOGLE_GENERATIVE_AI_API_KEY?: string;
   readonly ANTHROPIC_API_KEY?: string;
   readonly MISTRAL_API_KEY?: string;
+  readonly STRIPE_SECRET_KEY?: string;
+  readonly STRIPE_WEBHOOK_SECRET?: string;
+  readonly STRIPE_PAYMENT_METHOD_CONFIGURATION?: string;
 };
 
 export type Variables = {
