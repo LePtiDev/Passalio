@@ -1,4 +1,4 @@
-import type { BillingInterval, Plan, SubscriptionStatus } from "@passalio/shared";
+import type { BillingInterval, InvoiceStatus, Plan, SubscriptionStatus } from "@passalio/shared";
 
 export type PaymentMethod = {
   readonly type: string;
@@ -54,4 +54,13 @@ export type CheckoutRequest = {
   readonly customerEmail: string | null;
   readonly successUrl: string;
   readonly cancelUrl: string;
+};
+
+export type Invoice = {
+  readonly id: string;
+  readonly number: string | null;
+  readonly issuedAt: Date;
+  readonly totalCents: number;
+  readonly status: InvoiceStatus;
+  readonly pdfUrl: string | null;
 };

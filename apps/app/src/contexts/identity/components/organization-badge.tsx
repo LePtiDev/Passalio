@@ -11,9 +11,13 @@ const NAME_CLASS = {
 
 type OrganizationBadgeProps = {
   readonly placement?: keyof typeof NAME_CLASS;
+  readonly planLabel?: string | undefined;
 };
 
-export const OrganizationBadge = ({ placement = "sidebar" }: OrganizationBadgeProps) => {
+export const OrganizationBadge = ({
+  placement = "sidebar",
+  planLabel = identityFr.organizationBadge.freeTrial,
+}: OrganizationBadgeProps) => {
   const { data: organization } = useOrganization();
   if (organization === undefined) {
     return (
@@ -36,7 +40,7 @@ export const OrganizationBadge = ({ placement = "sidebar" }: OrganizationBadgePr
       />
       <span className="flex min-w-0 flex-col">
         <span className={cn("truncate font-bold", NAME_CLASS[placement])}>{organization.name}</span>
-        <span className="text-xs text-[#64748B]">{identityFr.organizationBadge.freeTrial}</span>
+        <span className="text-xs text-[#64748B]">{planLabel}</span>
       </span>
     </span>
   );

@@ -17,6 +17,7 @@ const SUBSCRIPTION_PATH = /^\/v1\/subscriptions\/([^/]+)$/;
 
 export const createFakeStripe = () => {
   const subscriptions = new Map<string, Record<string, unknown>>();
+  const invoices = new Map<string, Record<string, unknown>[]>();
   const calls: StripeCall[] = [];
 
   const answer = (method: string, url: URL): Response => {
@@ -25,6 +26,9 @@ export const createFakeStripe = () => {
     }
     if (url.pathname === "/v1/checkout/sessions" && method === "POST") {
       return Response.json({ url: `https://checkout.stripe.com/c/pay/cs_test_${calls.length}` });
+    }
+    if (url.pathname === "/v1/invoices") {
+      return Response.json({ data: invoices.get(url.searchParams.get("customer") ?? "") ?? [] });
     }
     if (url.pathname === "/v1/billing_portal/sessions" && method === "POST") {
       return Response.json({ url: `https://billing.stripe.com/p/session/test_${calls.length}` });
@@ -53,7 +57,7 @@ export const createFakeStripe = () => {
     return Promise.resolve(answer(method, parsed));
   };
 
-  return { service, subscriptions, calls };
+  return { service, subscriptions, invoices, calls };
 };
 
 export type FakeStripe = ReturnType<typeof createFakeStripe>;

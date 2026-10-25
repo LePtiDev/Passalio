@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { ORGANIZATION_ROLES, ROLE_PERMISSIONS } from "./roles";
 
 export const PLANS = ["solo", "team"] as const;
 export type Plan = (typeof PLANS)[number];
@@ -72,3 +73,30 @@ export type StartCheckoutBody = z.infer<typeof startCheckoutBody>;
 
 export const billingRedirectResponse = z.object({ url: z.url() });
 export type BillingRedirectResponse = z.infer<typeof billingRedirectResponse>;
+
+export const TECHNICIAN_ROLES = ORGANIZATION_ROLES.filter((role) =>
+  ROLE_PERMISSIONS[role].has("documents:sign"),
+);
+
+export const SOLO_TECHNICIAN_LIMIT = 1;
+
+export const billingSeatsResponse = z.object({
+  technicianCount: z.number().int().nonnegative(),
+  ownerName: z.string().nullable(),
+});
+export type BillingSeatsResponse = z.infer<typeof billingSeatsResponse>;
+
+export const INVOICE_STATUSES = ["open", "paid", "uncollectible", "void"] as const;
+export type InvoiceStatus = (typeof INVOICE_STATUSES)[number];
+
+export const invoiceResponse = z.object({
+  id: z.string(),
+  number: z.string().nullable(),
+  issuedAt: z.iso.datetime(),
+  totalCents: z.number().int(),
+  status: z.enum(INVOICE_STATUSES),
+  pdfUrl: z.url().nullable(),
+});
+export type InvoiceResponse = z.infer<typeof invoiceResponse>;
+
+export const invoicesResponse = z.object({ invoices: z.array(invoiceResponse) });

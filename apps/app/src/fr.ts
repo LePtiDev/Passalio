@@ -137,6 +137,11 @@ export const fr = {
       document_number_already_used: "Ce numéro est déjà attribué. Choisissez un numéro plus grand.",
       invalid_logo: "Ce logo n'est pas accepté : PNG, JPG, WebP ou SVG, 2 Mo maximum.",
       logo_not_found: "Il n'y a plus de logo à retirer.",
+      workspace_blocked: "Votre espace est en pause. Choisissez une formule pour le rouvrir.",
+      billing_unavailable: "Le paiement en ligne n'est pas encore ouvert.",
+      already_subscribed: "Votre entreprise a déjà un abonnement. Rechargez la page.",
+      price_not_found: "Cette formule n'est pas disponible. Réessayez dans un instant.",
+      no_subscription: "Aucun abonnement à gérer pour le moment.",
     },
   },
 } as const;

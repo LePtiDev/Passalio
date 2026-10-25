@@ -1,5 +1,6 @@
 import type {
   CheckoutRequest,
+  Invoice,
   StripeEvent,
   StripeSubscriptionSnapshot,
   Subscription,
@@ -16,6 +17,8 @@ export type SubscriptionRepository = {
 
 export type BillingContactDirectory = {
   readonly findEmail: (userId: string) => Promise<string | undefined>;
+  readonly findOwnerName: (organizationId: string) => Promise<string | undefined>;
+  readonly countTechnicians: (organizationId: string) => Promise<number>;
 };
 
 export type StripeEventLog = {
@@ -33,6 +36,7 @@ export type StripeGateway = {
   readonly retrieveSubscription: (
     subscriptionId: string,
   ) => Promise<StripeSubscriptionSnapshot | undefined>;
+  readonly listInvoices: (customerId: string) => Promise<readonly Invoice[]>;
 };
 
 export type BillingAuditEntry = {

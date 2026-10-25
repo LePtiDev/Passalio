@@ -130,6 +130,8 @@ export const DECLARED_ROUTES: readonly DeclaredRoute[] = [
   member("GET", "/api/billing/subscription", "organization:read"),
   member("POST", "/api/billing/checkout", "billing:manage"),
   member("POST", "/api/billing/portal", "billing:manage"),
+  member("GET", "/api/billing/seats", "organization:read"),
+  member("GET", "/api/billing/invoices", "organization:read"),
   member("GET", "/api/sync/pull", "customers:read"),
 
   platform("GET", "/api/admin/me", null),
