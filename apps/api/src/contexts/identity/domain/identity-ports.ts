@@ -112,7 +112,12 @@ export type InvitationNotifier = {
   readonly notify: (invitation: Invitation, organization: Organization) => Promise<void>;
 };
 
+export type SignUpPolicy = {
+  readonly isOpen: () => Promise<boolean>;
+};
+
 export type IdentityDependencies = {
+  readonly signUpPolicy: SignUpPolicy;
   readonly organizations: OrganizationRepository;
   readonly members: MemberRepository;
   readonly invitations: InvitationRepository;

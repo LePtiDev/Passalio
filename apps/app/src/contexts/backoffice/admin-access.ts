@@ -26,3 +26,6 @@ export const canSeePlatform = (role: PlatformRole) =>
 
 export const canManageTeam = (role: PlatformRole) =>
   PLATFORM_ROLE_PERMISSIONS[role].has("team:manage");
+
+export const canManageSettings = (role: PlatformRole) =>
+  PLATFORM_ROLE_PERMISSIONS[role].has("settings:manage");

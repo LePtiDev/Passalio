@@ -9,11 +9,13 @@ import { identityFr } from "../fr";
 import { AdminShowcase } from "./admin-showcase";
 import { AuthShowcaseHeading, type AuthShowcaseHeadingProps } from "./auth-showcase-heading";
 import { SignInShowcase } from "./sign-in-showcase";
+import { SignUpClosedShowcase } from "./sign-up-closed-showcase";
 import { SignUpShowcase } from "./sign-up-showcase";
 
 const SHOWCASES = {
   "sign-in": <SignInShowcase />,
   "sign-up": <SignUpShowcase />,
+  "sign-up-closed": <SignUpClosedShowcase />,
   admin: <AdminShowcase />,
 } as const;
 

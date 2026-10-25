@@ -49,6 +49,8 @@ export const JOURNAL_ACTIONS: Readonly<
   "platform.invitation_canceled": () => "a annulé une invitation dans l'équipe Passalio",
   "platform.invitation_accepted": (data) =>
     `a rejoint l'équipe Passalio (${platformRoleLabel(data["role"])})`,
+  "platform.sign_up_closed": () => "a fermé les inscriptions",
+  "platform.sign_up_opened": () => "a ouvert les inscriptions",
   "mcp.authorized": (data) =>
     `a connecté ${data["client"] ?? "Claude"} à l'espace admin (${MCP_ACCESS_JOURNAL_LABELS[data["access"] ?? ""] ?? ""})`,
   "mcp.revoked": (_data, target) => `a coupé les accès de Claude de ${target}`,

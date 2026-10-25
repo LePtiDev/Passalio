@@ -174,6 +174,17 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 6       | Cron de bout en bout : rappel trouvé avec contact, note, téléphone et adresse des rappels, envoyé une seule fois, trace, aucune donnée personnelle dans les logs | `apps/api/test/prospect-reminder-job.test.ts`         |
 | 9       | Plan de requête : index partiel `prospect_tasks_pending_notify_at_idx`                                                                                           | `apps/api/test/database`                              |
 
+## Inscriptions fermées (ADR 0029)
+
+| Famille | Ce qui est vérifié                                                                                                                          | Test                                                                                                     |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 2, 3    | Ouvertes par défaut, invité accepté même fermées, adresse sans espaces ni majuscules ; `settings:manage` au super admin seulement           | `platform-settings/domain/sign-up-settings.test.ts`, `packages/shared/src/platform-settings.test.ts`     |
+| 4       | Lire, fermer, rouvrir (journal), même valeur sans effet, admin et commercial refusés ; invitation expirée refusée ; entreprise refusée      | `platform-settings/application/*.test.ts`, `identity/application/create-organization-sign-up.test.ts`    |
+| 5, 7, 9 | Routes : 200, 400, 403 (admin, commercial), 404 (client, sans session) ; compte refusé `SIGN_UP_CLOSED`, invités acceptés, connexion gardée | `apps/api/test/platform-settings-routes.test.ts`, `apps/api/test/matrices`                               |
+| 8       | Requêtes des réglages et des invitations en attente cataloguées, index utilisés                                                             | `apps/api/test/database`                                                                                 |
+| 13      | Réglages : chargement, erreur avec code, ouvertes, fermées (qui et quand), confirmation, annuler, toast, échec ; écran « fermées »          | `backoffice/components/settings/settings-screen.test.tsx`, `identity/components/sign-up-screen.test.tsx` |
+| 14, 16  | Fermer, connexion d'un compte existant, page fermée, rouvrir ; accessibilité et zones tactiles des deux écrans                              | `e2e/platform-sign-up-settings.spec.ts`, `e2e/sign-up-settings-accessibility.spec.ts`                    |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.
@@ -230,6 +241,7 @@ Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans 
 | Admin           | Le rôle Commercial ne voit que Commercial                                                                                                                                                         | `admin-access.spec.ts`, `admin-guards.spec.ts`                          |
 | Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification                                                                                                                   | `platform-team.spec.ts`                                                 |
 | Équipe Passalio | Changer un rôle, retirer un membre (ses sessions sont fermées) ; pas son propre rôle                                                                                                              | `platform-team.spec.ts`, `platform-team-sessions.spec.ts`               |
+| Équipe Passalio | Fermer les inscriptions : page fermée, compte existant connecté, rouvrir                                                                                                                          | `platform-sign-up-settings.spec.ts`                                     |
 | Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination                                                                                                           | `commercial-companies.spec.ts`                                          |
 | Commercial      | Créer, modifier, supprimer une entreprise prospectée                                                                                                                                              | `commercial-companies.spec.ts`                                          |
 | Commercial      | Changer l'étape, ajouter une note, historique                                                                                                                                                     | `commercial-companies.spec.ts`                                          |

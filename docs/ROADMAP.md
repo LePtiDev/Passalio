@@ -62,6 +62,7 @@ Dernière mise à jour : 2026-10-25.
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                                                          | ADR 0024                                            |
 | Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                                                                | ADR 0025                                            |
 | Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                              | `docs/stripe.md`                                    |
+| Interrupteur des inscriptions (super admin) : fermer en production sans bloquer la connexion ni les invités                                                                                                       | ADR 0029                                            |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100 | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
 | Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                           | `contexts/sales/components/calls`                   |
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                        | PR #62                                              |
@@ -130,7 +131,9 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [x] Grille de prix et fonctionnement du paiement décidés (ADR 0025, choix de Quentin du 2026-10-24)
-- [ ] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, lecture seule, emails (fin d'essai J-3 et J0, paiement refusé, lecture seule)
+- [x] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, espace bloqué, e-mails (fin d'essai J-2, paiement refusé, espace bloqué), validées le 2026-10-24
+- [x] Fermer les inscriptions depuis l'admin (Plateforme › Réglages, super admin), connexion et invitations toujours possibles (ADR 0029)
+- [ ] Offre des 20 premiers clients : 19 € HT par mois à vie, quelle que soit la formule (choix de Quentin du 2026-10-24, à consigner dans l'ADR 0025 et à coder avec l'abonnement)
 - [ ] Abonnement, code : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures en lecture seule, passage Solo vers Équipe à l'invitation d'un deuxième technicien (ADR 0025)
 - [ ] Ouvrir le compte Stripe de production au nom de la micro-entreprise de Quentin (ADR 0025), mentions de la facture Stripe validées par la vérification réglementaire
 - [ ] Abonnement : écran bloquant en fin d'essai (7 jours), avec souscription, export et déconnexion

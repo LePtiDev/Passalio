@@ -13,13 +13,20 @@ export type CreateOrganizationInput = OptionalCompanyDetails & {
 };
 
 export const createOrganization =
-  ({ organizations, auditTrail }: Pick<IdentityDependencies, "organizations" | "auditTrail">) =>
+  ({
+    signUpPolicy,
+    organizations,
+    auditTrail,
+  }: Pick<IdentityDependencies, "signUpPolicy" | "organizations" | "auditTrail">) =>
   async (
     actor: UserActor,
     input: CreateOrganizationInput,
   ): Promise<Result<Organization, IdentityError>> => {
     if (actor.isImpersonating) {
       return err("impersonation_read_only");
+    }
+    if (!(await signUpPolicy.isOpen())) {
+      return err("sign_up_closed");
     }
     const normalized = normalizeProfileChanges(input);
     if (!normalized.isOk) {

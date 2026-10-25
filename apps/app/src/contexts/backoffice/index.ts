@@ -1,4 +1,10 @@
-export { canManageTeam, canSeePlatform, loadAdminAccess, type AdminAccess } from "./admin-access";
+export {
+  canManageSettings,
+  canManageTeam,
+  canSeePlatform,
+  loadAdminAccess,
+  type AdminAccess,
+} from "./admin-access";
 export { ACCOUNT_FILTERS, type AccountFilter } from "./backoffice-api";
 export { AccountScreen } from "./components/account/account-screen";
 export { ACCOUNT_TABS, type AccountTab } from "./components/account/account-tabs";
@@ -14,3 +20,4 @@ export { useNow } from "./hooks/use-now";
 export { JoinTeamScreen } from "./components/team/join-team-screen";
 export { TeamScreen } from "./components/team/team-screen";
 export { AuthorizeClaudeScreen } from "./components/mcp/authorize-claude-screen";
+export { SettingsScreen } from "./components/settings/settings-screen";

@@ -1,4 +1,5 @@
 import type { Actor } from "@passalio/shared";
+import { createPlatformSettingsDependencies, isSignUpOpen } from "../../platform-settings";
 import type { Bindings, Variables } from "../../../env";
 import type { UserActor } from "../domain/identity-models";
 import type { IdentityDependencies } from "../domain/identity-ports";
@@ -9,6 +10,14 @@ export const identityDependencies = (
   bindings: Bindings,
 ): IdentityDependencies =>
   createIdentityDependencies({
+    signUpPolicy: {
+      isOpen: isSignUpOpen(
+        createPlatformSettingsDependencies({
+          database: variables.database,
+          auditTrail: variables.auditTrail,
+        }),
+      ),
+    },
     database: variables.database,
     auditTrail: variables.auditTrail,
     emailSender: variables.emailSender,

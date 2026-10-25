@@ -10,6 +10,7 @@ export type IdentityError =
   | "invitation_expired"
   | "invitation_email_mismatch"
   | "impersonation_read_only"
+  | "sign_up_closed"
   | "invalid_siret"
   | "invalid_document_numbering"
   | "invalid_logo"

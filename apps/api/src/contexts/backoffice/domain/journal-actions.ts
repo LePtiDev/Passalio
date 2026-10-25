@@ -6,6 +6,8 @@ export const PLATFORM_JOURNAL_ACTIONS = [
   "platform.invitation_resent",
   "platform.invitation_canceled",
   "platform.invitation_accepted",
+  "platform.sign_up_closed",
+  "platform.sign_up_opened",
   "organization.created",
   "mcp.authorized",
   "mcp.revoked",

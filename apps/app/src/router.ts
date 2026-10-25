@@ -14,6 +14,7 @@ import {
   adminJournalRoute,
   adminOverviewRoute,
   adminRootRoute,
+  adminSettingsRoute,
   adminShellRoute,
   adminTeamRoute,
 } from "./routes/admin";
@@ -73,6 +74,7 @@ const routeTree = rootRoute.addChildren([
       adminAccountRoute,
       adminJournalRoute,
       adminTeamRoute,
+      adminSettingsRoute,
       adminCompaniesRoute,
       adminCompanyRoute,
       adminContactsRoute,

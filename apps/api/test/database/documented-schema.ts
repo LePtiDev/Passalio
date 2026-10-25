@@ -101,6 +101,7 @@ export const TABLES_WITHOUT_ORGANIZATION: Readonly<Record<string, string>> = {
   prospect_tasks: "Passalio data, see docs/ARCHITECTURE.md",
   platform_invitations: "Passalio team",
   platform_mail_settings: "Passalio team",
+  platform_settings: "Passalio settings, one row for the whole platform",
 };
 
 export const PASSALIO_TABLES = [
@@ -110,6 +111,7 @@ export const PASSALIO_TABLES = [
   "prospect_calls",
   "prospect_follow_ups",
   "prospect_tasks",
+  "platform_settings",
 ];
 
 export const SYNCHRONIZED_TABLES = [

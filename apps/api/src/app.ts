@@ -4,6 +4,7 @@ import { numberBlockRoutes } from "./contexts/compliance";
 import { customerRoutes, equipmentRoutes, plateReadingRoutes } from "./contexts/customers";
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
 import { mcpAuthorizationRoutes, mcpRoutes } from "./contexts/mcp";
+import { platformSettingsRoutes, signUpAvailabilityRoutes } from "./contexts/platform-settings";
 import { teamInvitationRoutes, teamRoutes } from "./contexts/platform-team";
 import {
   mailSettingsRoutes,
@@ -31,9 +32,11 @@ const apiRoutes = new Hono<AppEnv>()
   .route("/admin/prospects", prospectCallRoutes)
   .route("/admin/mail-settings", mailSettingsRoutes)
   .route("/admin/team", teamRoutes)
+  .route("/admin/settings", platformSettingsRoutes)
   .route("/admin/mcp/authorization", mcpAuthorizationRoutes)
   .route("/admin", backofficeRoutes)
   .route("/team-invitations", teamInvitationRoutes)
+  .route("/sign-up-availability", signUpAvailabilityRoutes)
   .route("/", identityRoutes.userRoutes)
   .route("/", organizationRoutes.companySearchRoutes)
   .route("/", identityRoutes.memberRoutes)

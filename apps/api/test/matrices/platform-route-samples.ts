@@ -1,4 +1,5 @@
 import {
+  changeSignUpSettingsBody,
   changeTeammateRoleBody,
   inviteTeammateBody,
   mailSettingsChange,
@@ -86,6 +87,11 @@ export const PLATFORM_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     ),
   [`PATCH ${PROSPECTS}/tasks/:taskId`]: (ids) =>
     withJson("PATCH", `${PROSPECTS}/tasks/${ids.taskId}`, prospectTaskChange, { status: "done" }),
+  "GET /api/admin/settings/sign-up": () => read("/api/admin/settings/sign-up"),
+  "PUT /api/admin/settings/sign-up": () =>
+    withJson("PUT", "/api/admin/settings/sign-up", changeSignUpSettingsBody, {
+      isSignUpOpen: true,
+    }),
   "GET /api/admin/team": () => read("/api/admin/team"),
   "POST /api/admin/team/invitations": () =>
     withJson("POST", "/api/admin/team/invitations", inviteTeammateBody, {
