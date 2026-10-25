@@ -75,7 +75,7 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
-## Signature hors ligne du certificat (ADR 0031)
+## Signature hors ligne du certificat (ADR 0032)
 
 | Famille | Ce qui est vérifié                                                                                                                                                                                         | Test                                                                                                                                                                                                  |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

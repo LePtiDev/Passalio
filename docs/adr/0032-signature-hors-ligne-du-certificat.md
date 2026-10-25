@@ -1,4 +1,4 @@
-# 0031 — Signature du certificat sur le téléphone, hors ligne
+# 0032 — Signature du certificat sur le téléphone, hors ligne
 
 - Date : 2026-10-25
 - Statut : accepté
