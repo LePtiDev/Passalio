@@ -197,6 +197,17 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 13      | Réglages : chargement, erreur avec code, ouvertes, fermées (qui et quand), confirmation, annuler, toast, échec ; écran « fermées »          | `backoffice/components/settings/settings-screen.test.tsx`, `identity/components/sign-up-screen.test.tsx` |
 | 14, 16  | Fermer, connexion d'un compte existant, page fermée, rouvrir ; accessibilité et zones tactiles des deux écrans                              | `e2e/platform-sign-up-settings.spec.ts`, `e2e/sign-up-settings-accessibility.spec.ts`                    |
 
+## Abonnement, données et Stripe (ADR 0030)
+
+| Famille | Ce qui est vérifié                                                                                                                                                                | Test                                                                                                       |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 2, 3    | États de l'espace : essai de 7 jours, actif, SEPA en attente, 15 jours après un paiement refusé, bloqué (fin d'essai, impayé, résiliation), bornes exactes ; prix par lookup key  | `billing/domain/*.test.ts`, `packages/shared/src/billing.test.ts`                                          |
+| 4       | Lire l'état (moyen de paiement au patron seul), Checkout, portail, événements Stripe une seule fois, relecture chez Stripe, ancien abonnement ignoré, journal                     | `billing/application/*.test.ts`                                                                            |
+| 2, 5    | Signature HMAC (vecteur connu, tolérance de 300 s, rotation), lecture des événements et abonnements Stripe, requêtes envoyées à Stripe                                            | `billing/infrastructure/*.test.ts`                                                                         |
+| 5, 7, 9 | Routes : 200, 400, 403 (rôles, impersonation), 404, 409, 503 sans Stripe ; webhook refusé sans signature ou mal signé ; rejeu sans effet                                          | `apps/api/test/billing-routes.test.ts`, `apps/api/test/billing-disabled.test.ts`, `apps/api/test/matrices` |
+| 6       | Blocage de bout en bout : écriture refusée après l'essai, lecture et abonnement possibles, synchronisation (certificat signé avant), réouverture au paiement, impayé, résiliation | `apps/api/test/workspace-blocking.test.ts`                                                                 |
+| 8       | Requêtes de l'abonnement et des événements Stripe cataloguées, filtrées par entreprise, index utilisés                                                                            | `apps/api/test/database`                                                                                   |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.
