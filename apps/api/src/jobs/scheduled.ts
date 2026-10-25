@@ -1,4 +1,5 @@
 import type { Bindings } from "../env";
+import { archiveSignedCertificatePdfs } from "./archive-certificate-pdfs";
 import { sendProspectReminders } from "./send-prospect-reminders";
 
 export const handleScheduled = async (
@@ -7,4 +8,5 @@ export const handleScheduled = async (
   executionContext: ExecutionContext,
 ): Promise<void> => {
   executionContext.waitUntil(sendProspectReminders(env));
+  executionContext.waitUntil(archiveSignedCertificatePdfs(env));
 };

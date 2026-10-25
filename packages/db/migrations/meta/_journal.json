@@ -162,6 +162,13 @@
       "when": 1792936566278,
       "tag": "0022_billing",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1792947270935,
+      "tag": "0023_certificate_pdf_archive",
+      "breakpoints": true
     }
   ]
 }

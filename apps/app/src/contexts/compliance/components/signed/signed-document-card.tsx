@@ -1,12 +1,11 @@
 import { Download, Eye, Share } from "lucide-react";
-import { useCallback } from "react";
-import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CARD_CLASS } from "@/contexts/customers";
 import type { DocumentRecord } from "@/lib/db/local-records";
 import { cn } from "@/lib/utils";
 import { complianceFr } from "../../fr";
 import { useCertificatePdf, type CertificatePdf } from "../../hooks/use-certificate-pdf";
+import { useSharePdf } from "../../hooks/use-share-pdf";
 import { numberOf } from "../../signed-labels";
 
 const text = complianceFr.signed;
@@ -43,17 +42,7 @@ const TileContent = ({
 );
 
 const PdfActions = ({ pdf }: { readonly pdf: CertificatePdf }) => {
-  const share = useCallback(() => {
-    if (pdf.status !== "ready") {
-      return;
-    }
-    const data = { files: [pdf.file], title: pdf.file.name };
-    if (typeof navigator.canShare !== "function" || !navigator.canShare(data)) {
-      toast.error(text.shareUnavailable);
-      return;
-    }
-    navigator.share(data).catch(() => undefined);
-  }, [pdf]);
+  const share = useSharePdf(pdf);
   if (pdf.status === "loading") {
     return (
       <div aria-busy="true" className="grid grid-cols-3 gap-2 lg:gap-3">

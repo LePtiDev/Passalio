@@ -56,6 +56,9 @@ importers:
       '@passalio/emails':
         specifier: workspace:*
         version: link:../../packages/emails
+      '@passalio/pdf':
+        specifier: workspace:*
+        version: link:../../packages/pdf
       '@passalio/shared':
         specifier: workspace:*
         version: link:../../packages/shared

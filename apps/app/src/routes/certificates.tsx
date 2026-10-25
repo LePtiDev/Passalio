@@ -1,6 +1,11 @@
 import { createRoute } from "@tanstack/react-router";
 import * as z from "zod";
-import { CertificateFormScreen, SignedScreen, SignScreen } from "@/contexts/compliance";
+import {
+  CertificateDocumentScreen,
+  CertificateFormScreen,
+  SignedScreen,
+  SignScreen,
+} from "@/contexts/compliance";
 import { signedInRoute } from "./signed-in-layout";
 
 const ID = z.string().max(64);
@@ -42,5 +47,17 @@ export const signedCertificatesRoute = createRoute({
   component: function SignedCertificatesRouteScreen() {
     const { interventionId } = signedCertificatesRoute.useParams();
     return <SignedScreen interventionId={interventionId} />;
+  },
+});
+
+const documentParams = z.object({ documentId: ID });
+
+export const certificateDocumentRoute = createRoute({
+  getParentRoute: () => signedInRoute,
+  path: "/certificats/$documentId",
+  params: { parse: (params) => documentParams.parse(params) },
+  component: function CertificateDocumentRouteScreen() {
+    const { documentId } = certificateDocumentRoute.useParams();
+    return <CertificateDocumentScreen key={documentId} documentId={documentId} />;
   },
 });

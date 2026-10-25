@@ -105,13 +105,13 @@ const CustomerFileContent = ({ file }: { readonly file: CustomerFile }) => {
               </Link>
             </Button>
             <div className="hidden lg:block">
-              <HistoryCard />
+              <HistoryCard items={file.certificates} />
             </div>
           </div>
           <div className="flex flex-col gap-4">
             <ContactCard customer={customer} firstSite={firstSite} />
             <div className="lg:hidden">
-              <HistoryCard />
+              <HistoryCard items={file.certificates} />
             </div>
           </div>
         </div>

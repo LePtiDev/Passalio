@@ -1,9 +1,9 @@
 import type { DocumentIssuer } from "@/lib/db/compliance-records";
 import type { LocalDatabase } from "@/lib/db/local-database";
-import type { EquipmentRecord, InterventionRecord } from "@/lib/db/local-records";
+import type { DocumentRecord, EquipmentRecord, InterventionRecord } from "@/lib/db/local-records";
 import { serverInterventionRecord } from "@/lib/sync/planning-test-records";
 import { serverCustomerRecord, serverSiteRecord } from "@/lib/sync/sync-test-records";
-import { insertEquipment, numberBlock, sampleIssuer } from "./certificate-records";
+import { certificateBody, insertEquipment, numberBlock, sampleIssuer } from "./certificate-records";
 
 export const VISIT_ID = "visit-1";
 
@@ -65,3 +65,29 @@ export const seedCertificateVisit = async (database: LocalDatabase, seed: VisitS
     });
   }
 };
+
+export const signedCertificateDocument = (
+  overrides: Partial<DocumentRecord> = {},
+): DocumentRecord => ({
+  id: "document-1",
+  organizationId: "organization-a",
+  createdAt: "2026-10-23T08:42:00.000Z",
+  updatedAt: "2026-10-23T08:42:00.000Z",
+  deletedAt: null,
+  interventionId: VISIT_ID,
+  equipmentId: INSERT_ID,
+  kind: "chimney_sweeping_certificate",
+  templateVersion: 2,
+  number: 144,
+  numberPrefix: "RD-2026-",
+  signedByUserId: "user-1",
+  signedAt: "2026-10-23T08:42:00.000Z",
+  completedOn: VISIT_DAY,
+  cancelsDocumentId: null,
+  data: {
+    ...certificateBody(),
+    company: sampleIssuer().company,
+    branding: sampleIssuer().branding,
+  },
+  ...overrides,
+});

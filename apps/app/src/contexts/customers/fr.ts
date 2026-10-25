@@ -358,6 +358,12 @@ export const customersFr = {
     historyEmptyTitle: "Aucune attestation pour l'instant",
     historyEmptyText:
       "Les interventions et les attestations signées de ce client apparaîtront ici.",
+    historyCount: (count: number) => (count === 1 ? "1 certificat" : `${count} certificats`),
+    historySigned: "Signé",
+    historyCancelled: "Annulé",
+    historySweeping: "Ramonage",
+    historyCorrectedBy: (number: string) => `Corrigé par ${number}`,
+    historyUnknownEquipment: "Appareil",
     notFoundTitle: "Ce client n'existe pas ou a été archivé",
     notFoundText: "Revenez à la liste pour retrouver vos clients.",
     backToList: "Retour aux clients",

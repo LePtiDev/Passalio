@@ -12,3 +12,4 @@ export { CertificateFormScreen } from "./components/form/certificate-form-screen
 export { SignScreen } from "./components/sign/sign-screen";
 export { SignedScreen } from "./components/signed/signed-screen";
 export { FillCertificateButton } from "./components/fill-certificate-button";
+export { CertificateDocumentScreen } from "./components/document/certificate-document-screen";

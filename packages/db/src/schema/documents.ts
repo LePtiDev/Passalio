@@ -1,5 +1,6 @@
 import { DOCUMENT_KINDS } from "@passalio/shared";
 import type { TradeId } from "@passalio/trades";
+import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { idColumn, organizationIdColumn, syncedTimestampColumns } from "../columns";
 import { equipments } from "./equipments";
@@ -30,6 +31,10 @@ export const documents = sqliteTable(
     completedOn: text("completed_on").notNull(),
     cancelsDocumentId: text("cancels_document_id"),
     data: text("data", { mode: "json" }).$type<Record<string, unknown>>().notNull(),
+    pdfKey: text("pdf_key"),
+    pdfSha256: text("pdf_sha256"),
+    pdfArchivedAt: integer("pdf_archived_at", { mode: "timestamp_ms" }),
+    pdfArchiveAttempts: integer("pdf_archive_attempts").notNull().default(0),
     ...syncedTimestampColumns(),
   },
   (table) => [
@@ -44,6 +49,9 @@ export const documents = sqliteTable(
       table.signedByUserId,
       table.updatedAt,
     ),
+    index("documents_pdf_archive_pending_idx")
+      .on(table.pdfArchiveAttempts, table.signedAt)
+      .where(sql`pdf_archived_at IS NULL AND deleted_at IS NULL`),
   ],
 );
 
