@@ -75,6 +75,7 @@ Dernière mise à jour : 2026-10-25.
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                                                                                                                                                         | ADR 0028                                            |
 | Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                                                                                                                                                 | ADR 0028                                            |
 | Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                                                                                                                                            | ADR 0030                                            |
+| Prospection, écran Configuration : Profil, Boîte mail (test de connexion), Rappels, Signature, admin pour un autre membre                                                                                                                                                                                                                   | ADR 0028                                            |
 
 ## Hors code (Quentin)
 
@@ -179,7 +180,7 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
 - [x] Prospection, boîte mail : données et API (réglages, mot de passe chiffré, test d'envoi SMTP, journal, e-mail récapitulatif) (ADR 0028)
 - [x] Prospection, rappels par e-mail : cron toutes les 5 minutes sur `notify_at`, index partiel, envoi par Resend (ADR 0028)
-- [ ] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
+- [x] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
 - [ ] Créer le secret `MAIL_SECRET_KEY` en staging et en production avant le déploiement de la boîte mail (sur demande de Quentin)
 - [ ] Prospection, boîte mail : récapitulatif quotidien, vérification nocturne du domaine (SPF, DKIM, DMARC), historique des changements à l'écran
 - [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion

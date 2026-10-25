@@ -125,4 +125,14 @@ describe("AdminLayout", () => {
     );
     expect(screen.getByText("quentin@passalio.test")).toBeInTheDocument();
   });
+
+  it("opens the member's configuration from the profile at the bottom of the sidebar", async () => {
+    renderLayout("sales");
+
+    const profile = await screen.findByRole("link", {
+      name: text.configurationOf("Quentin Admin"),
+    });
+    expect(profile).toHaveAttribute("href", "/admin/configuration");
+    expect(within(profile).getByText("quentin@passalio.test")).toBeInTheDocument();
+  });
 });

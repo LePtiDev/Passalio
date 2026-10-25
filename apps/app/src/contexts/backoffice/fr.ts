@@ -8,6 +8,8 @@ export const backofficeFr = {
     badge: "Admin",
     commercial: "Commercial",
     myDay: "Ma journée",
+    configuration: "Configuration",
+    configurationOf: (name: string) => `Configuration de ${name}`,
     calls: "Appels",
     platform: "Plateforme",
     companies: "Entreprises",

@@ -32,7 +32,10 @@ export const SMTP_PASSWORD_MAX_LENGTH = 200;
 
 export const MAIL_SIGNATURE_MAX_LENGTH = NOTES_MAX_LENGTH;
 
-const HOST_PATTERN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/;
+export const MAIL_SENDER_NAME_MAX_LENGTH = SHORT_TEXT_MAX_LENGTH;
+
+export const SMTP_HOST_PATTERN =
+  /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/;
 
 const address = z.email().max(254).toLowerCase();
 
@@ -42,11 +45,11 @@ const nullableAddress = z
   .nullable();
 
 export const mailSettingsChange = z.object({
-  senderName: z.string().trim().min(1).max(SHORT_TEXT_MAX_LENGTH),
+  senderName: z.string().trim().min(1).max(MAIL_SENDER_NAME_MAX_LENGTH),
   senderAddress: address,
   replyTo: nullableAddress,
   provider: z.enum(MAIL_PROVIDERS),
-  smtpHost: z.string().trim().toLowerCase().max(253).regex(HOST_PATTERN),
+  smtpHost: z.string().trim().toLowerCase().max(253).regex(SMTP_HOST_PATTERN),
   smtpPort: z.union([z.literal(465), z.literal(587)]),
   smtpUsername: z.string().trim().min(1).max(254),
   smtpPassword: z.string().min(1).max(SMTP_PASSWORD_MAX_LENGTH).optional(),

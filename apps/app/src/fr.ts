@@ -129,6 +129,11 @@ export const fr = {
       already_in_team: "Cette personne fait déjà partie de l'équipe.",
       teammate_not_found: "Cette personne ne fait plus partie de l'équipe.",
       cannot_change_own_role: "Vous ne pouvez pas changer votre propre rôle.",
+      password_required: "Le mot de passe d'application est obligatoire.",
+      mailbox_not_configured: "Enregistrez d'abord la boîte mail.",
+      smtp_auth_failed: "Le serveur refuse l'identifiant ou le mot de passe d'application.",
+      smtp_unreachable: "Serveur injoignable. Vérifiez le serveur et le port.",
+      smtp_refused: "Le serveur a refusé le mail de test. Vérifiez l'adresse d'envoi.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
       invalid_siret: "Le SIRET compte 14 chiffres.",

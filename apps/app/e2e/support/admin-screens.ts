@@ -190,6 +190,13 @@ export const ADMIN_SCREENS = {
       await expect(page.getByRole("form", { name: "Résultat" })).toBeVisible();
     },
   }),
+  configuration: openStored({
+    path: () => "/admin/configuration",
+    heading: () => "Configuration",
+    ready: async (page) => {
+      await expect(page.getByRole("region", { name: "Connexion" })).toBeVisible();
+    },
+  }),
 } as const satisfies Readonly<Record<string, OpenScreen>>;
 
 export type AdminScreenName = keyof typeof ADMIN_SCREENS;

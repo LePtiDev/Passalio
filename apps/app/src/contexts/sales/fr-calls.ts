@@ -82,6 +82,7 @@ export const callsFr = {
   targets: TARGETS,
   myDay: {
     title: "Ma journée",
+    configuration: "Configuration",
     start: "Commencer les appels",
     callsToday: "Appels du jour",
     callsTodayHint: "Depuis minuit",

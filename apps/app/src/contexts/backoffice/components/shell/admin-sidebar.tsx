@@ -1,4 +1,5 @@
-import { LogOut } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { LogOut, Settings } from "lucide-react";
 import logo from "@/assets/passalio-logo.svg";
 import type { NavigationItem } from "@/components/app-shell/navigation";
 import { SidebarLink } from "@/components/app-shell/sidebar-link";
@@ -50,12 +51,20 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
           />
         ) : null}
       </nav>
-      <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-2.5 pt-3.5">
-        <InitialsAvatar name={admin.name} tone="mint" size="small" />
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate text-[13px] font-semibold">{admin.name}</span>
-          <span className="truncate text-xs text-[#64748B]">{admin.email}</span>
-        </span>
+      <div className="flex items-center gap-1 border-t border-[#E3E8EF] pt-3">
+        <Link
+          to="/admin/configuration"
+          title={text.configuration}
+          aria-label={text.configurationOf(admin.name)}
+          className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-2.5 py-1.5 hover:bg-[#EEF3F8] data-[status=active]:bg-white data-[status=active]:shadow-[0_0_0_1px_#E3E8EF]"
+        >
+          <InitialsAvatar name={admin.name} tone="mint" size="small" />
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="truncate text-[13px] font-semibold">{admin.name}</span>
+            <span className="truncate text-xs text-[#64748B]">{admin.email}</span>
+          </span>
+          <Settings aria-hidden="true" className="size-4 shrink-0 text-[#94A3B8]" />
+        </Link>
         <button
           type="button"
           onClick={signOut}
