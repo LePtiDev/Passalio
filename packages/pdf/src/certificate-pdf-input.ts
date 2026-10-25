@@ -1,45 +1,14 @@
-import {
-  BRAND_COLORS,
-  CONTACT_TEXT_MAX_LENGTH,
-  DOCUMENT_TEMPLATES,
-  DOCUMENT_TEXT_MAX_LENGTH,
-  type BrandColor,
-} from "@passalio/shared";
-import { chimneySweepingCertificate } from "@passalio/trades";
+import type { BrandColor } from "@passalio/shared";
+import { chimneySweepingCertificate, documentBranding } from "@passalio/trades";
 import * as z from "zod";
 
 export { DOCUMENT_TEMPLATES, type DocumentTemplate } from "@passalio/shared";
-
-export const LOGO_FORMATS = ["png", "jpeg"] as const;
-
-export const BRANDING_TEXT_MAX_LENGTH = DOCUMENT_TEXT_MAX_LENGTH;
-
-const LOGO_MAX_BASE64_LENGTH = 3_000_000;
-
-const optionalText = (maxLength: number) => z.string().trim().min(1).max(maxLength).nullable();
-
-export const documentBranding = z.strictObject({
-  template: z.enum(DOCUMENT_TEMPLATES),
-  brandColor: z.enum(BRAND_COLORS),
-  logo: z
-    .strictObject({
-      format: z.enum(LOGO_FORMATS),
-      base64: z
-        .string()
-        .max(LOGO_MAX_BASE64_LENGTH)
-        .regex(/^[A-Za-z0-9+/=]+$/),
-    })
-    .nullable(),
-  contact: z.strictObject({
-    phone: optionalText(CONTACT_TEXT_MAX_LENGTH),
-    email: optionalText(CONTACT_TEXT_MAX_LENGTH),
-    website: optionalText(CONTACT_TEXT_MAX_LENGTH),
-  }),
-  customerMessage: optionalText(BRANDING_TEXT_MAX_LENGTH),
-  footerText: optionalText(BRANDING_TEXT_MAX_LENGTH),
-});
-
-export type DocumentBranding = z.infer<typeof documentBranding>;
+export {
+  BRANDING_TEXT_MAX_LENGTH,
+  documentBranding,
+  LOGO_FORMATS,
+  type DocumentBranding,
+} from "@passalio/trades";
 
 export const certificatePdfInput = z.strictObject({
   certificate: chimneySweepingCertificate,

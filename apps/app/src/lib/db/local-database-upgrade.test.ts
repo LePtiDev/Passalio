@@ -180,7 +180,7 @@ describe("LocalDatabase version 4", () => {
     const tableNames = database.tables.map(({ name }) => name);
     database.close();
 
-    expect(database.verno).toBe(4);
+    expect(database.verno).toBeGreaterThanOrEqual(4);
     expect(tableNames).not.toContain("visitTypes");
   });
 

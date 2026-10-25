@@ -1,5 +1,5 @@
 import { err, ok, type Result } from "@passalio/shared";
-import { nextSweepingDueDate } from "@passalio/trades";
+import { sweepingDatesAfter } from "@passalio/trades";
 import type { ComplianceError } from "./compliance-error";
 import type { SignedDocument } from "./document-models";
 import type { SigningEquipment, SigningIntervention } from "./compliance-ports";
@@ -34,8 +34,4 @@ export const checkCancelledDocument = (
   return isAlreadyCancelled ? err("document_already_cancelled") : ok(undefined);
 };
 
-export const sweepingDates = (lastSweepingOn: string | null, completedOn: string) => {
-  const latest =
-    lastSweepingOn !== null && lastSweepingOn > completedOn ? lastSweepingOn : completedOn;
-  return { lastSweepingOn: latest, nextDueDate: nextSweepingDueDate(latest) };
-};
+export const sweepingDates = sweepingDatesAfter;

@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./advice": "./src/advice.ts",
     "./fonts/*": "./fonts/*"
   },
   "scripts": {

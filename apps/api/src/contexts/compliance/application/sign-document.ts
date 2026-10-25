@@ -6,13 +6,31 @@ import {
   type ComplianceMutation,
   type Result,
 } from "@passalio/shared";
-import { CERTIFICATE_TEMPLATE_VERSION, checkCertificate } from "@passalio/trades";
+import {
+  BRANDED_CERTIFICATE_TEMPLATE_VERSION,
+  CERTIFICATE_TEMPLATE_VERSION,
+  checkBrandedCertificate,
+  checkCertificate,
+  type CertificateError,
+  type ChimneySweepingCertificate,
+  type SweptEquipment,
+} from "@passalio/trades";
 import type { ComplianceDependencies } from "../domain/compliance-ports";
 import type { ComplianceError } from "../domain/compliance-error";
 import type { SignedDocument } from "../domain/document-models";
 import { checkCancelledDocument, checkSigningTarget, sweepingDates } from "../domain/signing-rules";
 
 export type SignDocumentInput = Omit<ComplianceMutation, "type">;
+
+type CertificateCheck = (
+  data: unknown,
+  equipment: SweptEquipment,
+) => Result<ChimneySweepingCertificate, CertificateError>;
+
+const CERTIFICATE_CHECKS: ReadonlyMap<number, CertificateCheck> = new Map([
+  [CERTIFICATE_TEMPLATE_VERSION, checkCertificate],
+  [BRANDED_CERTIFICATE_TEMPLATE_VERSION, checkBrandedCertificate],
+]);
 
 const checkCancellation = async (
   { documents }: Pick<ComplianceDependencies, "documents">,
@@ -52,7 +70,8 @@ export const signDocument =
     if (await documents.exists(input.documentId)) {
       return err("already_exists");
     }
-    if (input.templateVersion !== CERTIFICATE_TEMPLATE_VERSION) {
+    const check = CERTIFICATE_CHECKS.get(input.templateVersion);
+    if (check === undefined) {
       return err("unknown_template");
     }
     const equipment = checkSigningTarget(
@@ -71,7 +90,7 @@ export const signDocument =
     if (!cancellation.isOk) {
       return cancellation;
     }
-    const certificate = checkCertificate(input.data, equipment.value);
+    const certificate = check(input.data, equipment.value);
     if (!certificate.isOk) {
       return certificate;
     }

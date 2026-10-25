@@ -1,8 +1,11 @@
 import { err, ok, type Result } from "@passalio/shared";
 import { EQUIPMENT_CATALOG, type EquipmentKind } from "../equipment-catalog";
 import type { FLUE_TYPES } from "../equipment-details";
+import type * as z from "zod";
 import {
+  brandedChimneySweepingCertificate,
   chimneySweepingCertificate,
+  type BrandedChimneySweepingCertificate,
   type ChimneySweepingCertificate,
   type LegalForm,
 } from "./certificate";
@@ -67,14 +70,25 @@ const firstBroken = (
   return rules.find(([isBroken]) => isBroken)?.[1];
 };
 
-export const checkCertificate = (
-  data: unknown,
+const checkParsed = <Certificate extends ChimneySweepingCertificate>(
+  parsed: z.ZodSafeParseResult<Certificate>,
   equipment: SweptEquipment,
-): Result<ChimneySweepingCertificate, CertificateError> => {
-  const parsed = chimneySweepingCertificate.safeParse(data);
+): Result<Certificate, CertificateError> => {
   if (!parsed.success) {
     return err("invalid_certificate");
   }
   const broken = firstBroken(parsed.data, equipment);
   return broken === undefined ? ok(parsed.data) : err(broken);
 };
+
+export const checkCertificate = (
+  data: unknown,
+  equipment: SweptEquipment,
+): Result<ChimneySweepingCertificate, CertificateError> =>
+  checkParsed(chimneySweepingCertificate.safeParse(data), equipment);
+
+export const checkBrandedCertificate = (
+  data: unknown,
+  equipment: SweptEquipment,
+): Result<BrandedChimneySweepingCertificate, CertificateError> =>
+  checkParsed(brandedChimneySweepingCertificate.safeParse(data), equipment);

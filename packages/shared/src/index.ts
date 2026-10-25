@@ -53,6 +53,8 @@ export {
   DOCUMENT_KINDS,
   DOCUMENT_NUMBER_BLOCK_SIZE,
   DOCUMENT_NUMBER_REFILL_THRESHOLD,
+  DOCUMENT_NUMBER_WIDTH,
+  documentNumberLabel,
   MAX_DOCUMENT_NUMBER,
   numberBlockResponse,
   reserveNumberBlockBody,
