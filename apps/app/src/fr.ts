@@ -16,6 +16,7 @@ export const fr = {
     team: "Équipe",
     services: "Prestations",
     company: "Entreprise",
+    documentSettings: "Documents",
     subscription: "Abonnement",
     soon: "Bientôt",
     breadcrumb: "Fil d'Ariane",
@@ -73,6 +74,9 @@ export const fr = {
     previous: "Page précédente",
     next: "Page suivante",
   },
+  form: {
+    optional: "· facultatif",
+  },
   dialog: {
     close: "Fermer",
   },
@@ -127,6 +131,12 @@ export const fr = {
       cannot_change_own_role: "Vous ne pouvez pas changer votre propre rôle.",
       invitation_email_mismatch:
         "Cette invitation a été envoyée à une autre adresse. Connectez-vous avec celle-ci.",
+      invalid_siret: "Le SIRET compte 14 chiffres.",
+      invalid_ape_code: "Le code APE compte 4 chiffres et une lettre, par exemple 4322B.",
+      invalid_document_numbering: "La numérotation est invalide. Vérifiez le préfixe et le numéro.",
+      document_number_already_used: "Ce numéro est déjà attribué. Choisissez un numéro plus grand.",
+      invalid_logo: "Ce logo n'est pas accepté : PNG, JPG, WebP ou SVG, 2 Mo maximum.",
+      logo_not_found: "Il n'y a plus de logo à retirer.",
     },
   },
 } as const;

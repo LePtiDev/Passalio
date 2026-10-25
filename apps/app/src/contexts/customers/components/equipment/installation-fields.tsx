@@ -12,7 +12,7 @@ import { equipmentNameOf } from "../../customer-view";
 import { customersFr } from "../../fr";
 import { SELECT_TRIGGER_CLASS } from "../customer-styles";
 import { SegmentedControl, type Choice } from "../form/choice-controls";
-import { FormField } from "../form/form-field";
+import { FormField } from "@/components/form-field";
 import { FieldRow, Fieldset } from "../form/form-shell";
 import { NO_REPLACEMENT, type EquipmentFormValues } from "./equipment-form-schema";
 import { EquipmentTextField } from "./equipment-text-field";

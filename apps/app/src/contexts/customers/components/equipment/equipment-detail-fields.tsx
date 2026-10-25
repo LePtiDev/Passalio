@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { customersFr, FLUE_TYPE_LABELS } from "../../fr";
 import { SELECT_TRIGGER_CLASS } from "../customer-styles";
-import { FormField } from "../form/form-field";
+import { FormField } from "@/components/form-field";
 import { FieldRow, Fieldset } from "../form/form-shell";
 import { isHeatPumpKind, type EquipmentFormValues } from "./equipment-form-schema";
 import { EquipmentTextField } from "./equipment-text-field";
