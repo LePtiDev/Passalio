@@ -130,7 +130,7 @@ describe("AdminLayout", () => {
     renderLayout("sales");
 
     const profile = await screen.findByRole("link", {
-      name: text.configurationOf("Quentin Admin"),
+      name: `${text.configuration} Quentin Admin quentin@passalio.test`,
     });
     expect(profile).toHaveAttribute("href", "/admin/configuration");
     expect(within(profile).getByText("quentin@passalio.test")).toBeInTheDocument();

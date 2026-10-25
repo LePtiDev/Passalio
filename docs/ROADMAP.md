@@ -219,6 +219,7 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Modifications refusées : dire laquelle a été refusée et pourquoi, pas seulement combien
 - [ ] Photos d'appareil : réduire la photo sur le téléphone avant l'envoi plutôt que refuser au-delà de 5 Mo
 - [ ] Régression visuelle : captures de référence de chaque état
+- [ ] Test instable : `offline-field-changes` « synchronisation en échec » sur mobile, l'inscription dépasse 5 s quand toute la suite tourne (vu le 2026-10-25)
 - [ ] Couverture avec seuils, tests de mutation, `test:all` obligatoire dans `release:*`, tests de fumée après déploiement
 
 ## Site passalio.com

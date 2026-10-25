@@ -55,10 +55,10 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
         <Link
           to="/admin/configuration"
           title={text.configuration}
-          aria-label={text.configurationOf(admin.name)}
           className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-2.5 py-1.5 hover:bg-[#EEF3F8] data-[status=active]:bg-white data-[status=active]:shadow-[0_0_0_1px_#E3E8EF]"
         >
           <InitialsAvatar name={admin.name} tone="mint" size="small" />
+          <span className="sr-only">{text.configuration}</span>
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="truncate text-[13px] font-semibold">{admin.name}</span>
             <span className="truncate text-xs text-[#64748B]">{admin.email}</span>
