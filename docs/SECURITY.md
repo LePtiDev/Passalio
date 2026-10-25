@@ -26,6 +26,7 @@ Objectif : qu'une fuite, une erreur ou un piratage ne fasse jamais perdre les do
 - Jetons API Cloudflare à droits minimaux, un par usage, avec expiration. Jamais la clé API globale.
 - Le jeton de déploiement local ne donne pas le droit de supprimer les bases D1 ni les buckets R2. Les opérations destructives se font à la main dans le tableau de bord.
 - Secrets en production via `wrangler secret`, en local dans `.dev.vars` (ignoré par git). Les clés des fournisseurs de modèles (`OPENAI_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `ANTHROPIC_API_KEY`, `MISTRAL_API_KEY`) suivent la même règle.
+- Mots de passe d'application des boîtes mail des commerciaux (ADR 0028) : chiffrés en AES-GCM 256 avec le secret `MAIL_SECRET_KEY` (32 octets en base64, un par environnement), jamais renvoyés par l'API, jamais journalisés, seulement remplaçables. Le journal `mail_settings.updated` ne garde que les noms des champs changés. Perdre la clé oblige chaque membre à ressaisir son mot de passe.
 
 ## 4. Isolation entre entreprises
 

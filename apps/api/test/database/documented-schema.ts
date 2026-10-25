@@ -100,6 +100,7 @@ export const TABLES_WITHOUT_ORGANIZATION: Readonly<Record<string, string>> = {
   prospect_follow_ups: "Passalio data, see docs/ARCHITECTURE.md",
   prospect_tasks: "Passalio data, see docs/ARCHITECTURE.md",
   platform_invitations: "Passalio team",
+  platform_mail_settings: "Passalio team",
 };
 
 export const PASSALIO_TABLES = [

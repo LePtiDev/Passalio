@@ -120,6 +120,13 @@
       "when": 1792874451739,
       "tag": "0016_services",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1792885977000,
+      "tag": "0017_platform_mail_settings",
+      "breakpoints": true
     }
   ]
 }

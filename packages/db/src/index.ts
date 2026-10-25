@@ -22,6 +22,7 @@ export {
   organizations,
   plateReadings,
   platformInvitations,
+  platformMailSettings,
   prospectCalls,
   prospectCompanies,
   prospectContacts,

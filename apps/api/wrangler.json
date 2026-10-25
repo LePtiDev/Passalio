@@ -34,7 +34,8 @@
     "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
     "TURNSTILE_SECRET_KEY": "1x0000000000000000000000000000000AA",
     "PLATE_READER_MODEL": "fake",
-    "MCP_ENABLED": "true"
+    "MCP_ENABLED": "true",
+    "MAIL_SECRET_KEY": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
   },
   "env": {
     "staging": {
