@@ -26,7 +26,7 @@ test("points out a missing first name and an incomplete number", async ({ page }
   expect(requests).toBe(0);
 });
 
-test("sends the request and confirms when Antho will call", async ({ page }) => {
+test("sends the request and confirms when we will call", async ({ page }) => {
   let body: unknown = null;
   await page.route(ENDPOINT, async (route) => {
     body = route.request().postDataJSON();
@@ -40,7 +40,7 @@ test("sends the request and confirms when Antho will call", async ({ page }) => 
 
   await expect(page.getByText("C’est noté, Julien.")).toBeVisible();
   await expect(
-    page.getByText("Antho vous appelle demain après-midi, entre 14 h et 18 h, au 06 12 34 56 78."),
+    page.getByText("On vous appelle demain après-midi, entre 14 h et 18 h, au 06 12 34 56 78."),
   ).toBeVisible();
   expect(body).toEqual({
     firstName: "Julien",

@@ -205,7 +205,7 @@ export const independentSweepPage: MarketingPageInput = {
     {
       question: "Je ne suis pas à l’aise avec l’informatique.",
       answer:
-        "Passalio s’utilise comme une application de téléphone. Si vous voulez, Antho vous l’installe au téléphone en 15 minutes.",
+        "Passalio s’utilise comme une application de téléphone. Si vous voulez, on vous l’installe au téléphone en 15 minutes.",
     },
   ],
   finalTitle: "Essayez-le sur votre prochain ramonage.",
