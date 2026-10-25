@@ -11,6 +11,8 @@ const WRONG_CODE_MESSAGE = "Code incorrect. Vérifiez l'heure de votre télépho
 const COMMERCIAL_PAGES = [
   { path: "/admin/contacts", heading: "Contacts" },
   { path: "/admin/prospection", heading: "Prospection" },
+  { path: "/admin/journee", heading: "Ma journée" },
+  { path: "/admin/appels", heading: "Appels" },
 ] as const;
 const COMPANY_PAGES = ["/configuration/entreprise", "/", "/connexion"] as const;
 

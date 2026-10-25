@@ -1,0 +1,47 @@
+---
+import type { MarketingPage } from "../../content/content-schema";
+import { marketingFr } from "../../copy/marketing-fr";
+import BaseLayout from "../../layouts/base-layout.astro";
+import { breadcrumbJsonLd, faqJsonLd, softwareJsonLd } from "../../seo";
+import SiteHeader from "../navigation/site-header.astro";
+import SiteFooter from "../site-footer.astro";
+import CallbackSection from "./callback-section.astro";
+import FeatureRows from "./feature-rows.astro";
+import MarketingHero from "./marketing-hero.astro";
+import PainsStrip from "./pains-strip.astro";
+import QuestionsSection from "./questions-section.astro";
+import TrustStrip from "./trust-strip.astro";
+
+interface Props {
+  page: MarketingPage;
+  path: string;
+}
+
+const { page, path } = Astro.props;
+const crumbs = [
+  { name: marketingFr.breadcrumbHome, path: "/" },
+  { name: page.menu.title, path },
+];
+---
+
+<BaseLayout
+  title={page.seo.title}
+  description={page.seo.description}
+  path={path}
+  structuredData={[
+    breadcrumbJsonLd(crumbs),
+    softwareJsonLd(page.seo.description),
+    faqJsonLd(page.questions),
+  ]}
+>
+  <SiteHeader currentPath={path} />
+  <main>
+    <MarketingHero page={page} />
+    <PainsStrip pains={page.pains} />
+    <FeatureRows title={page.featuresTitle} features={page.features} />
+    <TrustStrip />
+    <QuestionsSection questions={page.questions} />
+    <CallbackSection title={page.finalTitle} lead={marketingFr.callbackLead} pagePath={path} />
+  </main>
+  <SiteFooter />
+</BaseLayout>

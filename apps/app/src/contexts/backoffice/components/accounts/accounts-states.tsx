@@ -7,11 +7,7 @@ import { cn } from "@/lib/utils";
 import { SIGN_UP_PATH } from "@/lib/session";
 import type { AccountFilter } from "../../backoffice-api";
 import { backofficeFr } from "../../fr";
-import {
-  ADMIN_CARD_CLASS,
-  ADMIN_PRIMARY_BUTTON_CLASS,
-  ADMIN_SECONDARY_BUTTON_CLASS,
-} from "../admin-styles";
+import { ADMIN_CARD_CLASS } from "../admin-styles";
 import { ACCOUNT_GRID_CLASS } from "./account-row";
 
 const text = backofficeFr.accounts;
@@ -76,7 +72,7 @@ export const AccountsEmpty = ({ search, filter, onClearSearch, onShowAll }: Acco
   if (search !== "") {
     return (
       <EmptyFrame title={text.searchEmptyTitle(search)} description={text.searchEmptyText}>
-        <Button variant="outline" className={ADMIN_SECONDARY_BUTTON_CLASS} onClick={onClearSearch}>
+        <Button variant="secondary" onClick={onClearSearch}>
           <X aria-hidden="true" />
           {text.clearSearch}
         </Button>
@@ -86,7 +82,7 @@ export const AccountsEmpty = ({ search, filter, onClearSearch, onShowAll }: Acco
   if (filter !== "all") {
     return (
       <EmptyFrame title={text.filterEmpty[filter]} description={text.filterEmptyText}>
-        <Button variant="outline" className={ADMIN_SECONDARY_BUTTON_CLASS} onClick={onShowAll}>
+        <Button variant="secondary" onClick={onShowAll}>
           {text.showAll}
         </Button>
       </EmptyFrame>
@@ -94,7 +90,7 @@ export const AccountsEmpty = ({ search, filter, onClearSearch, onShowAll }: Acco
   }
   return (
     <EmptyFrame title={text.filterEmpty.all} description={text.allEmptyText}>
-      <Button className={ADMIN_PRIMARY_BUTTON_CLASS} onClick={copySignUpLink}>
+      <Button onClick={copySignUpLink}>
         <Copy aria-hidden="true" />
         {text.copySignUpLink}
       </Button>

@@ -1,7 +1,6 @@
 import { normalizeSearchText } from "@passalio/shared";
 import { Check, ChevronDown, Search, UsersRound } from "lucide-react";
 import { useCallback, useMemo, useState, type ChangeEvent } from "react";
-import { PRIMARY_BUTTON_CLASS, SECONDARY_BUTTON_CLASS } from "@/contexts/customers";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -219,12 +218,7 @@ export const MobileTechnicianPicker = (props: PickerProps) => {
           <span aria-hidden="true" className="mx-auto mb-1 h-1 w-10 rounded-full bg-[#CBD5E1]" />
           <SheetTitle className="sr-only">{text.pickerTitle}</SheetTitle>
           <PickerList {...props} selection={draft} onChange={setDraft} isLarge />
-          <Button
-            type="button"
-            disabled={draft.length === 0}
-            onClick={apply}
-            className={cn(PRIMARY_BUTTON_CLASS, "w-full")}
-          >
+          <Button type="button" disabled={draft.length === 0} onClick={apply} className="w-full">
             {text.apply(draft.length)}
           </Button>
         </SheetContent>
@@ -246,11 +240,7 @@ export const DesktopTechnicianPicker = (props: PickerProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          className={cn(SECONDARY_BUTTON_CLASS, "gap-2 data-[state=open]:border-[#0F2A44]")}
-        >
+        <Button type="button" variant="secondary" className="data-[state=open]:border-[#0F2A44]">
           <UsersRound aria-hidden="true" className="size-3.5 text-[#64748B]" />
           {selectionLabel(props.technicians, props.selection)}
           <ChevronDown aria-hidden="true" className="size-3.5 text-[#64748B]" />

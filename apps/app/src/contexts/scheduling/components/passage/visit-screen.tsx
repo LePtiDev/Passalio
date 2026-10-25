@@ -23,14 +23,13 @@ import {
 import {
   ConfirmDialog,
   customerNameOf,
-  PRIMARY_BUTTON_CLASS,
   routeUrlOf,
-  SECONDARY_BUTTON_CLASS,
   SOON_BADGE_CLASS,
   SyncPill,
 } from "@/contexts/customers";
 import { useLocalSession } from "@/lib/db/local-database-context";
 import { cn } from "@/lib/utils";
+import { assignedTechniciansOf } from "../../visit-team";
 import { schedulingFr } from "../../fr";
 import { cancelIntervention } from "../../intervention-store";
 import { longDayLabel, parisMinutesOf, todayOf } from "../../planning-dates";
@@ -94,7 +93,7 @@ const ActionTile = ({
 };
 
 const CertificateButton = ({ className }: { readonly className: string }) => (
-  <Button type="button" disabled className={cn(PRIMARY_BUTTON_CLASS, className)}>
+  <Button type="button" disabled className={className}>
     <FilePenLine aria-hidden="true" className="size-5 lg:size-3.5" />
     {text.fillCertificate}
     <span className={SOON_BADGE_CLASS}>{schedulingFr.visit.soon}</span>
@@ -110,8 +109,9 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
   const { intervention, customer, site } = visit;
   const name = customer === null ? "" : customerNameOf(customer);
   const status = visitStatusOf(intervention, todayOf(now), parisMinutesOf(now));
-  const technicianName =
-    team?.technicians.find(({ userId }) => userId === intervention.technicianUserId)?.name ?? "";
+  const technicianNames = assignedTechniciansOf(intervention).flatMap(
+    (technicianId) => team?.technicians.find(({ userId }) => userId === technicianId)?.name ?? [],
+  );
   const when = [longDayLabel(intervention.scheduledDate), intervention.startTime]
     .filter((part) => part !== null)
     .join(" · ");
@@ -196,13 +196,13 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
                 </span>
               </div>
               <p className="text-[13px] text-[#475569]">
-                {text.subtitle(when, technicianName, intervention.equipmentIds.length)}
+                {text.subtitle(when, technicianNames.join(", "), intervention.equipmentIds.length)}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             {phoneHref === undefined ? null : (
-              <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+              <Button asChild variant="secondary">
                 <a href={phoneHref}>
                   <Phone aria-hidden="true" className="size-3.5" />
                   {text.call}
@@ -210,7 +210,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
               </Button>
             )}
             {routeHref === undefined ? null : (
-              <Button asChild variant="outline" className={SECONDARY_BUTTON_CLASS}>
+              <Button asChild variant="secondary">
                 <a href={routeHref} target="_blank" rel="noreferrer">
                   <Navigation aria-hidden="true" className="size-3.5" />
                   {text.route}
@@ -218,12 +218,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
               </Button>
             )}
             {canCancel ? (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={askCancel}
-                className={SECONDARY_BUTTON_CLASS}
-              >
+              <Button type="button" variant="secondary" onClick={askCancel}>
                 {text.cancel}
               </Button>
             ) : null}
@@ -262,7 +257,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
               </p>
             )}
           </div>
-          <VisitInfoCard visit={visit} technicianName={technicianName} />
+          <VisitInfoCard visit={visit} technicianNames={technicianNames} />
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col border-t border-[#E3E8EF] bg-white px-4 pt-3 pb-[max(18px,env(safe-area-inset-bottom))] lg:hidden">

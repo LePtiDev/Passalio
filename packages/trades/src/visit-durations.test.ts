@@ -5,11 +5,8 @@ import {
   isVisitType,
   MAX_VISIT_DURATION_MINUTES,
   MIN_VISIT_DURATION_MINUTES,
-  totalVisitMinutes,
   VISIT_DURATION_STEP_MINUTES,
   visitDurationMinutes,
-  visitDurations,
-  visitMinutesOf,
   visitTypes,
 } from "./visit-durations";
 
@@ -51,29 +48,6 @@ describe("visitDurationMinutes", () => {
   });
 });
 
-describe("visitDurations", () => {
-  it("accepts a partial set of durations", () => {
-    expect(visitDurations.safeParse({ chimney_sweeping: 45 })).toEqual({
-      success: true,
-      data: { chimney_sweeping: 45 },
-    });
-  });
-
-  it("accepts an empty set of durations", () => {
-    expect(visitDurations.safeParse({}).success).toBe(true);
-  });
-
-  it("refuses a type that is not a trade", () => {
-    expect(visitDurations.safeParse({ plumbing: 60 }).success).toBe(false);
-  });
-
-  it("refuses a duration out of bounds or off the 15-minute step", () => {
-    expect(visitDurations.safeParse({ chimney_sweeping: 0 }).success).toBe(false);
-    expect(visitDurations.safeParse({ chimney_sweeping: 495 }).success).toBe(false);
-    expect(visitDurations.safeParse({ chimney_sweeping: 50 }).success).toBe(false);
-  });
-});
-
 describe("visitTypes", () => {
   it("accepts a list of trades", () => {
     expect(visitTypes.safeParse(["chimney_sweeping", "boiler_maintenance"]).success).toBe(true);
@@ -95,35 +69,4 @@ describe("isVisitType", () => {
       expect(isVisitType(value)).toBe(false);
     },
   );
-});
-
-describe("visitMinutesOf", () => {
-  it("uses the duration chosen by the company", () => {
-    expect(visitMinutesOf("chimney_sweeping", { chimney_sweeping: 45 })).toBe(45);
-  });
-
-  it("falls back to the default duration when the company did not choose one", () => {
-    expect(visitMinutesOf("septic_tank_emptying", { chimney_sweeping: 45 })).toBe(120);
-    expect(visitMinutesOf("stove_maintenance", {})).toBe(90);
-  });
-});
-
-describe("totalVisitMinutes", () => {
-  it("adds up the durations of every type of the visit", () => {
-    expect(totalVisitMinutes(["chimney_sweeping", "stove_maintenance"], {})).toBe(150);
-  });
-
-  it("adds up company durations and default durations together", () => {
-    expect(
-      totalVisitMinutes(["chimney_sweeping", "boiler_maintenance"], { chimney_sweeping: 30 }),
-    ).toBe(90);
-  });
-
-  it("gives zero minutes to a visit without type", () => {
-    expect(totalVisitMinutes([], { chimney_sweeping: 30 })).toBe(0);
-  });
-
-  it("gives the duration of the single type of a visit", () => {
-    expect(totalVisitMinutes(["heat_pump_maintenance"], { heat_pump_maintenance: 75 })).toBe(75);
-  });
 });

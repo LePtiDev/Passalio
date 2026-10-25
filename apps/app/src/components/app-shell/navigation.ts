@@ -7,7 +7,7 @@ import {
   House,
   LayoutDashboard,
   Settings,
-  Timer,
+  Tags,
   Users,
   UsersRound,
   type LucideIcon,
@@ -21,7 +21,7 @@ export type NavigationItem = {
     | "/"
     | "/equipe"
     | "/reglages"
-    | "/reglages/types-de-passage"
+    | "/reglages/prestations"
     | "/clients"
     | "/planning"
     | "/admin"
@@ -31,6 +31,8 @@ export type NavigationItem = {
     | "/admin/entreprises"
     | "/admin/contacts"
     | "/admin/prospection"
+    | "/admin/journee"
+    | "/admin/appels"
     | null;
   readonly activeFor?: readonly string[];
   readonly isExact?: boolean;
@@ -53,7 +55,7 @@ export const MAIN_NAVIGATION: readonly NavigationItem[] = [
 
 export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
   { label: text.team, icon: UsersRound, to: "/equipe" },
-  { label: text.visitTypes, icon: Timer, to: "/reglages/types-de-passage" },
+  { label: text.services, icon: Tags, to: "/reglages/prestations" },
   { label: text.company, icon: Building2, to: null },
   { label: text.subscription, icon: CreditCard, to: null },
 ];

@@ -1,3 +1,4 @@
+import { buttonVariants } from "@/components/ui/button";
 import type { ProspectCompanyFileResponse } from "@passalio/shared";
 import { useCallback, type ReactNode } from "react";
 import { ErrorState } from "@/components/error-state";
@@ -46,10 +47,7 @@ const LeadSummary = ({
         <span className="text-[13px] text-[#64748B]">{line}</span>
       </div>
       <LeadStageButtons company={file.company} onChanged={onChanged} />
-      <CompanyLink
-        id={file.company.id}
-        className="flex h-12 items-center justify-center rounded-[10px] bg-[#0F2A44] text-[15px] font-semibold text-white"
-      >
+      <CompanyLink id={file.company.id} className={buttonVariants()}>
         {text.openFile}
       </CompanyLink>
     </>

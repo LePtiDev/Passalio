@@ -30,6 +30,8 @@ const linkNamesIn = (navigation: HTMLElement) =>
     .map((link) => link.textContent);
 
 const COMMERCIAL_LINKS = [
+  { name: text.myDay, href: "/admin/journee" },
+  { name: text.calls, href: "/admin/appels" },
   { name: text.companies, href: "/admin/entreprises" },
   { name: text.contacts, href: "/admin/contacts" },
   { name: text.prospection, href: "/admin/prospection" },

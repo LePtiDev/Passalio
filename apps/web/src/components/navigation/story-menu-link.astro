@@ -1,0 +1,29 @@
+---
+import type { StoryLink } from "../../content/catalog";
+import { storiesFr } from "../../copy/stories-fr";
+import { COVER_THEMES } from "../stories/cover-themes";
+
+interface Props {
+  story: StoryLink;
+}
+
+const { story } = Astro.props;
+const theme = COVER_THEMES[story.card.theme];
+---
+
+<a
+  href={story.href}
+  class="flex min-h-12 items-center gap-3 rounded-[7px] p-2.5 text-navy hover:bg-panel focus-visible:bg-panel"
+>
+  <span
+    class:list={[
+      "flex h-12 w-16 shrink-0 items-center justify-center rounded-[7px] p-1 text-center text-[11px] leading-tight font-bold",
+      theme.thumb,
+    ]}
+    aria-hidden="true">{story.card.quote}</span
+  >
+  <span class="flex min-w-0 flex-col">
+    <span class="text-xs text-slate-text">{storiesFr.readingTime(story.card.minutes)}</span>
+    <span class="text-[15px] font-semibold lg:text-[13px]">{story.card.title}</span>
+  </span>
+</a>

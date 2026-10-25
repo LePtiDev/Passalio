@@ -1,0 +1,226 @@
+---
+import { PATHS } from "../../content/catalog";
+import { navigationFr } from "../../copy/navigation-fr";
+import { appUrl } from "../../links";
+import { activityMenu, productMenu, storiesMenu } from "../../navigation";
+import MenuEntryLink from "./menu-entry-link.astro";
+import MenuHighlight from "./menu-highlight.astro";
+import MobileMenu from "./mobile-menu.astro";
+import StoryMenuLink from "./story-menu-link.astro";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const products = productMenu();
+const activities = activityMenu();
+const stories = storiesMenu();
+
+const triggers = [
+  { id: "produit", label: navigationFr.product },
+  { id: "activite", label: navigationFr.activity },
+  { id: "histoires", label: navigationFr.stories },
+] as const;
+---
+
+<header class="relative z-20 border-b border-hairline bg-white" data-site-header>
+  <div class="mx-auto flex h-14 max-w-270 items-center justify-between gap-4 pr-1 pl-4 lg:px-6">
+    <div class="flex items-center gap-5">
+      <a href={PATHS.home} class="flex min-h-12 items-center" aria-label={navigationFr.homeLink}>
+        <img src="/passalio-logo.svg" alt="" width="86" height="17" class="h-4.25 w-auto" />
+      </a>
+      <nav aria-label={navigationFr.label} class="hidden items-center gap-0.5 lg:flex">
+        {
+          triggers.map((trigger) => (
+            <button
+              type="button"
+              class="group inline-flex h-8 items-center gap-1 rounded-md px-2.5 text-[13px] font-medium text-slate-text hover:text-navy aria-expanded:bg-slate-100 aria-expanded:font-semibold aria-expanded:text-navy"
+              aria-expanded="false"
+              aria-controls={`menu-${trigger.id}`}
+              data-menu-trigger={trigger.id}
+            >
+              {trigger.label}
+              <svg
+                class="size-3 transition-transform group-aria-expanded:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+          ))
+        }
+      </nav>
+    </div>
+    <div class="flex items-center gap-1">
+      <a
+        href={appUrl("signIn")}
+        class="hidden px-2.5 py-1.5 text-[13px] font-medium text-navy hover:text-validated lg:inline-flex"
+      >
+        {navigationFr.signIn}
+      </a>
+      <a
+        href={appUrl("signUp")}
+        class="hidden h-8 items-center rounded-md bg-navy px-3 text-[13px] font-semibold text-white shadow-button hover:bg-navy-hover lg:inline-flex"
+      >
+        {navigationFr.tryFree}
+      </a>
+      <a href={appUrl("signUp")} class="inline-flex min-h-12 items-center lg:hidden">
+        <span
+          class="inline-flex h-10 items-center rounded-[7px] bg-navy px-3 text-sm font-semibold text-white"
+        >
+          {navigationFr.tryShort}
+        </span>
+      </a>
+      <button
+        type="button"
+        class="inline-flex size-12 items-center justify-center text-navy lg:hidden"
+        aria-label={navigationFr.openMenu}
+        aria-haspopup="dialog"
+        aria-controls="menu-mobile"
+        data-mobile-menu-open
+      >
+        <svg
+          class="size-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg
+        >
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="menu-produit"
+    hidden
+    data-menu-panel="produit"
+    class="absolute top-[calc(100%+6px)] left-1/2 hidden w-190 -translate-x-1/2 grid-cols-[210px_minmax(0,1fr)] gap-2 rounded-[10px] border border-card-line bg-white p-2 shadow-menu lg:[&:not([hidden])]:grid"
+  >
+    <MenuHighlight href="/#passage" {...navigationFr.productHighlight} />
+    <div class="grid grid-cols-2 content-start gap-0.5">
+      {products.map((entry) => <MenuEntryLink entry={entry} isCurrent={entry.href === currentPath} />)}
+    </div>
+  </div>
+
+  <div
+    id="menu-activite"
+    hidden
+    data-menu-panel="activite"
+    class="absolute top-[calc(100%+6px)] left-1/2 hidden w-160 -translate-x-1/2 grid-cols-[200px_minmax(0,1fr)] gap-2 rounded-[10px] border border-card-line bg-white p-2 shadow-menu lg:[&:not([hidden])]:grid"
+  >
+    <MenuHighlight href={PATHS.home} {...navigationFr.activityHighlight} />
+    <div class="flex flex-col gap-0.5">
+      {
+        activities.map((entry) => (
+          <MenuEntryLink entry={entry} isCurrent={entry.href === currentPath} />
+        ))
+      }
+    </div>
+  </div>
+
+  <div
+    id="menu-histoires"
+    hidden
+    data-menu-panel="histoires"
+    class="absolute top-[calc(100%+6px)] left-1/2 hidden w-135 -translate-x-1/2 flex-col gap-0.5 rounded-[10px] border border-card-line bg-white p-2 shadow-menu lg:[&:not([hidden])]:flex"
+  >
+    {stories.map((story) => <StoryMenuLink story={story} />)}
+    <div class="mt-1 border-t border-hairline px-2.5 pt-1">
+      <a
+        href={PATHS.stories}
+        class="inline-flex min-h-10 items-center text-[13px] font-semibold text-validated hover:text-navy"
+      >
+        {navigationFr.allStories} →
+      </a>
+    </div>
+  </div>
+
+  <MobileMenu
+    currentPath={currentPath}
+    products={products}
+    activities={activities}
+    stories={stories}
+  />
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const triggers = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-menu-trigger]"),
+  );
+  const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-menu-panel]"));
+
+  const closeAll = () => {
+    triggers.forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+    panels.forEach((panel) => panel.setAttribute("hidden", ""));
+  };
+
+  const open = (id: string) => {
+    triggers.forEach((trigger) =>
+      trigger.setAttribute("aria-expanded", String(trigger.dataset["menuTrigger"] === id)),
+    );
+    panels.forEach((panel) => panel.toggleAttribute("hidden", panel.dataset["menuPanel"] !== id));
+  };
+
+  let lastPointerType = "";
+
+  triggers.forEach((trigger) => {
+    const id = trigger.dataset["menuTrigger"] ?? "";
+    trigger.addEventListener("pointerdown", (event) => {
+      lastPointerType = event.pointerType;
+    });
+    trigger.addEventListener("click", () => {
+      const isMouse = lastPointerType === "mouse";
+      lastPointerType = "";
+      if (isMouse) {
+        open(id);
+        return;
+      }
+      if (trigger.getAttribute("aria-expanded") === "true") {
+        closeAll();
+        return;
+      }
+      open(id);
+    });
+    trigger.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") open(id);
+    });
+  });
+
+  header?.addEventListener("pointerleave", (event) => {
+    if (event.pointerType === "mouse") closeAll();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    const expanded = triggers.find((trigger) => trigger.getAttribute("aria-expanded") === "true");
+    closeAll();
+    expanded?.focus();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Node && header?.contains(event.target)) return;
+    closeAll();
+  });
+
+  header?.addEventListener("focusout", (event) => {
+    if (event.relatedTarget instanceof Node && header.contains(event.relatedTarget)) return;
+    closeAll();
+  });
+
+  const dialog = document.querySelector<HTMLDialogElement>("#menu-mobile");
+  document
+    .querySelector("[data-mobile-menu-open]")
+    ?.addEventListener("click", () => dialog?.showModal());
+  document
+    .querySelector("[data-mobile-menu-close]")
+    ?.addEventListener("click", () => dialog?.close());
+</script>

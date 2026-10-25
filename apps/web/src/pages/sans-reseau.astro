@@ -1,0 +1,76 @@
+---
+import ButtonLink from "../components/button-link.astro";
+import NoNetworkPhone from "../components/campaigns/no-network-phone.astro";
+import NoNetworkSections from "../components/campaigns/no-network-sections.astro";
+import CheckIcon from "../components/check-icon.astro";
+import CallbackSection from "../components/marketing/callback-section.astro";
+import SiteHeader from "../components/navigation/site-header.astro";
+import SiteFooter from "../components/site-footer.astro";
+import { noNetworkCampaign } from "../content/campaigns/no-network";
+import { PATHS } from "../content/catalog";
+import { marketingFr } from "../copy/marketing-fr";
+import BaseLayout from "../layouts/base-layout.astro";
+import { breadcrumbJsonLd, softwareJsonLd } from "../seo";
+
+const campaign = noNetworkCampaign;
+---
+
+<BaseLayout
+  title={campaign.seo.title}
+  description={campaign.seo.description}
+  path={PATHS.noNetwork}
+  structuredData={[
+    breadcrumbJsonLd([
+      { name: marketingFr.breadcrumbHome, path: PATHS.home },
+      { name: campaign.card.title, path: PATHS.noNetwork },
+    ]),
+    softwareJsonLd(campaign.seo.description),
+  ]}
+>
+  <SiteHeader currentPath={PATHS.noNetwork} />
+  <main>
+    <section class="py-8 sm:py-16">
+      <div class="mx-auto flex max-w-270 flex-wrap items-center gap-6 px-4 sm:gap-14 sm:px-6">
+        <div class="flex min-w-0 flex-[1_1_420px] flex-col gap-4.5">
+          <p
+            class="self-start rounded-full bg-amber-soft px-2.5 py-0.5 text-xs font-semibold text-amber-text"
+          >
+            {campaign.eyebrow}
+          </p>
+          <h1
+            class="text-[31px] leading-[1.12] font-bold tracking-[-0.03em] text-balance sm:text-[44px]"
+          >
+            {campaign.titleLines[0]}<br />{campaign.titleLines[1]}
+          </h1>
+          <p class="max-w-120 text-base leading-relaxed text-slate-text sm:text-[15px]">
+            {campaign.lead}
+          </p>
+          <div class="flex flex-col gap-2 sm:flex-row">
+            <ButtonLink href="#rappel">{campaign.primaryAction}</ButtonLink>
+            <ButtonLink href="#comment" variant="outline">{campaign.secondaryAction}</ButtonLink>
+          </div>
+          <ul class="flex flex-wrap gap-x-3.5 gap-y-1 text-xs text-slate-text">
+            {
+              campaign.highlights.map((highlight) => (
+                <li class="inline-flex items-center gap-1.25">
+                  <CheckIcon class="size-3.25 text-validated" />
+                  {highlight}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <NoNetworkPhone />
+      </div>
+    </section>
+    <NoNetworkSections />
+    <CallbackSection
+      eyebrow={campaign.callback.eyebrow}
+      title={campaign.callback.title}
+      lead={campaign.callback.lead}
+      note={campaign.callback.mailNote}
+      pagePath={PATHS.noNetwork}
+    />
+  </main>
+  <SiteFooter />
+</BaseLayout>

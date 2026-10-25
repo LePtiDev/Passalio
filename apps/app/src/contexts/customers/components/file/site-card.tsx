@@ -27,8 +27,6 @@ import {
   ICON_BUTTON_CLASS,
   LINK_BUTTON_CLASS,
   NEUTRAL_BADGE_CLASS,
-  PRIMARY_BUTTON_CLASS,
-  SECONDARY_BUTTON_CLASS,
 } from "../customer-styles";
 import { useCustomerParams, useSiteSearch } from "../../hooks/use-route-params";
 import { EquipmentRow } from "./equipment-row";
@@ -55,7 +53,7 @@ const NoEquipment = ({ site }: { readonly site: SiteRecord }) => {
     <div className="flex flex-col items-start gap-1 border-t border-dashed border-[#D5DDE6] bg-[#FBFCFD] px-3.5 py-4">
       <span className="text-[15px] font-semibold lg:text-[13px]">{text.noEquipmentTitle}</span>
       <span className="text-[13px] text-[#475569]">{text.noEquipmentText}</span>
-      <Button asChild className={cn(PRIMARY_BUTTON_CLASS, "mt-2 w-full px-4 lg:w-auto")}>
+      <Button asChild className="mt-2 w-full lg:w-auto">
         <Link to="/clients/$customerId/appareils/nouveau" params={params} search={search}>
           <Plus aria-hidden="true" className="size-4 lg:size-3.5" />
           {text.addEquipment}
@@ -117,11 +115,7 @@ const SiteHeader = ({ site }: { readonly site: SiteRecord }) => {
         )}
       </div>
       <SiteMenu site={site} />
-      <Button
-        asChild
-        variant="outline"
-        className={cn(SECONDARY_BUTTON_CLASS, "hidden lg:inline-flex")}
-      >
+      <Button asChild variant="secondary" className="hidden lg:inline-flex">
         <a href={routeUrlOf(site)} target="_blank" rel="noreferrer">
           <Navigation aria-hidden="true" className="size-3.5" />
           {text.route}

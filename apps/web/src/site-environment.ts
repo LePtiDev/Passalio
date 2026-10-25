@@ -3,12 +3,19 @@ const APP_ORIGINS = {
   production: "https://app.passalio.com",
 } as const;
 
+const SITE_ORIGINS = {
+  staging: "https://staging.passalio.com",
+  production: "https://passalio.com",
+} as const;
+
 export type SiteEnvironment = keyof typeof APP_ORIGINS;
 
 export const toSiteEnvironment = (value: string | undefined): SiteEnvironment =>
   value === "staging" ? "staging" : "production";
 
 export const appOriginFor = (environment: SiteEnvironment): string => APP_ORIGINS[environment];
+
+export const siteOriginFor = (environment: SiteEnvironment): string => SITE_ORIGINS[environment];
 
 export const isIndexable = (environment: SiteEnvironment): boolean => environment === "production";
 

@@ -1,0 +1,16 @@
+---
+import { marketingFr } from "../../copy/marketing-fr";
+---
+
+<section class="border-b border-hairline py-7 sm:py-9">
+  <ul class="mx-auto grid max-w-270 grid-cols-2 gap-4 px-4 sm:grid-cols-4 sm:px-6">
+    {
+      marketingFr.trust.map((item) => (
+        <li class="flex flex-col gap-0.5">
+          <p class="text-[13.5px] font-bold">{item.title}</p>
+          <p class="text-[12.5px] text-slate-text">{item.text}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

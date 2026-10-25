@@ -14,10 +14,6 @@ import { onboardingFr } from "../../onboarding-fr";
 import { BackButton } from "./back-button";
 import { InvitationRow } from "./invitation-row";
 import { OnboardingBody, OnboardingFooter, OnboardingHeading } from "./onboarding-layout";
-import {
-  ONBOARDING_GHOST_BUTTON_CLASS,
-  ONBOARDING_PRIMARY_BUTTON_CLASS,
-} from "./onboarding-styles";
 import { EMPTY_INVITATION, teamFormSchema, type TeamFormValues } from "./team-form-schema";
 
 const text = onboardingFr.team;
@@ -130,8 +126,7 @@ export const TeamStep = () => {
         <span className="flex flex-1 items-center justify-end gap-2 lg:flex-none">
           <Button
             type="button"
-            variant="ghost"
-            className={ONBOARDING_GHOST_BUTTON_CLASS}
+            variant="secondary"
             onClick={finishLater}
             disabled={isSubmitting || completion.isPending}
           >
@@ -139,7 +134,7 @@ export const TeamStep = () => {
           </Button>
           <Button
             type="submit"
-            className={ONBOARDING_PRIMARY_BUTTON_CLASS}
+            className="flex-1 lg:flex-none"
             disabled={isSubmitting || completion.isPending || filledCount === 0}
           >
             {isSubmitting ? text.sending : text.send(filledCount)}

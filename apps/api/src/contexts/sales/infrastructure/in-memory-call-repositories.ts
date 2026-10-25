@@ -175,7 +175,9 @@ export const createInMemoryCallRepositories = (
         state.tasks
           .filter(
             (task) =>
-              task.ownerUserId === ownerUserId && task.status === "open" && task.dueAt < before,
+              (task.ownerUserId === ownerUserId || task.ownerUserId === null) &&
+              task.status === "open" &&
+              task.dueAt < before,
           )
           .toSorted(byDueAt)
           .slice(0, limit)

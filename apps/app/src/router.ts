@@ -24,6 +24,7 @@ import {
   adminProspectionRoute,
   adminContactsRoute,
 } from "./routes/admin-commercial";
+import { adminCallSessionRoute, adminCallsRoute, adminMyDayRoute } from "./routes/admin-calls";
 import { adminMcpAuthorizeRoute } from "./routes/admin-mcp";
 import { adminCodeRoute, adminSecurityRoute } from "./routes/admin-security";
 import { forgotPasswordRoute } from "./routes/forgot-password";
@@ -38,7 +39,7 @@ import {
 } from "./routes/onboarding";
 import { newVisitRoute, planningRoute, visitRoute } from "./routes/planning";
 import { resetPasswordRoute } from "./routes/reset-password";
-import { settingsRoute, visitTypesRoute } from "./routes/settings";
+import { settingsRoute, servicesRoute } from "./routes/settings";
 import { rootRoute } from "./routes/root";
 import { signInRoute } from "./routes/sign-in";
 import { signInCodeRoute } from "./routes/sign-in-code";
@@ -77,13 +78,16 @@ const routeTree = rootRoute.addChildren([
       adminContactsRoute,
       adminContactRoute,
       adminProspectionRoute,
+      adminMyDayRoute,
+      adminCallsRoute,
+      adminCallSessionRoute,
     ]),
   ]),
   signedInRoute.addChildren([
     homeRoute,
     teamRoute,
     settingsRoute,
-    visitTypesRoute,
+    servicesRoute,
     customersRoute,
     newCustomerRoute,
     customerRoute,

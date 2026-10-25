@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ADMIN_PRIMARY_BUTTON_CLASS, ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 
 type FormDialogProps = {
   readonly isOpen: boolean;
@@ -53,15 +52,10 @@ export const FormDialog = ({
           <DialogFooter className="gap-2 border-t border-[#EEF2F6] px-5 py-3 sm:justify-between">
             <span className="flex">{aside}</span>
             <span className="flex flex-col-reverse gap-2 sm:flex-row">
-              <Button
-                type="button"
-                variant="outline"
-                className={ADMIN_SECONDARY_BUTTON_CLASS}
-                onClick={close}
-              >
+              <Button type="button" variant="secondary" onClick={close}>
                 {cancelLabel}
               </Button>
-              <Button type="submit" className={ADMIN_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting}>
                 {submitLabel}
               </Button>
             </span>

@@ -14,7 +14,7 @@ import { identityFr } from "../fr";
 import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AuthHeading } from "./auth-heading";
-import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
+import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS } from "./auth-styles";
 import { TurnstileSlot } from "./turnstile-slot";
 
 const text = identityFr.forgotPassword;
@@ -94,7 +94,7 @@ export const ForgotPasswordForm = () => {
           containerRef={turnstile.containerRef}
           isInteractive={turnstile.isInteractive}
         />
-        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? text.submitting : text.submit}
         </Button>
       </div>

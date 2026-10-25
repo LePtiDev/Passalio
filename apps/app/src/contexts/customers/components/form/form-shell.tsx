@@ -4,7 +4,6 @@ import { DesktopTopBar, type BreadcrumbStep } from "@/components/app-shell/page-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { customersFr } from "../../fr";
-import { PRIMARY_BUTTON_CLASS, SECONDARY_BUTTON_CLASS } from "../customer-styles";
 import { SyncPill } from "../sync-indicator";
 
 type FormShellProps = {
@@ -60,13 +59,13 @@ export const FormShell = ({
       <span className="hidden flex-1 text-[13px] text-[#64748B] lg:block">{note}</span>
       <Button
         type="button"
-        variant="outline"
+        variant="secondary"
         onClick={onCancel}
-        className={cn(SECONDARY_BUTTON_CLASS, "hidden lg:inline-flex")}
+        className="hidden lg:inline-flex"
       >
         {text.cancel}
       </Button>
-      <Button type="submit" disabled={isSubmitting} className={cn(PRIMARY_BUTTON_CLASS, "lg:px-4")}>
+      <Button type="submit" disabled={isSubmitting}>
         {primaryLabel}
       </Button>
     </div>

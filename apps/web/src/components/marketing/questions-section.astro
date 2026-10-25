@@ -1,0 +1,29 @@
+---
+import { marketingFr } from "../../copy/marketing-fr";
+
+interface Props {
+  questions: ReadonlyArray<{ question: string; answer: string }>;
+}
+
+const { questions } = Astro.props;
+---
+
+<section id="questions" class="scroll-mt-4 py-10 sm:py-18">
+  <div class="mx-auto flex max-w-270 flex-wrap gap-x-16 gap-y-6 px-4 sm:px-6">
+    <h2
+      class="min-w-0 flex-[1_1_260px] text-[23px] leading-tight font-bold tracking-[-0.02em] sm:text-[27px]"
+    >
+      {marketingFr.questionsTitle}
+    </h2>
+    <dl class="min-w-0 flex-[2_1_420px] border-b border-card-line">
+      {
+        questions.map((item) => (
+          <div class="flex flex-col gap-1 border-t border-card-line py-4">
+            <dt class="text-[14.5px] font-bold">{item.question}</dt>
+            <dd class="text-slate-text">{item.answer}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

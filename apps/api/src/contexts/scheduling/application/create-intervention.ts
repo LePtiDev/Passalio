@@ -5,9 +5,11 @@ import {
   checkEquipmentsAtPlace,
   checkVisitTypes,
   newIntervention,
+  teamOf,
 } from "../domain/intervention-rules";
 import type { SchedulingDependencies } from "../domain/scheduling-ports";
 import type { SchedulingError } from "../domain/scheduling-error";
+import { allMembers, checkedServiceLines } from "./check-visit-details";
 
 export type CreateInterventionInput = {
   readonly id?: string | undefined;
@@ -15,13 +17,15 @@ export type CreateInterventionInput = {
 };
 
 export const createIntervention =
-  ({ interventions, places, team, now }: SchedulingDependencies) =>
+  (dependencies: SchedulingDependencies) =>
   async (
     actor: Actor,
     input: CreateInterventionInput,
   ): Promise<Result<Intervention, SchedulingError>> => {
+    const { interventions, places, now } = dependencies;
     const fields = input.intervention;
-    assertCanManageInterventionOf(actor, fields.technicianUserId);
+    const team = teamOf(fields);
+    assertCanManageInterventionOf(actor, team.technicianUserIds);
     const visitTypes = checkVisitTypes(fields.visitTypes ?? []);
     if (!visitTypes.isOk) {
       return visitTypes;
@@ -41,8 +45,16 @@ export const createIntervention =
     if (!equipmentIds.isOk) {
       return equipmentIds;
     }
-    if (!(await team.isMember(actor.organizationId, fields.technicianUserId))) {
+    if (!(await allMembers(dependencies, actor.organizationId, team.technicianUserIds))) {
       return err("technician_not_member");
+    }
+    const serviceLines = await checkedServiceLines(
+      dependencies,
+      actor.organizationId,
+      fields.serviceLines,
+    );
+    if (!serviceLines.isOk) {
+      return serviceLines;
     }
     const intervention = newIntervention(fields, {
       id,
@@ -50,6 +62,8 @@ export const createIntervention =
       createdByUserId: actor.userId,
       equipmentIds: equipmentIds.value,
       visitTypes: visitTypes.value,
+      serviceLines: serviceLines.value ?? [],
+      team,
       at: now(),
     });
     await interventions.create(intervention);

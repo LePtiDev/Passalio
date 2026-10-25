@@ -10,7 +10,7 @@ import { customerNameOf, formatTimestamp } from "../../customer-view";
 import { customersFr } from "../../fr";
 import { useCustomerFile, type CustomerFile } from "../../hooks/use-customer-file";
 import { useCustomerParams } from "../../hooks/use-route-params";
-import { LINK_BUTTON_CLASS, SECONDARY_BUTTON_CLASS } from "../customer-styles";
+import { LINK_BUTTON_CLASS } from "../customer-styles";
 import { SyncPill } from "../sync-indicator";
 import { ContactCard } from "./contact-card";
 import {
@@ -98,7 +98,7 @@ const CustomerFileContent = ({ file }: { readonly file: CustomerFile }) => {
                 today={today}
               />
             ))}
-            <Button asChild variant="outline" className={cn(SECONDARY_BUTTON_CLASS, "lg:hidden")}>
+            <Button asChild variant="secondary" className="lg:hidden">
               <Link to="/clients/$customerId/lieux/nouveau" params={params}>
                 <Plus aria-hidden="true" className="size-4" />
                 {text.addSite}

@@ -1,0 +1,20 @@
+---
+import type { GetStaticPaths } from "astro";
+import MarketingPageView from "../../components/marketing/marketing-page.astro";
+import { PATHS, publishedFeaturePages } from "../../content/catalog";
+import type { MarketingPage } from "../../content/content-schema";
+
+export const getStaticPaths = (() =>
+  publishedFeaturePages().map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  page: MarketingPage;
+}
+
+const { page } = Astro.props;
+---
+
+<MarketingPageView page={page} path={PATHS.feature(page.slug)} />

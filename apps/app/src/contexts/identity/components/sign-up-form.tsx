@@ -15,7 +15,7 @@ import { useTurnstile } from "../hooks/use-turnstile";
 import { AuthField, authFieldErrorId } from "./auth-field";
 import { AcceptTermsLabel } from "./accept-terms-label";
 import { AuthHeading } from "./auth-heading";
-import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "./auth-styles";
+import { AUTH_FIELD_CLASS, AUTH_TOUCH_LINK_CLASS } from "./auth-styles";
 import { CheckboxField } from "./checkbox-field";
 import { PasswordInput } from "./password-input";
 import { newPasswordSchema } from "./password-schema";
@@ -160,7 +160,7 @@ export const SignUpForm = ({ returnTo }: SignUpFormProps) => {
             containerRef={turnstile.containerRef}
             isInteractive={turnstile.isInteractive}
           />
-          <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? text.submitting : text.submit}
           </Button>
         </div>

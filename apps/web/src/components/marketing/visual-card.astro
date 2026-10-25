@@ -1,0 +1,39 @@
+---
+import type { VisualCard } from "../../content/content-schema";
+import StatusPill from "./status-pill.astro";
+
+interface Props {
+  card: VisualCard;
+}
+
+const { card } = Astro.props;
+---
+
+<div
+  class="mx-auto flex w-full max-w-110 flex-col gap-2.5 rounded-xl border border-card-line bg-white p-4 shadow-card"
+>
+  <div class="flex items-start justify-between gap-2.5">
+    <div>
+      <p class="text-sm font-bold">{card.title}</p>
+      <p class="text-xs text-slate-text">{card.subtitle}</p>
+    </div>
+    {card.status && <StatusPill label={card.status.label} tone={card.status.tone} class="text-[11px]" />}
+  </div>
+  <ul class="flex flex-col">
+    {
+      card.rows.map((row) => (
+        <li class="flex items-center justify-between gap-2.5 border-t border-hairline py-2.25">
+          <span class="min-w-0">
+            <span class="block text-[13px] font-semibold">{row.label}</span>
+            {row.value && <span class="block text-xs text-slate-text">{row.value}</span>}
+          </span>
+          {row.tag && (
+            <span class="shrink-0 rounded-full bg-hairline px-2 py-0.5 text-[11px] font-semibold">
+              {row.tag}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</div>

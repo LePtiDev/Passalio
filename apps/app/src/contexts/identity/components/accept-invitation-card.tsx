@@ -46,7 +46,7 @@ export const AcceptInvitationCard = ({
     <section className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">{identityFr.invitation.title}</h1>
       <p>{identityFr.invitation.text}</p>
-      <Button className="h-12 text-base" disabled={accept.isPending} onClick={acceptNow}>
+      <Button disabled={accept.isPending} onClick={acceptNow}>
         {accept.isPending ? identityFr.invitation.accepting : identityFr.invitation.accept}
       </Button>
     </section>

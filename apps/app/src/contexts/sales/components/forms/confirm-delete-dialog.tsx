@@ -8,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ADMIN_SECONDARY_BUTTON_CLASS } from "@/contexts/backoffice";
 
 type ConfirmDeleteDialogProps = {
   readonly isOpen: boolean;
@@ -36,14 +35,8 @@ export const ConfirmDeleteDialog = ({
         <AlertDialogDescription>{description}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel className={ADMIN_SECONDARY_BUTTON_CLASS}>
-          {cancelLabel}
-        </AlertDialogCancel>
-        <AlertDialogAction
-          variant="destructive"
-          className="h-12 rounded-[10px] text-[15px] font-semibold lg:h-8 lg:rounded-[7px] lg:px-3 lg:text-[13px]"
-          onClick={onConfirm}
-        >
+        <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
+        <AlertDialogAction variant="danger" onClick={onConfirm}>
           {confirmLabel}
         </AlertDialogAction>
       </AlertDialogFooter>

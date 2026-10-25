@@ -7,6 +7,7 @@ import { NEUTRAL_BADGE_CLASS } from "../sales-styles";
 import { StageDot, StageLabel } from "../stage-label";
 import { ProspectionLink } from "./company-map-card";
 import { CallLink, CallTile, SECONDARY_ACTION_CLASS, TILE_CLASS, TileButton } from "./file-actions";
+import { NoteCallLink } from "./note-call-link";
 import { StageMenu } from "./stage-menu";
 
 const text = salesFr.file;
@@ -44,16 +45,13 @@ export const CompanyFileHeader = ({ company, phone, now, onEdit }: CompanyFileHe
       </div>
       <div className="flex gap-2">
         <CallLink phone={phone} className={SECONDARY_ACTION_CLASS} />
-        <Button variant="outline" className={SECONDARY_ACTION_CLASS} onClick={onEdit}>
+        <NoteCallLink companyId={company.id} className={SECONDARY_ACTION_CLASS} />
+        <Button variant="secondary" onClick={onEdit}>
           <Pencil aria-hidden="true" className="size-3.5" strokeWidth={1.8} />
           {text.edit}
         </Button>
         <StageMenu companyId={company.id} name={company.name} stage={company.stage} align="end">
-          <button
-            type="button"
-            aria-label={text.stageLabel}
-            className="inline-flex h-8 items-center gap-1.5 rounded-[7px] border border-[#E3E8EF] bg-white pr-2 pl-3 text-[13px] font-semibold hover:bg-[#F7F9FB]"
-          >
+          <button type="button" aria-label={text.stageLabel} className={SECONDARY_ACTION_CLASS}>
             {text.stage}
             <ChevronDown aria-hidden="true" className="size-3.5 text-[#64748B]" />
           </button>
@@ -83,6 +81,7 @@ export const CompanyFileHeader = ({ company, phone, now, onEdit }: CompanyFileHe
         </StageMenu>
         <TileButton icon={Pencil} label={text.edit} onClick={onEdit} />
       </div>
+      <NoteCallLink companyId={company.id} className={SECONDARY_ACTION_CLASS} />
     </div>
   </>
 );

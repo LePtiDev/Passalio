@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { CARD_CLASS, fullAddressOf } from "@/contexts/customers";
 import { cn } from "@/lib/utils";
-import { formatDuration, formatEuros, schedulingFr, visitTypesLabel } from "../../fr";
+import { formatDuration, formatEuros, schedulingFr, visitServicesLabel } from "../../fr";
 import type { VisitFile } from "../../hooks/use-visit";
 
 const text = schedulingFr.visit;
@@ -23,10 +23,10 @@ type InfoLine = {
 
 export const VisitInfoCard = ({
   visit,
-  technicianName,
+  technicianNames,
 }: {
   readonly visit: VisitFile;
-  readonly technicianName: string;
+  readonly technicianNames: readonly string[];
 }) => {
   const { customer, site, intervention } = visit;
   const lines: readonly InfoLine[] = [
@@ -46,17 +46,17 @@ export const VisitInfoCard = ({
       icon: Timer,
       label: text.visitType,
       value:
-        intervention.visitTypes.length === 0
+        visitServicesLabel(intervention) === ""
           ? null
           : text.typeAndDuration(
-              visitTypesLabel(intervention.visitTypes),
+              visitServicesLabel(intervention),
               formatDuration(intervention.durationMinutes),
             ),
     },
     {
       icon: UserRound,
-      label: text.technician,
-      value: technicianName === "" ? null : technicianName,
+      label: technicianNames.length > 1 ? text.technicians : text.technician,
+      value: technicianNames.length === 0 ? null : technicianNames.join(", "),
     },
   ];
   return (

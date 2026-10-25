@@ -9,7 +9,7 @@ import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
 import { TotpCodeInput } from "./totp-code-input";
-import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "../auth-styles";
+import { AUTH_FIELD_CLASS, AUTH_LINK_CLASS } from "../auth-styles";
 
 const text = twoFactorFr.code;
 
@@ -94,7 +94,7 @@ export const TwoFactorCodeForm = ({ subtitle, onVerified }: TwoFactorCodeFormPro
           )}
         </AuthField>
         {isBackup ? <p className="-mt-2 text-[13px] text-[#64748B]">{text.backupHint}</p> : null}
-        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? text.submitting : text.submit}
         </Button>
         <div className="flex items-center justify-between gap-3 text-sm lg:text-[13px]">

@@ -9,3 +9,12 @@ export {
   type ProspectionScope,
 } from "./components/prospection/prospection-scope";
 export type { CompanyListScope, ContactListScope } from "./sales-api";
+export { CallSessionScreen } from "./components/calls/call-session-screen";
+export { CallsScreen } from "./components/calls/calls-screen";
+export { MyDayScreen } from "./components/calls/my-day-screen";
+export {
+  CALL_SERIES_DEFAULT_SIZE,
+  CALL_SERIES_MAX_SIZE,
+  CALL_SERIES_MIN_SIZE,
+  type CallSession,
+} from "./components/calls/call-session";

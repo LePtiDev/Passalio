@@ -4,7 +4,7 @@ import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { twoFactorFr } from "../../two-factor-fr";
 import { AuthField, authFieldErrorId } from "../auth-field";
 import { AuthHeading } from "../auth-heading";
-import { AUTH_FIELD_CLASS, AUTH_PRIMARY_BUTTON_CLASS } from "../auth-styles";
+import { AUTH_FIELD_CLASS } from "../auth-styles";
 import { PasswordInput } from "../password-input";
 
 const text = twoFactorFr.setup;
@@ -53,7 +53,7 @@ export const PasswordConfirmation = ({ onConfirm }: PasswordConfirmationProps) =
             }
           />
         </AuthField>
-        <Button type="submit" className={AUTH_PRIMARY_BUTTON_CLASS} disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {text.continue}
         </Button>
         <button

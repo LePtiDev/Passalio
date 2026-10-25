@@ -3,16 +3,27 @@
   "name": "passalio-web-local",
   "compatibility_date": "2026-10-01",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "not_found_handling": "404-page"
   },
   "env": {
     "staging": {
       "name": "passalio-web-staging",
-      "routes": [{ "pattern": "staging.passalio.com", "custom_domain": true }]
+      "routes": [
+        {
+          "pattern": "staging.passalio.com",
+          "custom_domain": true
+        }
+      ]
     },
     "production": {
       "name": "passalio-web",
-      "routes": [{ "pattern": "passalio.com", "custom_domain": true }]
+      "routes": [
+        {
+          "pattern": "passalio.com",
+          "custom_domain": true
+        }
+      ]
     }
   }
 }

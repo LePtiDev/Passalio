@@ -6,4 +6,5 @@ export type SchedulingError =
   | "equipment_not_found"
   | "technician_not_member"
   | "intervention_closed"
-  | "invalid_visit_type";
+  | "invalid_visit_type"
+  | "service_not_found";

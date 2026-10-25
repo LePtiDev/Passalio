@@ -1,0 +1,67 @@
+---
+import type { MarketingPage } from "../../content/content-schema";
+import { PATHS } from "../../content/catalog";
+import { homeFr } from "../../copy/home-fr";
+import StatusPill from "../marketing/status-pill.astro";
+
+interface Props {
+  page: MarketingPage;
+}
+
+const { page } = Astro.props;
+const visual = page.features[0]?.visual;
+const rows = visual?.rows.slice(0, 3) ?? [];
+---
+
+<li
+  class="relative flex flex-col overflow-hidden rounded-xl border border-card-line bg-white shadow-card has-[a:hover]:border-input"
+>
+  <div class="dot-grid flex h-34 items-start border-b border-hairline bg-panel p-3" aria-hidden="true">
+    {
+      visual && (
+        <div class="w-full rounded-lg border border-card-line bg-white p-2.5 text-[11px] shadow-card">
+          <p class="flex items-center justify-between gap-2 font-bold">
+            <span class="truncate">{visual.title}</span>
+            {visual.status && (
+              <StatusPill label={visual.status.label} tone={visual.status.tone} class="text-[10px]" />
+            )}
+          </p>
+          {rows.map((row) => (
+            <p class="mt-1 flex justify-between gap-2 border-t border-hairline pt-1">
+              <span class="truncate">{row.label}</span>
+              {row.value && <span class="truncate text-slate-text">{row.value}</span>}
+            </p>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  <div class="flex flex-1 flex-col gap-1 p-4">
+    <h3 class="flex flex-wrap items-center gap-2 font-bold">
+      {
+        page.isPublished ? (
+          <a href={PATHS.feature(page.slug)} class="after:absolute after:inset-0">
+            {page.menu.title}
+          </a>
+        ) : (
+          page.menu.title
+        )
+      }
+      {
+        !page.isPublished && (
+          <span class="rounded-full bg-amber-soft px-2 py-0.5 text-[11px] font-semibold text-amber-text">
+            {homeFr.product.soon}
+          </span>
+        )
+      }
+    </h3>
+    <p class="text-[13px] text-slate-text">{page.menu.text}</p>
+    {
+      page.isPublished && (
+        <p class="mt-auto pt-2 text-[13px] font-semibold text-validated" aria-hidden="true">
+          {homeFr.product.discover} →
+        </p>
+      )
+    }
+  </div>
+</li>

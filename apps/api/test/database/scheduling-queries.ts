@@ -1,9 +1,11 @@
 import { newId } from "@passalio/shared";
 import { PAGE, type CatalogedQuery } from "./cataloged-query";
-import { LATER } from "./domain-fixtures";
+import { AT, LATER } from "./domain-fixtures";
 import { anIntervention } from "./field-fixtures";
 
 const CURSOR = { updatedAt: LATER, id: newId() };
+
+const SERVICE_ID = newId();
 
 export const SCHEDULING_QUERIES: readonly CatalogedQuery[] = [
   {
@@ -59,13 +61,46 @@ export const SCHEDULING_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.teamMembers.isMember(s.organization.id, s.technician.id),
   },
   {
-    method: "visitTypeSettings.find",
-    query: "trades and visit durations of the organization",
-    run: (r, s) => r.visitTypeSettings.find(s.organization.id),
+    method: "services.listActive",
+    query: "active services of the organization",
+    run: (r, s) => r.services.listActive(s.organization.id),
   },
   {
-    method: "visitTypeSettings.saveDurations",
-    query: "save the visit durations of the organization",
-    run: (r, s) => r.visitTypeSettings.saveDurations(s.organization.id, { chimney_sweeping: 75 }),
+    method: "services.findActive",
+    query: "find an active service",
+    run: (r, s) => r.services.findActive(s.organization.id, SERVICE_ID),
+  },
+  {
+    method: "services.create",
+    query: "add a service",
+    run: (r, s) =>
+      r.services.create({
+        id: newId(),
+        organizationId: s.organization.id,
+        name: "Ramonage de conduit",
+        durationMinutes: 60,
+        priceCents: 7500,
+        document: "chimney_sweeping_certificate",
+        trade: "chimney_sweeping",
+        archivedAt: null,
+        createdAt: AT,
+        updatedAt: AT,
+      }),
+  },
+  {
+    method: "services.update",
+    query: "change the price of a service",
+    run: (r, s) =>
+      r.services.update(s.organization.id, SERVICE_ID, { priceCents: 8000, updatedAt: LATER }),
+  },
+  {
+    method: "services.archive",
+    query: "archive a service",
+    run: (r, s) => r.services.archive(s.organization.id, SERVICE_ID, LATER),
+  },
+  {
+    method: "serviceCatalog.knownIds",
+    query: "services of the organization chosen on an intervention",
+    run: (r, s) => r.serviceCatalog.knownIds(s.organization.id, [SERVICE_ID, newId()]),
   },
 ];

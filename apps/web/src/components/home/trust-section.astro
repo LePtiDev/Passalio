@@ -1,0 +1,25 @@
+---
+import { homeFr } from "../../copy/home-fr";
+import TrustIcon from "./trust-icon.astro";
+---
+
+<section class="border-t border-hairline py-[clamp(56px,8vw,96px)]">
+  <div class="mx-auto max-w-270 px-4 sm:px-6">
+    <h2
+      class="text-center text-[clamp(22px,2.6vw,28px)] leading-tight font-bold tracking-[-0.03em] text-balance"
+    >
+      {homeFr.trust.title}
+    </h2>
+    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        homeFr.trust.items.map((item) => (
+          <li class="flex flex-col gap-1 rounded-xl border border-card-line p-5 shadow-card">
+            <TrustIcon icon={item.icon} />
+            <h3 class="mt-2 font-bold">{item.title}</h3>
+            <p class="text-[13px] text-slate-text">{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

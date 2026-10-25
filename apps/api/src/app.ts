@@ -6,7 +6,7 @@ import { identityRoutes, organizationRoutes } from "./contexts/identity";
 import { mcpAuthorizationRoutes, mcpRoutes } from "./contexts/mcp";
 import { teamInvitationRoutes, teamRoutes } from "./contexts/platform-team";
 import { prospectCallRoutes, prospectCompanyRoutes, prospectContactRoutes } from "./contexts/sales";
-import { visitTypeRoutes } from "./contexts/scheduling";
+import { serviceRoutes } from "./contexts/scheduling";
 import { syncRoutes } from "./contexts/sync";
 import type { AppEnv } from "./env";
 import { authRoutes } from "./platform/auth-routes";
@@ -36,7 +36,7 @@ const apiRoutes = new Hono<AppEnv>()
   .route("/", equipmentRoutes)
   .route("/", plateReadingRoutes)
   .route("/", numberBlockRoutes)
-  .route("/", visitTypeRoutes)
+  .route("/", serviceRoutes)
   .route("/", syncRoutes);
 
 export const app = createApp()
