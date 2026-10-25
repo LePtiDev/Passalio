@@ -70,6 +70,7 @@ Dernière mise à jour : 2026-10-25.
 | Réglages › Entreprise (mentions légales du certificat) et Réglages › Documents (modèle, couleur, logo, coordonnées, textes, numérotation, aperçu du PDF) ; le prochain numéro ne redescend plus sous les numéros réservés | `contexts/identity/components/settings`             |
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                                       | ADR 0028                                            |
 | Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                               | ADR 0028                                            |
+| Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                          | ADR 0030                                            |
 
 ## Hors code (Quentin)
 
@@ -216,7 +217,9 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
 - [x] Barre de navigation commune, pages par activité, pages fonction, histoires de terrain, page Sans réseau, SEO complet (maquette : https://claude.ai/artifact/6LZhtqB84KkzXpjxumRoqt)
-- [ ] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com) et comptage des visites par page et par jour, sans donnée personnelle
+- [x] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com, ADR 0030)
+- [ ] Comptage des visites par page et par jour, sans donnée personnelle
+- [ ] Ajouter passalio.com et staging.passalio.com au widget Turnstile avant de déployer le site
 - [ ] Publier les pages Certificat, Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et leurs histoires quand la fonction est en production (`isPublished`)
 - [ ] Remplacer les histoires inventées par de vrais témoignages dès les premiers clients
 - [ ] Pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement

@@ -71,7 +71,7 @@ export const softwareSwitchPage: MarketingPageInput = {
       bullets: [
         "Fichier Excel ou CSV",
         "Lignes à vérifier signalées avant l’import",
-        "Antho au téléphone pendant la reprise si vous voulez",
+        "Quelqu’un de l’équipe au téléphone pendant la reprise si vous voulez",
       ],
       visual: {
         title: "Vérification",
@@ -191,7 +191,8 @@ export const softwareSwitchPage: MarketingPageInput = {
   questions: [
     {
       question: "Combien de temps prend le changement ?",
-      answer: "Une soirée pour la reprise des clients, avec Antho au téléphone si vous voulez.",
+      answer:
+        "Une soirée pour la reprise des clients, avec quelqu’un de l’équipe au téléphone si vous voulez.",
     },
     {
       question: "Je suis encore engagé chez un autre éditeur.",

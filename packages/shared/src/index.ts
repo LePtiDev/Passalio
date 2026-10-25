@@ -193,6 +193,17 @@ export {
   type TeammateResponse,
   type TeamResponse,
 } from "./platform-team";
+export {
+  CALLBACK_MESSAGE_MAX_LENGTH,
+  CALLBACK_SLOTS,
+  FRENCH_PHONE_PATTERN,
+  FRENCH_POSTAL_CODE_PATTERN,
+  publicCallbackRequest,
+  publicCallbackResponse,
+  type CallbackSlot,
+  type PublicCallbackRequest,
+  type PublicCallbackResponse,
+} from "./public-callback";
 export { TERMS_VERSION } from "./terms";
 export { err, ok, type Err, type Ok, type Result } from "./result";
 export {
@@ -256,6 +267,7 @@ export {
   INTEREST_LEVELS,
   NEXT_ACTIONS,
   NOTIFY_MODES,
+  PROSPECT_TASK_SOURCES,
   PROSPECT_TASK_STATUSES,
   prospectCallLog,
   prospectQualification,
@@ -275,6 +287,7 @@ export {
   type ProspectQualification,
   type ProspectSchedule,
   type ProspectTaskChange,
+  type ProspectTaskSource,
   type ProspectTaskStatus,
   type ScheduledNextAction,
   type ProspectTeamSize,

@@ -38,5 +38,34 @@ export const callbackRequestBody = (draft: CallbackDraft) => ({
   pagePath: draft.pagePath,
 });
 
+export type WebsiteCallbackField = CallbackField | "postalCode";
+
+export interface WebsiteCallbackDraft extends CallbackDraft {
+  postalCode: string;
+}
+
+export const isPostalCode = (raw: string): boolean => /^\d{5}$/.test(raw.replace(/\s/g, ""));
+
+export const invalidWebsiteCallbackFields = (
+  draft: WebsiteCallbackDraft,
+): ReadonlyArray<WebsiteCallbackField> => [
+  ...invalidCallbackFields(draft),
+  ...(isPostalCode(draft.postalCode) ? [] : (["postalCode"] as const)),
+];
+
+export const websiteCallbackRequestBody = (
+  draft: WebsiteCallbackDraft,
+  turnstileToken: string,
+) => ({
+  ...callbackRequestBody(draft),
+  postalCode: draft.postalCode.replace(/\s/g, ""),
+  turnstileToken,
+});
+
+export type CallbackFailure = "too_many_requests" | "failed";
+
+export const callbackFailureOf = (status: number): CallbackFailure =>
+  status === 429 ? "too_many_requests" : "failed";
+
 export const shortTraceId = (traceId: string | null): string | null =>
   traceId === null || traceId === "" ? null : traceId.slice(0, 8);

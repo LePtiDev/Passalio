@@ -28,6 +28,7 @@ import { createD1MailMemberDirectory } from "../../src/contexts/sales/infrastruc
 import { createD1MailSettingsRepository } from "../../src/contexts/sales/infrastructure/d1-mail-settings-repository";
 import { createD1ReminderRepository } from "../../src/contexts/sales/infrastructure/d1-reminder-repository";
 import { createD1TaskRepository } from "../../src/contexts/sales/infrastructure/d1-task-repository";
+import { createD1VisitorRateLimit } from "../../src/contexts/sales/infrastructure/d1-visitor-rate-limit";
 import { mainContactsOf } from "../../src/contexts/sales/infrastructure/main-contacts";
 import { createSalesDependencies } from "../../src/contexts/sales/infrastructure/sales-dependencies";
 import {
@@ -81,6 +82,7 @@ export const createRepositories = (database: Database) => {
       of: (companyIds: readonly string[]) => mainContactsOf(database, companyIds),
     },
     salesPeople: sales.people,
+    websiteVisitors: createD1VisitorRateLimit(database),
     salesAudit: sales.audit,
     backofficeAccounts: createD1AccountReadModel(database),
     backofficeJournal: createD1JournalReadModel(database),

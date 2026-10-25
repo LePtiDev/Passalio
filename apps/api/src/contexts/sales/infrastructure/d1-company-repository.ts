@@ -1,4 +1,4 @@
-import { prospectCompanies, prospectEvents, users } from "@passalio/db";
+import { prospectCompanies, prospectContacts, prospectEvents, users } from "@passalio/db";
 import { normalizeSearchText, type ProspectStage } from "@passalio/shared";
 import { and, asc, count, eq, getTableColumns, gt, isNotNull, like, or } from "drizzle-orm";
 import type { Database } from "../../../platform/database";
@@ -76,6 +76,20 @@ export const createD1CompanyRepository = (database: Database): CompanyRepository
       .select(getTableColumns(prospectCompanies))
       .from(prospectCompanies)
       .where(eq(prospectCompanies.id, companyId))
+      .get(),
+  findByPhone: async (phone) =>
+    (await database
+      .select(getTableColumns(prospectCompanies))
+      .from(prospectCompanies)
+      .where(eq(prospectCompanies.phone, phone))
+      .limit(1)
+      .get()) ??
+    database
+      .select(getTableColumns(prospectCompanies))
+      .from(prospectContacts)
+      .innerJoin(prospectCompanies, eq(prospectCompanies.id, prospectContacts.companyId))
+      .where(or(eq(prospectContacts.phone, phone), eq(prospectContacts.mobile, phone)))
+      .limit(1)
       .get(),
   update: async (companyId, changes) => {
     await database

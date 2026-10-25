@@ -44,6 +44,7 @@ export const prospectCompanies = sqliteTable(
     index("prospect_companies_department_search_name_idx").on(table.department, table.searchName),
     index("prospect_companies_stage_search_name_idx").on(table.stage, table.searchName),
     index("prospect_companies_search_name_idx").on(table.searchName),
+    index("prospect_companies_phone_idx").on(table.phone),
   ],
 );
 
@@ -69,6 +70,8 @@ export const prospectContacts = sqliteTable(
   (table) => [
     index("prospect_contacts_company_id_idx").on(table.companyId),
     index("prospect_contacts_search_name_idx").on(table.searchName),
+    index("prospect_contacts_phone_idx").on(table.phone),
+    index("prospect_contacts_mobile_idx").on(table.mobile),
   ],
 );
 

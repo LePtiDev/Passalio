@@ -28,6 +28,7 @@ export type InMemorySalesState = {
   readonly tasks: ProspectTask[];
   readonly people: Person[];
   readonly deletedCompanies: { readonly actorUserId: string; readonly companyId: string }[];
+  readonly websiteTaskIds: string[];
 };
 
 export const createInMemorySalesState = (): InMemorySalesState => ({
@@ -39,6 +40,7 @@ export const createInMemorySalesState = (): InMemorySalesState => ({
   tasks: [],
   people: [],
   deletedCompanies: [],
+  websiteTaskIds: [],
 });
 
 const CREATED_AT = new Date("2026-01-01T00:00:00Z");
@@ -192,6 +194,14 @@ export const createInMemorySalesDependencies = (
         state.companies.push(company);
       },
       findById: async (companyId) => state.companies.find(({ id }) => id === companyId),
+      findByPhone: async (phone) =>
+        state.companies.find((company) => company.phone === phone) ??
+        state.companies.find(({ id }) =>
+          state.contacts.some(
+            (contact) =>
+              contact.companyId === id && (contact.phone === phone || contact.mobile === phone),
+          ),
+        ),
       update: async (companyId, changes) =>
         replaceById(state.companies, companyId, (company) => withChanges(company, changes)),
       changeStage: async (companyId, stage, event) => {
