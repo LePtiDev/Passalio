@@ -127,7 +127,7 @@ Dernière mise à jour : 2026-10-25.
 - [x] Planning, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, fiche passage
 - [x] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé
 - [ ] Certificat : historique sur la fiche client et page du certificat (`/certificats/:id`, maquette 16 et 17)
-- [ ] Certificat : bloc Paiement du récapitulatif (montant, moyen de paiement), selon la décision sur la facture
+- [ ] Certificat : bloc Paiement du récapitulatif (montant, moyen de paiement), à livrer avec la facture (décision de Quentin du 2026-10-25)
 - [ ] Rappel un mois avant l'échéance annoncé sur l'écran « Certificat signé » une fois les relances codées
 - [x] Types de passage : durée par défaut par métier (Réglages › Types de passage), type et durée modifiable sur le nouveau passage (maquette validée le 2026-10-23)
 - [ ] Planning : modifier un passage (date, heure, techniciens, prestations, durée), le marquer terminé sans certificat
