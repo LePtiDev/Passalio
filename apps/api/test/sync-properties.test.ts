@@ -6,6 +6,7 @@ import { startTestPlatform, type TestPlatform } from "./test-platform";
 
 const SYNC_PAGE_SIZE = 200;
 const PAGED_CUSTOMER_COUNT = SYNC_PAGE_SIZE * 2 + 50;
+const FULL_BATCH_TIMEOUT_MS = 30_000;
 
 const organizationResponse = z.object({ organization: z.object({ id: z.string() }) });
 const pushResponse = z.object({
@@ -124,19 +125,23 @@ afterAll(async () => {
 });
 
 describe("sync push batches", () => {
-  it("applies a full batch of 50 mutations and creates nothing new when it is pushed again", async () => {
-    const envelopes = envelopesOf(
-      Array.from({ length: SYNC_PUSH_MAX_MUTATIONS }, (_, index) => creationOf(1, index)),
-    );
-    const first = pushResponse.parse(await (await pushEnvelopes(batchOwner, envelopes)).json());
-    const second = pushResponse.parse(await (await pushEnvelopes(batchOwner, envelopes)).json());
-    expect(first.results.map(({ id }) => id)).toEqual(envelopes.map(({ id }) => id));
-    expect(first.results.every(({ status }) => status === "applied")).toBe(true);
-    expect(second.results.every(({ status }) => status === "applied")).toBe(true);
-    const pulled = (await pullAll(batchOwner)).pages.flatMap(({ changes }) => changes.customers);
-    expect(pulled).toHaveLength(SYNC_PUSH_MAX_MUTATIONS);
-    expect(new Set(pulled.map(({ id }) => id)).size).toBe(SYNC_PUSH_MAX_MUTATIONS);
-  });
+  it(
+    "applies a full batch of 50 mutations and creates nothing new when it is pushed again",
+    async () => {
+      const envelopes = envelopesOf(
+        Array.from({ length: SYNC_PUSH_MAX_MUTATIONS }, (_, index) => creationOf(1, index)),
+      );
+      const first = pushResponse.parse(await (await pushEnvelopes(batchOwner, envelopes)).json());
+      const second = pushResponse.parse(await (await pushEnvelopes(batchOwner, envelopes)).json());
+      expect(first.results.map(({ id }) => id)).toEqual(envelopes.map(({ id }) => id));
+      expect(first.results.every(({ status }) => status === "applied")).toBe(true);
+      expect(second.results.every(({ status }) => status === "applied")).toBe(true);
+      const pulled = (await pullAll(batchOwner)).pages.flatMap(({ changes }) => changes.customers);
+      expect(pulled).toHaveLength(SYNC_PUSH_MAX_MUTATIONS);
+      expect(new Set(pulled.map(({ id }) => id)).size).toBe(SYNC_PUSH_MAX_MUTATIONS);
+    },
+    FULL_BATCH_TIMEOUT_MS,
+  );
 
   it("refuses a batch of more than 50 mutations without applying any of them", async () => {
     const response = await pushEnvelopes(

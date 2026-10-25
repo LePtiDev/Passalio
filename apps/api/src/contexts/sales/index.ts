@@ -13,5 +13,8 @@ export type { ProspectError } from "./domain/prospect-error";
 export { callRoutes as prospectCallRoutes } from "./http/call-routes";
 export { companyRoutes as prospectCompanyRoutes } from "./http/company-routes";
 export { contactRoutes as prospectContactRoutes } from "./http/contact-routes";
+export { mailSettingsRoutes } from "./http/mail-settings-routes";
 export { publicRoutes as websiteCallbackRoutes } from "./http/public-routes";
 export { createSalesDependencies } from "./infrastructure/sales-dependencies";
+export { sendDueReminders } from "./application/send-due-reminders";
+export { createReminderDependencies } from "./infrastructure/reminder-dependencies";

@@ -91,7 +91,7 @@ export const TERMS_SERVICE_SECTIONS: readonly LegalSection[] = [
     blocks: [
       {
         kind: "paragraph",
-        text: "Vous pouvez essayer Passalio gratuitement pendant 14 jours, sans moyen de paiement. À la fin de l'essai, l'espace passe en lecture seule jusqu'à la souscription d'un abonnement. Vos données sont conservées selon l'article 11.",
+        text: "Vous pouvez essayer Passalio gratuitement pendant 7 jours, sans moyen de paiement. À la fin de l'essai, que l'espace soit configuré ou non, il est bloqué jusqu'à la souscription d'un abonnement : vous pouvez seulement souscrire, exporter vos données et vous déconnecter. Vos données sont conservées selon l'article 11.",
       },
     ],
   },

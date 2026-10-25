@@ -92,8 +92,8 @@ describe("getAccountFile", () => {
           trades: ["chimney_sweeping"],
           customerCount: 42,
           createdAt: "2026-10-15T08:00:00.000Z",
-          trialEndsAt: "2026-10-29T08:00:00.000Z",
-          isInTrial: true,
+          trialEndsAt: "2026-10-22T08:00:00.000Z",
+          isInTrial: false,
         },
         owner: { name: "Jean", email: "jean@ramonage-a.fr" },
         staffCount: 2,
@@ -117,12 +117,12 @@ describe("getAccountFile", () => {
     });
   });
 
-  it("tells an account is no longer in trial after 14 days", async () => {
+  it("tells an account is no longer in trial after 7 days", async () => {
     state.accounts.push(
       inMemoryAccount({
         id: "organization-old",
         name: "Old",
-        createdAt: new Date("2026-10-09T10:00:00Z"),
+        createdAt: new Date("2026-10-16T10:00:00Z"),
       }),
     );
     const result = await run()(admin, "organization-old");

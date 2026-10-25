@@ -33,11 +33,11 @@ describe("activity window", () => {
       previousStart: "2026-08-25",
       months: ["2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10"],
       historyStart: "2026-05-01",
-      trialStartedAfter: new Date("2026-10-09T10:00:00Z"),
+      trialStartedAfter: new Date("2026-10-16T10:00:00Z"),
     });
   });
 
-  it("ends the free trial 14 days after the account is created", () => {
-    expect(trialEndOf(new Date("2026-10-20T08:00:00Z"))).toEqual(new Date("2026-11-03T08:00:00Z"));
+  it("ends the free trial 7 days after the account is created", () => {
+    expect(trialEndOf(new Date("2026-10-20T08:00:00Z"))).toEqual(new Date("2026-10-27T08:00:00Z"));
   });
 });

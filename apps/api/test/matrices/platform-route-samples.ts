@@ -1,6 +1,8 @@
 import {
+  changeSignUpSettingsBody,
   changeTeammateRoleBody,
   inviteTeammateBody,
+  mailSettingsChange,
   mcpApprovalBody,
   mcpDenialBody,
   prospectCallLog,
@@ -85,6 +87,11 @@ export const PLATFORM_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     ),
   [`PATCH ${PROSPECTS}/tasks/:taskId`]: (ids) =>
     withJson("PATCH", `${PROSPECTS}/tasks/${ids.taskId}`, prospectTaskChange, { status: "done" }),
+  "GET /api/admin/settings/sign-up": () => read("/api/admin/settings/sign-up"),
+  "PUT /api/admin/settings/sign-up": () =>
+    withJson("PUT", "/api/admin/settings/sign-up", changeSignUpSettingsBody, {
+      isSignUpOpen: true,
+    }),
   "GET /api/admin/team": () => read("/api/admin/team"),
   "POST /api/admin/team/invitations": () =>
     withJson("POST", "/api/admin/team/invitations", inviteTeammateBody, {
@@ -95,6 +102,24 @@ export const PLATFORM_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     withoutBody("POST", `/api/admin/team/invitations/${ids.teamInvitationId}/resend`),
   "DELETE /api/admin/team/invitations/:invitationId": (ids) =>
     withoutBody("DELETE", `/api/admin/team/invitations/${ids.teamInvitationId}`),
+  "GET /api/admin/mail-settings/:userId": (ids) =>
+    read(`/api/admin/mail-settings/${ids.teammateUserId}`),
+  "PUT /api/admin/mail-settings/:userId": (ids) =>
+    withJson("PUT", `/api/admin/mail-settings/${ids.teammateUserId}`, mailSettingsChange, {
+      senderName: "Recrue, Passalio",
+      senderAddress: "recrue@passalio.fr",
+      replyTo: null,
+      provider: "ovh_email_pro",
+      smtpHost: "pro1.mail.ovh.net",
+      smtpPort: 587,
+      smtpUsername: "recrue@passalio.fr",
+      smtpPassword: "mot-de-passe-matrice",
+      signature: null,
+      reminderNotify: "minutes_15",
+      reminderAddress: null,
+    }),
+  "POST /api/admin/mail-settings/:userId/test": (ids) =>
+    withoutBody("POST", `/api/admin/mail-settings/${ids.teammateUserId}/test`),
   "PATCH /api/admin/team/members/:userId": (ids) =>
     withJson("PATCH", `/api/admin/team/members/${ids.teammateUserId}`, changeTeammateRoleBody, {
       role: "sales",

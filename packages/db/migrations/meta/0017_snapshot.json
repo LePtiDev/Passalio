@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "137c260d-4cdf-4deb-9f7b-5e6a13b1dd8e",
+  "id": "42766621-1562-46c3-87bc-deda2594e5ee",
   "prevId": "9b2b8246-7c1c-4bb8-9cb4-91215ef09d88",
   "tables": {
     "activity_days": {
@@ -2061,6 +2061,162 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
+    "platform_mail_settings": {
+      "name": "platform_mail_settings",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sender_name": {
+          "name": "sender_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sender_address": {
+          "name": "sender_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reply_to": {
+          "name": "reply_to",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "smtp_host": {
+          "name": "smtp_host",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "smtp_port": {
+          "name": "smtp_port",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "smtp_username": {
+          "name": "smtp_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "smtp_password_cipher": {
+          "name": "smtp_password_cipher",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password_updated_at": {
+          "name": "password_updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "verified_at": {
+          "name": "verified_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "signature": {
+          "name": "signature",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reminder_notify": {
+          "name": "reminder_notify",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reminder_address": {
+          "name": "reminder_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_by_user_id": {
+          "name": "updated_by_user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "platform_mail_settings_user_id_users_id_fk": {
+          "name": "platform_mail_settings_user_id_users_id_fk",
+          "tableFrom": "platform_mail_settings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "platform_mail_settings_updated_by_user_id_users_id_fk": {
+          "name": "platform_mail_settings_updated_by_user_id_users_id_fk",
+          "tableFrom": "platform_mail_settings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "updated_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "prospect_calls": {
       "name": "prospect_calls",
       "columns": {
@@ -2430,13 +2586,6 @@
             "search_name"
           ],
           "isUnique": false
-        },
-        "prospect_companies_phone_idx": {
-          "name": "prospect_companies_phone_idx",
-          "columns": [
-            "phone"
-          ],
-          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -2574,20 +2723,6 @@
           "name": "prospect_contacts_search_name_idx",
           "columns": [
             "search_name"
-          ],
-          "isUnique": false
-        },
-        "prospect_contacts_phone_idx": {
-          "name": "prospect_contacts_phone_idx",
-          "columns": [
-            "phone"
-          ],
-          "isUnique": false
-        },
-        "prospect_contacts_mobile_idx": {
-          "name": "prospect_contacts_mobile_idx",
-          "columns": [
-            "mobile"
           ],
           "isUnique": false
         }
@@ -2919,13 +3054,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "created_at": {

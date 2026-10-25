@@ -124,8 +124,29 @@
     {
       "idx": 17,
       "version": "6",
-      "when": 1792885430641,
-      "tag": "0017_website_callbacks",
+      "when": 1792885977000,
+      "tag": "0017_platform_mail_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1792887695145,
+      "tag": "0018_prospect_task_notifications",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1792890784372,
+      "tag": "0019_platform_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1792927424314,
+      "tag": "0020_website_callbacks",
       "breakpoints": true
     }
   ]

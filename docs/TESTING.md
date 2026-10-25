@@ -152,7 +152,40 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 3       | Formulaires d'appel et de série (champs requis selon le résultat, 5 à 30 appels), progression d'une série, contact et numéro appelés, rappel à clore   | `call-form-schema`, `call-series-form-schema`, `session-progress`, `call-desk-model` |
 | 3       | Écrans Ma journée, Appels, série : compteurs, liens, enregistrement, passer, terminer, mobile, vide, chargement, erreur avec code ; « Noter un appel » | `my-day-screen`, `calls-screen`, `call-session-screen`, `company-file-call-note`     |
 
-## Demande de rappel depuis le site (ADR 0028)
+## Boîte mail des membres (ADR 0028)
+
+| Famille | Ce qui est vérifié                                                                                                                      | Test                                                         |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 2       | Champs changés, changement de connexion qui efface le test réussi, droit sur sa boîte ou celle d'un autre membre                        | `sales/application/save-mail-settings.test.ts`               |
+| 4       | Lire, enregistrer, tester : mot de passe exigé la première fois, gardé ensuite, rien d'écrit sans changement, journal, e-mail au membre | `save-mail-settings`, `get-mail-settings`, `test-mailbox`    |
+| 2       | Chiffrement AES-GCM aller-retour, clé invalide, texte chiffré illisible ; erreurs SMTP classées (identifiants, connexion, refus)        | `aes-password-cipher.test.ts`, `smtp-mail-transport.test.ts` |
+| 5, 6    | Routes : 200, 204, 400, 404, 409, 422, mot de passe jamais renvoyé, réponses conformes aux schémas zod                                  | `apps/api/test/mail-settings-routes.test.ts`                 |
+| 7, 8, 9 | Matrices des rôles, double authentification, impersonation ; plans de requêtes de la table                                              | `apps/api/test/matrices`, `apps/api/test/database`           |
+| 3       | Gabarits de l'e-mail récapitulatif et de l'e-mail de test                                                                               | `packages/emails/src/mail-settings-emails.test.ts`           |
+
+## Rappels par e-mail (ADR 0028)
+
+| Famille | Ce qui est vérifié                                                                                                                                               | Test                                                  |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 2       | Envoyer avant, à l'heure et jusqu'à une heure après ; ne plus envoyer trop tard, sans responsable ou sans notification                                           | `sales/domain/reminder-rules.test.ts`                 |
+| 4       | Un envoi par rappel dû, marqué notifié ; rappels écartés marqués aussi ; envoi refusé gardé pour la prochaine fois                                               | `sales/application/send-due-reminders.test.ts`        |
+| 3       | Gabarit selon la maquette : quand, qui, entreprise, note, qualification, boutons Appeler et Ouvrir la fiche, heure de Paris, échappement                         | `packages/emails/src/prospect-reminder-email.test.ts` |
+| 5       | Envoi par Resend, log local sans le prospect, envoi refusé sans configuration                                                                                    | `apps/api/src/platform/resend-email-sender.test.ts`   |
+| 6       | Cron de bout en bout : rappel trouvé avec contact, note, téléphone et adresse des rappels, envoyé une seule fois, trace, aucune donnée personnelle dans les logs | `apps/api/test/prospect-reminder-job.test.ts`         |
+| 9       | Plan de requête : index partiel `prospect_tasks_pending_notify_at_idx`                                                                                           | `apps/api/test/database`                              |
+
+## Inscriptions fermées (ADR 0029)
+
+| Famille | Ce qui est vérifié                                                                                                                          | Test                                                                                                     |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 2, 3    | Ouvertes par défaut, invité accepté même fermées, adresse sans espaces ni majuscules ; `settings:manage` au super admin seulement           | `platform-settings/domain/sign-up-settings.test.ts`, `packages/shared/src/platform-settings.test.ts`     |
+| 4       | Lire, fermer, rouvrir (journal), même valeur sans effet, admin et commercial refusés ; invitation expirée refusée ; entreprise refusée      | `platform-settings/application/*.test.ts`, `identity/application/create-organization-sign-up.test.ts`    |
+| 5, 7, 9 | Routes : 200, 400, 403 (admin, commercial), 404 (client, sans session) ; compte refusé `SIGN_UP_CLOSED`, invités acceptés, connexion gardée | `apps/api/test/platform-settings-routes.test.ts`, `apps/api/test/matrices`                               |
+| 8       | Requêtes des réglages et des invitations en attente cataloguées, index utilisés                                                             | `apps/api/test/database`                                                                                 |
+| 13      | Réglages : chargement, erreur avec code, ouvertes, fermées (qui et quand), confirmation, annuler, toast, échec ; écran « fermées »          | `backoffice/components/settings/settings-screen.test.tsx`, `identity/components/sign-up-screen.test.tsx` |
+| 14, 16  | Fermer, connexion d'un compte existant, page fermée, rouvrir ; accessibilité et zones tactiles des deux écrans                              | `e2e/platform-sign-up-settings.spec.ts`, `e2e/sign-up-settings-accessibility.spec.ts`                    |
+
+## Demande de rappel depuis le site (ADR 0030)
 
 | Famille | Ce qui est vérifié                                                                                                               | Test                                                                                             |
 | ------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -218,6 +251,7 @@ Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans 
 | Admin           | Le rôle Commercial ne voit que Commercial                                                                                                                                                         | `admin-access.spec.ts`, `admin-guards.spec.ts`                           |
 | Équipe Passalio | Inviter un membre, il rejoint par e-mail puis active la double authentification                                                                                                                   | `platform-team.spec.ts`                                                  |
 | Équipe Passalio | Changer un rôle, retirer un membre (ses sessions sont fermées) ; pas son propre rôle                                                                                                              | `platform-team.spec.ts`, `platform-team-sessions.spec.ts`                |
+| Équipe Passalio | Fermer les inscriptions : page fermée, compte existant connecté, rouvrir                                                                                                                          | `platform-sign-up-settings.spec.ts`                                      |
 | Commercial      | Entreprises : onglets d'étape, filtres en cascade (taper « 94 »), recherche, pagination                                                                                                           | `commercial-companies.spec.ts`                                           |
 | Commercial      | Créer, modifier, supprimer une entreprise prospectée                                                                                                                                              | `commercial-companies.spec.ts`                                           |
 | Commercial      | Changer l'étape, ajouter une note, historique                                                                                                                                                     | `commercial-companies.spec.ts`                                           |

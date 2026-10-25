@@ -2,6 +2,7 @@ import {
   BRAND_COLORS,
   ok,
   ORGANIZATION_ROLES,
+  signUpAvailabilityResponse,
   TEAM_SIZES,
   type OrganizationRole,
 } from "@passalio/shared";
@@ -95,6 +96,7 @@ export type OrganizationChanges = Partial<
 >;
 
 export const identityApi = {
+  fetchSignUpAvailability: () => apiRequest("/sign-up-availability", signUpAvailabilityResponse),
   fetchActor: async () => {
     const result = await apiRequest("/me", actorResponse);
     return result.isOk ? ok(result.value.actor) : result;

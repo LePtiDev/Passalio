@@ -14,6 +14,8 @@ export const CROSS_ORGANIZATION_QUERIES: Readonly<Record<string, string>> = {
   "backofficeAccounts.listAccounts: accounts list filtered by dropping": PASSALIO_BACK_OFFICE,
   "backofficeAccounts.countActivePeople: active people of the overview": PASSALIO_BACK_OFFICE,
   "backofficeJournal.journal: platform journal filtered by actions": PASSALIO_BACK_OFFICE,
+  "pendingInvitations.hasPendingInvitation: pending company or team invitation of a person who signs up while sign-up is closed":
+    "a person who signs up belongs to no organization yet",
 };
 
 export const isCrossOrganizationQuery = (name: string) =>

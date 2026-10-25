@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-24.
+Dernière mise à jour : 2026-10-25.
 
 ## Fait
 
@@ -62,11 +62,14 @@ Dernière mise à jour : 2026-10-24.
 | Prospection, appels : résultat et prochaine action, rappels et démos avec notification, qualification, Ma journée, séries d'appels (API)                                                                          | ADR 0024                                            |
 | Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                                                                | ADR 0025                                            |
 | Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                              | `docs/stripe.md`                                    |
+| Interrupteur des inscriptions (super admin) : fermer en production sans bloquer la connexion ni les invités                                                                                                       | ADR 0029                                            |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100 | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
 | Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                           | `contexts/sales/components/calls`                   |
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                        | PR #62                                              |
 | PDF du certificat de ramonage : modèles Bandeau et Sobre, cinq couleurs, page de conseils, mentions obligatoires, rendu déterministe et empreinte                                                                 | ADR 0027, `packages/pdf`                            |
-| Site : API de la demande de rappel (Turnstile, limite par IP, CORS, rappel dans Ma journée)                                                                                                                       | ADR 0028                                            |
+| Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                               | ADR 0028                                            |
+| Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                       | ADR 0028                                            |
+| Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                  | ADR 0030                                            |
 
 ## Hors code (Quentin)
 
@@ -129,9 +132,13 @@ Dernière mise à jour : 2026-10-24.
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [x] Grille de prix et fonctionnement du paiement décidés (ADR 0025, choix de Quentin du 2026-10-24)
-- [ ] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, lecture seule, emails (fin d'essai J-3 et J0, paiement refusé, lecture seule)
+- [x] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, espace bloqué, e-mails (fin d'essai J-2, paiement refusé, espace bloqué), validées le 2026-10-24
+- [x] Fermer les inscriptions depuis l'admin (Plateforme › Réglages, super admin), connexion et invitations toujours possibles (ADR 0029)
+- [ ] Offre des 20 premiers clients : 19 € HT par mois à vie, quelle que soit la formule (choix de Quentin du 2026-10-24, à consigner dans l'ADR 0025 et à coder avec l'abonnement)
 - [ ] Abonnement, code : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures en lecture seule, passage Solo vers Équipe à l'invitation d'un deuxième technicien (ADR 0025)
-- [ ] Ouvrir le compte Stripe de production au nom de la SAS, mentions de la facture Stripe validées par la vérification réglementaire
+- [ ] Ouvrir le compte Stripe de production au nom de la micro-entreprise de Quentin (ADR 0025), mentions de la facture Stripe validées par la vérification réglementaire
+- [ ] Abonnement : écran bloquant en fin d'essai (7 jours), avec souscription, export et déconnexion
+- [ ] Espace admin : revoir « essais qui finissent cette semaine », qui couvre désormais tous les essais (7 jours)
 - [x] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
 - [ ] Poser le secret `RESEND_API_KEY` en staging et en production, puis tester un envoi sur chaque environnement
 - [x] Turnstile sur l'inscription, la connexion et le mot de passe oublié
@@ -153,7 +160,11 @@ Dernière mise à jour : 2026-10-24.
 - [x] Prospection, écrans selon la maquette v2 validée le 2026-10-24 (https://claude.ai/artifact/Mga3znKvY8Zx8UAtg9PNTA) : Ma journée, Appels, Série d'appels, fiche, ordinateur et mobile
 - [ ] Prospection, écrans : tuiles Mails, Campagnes, Ma semaine et conseils de Ma journée ; onglets Prioritaires et Faits aujourd'hui des Appels ; nombre d'entreprises qui correspondent à une série (avec les PR mails, campagnes, statistiques)
 - [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
-- [ ] Prospection, configuration de la boîte mail dans le profil (admin pour un autre membre), envoi SMTP, rappels par e-mail
+- [x] Prospection, boîte mail : données et API (réglages, mot de passe chiffré, test d'envoi SMTP, journal, e-mail récapitulatif) (ADR 0028)
+- [x] Prospection, rappels par e-mail : cron toutes les 5 minutes sur `notify_at`, index partiel, envoi par Resend (ADR 0028)
+- [ ] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
+- [ ] Créer le secret `MAIL_SECRET_KEY` en staging et en production avant le déploiement de la boîte mail (sur demande de Quentin)
+- [ ] Prospection, boîte mail : récapitulatif quotidien, vérification nocturne du domaine (SPF, DKIM, DMARC), historique des changements à l'écran
 - [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
 - [ ] Prospection, campagnes : envoi programmé, montée progressive de 5 à 25 par jour, créneau 8 h à 11 h
 - [ ] Prospection, statistiques : réponses, rendez-vous, taux de décroché par heure
@@ -202,7 +213,7 @@ Dernière mise à jour : 2026-10-24.
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
 - [x] Barre de navigation commune, pages par activité, pages fonction, histoires de terrain, page Sans réseau, SEO complet (maquette : https://claude.ai/artifact/6LZhtqB84KkzXpjxumRoqt)
-- [x] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com, ADR 0028)
+- [x] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com, ADR 0030)
 - [ ] Comptage des visites par page et par jour, sans donnée personnelle
 - [ ] Ajouter passalio.com et staging.passalio.com au widget Turnstile avant de déployer le site
 - [ ] Publier les pages Certificat, Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et leurs histoires quand la fonction est en production (`isPublished`)

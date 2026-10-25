@@ -1,6 +1,7 @@
 import { app } from "./app";
 import { isAuthorizationServerRequest, serveAuthorizationServer } from "./contexts/mcp";
 import type { Bindings } from "./env";
+import { handleScheduled } from "./jobs/scheduled";
 
 export const handleRequest = async (
   request: Request,
@@ -11,6 +12,6 @@ export const handleRequest = async (
     ? serveAuthorizationServer(request, env, executionContext)
     : app.fetch(request, env, executionContext);
 
-const worker: ExportedHandler<Bindings> = { fetch: handleRequest };
+const worker: ExportedHandler<Bindings> = { fetch: handleRequest, scheduled: handleScheduled };
 
 export default worker;

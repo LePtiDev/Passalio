@@ -94,4 +94,24 @@ export const PLATFORM_QUERIES: readonly CatalogedQuery[] = [
     query: "accept a team invitation",
     run: (r, s) => r.teamInvitations.accept(aTeamInvitation(s.superadmin.id), s.salesperson.id),
   },
+  {
+    method: "platformSettings.findSignUpSettings",
+    query: "is sign-up open, on every sign-up and new company",
+    run: (r) => r.platformSettings.findSignUpSettings(),
+  },
+  {
+    method: "platformSettings.saveSignUpSettings",
+    query: "open or close sign-up",
+    run: (r, s) =>
+      r.platformSettings.saveSignUpSettings({
+        isSignUpOpen: false,
+        changedAt: LATER,
+        changedByUserId: s.superadmin.id,
+      }),
+  },
+  {
+    method: "pendingInvitations.hasPendingInvitation",
+    query: "pending company or team invitation of a person who signs up while sign-up is closed",
+    run: (r, s) => r.pendingInvitations.hasPendingInvitation(s.teamInvitation.email, LATER),
+  },
 ];

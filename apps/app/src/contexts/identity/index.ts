@@ -2,6 +2,7 @@ export { AuthLayout } from "./components/auth-layout";
 export { ForgotPasswordForm } from "./components/forgot-password-form";
 export { ResetPasswordForm } from "./components/reset-password-form";
 export { SignUpForm } from "./components/sign-up-form";
+export { SignUpScreen } from "./components/sign-up-screen";
 export { AcceptInvitationCard } from "./components/accept-invitation-card";
 export { SignInForm } from "./components/sign-in-form";
 export { OrganizationBadge } from "./components/organization-badge";

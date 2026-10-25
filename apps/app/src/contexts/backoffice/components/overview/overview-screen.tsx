@@ -1,9 +1,12 @@
-import { useCallback } from "react";
+import { Link } from "@tanstack/react-router";
+import { SlidersHorizontal } from "lucide-react";
+import { useCallback, useMemo } from "react";
 import { ErrorState } from "@/components/error-state";
 import { monthYearOf } from "../../calendar-labels";
 import { backofficeFr } from "../../fr";
 import { useOverview } from "../../hooks/use-backoffice-queries";
 import { useNow } from "../../hooks/use-now";
+import { settingsFr } from "../../settings-fr";
 import { AdminHeading, AdminPage, type AdminTrailStep } from "../shell/admin-page";
 import { DroppingCard } from "./dropping-card";
 import { MovementsCard } from "./movements-card";
@@ -15,13 +18,36 @@ const text = backofficeFr.overview;
 
 const TRAIL: readonly AdminTrailStep[] = [{ label: text.title }];
 
-export const OverviewScreen = () => {
+const SettingsLink = () => (
+  <Link
+    to="/admin/reglages"
+    aria-label={settingsFr.open}
+    className="-mr-2 flex size-12 shrink-0 items-center justify-center rounded-xl text-[#0F2A44]"
+  >
+    <SlidersHorizontal aria-hidden="true" className="size-[22px]" />
+  </Link>
+);
+
+export const OverviewScreen = ({
+  canManageSettings = false,
+}: {
+  readonly canManageSettings?: boolean;
+}) => {
   const overview = useOverview();
   const { refetch } = overview;
   const retry = useCallback(() => void refetch(), [refetch]);
   const month = monthYearOf(useNow());
+  const mobileAction = useMemo(
+    () => (canManageSettings ? <SettingsLink /> : undefined),
+    [canManageSettings],
+  );
   return (
-    <AdminPage trail={TRAIL} mobileTitle={text.title} mobileSubtitle={text.mobileSubtitle(month)}>
+    <AdminPage
+      trail={TRAIL}
+      mobileTitle={text.title}
+      mobileSubtitle={text.mobileSubtitle(month)}
+      mobileAction={mobileAction}
+    >
       <AdminHeading title={text.title} subtitle={text.subtitle(month)} />
       {overview.isPending ? <OverviewSkeleton /> : null}
       {overview.isError ? <ErrorState error={overview.error} onRetry={retry} /> : null}

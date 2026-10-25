@@ -11,6 +11,26 @@ const priceSectionText = () => {
   return section.blocks.flatMap((block) => (block.kind === "list" ? block.items : [])).join("\n");
 };
 
+const trialSectionText = () => {
+  const section = TERMS_FR.sections.find((candidate) => candidate.id === "essai");
+  if (section === undefined) {
+    throw new Error("no trial section");
+  }
+  return section.blocks.map((block) => (block.kind === "paragraph" ? block.text : "")).join("\n");
+};
+
+describe("free trial (ADR 0025)", () => {
+  it("lasts 7 days without a payment method", () => {
+    expect(trialSectionText()).toContain("gratuitement pendant 7 jours, sans moyen de paiement.");
+  });
+
+  it("blocks the workspace at the end of the trial, configured or not, except subscribing, exporting and signing out", () => {
+    expect(trialSectionText()).toContain(
+      "que l'espace soit configuré ou non, il est bloqué jusqu'à la souscription d'un abonnement : vous pouvez seulement souscrire, exporter vos données et vous déconnecter.",
+    );
+  });
+});
+
 describe("subscription prices (ADR 0025)", () => {
   it("lists the Solo plan for one technician at 29 € a month or 290 € a year", () => {
     expect(priceSectionText()).toContain(

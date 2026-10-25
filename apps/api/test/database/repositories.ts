@@ -15,6 +15,8 @@ import { createD1MemberRepository } from "../../src/contexts/identity/infrastruc
 import { createD1OrganizationRepository } from "../../src/contexts/identity/infrastructure/d1-organization-repository";
 import { findMcpCaller } from "../../src/contexts/mcp/infrastructure/mcp-caller-repository";
 import { countMcpCall } from "../../src/contexts/mcp/infrastructure/mcp-rate-limit";
+import { createD1PendingInvitationLookup } from "../../src/contexts/platform-settings/infrastructure/d1-pending-invitation-lookup";
+import { createD1PlatformSettingsRepository } from "../../src/contexts/platform-settings/infrastructure/d1-platform-settings-repository";
 import { createD1TeamInvitationRepository } from "../../src/contexts/platform-team/infrastructure/d1-team-invitation-repository";
 import { createD1TeammateRepository } from "../../src/contexts/platform-team/infrastructure/d1-teammate-repository";
 import { createD1CallRepository } from "../../src/contexts/sales/infrastructure/d1-call-repository";
@@ -22,6 +24,9 @@ import { createD1CompanyRepository } from "../../src/contexts/sales/infrastructu
 import { createD1ContactRepository } from "../../src/contexts/sales/infrastructure/d1-contact-repository";
 import { createD1EventRepository } from "../../src/contexts/sales/infrastructure/d1-event-repository";
 import { createD1FollowUpRepository } from "../../src/contexts/sales/infrastructure/d1-follow-up-repository";
+import { createD1MailMemberDirectory } from "../../src/contexts/sales/infrastructure/d1-mail-member-directory";
+import { createD1MailSettingsRepository } from "../../src/contexts/sales/infrastructure/d1-mail-settings-repository";
+import { createD1ReminderRepository } from "../../src/contexts/sales/infrastructure/d1-reminder-repository";
 import { createD1TaskRepository } from "../../src/contexts/sales/infrastructure/d1-task-repository";
 import { createD1VisitorRateLimit } from "../../src/contexts/sales/infrastructure/d1-visitor-rate-limit";
 import { mainContactsOf } from "../../src/contexts/sales/infrastructure/main-contacts";
@@ -70,6 +75,9 @@ export const createRepositories = (database: Database) => {
     prospectCalls: createD1CallRepository(database),
     prospectFollowUps: createD1FollowUpRepository(database),
     prospectTasks: createD1TaskRepository(database),
+    mailSettings: createD1MailSettingsRepository(database),
+    mailMembers: createD1MailMemberDirectory(database),
+    reminders: createD1ReminderRepository(database),
     prospectMainContacts: {
       of: (companyIds: readonly string[]) => mainContactsOf(database, companyIds),
     },
@@ -80,6 +88,8 @@ export const createRepositories = (database: Database) => {
     backofficeJournal: createD1JournalReadModel(database),
     teammates: createD1TeammateRepository(database),
     teamInvitations: createD1TeamInvitationRepository(database),
+    platformSettings: createD1PlatformSettingsRepository(database),
+    pendingInvitations: createD1PendingInvitationLookup(database),
     mcp: {
       findCaller: (userId: string) => findMcpCaller(database, userId),
       countCall: (userId: string, now: Date) => countMcpCall(database, userId, now),

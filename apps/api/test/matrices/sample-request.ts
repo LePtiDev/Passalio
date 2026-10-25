@@ -42,7 +42,7 @@ export const withoutBody = (method: "POST" | "DELETE", path: string): SampleRequ
 });
 
 export const withJson = <Schema extends z.ZodType>(
-  method: "POST" | "PATCH",
+  method: "POST" | "PATCH" | "PUT",
   path: string,
   schema: Schema,
   body: z.input<Schema>,

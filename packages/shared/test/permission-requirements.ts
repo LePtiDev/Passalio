@@ -157,6 +157,10 @@ export const PLATFORM_PERMISSION_REQUIREMENTS: Readonly<
     architectureRule: "superadmin : y compris l'équipe Passalio (team:manage)",
     grantedTo: ["superadmin"],
   },
+  "settings:manage": {
+    architectureRule: "superadmin : y compris les réglages de la plateforme (settings:manage)",
+    grantedTo: ["superadmin"],
+  },
   "mcp:connect": {
     architectureRule: "Permission mcp:connect (super admin, admin)",
     grantedTo: EVERY_BACKOFFICE_ROLE,

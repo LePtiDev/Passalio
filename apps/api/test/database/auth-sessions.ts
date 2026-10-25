@@ -13,6 +13,7 @@ const PASSWORD = "mot-de-passe-de-test";
 const authOn = (database: Database, traceId: string) =>
   createAuth({
     database,
+    signUpGate: { canSignUp: async () => true },
     emailSender: createEmailSender(
       {
         delivery: "disabled",

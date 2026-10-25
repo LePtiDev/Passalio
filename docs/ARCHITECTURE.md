@@ -54,19 +54,20 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 
 ## 3. Contextes métier (DDD léger)
 
-| Contexte        | Responsabilité                                                       |
-| --------------- | -------------------------------------------------------------------- |
-| `identity`      | Comptes, entreprises, membres, rôles, permissions, impersonation     |
-| `customers`     | Clients, lieux, équipements, historique                              |
-| `scheduling`    | Interventions, tournées, confirmation J-1, suivi d'arrivée           |
-| `compliance`    | Attestations, signature, PDF, numérotation, versions                 |
-| `engagement`    | Échéances, relances, envois email/SMS                                |
-| `billing`       | Abonnement Stripe (`docs/stripe.md`), état du compte                 |
-| `backoffice`    | Outils internes : support, impersonation, métriques                  |
-| `sales`         | Prospection de Passalio : entreprises, contacts, étapes, historique  |
-| `platform-team` | Équipe Passalio : membres, rôles plateforme, invitations             |
-| `mcp`           | Serveur MCP admin : OAuth, consentement, outils pour Claude          |
-| `sync`          | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes |
+| Contexte            | Responsabilité                                                           |
+| ------------------- | ------------------------------------------------------------------------ |
+| `identity`          | Comptes, entreprises, membres, rôles, permissions, impersonation         |
+| `customers`         | Clients, lieux, équipements, historique                                  |
+| `scheduling`        | Interventions, tournées, confirmation J-1, suivi d'arrivée               |
+| `compliance`        | Attestations, signature, PDF, numérotation, versions                     |
+| `engagement`        | Échéances, relances, envois email/SMS                                    |
+| `billing`           | Abonnement Stripe (`docs/stripe.md`), état du compte                     |
+| `backoffice`        | Outils internes : support, impersonation, métriques                      |
+| `sales`             | Prospection de Passalio : entreprises, contacts, étapes, historique      |
+| `platform-team`     | Équipe Passalio : membres, rôles plateforme, invitations                 |
+| `platform-settings` | Réglages de la plateforme : ouvrir ou fermer les inscriptions (ADR 0029) |
+| `mcp`               | Serveur MCP admin : OAuth, consentement, outils pour Claude              |
+| `sync`              | Routes `/sync/push` et `/sync/pull`, assemblent les autres contextes     |
 
 Communication entre contextes : appel via l'`index.ts` public, ou événement de domaine en mémoire (`DocumentSigned` → `engagement` programme la relance). Pas d'event sourcing, pas de CQRS, pas de bus externe.
 
@@ -136,13 +137,13 @@ Règle : `domain/` n'importe rien d'autre que `packages/shared`. Les use cases d
 
 ### Rôles plateforme (équipe interne)
 
-- `superadmin` (Super admin) : tout le backoffice, y compris l'équipe Passalio (`team:manage`).
-- `admin` (Admin) : tout le backoffice sauf l'équipe (ADR 0018, remplace `support`).
+- `superadmin` (Super admin) : tout le backoffice, y compris l'équipe Passalio (`team:manage`) et les réglages de la plateforme (`settings:manage`, ADR 0029).
+- `admin` (Admin) : tout le backoffice sauf l'équipe et les réglages (ADR 0018, remplace `support`).
 - `sales` (Commercial) : seulement la prospection, pas les comptes clients (ADR 0017).
 
 Permissions plateforme dans `packages/shared/src/platform-permissions.ts`, vérifiées par `assertPlatformCan`. Routes sous `/api/admin`, protégées par `requirePlatformActor` (contexte `backoffice`). Le rôle se donne depuis la page « Équipe Passalio » par invitation (ADR 0018), ou en urgence avec `pnpm platform:grant --env <local|staging|production> --email <email> --role <superadmin|admin|sales>` et se retire avec `pnpm platform:revoke`. Double authentification obligatoire. Lecture des comptes clients : `GET /api/admin/overview`, `/accounts`, `/accounts/:id` (et `/members`, `/usage`, `/journal`), `/journal`, réponses décrites par les schémas zod de `packages/shared/src/backoffice-responses.ts`. L'utilisation se mesure en jours d'utilisation par personne (`activity_days`). Voir ADR 0015.
 
-Écrans de l'espace admin (`apps/app/src/contexts/backoffice/`) : `/admin` (vue d'ensemble), `/admin/comptes?filtre=&recherche=`, `/admin/comptes/:accountId?onglet=personnel|utilisation|journal`, `/admin/journal`, `/admin/equipe` (super admin seulement : membres, invitations, changer un rôle, retirer). L'invitation s'accepte sur `/equipe-passalio/invitations/:id` après connexion ou création de compte avec la même adresse. Avant d'entrer, le garde de route appelle `/api/admin/me` : 404 renvoie à l'accueil, 403 à `/admin/securite` (activation de la double authentification : mot de passe, QR code, codes de secours), 401 à `/admin/code`. Une connexion par mot de passe d'un compte à double authentification passe par `/connexion/code`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
+Écrans de l'espace admin (`apps/app/src/contexts/backoffice/`) : `/admin` (vue d'ensemble), `/admin/comptes?filtre=&recherche=`, `/admin/comptes/:accountId?onglet=personnel|utilisation|journal`, `/admin/journal`, `/admin/equipe` (super admin seulement : membres, invitations, changer un rôle, retirer), `/admin/reglages` (super admin seulement : ouvrir ou fermer les inscriptions, `GET` et `PUT /api/admin/settings/sign-up`, ADR 0029 ; sur mobile, depuis l'icône de la vue d'ensemble). L'invitation s'accepte sur `/equipe-passalio/invitations/:id` après connexion ou création de compte avec la même adresse. Avant d'entrer, le garde de route appelle `/api/admin/me` : 404 renvoie à l'accueil, 403 à `/admin/securite` (activation de la double authentification : mot de passe, QR code, codes de secours), 401 à `/admin/code`. Une connexion par mot de passe d'un compte à double authentification passe par `/connexion/code`. Ce ne sont pas des écrans terrain : ils demandent le réseau.
 
 Un seul propriétaire par entreprise. Il peut transférer ce rôle à un administrateur, qui devient propriétaire pendant que l'ancien devient administrateur. Personne ne peut inviter, nommer ou retirer un propriétaire. Une même personne peut être membre de plusieurs entreprises, avec un rôle par entreprise.
 
@@ -197,6 +198,8 @@ Dans le code : rôles `owner`, `admin`, `secretary`, `technician` (`packages/sha
 - Permissions `prospects:read` et `prospects:write` (rôles `superadmin`, `admin`, `sales`).
 - Routes sous `/api/admin/prospects` : `GET /filters` (départements, personnes de l'équipe), `GET /map?department=&stage=`, `GET` et `POST /companies` (`stage`, `department`, `owner`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /companies/:companyId`, `POST /companies/:companyId/stage`, `/notes`, `/contacts`, `GET /contacts` (`filter=all|leaders|no_phone`, `department`, `q`, `cursor`), `GET`, `PATCH` et `DELETE /contacts/:contactId`. Réponses décrites par `packages/shared/src/prospect-responses.ts`.
 - Appels et rappels (ADR 0024) : tables `prospect_calls` (appels, jamais modifiés), `prospect_follow_ups` (dernier appel et qualification, une ligne par entreprise), `prospect_tasks` (rappels et démos, notification calculée en heure de Paris). Routes `POST /companies/:companyId/calls`, `PATCH /companies/:companyId/qualification`, `GET /companies/:companyId/follow-up`, `GET /my-day`, `GET /call-series?target=never_called|not_reached&department=&cursor=`, `PATCH /tasks/:taskId`. Réponses décrites par `packages/shared/src/prospect-call-responses.ts`.
+- Boîte mail des membres (ADR 0028) : table `platform_mail_settings` (une ligne par membre, mot de passe SMTP chiffré avec `MAIL_SECRET_KEY`, sécurité déduite du port 465 ou 587). Routes `GET` et `PUT /api/admin/mail-settings/:userId`, `POST /api/admin/mail-settings/:userId/test`. Sa propre boîte demande `prospects:write`, celle d'un autre membre `team:manage` ; ce changement est journalisé et le membre reçoit un e-mail récapitulatif. Envoi SMTP par `worker-mailer` quand `EMAIL_DELIVERY=resend`, sinon écrit dans les logs. Schémas dans `packages/shared/src/mail-settings.ts`.
+- Rappels par e-mail (ADR 0028) : cron `*/5 * * * *` (`triggers.crons` de `wrangler.json`, `apps/api/src/jobs/scheduled.ts`) qui appelle `sendDueReminders` du contexte `sales`. Envoi par l'adresse transactionnelle (Resend, gabarit `packages/emails/src/prospect-reminder-email.ts`) à l'adresse des rappels du responsable, sinon à son adresse de connexion, puis `notified_at` est rempli. Chaque exécution démarre une trace et écrit `prospect_reminders_run`.
 - Écrans (espace admin, `apps/app/src/contexts/sales/`) : `/admin/entreprises?etape=&departement=&suivi=&recherche=`, `/admin/entreprises/:companyId`, `/admin/contacts?onglet=&departement=&recherche=`, `/admin/contacts/:contactId`. Onglets par étape, filtres actifs à gauche, recherche et menu « Filtres » à droite. Le menu « Filtres » est en cascade : sur ordinateur, un sous-menu par filtre, ouvert à gauche avec sa flèche vers la gauche ; sur mobile, un panneau du bas à deux niveaux. Au-delà de 7 choix, une recherche filtre la liste (taper « 94 » ou « marne »). Dans tous les menus et listes déroulantes, la coche du choix actif est à droite. Le rôle `sales`, sans `platform:read`, ne voit que Commercial : les pages Plateforme le renvoient vers `/admin/entreprises`.
 - Prospection (`/admin/prospection?etape=&departement=&recherche=&entreprise=`) : onglets À qualifier, Qualifiées, Pas intéressées ; liste à gauche, carte Leaflet (dépendance `leaflet`) sur le fond Plan IGN v2 servi par `data.geopf.fr` (WMTS, sans clé, attribution « © IGN »), points colorés par étape, fiche flottante pour qualifier sans quitter la carte. Sur mobile, carte plein écran, recherche flottante et feuille en bas. La fiche entreprise montre une mini-carte et un lien « Voir sur la carte » (tuile « Carte » sur mobile).
 - Appels (ADR 0024, `apps/app/src/contexts/sales/components/calls/`) : `/admin/journee` (Ma journée : compteurs, rappels et démos du jour et en retard, le plus urgent d'abord), `/admin/appels` (rappels du jour et carte « Appeler en volume » : nombre de 5 à 30, zone, cible), `/admin/appels/serie?departement=&cible=&nombre=` (série), `?depuis=journee` (les rappels de Ma journée à la suite), `?entreprise=&tache=` (un seul appel, depuis un rappel ou « Noter un appel » de la fiche). L'écran d'appel couvre tout l'écran : contact et bouton d'appel, historique, prochaine question, qualification enregistrée au clic, résultat. Sur ordinateur, les choix sont des boutons ; sur mobile, des listes déroulantes et un bouton d'enregistrement fixé en bas. La liste de la série est figée au lancement. Un appel noté clôt le rappel d'où il vient, sinon le premier rappel ouvert dû au plus tard ce soir.
@@ -269,6 +272,7 @@ D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, 
 | `prospect_tasks`         | `(owner_user_id, status, due_at)` pour Ma journée, `(company_id, status)`, `(contact_id)`                                                                                      |
 | `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                       |
 | `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                      |
+| `platform_settings`      | une seule ligne, lue par sa clé primaire ; l'inscription fermée lit `invitations (email)` et `platform_invitations (email, status)`                                            |
 
 Règles :
 

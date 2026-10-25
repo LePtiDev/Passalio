@@ -7,10 +7,12 @@ import {
   MapPin,
   Phone,
   ShieldCheck,
+  SlidersHorizontal,
   Users,
 } from "lucide-react";
 import type { NavigationItem } from "@/components/app-shell/navigation";
 import { backofficeFr } from "../../fr";
+import { settingsFr } from "../../settings-fr";
 import { teamFr } from "../../team-fr";
 
 const text = backofficeFr.shell;
@@ -35,9 +37,16 @@ const TEAM_NAVIGATION: NavigationItem = {
   to: "/admin/equipe",
 };
 
+const SETTINGS_NAVIGATION: NavigationItem = {
+  label: settingsFr.navigation,
+  icon: SlidersHorizontal,
+  to: "/admin/reglages",
+};
+
 export const SUPERADMIN_PLATFORM_NAVIGATION: readonly NavigationItem[] = [
   ...PLATFORM_NAVIGATION,
   TEAM_NAVIGATION,
+  SETTINGS_NAVIGATION,
 ];
 
 export const ADMIN_MOBILE_NAVIGATION: readonly NavigationItem[] = [

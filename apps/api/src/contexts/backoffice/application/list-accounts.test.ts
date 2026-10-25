@@ -103,7 +103,7 @@ describe("listAccounts", () => {
         name: "Ramonage A",
         address: "1 rue du Four, Paris",
         createdAt: "2026-10-20T08:00:00.000Z",
-        trialEndsAt: "2026-11-03T08:00:00.000Z",
+        trialEndsAt: "2026-10-27T08:00:00.000Z",
         isInTrial: true,
         staffCount: 2,
         staff: [
