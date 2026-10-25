@@ -246,6 +246,17 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6    | Route : 201 sans session, 400, 403, 429 après 5 demandes, CORS réservé au site, entreprise inconnue créée une seule fois         | `apps/api/test/website-callback-routes.test.ts`, `apps/api/test/matrices/website-routes.test.ts` |
 | 9       | Plans de requêtes et index des recherches par téléphone, de l'ajout du rappel et de la limite par visiteur                       | `apps/api/test/database`                                                                         |
 
+## Écran Configuration (ADR 0028)
+
+| Famille | Ce qui est vérifié                                                                                                                                                                                            | Test                                              |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| 3       | Formulaire : valeurs de départ (membre, Zoho), mot de passe obligatoire la première fois puis gardé, adresses et serveur vérifiés, champs vides envoyés à `null`, rubrique de la première erreur              | `configuration-form-schema.test.ts`               |
+| 3       | Écran : boîte neuve, fournisseur qui remplit serveur et port, test après enregistrement, erreur du test avec code, lien mot de passe d'application, rubriques, admin pour un autre membre, chargement, erreur | `configuration-screen.test.tsx`                   |
+| 3       | Accès : icône réglages de Ma journée sur mobile                                                                                                                                                               | `admin-layout.test.tsx`, `my-day-screen.test.tsx` |
+| 3       | Menu « Mon compte » (barre latérale admin et ramoneur) : nom seul en bas, menu avec l'adresse entière, Mon profil, Configuration ou Réglages, Se déconnecter en rouge                                         | `admin-layout.test.tsx`, `app-sidebar.test.tsx`   |
+| E2E     | Brancher sa boîte, la tester, régler l'adresse des rappels ; un admin modifie la boîte d'un commercial, mobile et ordinateur                                                                                  | `apps/app/e2e/commercial-configuration.spec.ts`   |
+| A11y    | Accessibilité ordinateur et mobile, zones tactiles de 48 px                                                                                                                                                   | `admin-screens-accessibility.spec.ts`             |
+
 ## Parcours de bout en bout
 
 Chaque parcours tourne sur mobile (360 px) et ordinateur (1440 px). Les écrans ont aussi leur contrôle d'accessibilité et de zones tactiles : `user-screens-*.spec.ts`, `admin-screens-accessibility.spec.ts`, `field-*-accessibility.spec.ts`, `customer-*-accessibility.spec.ts`.

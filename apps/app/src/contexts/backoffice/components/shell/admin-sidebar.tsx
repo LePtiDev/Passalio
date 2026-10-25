@@ -1,10 +1,10 @@
-import { LogOut } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Settings, UserRound } from "lucide-react";
 import logo from "@/assets/passalio-logo.svg";
+import { AccountMenu, AccountMenuLink } from "@/components/app-shell/account-menu";
 import type { NavigationItem } from "@/components/app-shell/navigation";
 import { SidebarLink } from "@/components/app-shell/sidebar-link";
-import { InitialsAvatar } from "@/components/initials-avatar";
 import { fr } from "@/fr";
-import { useSignOutButton } from "@/lib/use-sign-out-button";
 import { canManageTeam, canSeePlatform } from "../../admin-access";
 import type { PlatformAdmin } from "../../backoffice-api";
 import { backofficeFr } from "../../fr";
@@ -15,6 +15,8 @@ import {
 } from "./admin-navigation";
 
 const text = backofficeFr.shell;
+
+const PROFILE_SEARCH = { rubrique: "profil" } as const;
 
 const NavigationGroup = ({
   title,
@@ -32,7 +34,6 @@ const NavigationGroup = ({
 );
 
 export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
-  const { signOut, isSigningOut } = useSignOutButton();
   return (
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-5 border-r border-[#E3E8EF] bg-[#F7F9FB] px-3 py-4 lg:flex">
       <div className="flex items-center gap-2 px-2.5">
@@ -50,22 +51,21 @@ export const AdminSidebar = ({ admin }: { readonly admin: PlatformAdmin }) => {
           />
         ) : null}
       </nav>
-      <div className="flex items-center gap-2.5 border-t border-[#E3E8EF] px-2.5 pt-3.5">
-        <InitialsAvatar name={admin.name} tone="mint" size="small" />
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate text-[13px] font-semibold">{admin.name}</span>
-          <span className="truncate text-xs text-[#64748B]">{admin.email}</span>
-        </span>
-        <button
-          type="button"
-          onClick={signOut}
-          disabled={isSigningOut}
-          aria-label={fr.app.signOut}
-          title={fr.app.signOut}
-          className="flex size-8 shrink-0 items-center justify-center rounded-md text-[#64748B] hover:bg-[#EEF3F8] hover:text-[#0F2A44]"
-        >
-          <LogOut aria-hidden="true" className="size-4" />
-        </button>
+      <div className="border-t border-[#E3E8EF] pt-3">
+        <AccountMenu user={admin}>
+          <AccountMenuLink>
+            <Link to="/admin/configuration" search={PROFILE_SEARCH}>
+              <UserRound aria-hidden="true" />
+              {text.profile}
+            </Link>
+          </AccountMenuLink>
+          <AccountMenuLink>
+            <Link to="/admin/configuration">
+              <Settings aria-hidden="true" />
+              {text.configuration}
+            </Link>
+          </AccountMenuLink>
+        </AccountMenu>
       </div>
     </aside>
   );

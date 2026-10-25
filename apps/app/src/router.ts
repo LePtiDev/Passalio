@@ -26,6 +26,7 @@ import {
   adminContactsRoute,
 } from "./routes/admin-commercial";
 import { adminCallSessionRoute, adminCallsRoute, adminMyDayRoute } from "./routes/admin-calls";
+import { adminConfigurationRoute } from "./routes/admin-configuration";
 import { adminMcpAuthorizeRoute } from "./routes/admin-mcp";
 import { adminCodeRoute, adminSecurityRoute } from "./routes/admin-security";
 import { forgotPasswordRoute } from "./routes/forgot-password";
@@ -94,6 +95,7 @@ const routeTree = rootRoute.addChildren([
       adminMyDayRoute,
       adminCallsRoute,
       adminCallSessionRoute,
+      adminConfigurationRoute,
     ]),
   ]),
   signedInRoute.addChildren([

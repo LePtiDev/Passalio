@@ -100,4 +100,15 @@ describe("MyDayScreen", () => {
     await user.click(within(alert).getByRole("button", { name: fr.errors.retry }));
     expect(await screen.findByText(text.emptyTitle)).toBeVisible();
   });
+
+  it("opens the configuration from the mobile header", async () => {
+    installFakeApi({ [MY_DAY_ROUTE]: jsonReply(myDay()) });
+
+    renderScreen(<MyDayScreen />, { path: "/admin/journee" });
+
+    expect(await screen.findByRole("link", { name: text.configuration })).toHaveAttribute(
+      "href",
+      "/admin/configuration",
+    );
+  });
 });
