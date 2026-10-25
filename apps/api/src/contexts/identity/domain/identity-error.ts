@@ -13,6 +13,8 @@ export type IdentityError =
   | "sign_up_closed"
   | "invalid_siret"
   | "invalid_document_numbering"
+  | "invalid_ape_code"
+  | "document_number_already_used"
   | "invalid_logo"
   | "logo_not_found"
   | "company_search_unavailable";

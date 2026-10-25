@@ -1,5 +1,5 @@
-import { members, organizations } from "@passalio/db";
-import { and, eq, isNull } from "drizzle-orm";
+import { documentNumberBlocks, members, organizations } from "@passalio/db";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import type { Database } from "../../../platform/database";
 import type { OrganizationRepository } from "../domain/identity-ports";
 
@@ -33,8 +33,25 @@ export const createD1OrganizationRepository = (database: Database): Organization
         brandColor: organizations.brandColor,
         documentNumberPrefix: organizations.documentNumberPrefix,
         nextDocumentNumber: organizations.nextDocumentNumber,
+        legalForm: organizations.legalForm,
+        shareCapitalEuros: organizations.shareCapitalEuros,
+        registryKind: organizations.registryKind,
+        registryCity: organizations.registryCity,
+        apeCode: organizations.apeCode,
+        qualification: organizations.qualification,
+        documentTemplate: organizations.documentTemplate,
+        contactEmail: organizations.contactEmail,
+        website: organizations.website,
+        customerMessage: organizations.customerMessage,
+        footerText: organizations.footerText,
+        isAdviceAttachedByDefault: organizations.isAdviceAttachedByDefault,
         logoKey: organizations.logo,
         onboardingCompletedAt: organizations.onboardingCompletedAt,
+        hasReservedNumbers: sql<boolean>`exists ${database
+          .select({ id: documentNumberBlocks.id })
+          .from(documentNumberBlocks)
+          .where(eq(documentNumberBlocks.organizationId, organizationId))
+          .limit(1)}`.mapWith(Boolean),
       })
       .from(organizations)
       .where(activeOrganization(organizationId))

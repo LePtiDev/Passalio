@@ -1,4 +1,4 @@
-import { DEFAULT_BRAND_COLOR, ok } from "@passalio/shared";
+import { DEFAULT_BRAND_COLOR, DEFAULT_DOCUMENT_TEMPLATE, ok } from "@passalio/shared";
 import type { CompanySummary } from "../domain/company-summary";
 import type { IdentityAuditEntry, IdentityDependencies } from "../domain/identity-ports";
 import type { Invitation, Member, TeamMember } from "../domain/identity-models";
@@ -44,8 +44,21 @@ export const inMemoryOrganization = (
   brandColor: DEFAULT_BRAND_COLOR,
   documentNumberPrefix: "",
   nextDocumentNumber: 1,
+  legalForm: null,
+  shareCapitalEuros: null,
+  registryKind: null,
+  registryCity: null,
+  apeCode: null,
+  qualification: null,
+  documentTemplate: DEFAULT_DOCUMENT_TEMPLATE,
+  contactEmail: null,
+  website: null,
+  customerMessage: null,
+  footerText: null,
+  isAdviceAttachedByDefault: true,
   logoKey: null,
   onboardingCompletedAt: null,
+  hasReservedNumbers: false,
   ...organization,
 });
 
@@ -222,6 +235,9 @@ export const createInMemoryIdentityDependencies = (
       get: async (key) => {
         const contentType = state.logos.get(key);
         return contentType === undefined ? undefined : { body: new Blob([]).stream(), contentType };
+      },
+      delete: async (key) => {
+        state.logos.delete(key);
       },
     },
     companyDirectory: {

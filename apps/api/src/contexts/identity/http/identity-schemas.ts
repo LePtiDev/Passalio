@@ -1,10 +1,14 @@
 import {
   BRAND_COLORS,
+  CONTACT_TEXT_MAX_LENGTH,
+  DOCUMENT_TEMPLATES,
+  DOCUMENT_TEXT_MAX_LENGTH,
   MAX_FIRST_DOCUMENT_NUMBER,
+  MAX_SHARE_CAPITAL_EUROS,
   ORGANIZATION_ROLES,
   TEAM_SIZES,
 } from "@passalio/shared";
-import { TRADE_IDS } from "@passalio/trades";
+import { COMPANY_TEXT_MAX_LENGTH, LEGAL_FORMS, REGISTRY_KINDS, TRADE_IDS } from "@passalio/trades";
 import * as z from "zod";
 import {
   ORGANIZATION_NAME_MAX_LENGTH,
@@ -35,6 +39,18 @@ export const updateOrganizationBody = z.object({
   brandColor: z.enum(BRAND_COLORS).optional(),
   documentNumberPrefix: z.string().max(12).optional(),
   nextDocumentNumber: z.int().min(1).max(MAX_FIRST_DOCUMENT_NUMBER).optional(),
+  legalForm: z.enum(LEGAL_FORMS).nullable().optional(),
+  shareCapitalEuros: z.int().min(1).max(MAX_SHARE_CAPITAL_EUROS).nullable().optional(),
+  registryKind: z.enum(REGISTRY_KINDS).nullable().optional(),
+  registryCity: z.string().max(COMPANY_TEXT_MAX_LENGTH).nullable().optional(),
+  apeCode: z.string().max(10).nullable().optional(),
+  qualification: z.string().max(COMPANY_TEXT_MAX_LENGTH).nullable().optional(),
+  documentTemplate: z.enum(DOCUMENT_TEMPLATES).optional(),
+  contactEmail: z.email().max(CONTACT_TEXT_MAX_LENGTH).nullable().optional(),
+  website: z.string().max(CONTACT_TEXT_MAX_LENGTH).nullable().optional(),
+  customerMessage: z.string().max(DOCUMENT_TEXT_MAX_LENGTH).nullable().optional(),
+  footerText: z.string().max(DOCUMENT_TEXT_MAX_LENGTH).nullable().optional(),
+  isAdviceAttachedByDefault: z.boolean().optional(),
 });
 
 export const companySearchQuery = z.object({

@@ -20,3 +20,15 @@ export const LOGO_CONTENT_TYPES = [
   "image/jpeg",
   "image/webp",
 ] as const;
+
+export const DOCUMENT_TEMPLATES = ["banner", "plain"] as const;
+
+export type DocumentTemplate = (typeof DOCUMENT_TEMPLATES)[number];
+
+export const DEFAULT_DOCUMENT_TEMPLATE: DocumentTemplate = "banner";
+
+export const DOCUMENT_TEXT_MAX_LENGTH = 300;
+
+export const CONTACT_TEXT_MAX_LENGTH = 120;
+
+export const MAX_SHARE_CAPITAL_EUROS = 1_000_000_000;

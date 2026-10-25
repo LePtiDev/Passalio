@@ -1,7 +1,11 @@
-import { assertCan, ok, type Actor, type Result } from "@passalio/shared";
+import { assertCan, err, ok, type Actor, type Result } from "@passalio/shared";
 import type { IdentityError } from "../domain/identity-error";
 import type { IdentityDependencies } from "../domain/identity-ports";
-import { normalizeProfileChanges, type ProfileChanges } from "../domain/organization-profile";
+import {
+  isNumberingRewound,
+  normalizeProfileChanges,
+  type ProfileChanges,
+} from "../domain/organization-profile";
 
 export const updateOrganizationProfile =
   ({ organizations, auditTrail }: Pick<IdentityDependencies, "organizations" | "auditTrail">) =>
@@ -10,6 +14,13 @@ export const updateOrganizationProfile =
     const normalized = normalizeProfileChanges(changes);
     if (!normalized.isOk) {
       return normalized;
+    }
+    const profile = await organizations.findProfile(actor.organizationId);
+    if (profile === undefined) {
+      return err("organization_not_found");
+    }
+    if (isNumberingRewound(profile, normalized.value)) {
+      return err("document_number_already_used");
     }
     await organizations.updateProfile(actor.organizationId, normalized.value);
     await auditTrail.record({

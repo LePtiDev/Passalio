@@ -4,13 +4,14 @@ import { validateJson, validateQuery } from "../../../platform/validation";
 import { completeOnboarding } from "../application/complete-onboarding";
 import { getOrganizationLogo } from "../application/get-organization-logo";
 import { getOrganizationProfile } from "../application/get-organization-profile";
+import { removeOrganizationLogo } from "../application/remove-organization-logo";
 import { searchCompanies } from "../application/search-companies";
 import { updateOrganizationProfile } from "../application/update-organization-profile";
 import { uploadOrganizationLogo } from "../application/upload-organization-logo";
 import { identityDependencies } from "./identity-context";
 import { identityErrorResponse } from "./identity-responses";
 import { companySearchQuery, updateOrganizationBody } from "./identity-schemas";
-import { toOrganizationResponse } from "./organization-response";
+import { toDocumentSettingsResponse, toOrganizationResponse } from "./organization-response";
 import { requireActor, requireUser, type ActorEnv, type UserEnv } from "./require-actor";
 
 const LOGO_HEADERS = {
@@ -40,6 +41,14 @@ const organizationSettingsRoutes = new Hono<ActorEnv>()
       ? context.json({ organization: toOrganizationResponse(result.value) })
       : identityErrorResponse(context, result.error, context.get("traceId"));
   })
+  .get("/organization/document-settings", async (context) => {
+    const result = await getOrganizationProfile(identityDependencies(context.var, context.env))(
+      context.get("actor"),
+    );
+    return result.isOk
+      ? context.json({ settings: toDocumentSettingsResponse(result.value) })
+      : identityErrorResponse(context, result.error, context.get("traceId"));
+  })
   .patch("/organization", validateJson(updateOrganizationBody), async (context) => {
     const result = await updateOrganizationProfile(identityDependencies(context.var, context.env))(
       context.get("actor"),
@@ -60,6 +69,14 @@ const organizationSettingsRoutes = new Hono<ActorEnv>()
         body: await context.req.arrayBuffer(),
         contentType: context.req.header("content-type") ?? "",
       },
+    );
+    return result.isOk
+      ? context.body(null, 204)
+      : identityErrorResponse(context, result.error, context.get("traceId"));
+  })
+  .delete("/organization/logo", async (context) => {
+    const result = await removeOrganizationLogo(identityDependencies(context.var, context.env))(
+      context.get("actor"),
     );
     return result.isOk
       ? context.body(null, 204)
