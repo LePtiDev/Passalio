@@ -6,7 +6,15 @@ const CORS = {
   "access-control-expose-headers": "x-trace-id",
 };
 
+const PASSING_TURNSTILE = `window.turnstile = {
+  render: (container, options) => { setTimeout(() => options.callback("jeton-e2e"), 0); return "widget"; },
+  reset: () => undefined,
+};`;
+
 test.beforeEach(async ({ page }) => {
+  await page.route("https://challenges.cloudflare.com/**", (route) =>
+    route.fulfill({ contentType: "text/javascript", body: PASSING_TURNSTILE }),
+  );
   await page.goto("/sans-reseau");
 });
 
@@ -35,6 +43,7 @@ test("sends the request and confirms when we will call", async ({ page }) => {
   await page.getByLabel("Prénom").fill("Julien");
   await page.getByLabel("Entreprise").fill("Ramonage Martin");
   await page.getByRole("textbox", { name: "Téléphone" }).fill("06.12.34.56.78");
+  await page.getByLabel("Code postal").fill("94100");
   await page.getByLabel("Moment").selectOption("afternoon");
   await page.getByRole("button", { name: "Être rappelé", exact: true }).click();
 
@@ -46,9 +55,11 @@ test("sends the request and confirms when we will call", async ({ page }) => {
     firstName: "Julien",
     company: "Ramonage Martin",
     phone: "0612345678",
+    postalCode: "94100",
     slot: "afternoon",
     message: null,
     pagePath: "/sans-reseau",
+    turnstileToken: "jeton-e2e",
   });
 });
 
@@ -62,6 +73,7 @@ test("shows the short trace code when the server refuses", async ({ page }) => {
   );
   await page.getByLabel("Prénom").fill("Julien");
   await page.getByRole("textbox", { name: "Téléphone" }).fill("0612345678");
+  await page.getByLabel("Code postal").fill("94100");
   await page.getByRole("button", { name: "Être rappelé", exact: true }).click();
 
   await expect(page.getByRole("alert")).toHaveText(
@@ -74,6 +86,7 @@ test("asks to check the connection when the request cannot leave", async ({ page
   await page.route(ENDPOINT, (route) => route.abort());
   await page.getByLabel("Prénom").fill("Julien");
   await page.getByRole("textbox", { name: "Téléphone" }).fill("0612345678");
+  await page.getByLabel("Code postal").fill("94100");
   await page.getByRole("button", { name: "Être rappelé", exact: true }).click();
 
   await expect(page.getByRole("alert")).toHaveText(
