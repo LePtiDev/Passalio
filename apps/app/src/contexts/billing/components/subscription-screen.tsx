@@ -98,7 +98,7 @@ export const SubscriptionScreen = ({
           />
         </span>
       </MobileTopBar>
-      <div className="flex w-full flex-col leading-[normal] lg:max-w-[968px] gap-3.5 p-4 pb-8 lg:gap-5 lg:p-6">
+      <div className="flex w-full flex-col leading-[normal] gap-3.5 p-4 pb-8 lg:gap-5 lg:p-6">
         <div className="hidden flex-col gap-1 lg:flex">
           <h1 className="text-[20px] font-bold tracking-[-0.015em]">{billingFr.title}</h1>
           <p className="text-[13px] text-[#475569]">{billingFr.intro}</p>
