@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { unwrap } from "@/lib/api-client";
+import { logoForPdf } from "@/lib/pdf/logo-for-pdf";
 import { identityApi, type OrganizationChanges } from "../identity-api";
 
 export const ORGANIZATION_QUERY_KEY = ["identity", "organization"] as const;
@@ -10,6 +11,19 @@ export const useOrganization = () =>
   useQuery({
     queryKey: ORGANIZATION_QUERY_KEY,
     queryFn: async () => unwrap(await identityApi.fetchOrganization()),
+  });
+
+export const useOrganizationPdfLogo = (hasLogo: boolean) =>
+  useQuery({
+    queryKey: [...ORGANIZATION_QUERY_KEY, "pdf-logo"],
+    enabled: hasLogo,
+    queryFn: async () => {
+      const response = await fetch(ORGANIZATION_LOGO_URL, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("logo_unavailable");
+      }
+      return logoForPdf(await response.blob());
+    },
   });
 
 export const useUpdateOrganization = () => {

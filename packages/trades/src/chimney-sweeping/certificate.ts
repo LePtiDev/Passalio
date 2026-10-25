@@ -1,9 +1,12 @@
 import { CALENDAR_DATE_PATTERN } from "@passalio/shared";
 import * as z from "zod";
+import { documentBranding } from "../document-branding";
 import { ENERGIES, EQUIPMENT_KINDS } from "../equipment-catalog";
 import { FLUE_TYPES } from "../equipment-details";
 
 export const CERTIFICATE_TEMPLATE_VERSION = 1;
+
+export const BRANDED_CERTIFICATE_TEMPLATE_VERSION = 2;
 
 export const LEGAL_FORMS = ["ei", "eurl", "sarl", "sasu", "sas", "sa", "other"] as const;
 
@@ -84,5 +87,12 @@ export const chimneySweepingCertificate = z.strictObject({
 });
 
 export type ChimneySweepingCertificate = z.infer<typeof chimneySweepingCertificate>;
+
+export const brandedChimneySweepingCertificate = z.strictObject({
+  ...chimneySweepingCertificate.shape,
+  branding: documentBranding,
+});
+
+export type BrandedChimneySweepingCertificate = z.infer<typeof brandedChimneySweepingCertificate>;
 
 export type CertificateCompany = ChimneySweepingCertificate["company"];

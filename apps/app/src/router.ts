@@ -38,6 +38,11 @@ import {
   onboardingTeamRoute,
   onboardingTradesRoute,
 } from "./routes/onboarding";
+import {
+  certificateFormRoute,
+  certificateSignRoute,
+  signedCertificatesRoute,
+} from "./routes/certificates";
 import { newVisitRoute, planningRoute, visitRoute } from "./routes/planning";
 import { resetPasswordRoute } from "./routes/reset-password";
 import {
@@ -108,6 +113,9 @@ const routeTree = rootRoute.addChildren([
     planningRoute,
     newVisitRoute,
     visitRoute,
+    certificateFormRoute,
+    certificateSignRoute,
+    signedCertificatesRoute,
   ]),
 ]);
 

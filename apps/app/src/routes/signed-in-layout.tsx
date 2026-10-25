@@ -3,6 +3,7 @@ import { AppSidebar, type SignedInUser } from "@/components/app-shell/app-sideba
 import { MobileTabBar } from "@/components/app-shell/mobile-tab-bar";
 import { FormSkeleton } from "@/components/page-skeleton";
 import { BillingBanner, WorkspaceGate } from "@/contexts/billing";
+import { SigningPreparation } from "@/contexts/compliance";
 import { MobileRejectionNotice } from "@/contexts/customers";
 import { LocalDatabaseProvider } from "@/lib/db/local-database-context";
 import { createRememberedCheck } from "@/lib/remembered-check";
@@ -31,6 +32,7 @@ const SignedInLayout = () => {
   });
   return (
     <LocalDatabaseProvider userId={userId} organizationId={organizationId}>
+      <SigningPreparation userName={user.name} />
       <WorkspaceGate email={user.email}>
         <div className="min-h-dvh bg-[#F7F9FB] lg:flex lg:bg-white">
           <AppSidebar user={user} />

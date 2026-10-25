@@ -1,13 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import {
-  ChevronLeft,
-  Ellipsis,
-  FilePenLine,
-  Navigation,
-  Phone,
-  StickyNote,
-  UserRound,
-} from "lucide-react";
+import { ChevronLeft, Ellipsis, Navigation, Phone, StickyNote, UserRound } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { DesktopTopBar } from "@/components/app-shell/page-bars";
@@ -20,13 +12,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ConfirmDialog,
-  customerNameOf,
-  routeUrlOf,
-  SOON_BADGE_CLASS,
-  SyncPill,
-} from "@/contexts/customers";
+import { ConfirmDialog, customerNameOf, routeUrlOf, SyncPill } from "@/contexts/customers";
+import { FillCertificateButton } from "@/contexts/compliance";
 import { useLocalSession } from "@/lib/db/local-database-context";
 import { cn } from "@/lib/utils";
 import { assignedTechniciansOf } from "../../visit-team";
@@ -91,14 +78,6 @@ const ActionTile = ({
     </a>
   );
 };
-
-const CertificateButton = ({ className }: { readonly className: string }) => (
-  <Button type="button" disabled className={className}>
-    <FilePenLine aria-hidden="true" className="size-5 lg:size-3.5" />
-    {text.fillCertificate}
-    <span className={SOON_BADGE_CLASS}>{schedulingFr.visit.soon}</span>
-  </Button>
-);
 
 const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
   const { database } = useLocalSession();
@@ -222,7 +201,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
                 {text.cancel}
               </Button>
             ) : null}
-            <CertificateButton className="" />
+            <FillCertificateButton interventionId={intervention.id} />
           </div>
         </div>
         <div className="flex flex-col gap-3 lg:hidden">
@@ -247,7 +226,11 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
         </div>
         <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-5">
           <div className="flex flex-col gap-3">
-            <VisitEquipments equipments={visit.equipments} documents={visit.documents} />
+            <VisitEquipments
+              interventionId={intervention.id}
+              equipments={visit.equipments}
+              documents={visit.documents}
+            />
             {intervention.notes === null ? null : (
               <p className="flex items-start gap-3 rounded-[12px] bg-[#F7F9FB] px-3.5 py-3 text-[13px] text-[#475569] lg:rounded-lg">
                 <StickyNote aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-[#94A3B8]" />
@@ -261,7 +244,7 @@ const VisitBody = ({ visit }: { readonly visit: VisitFile }) => {
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col border-t border-[#E3E8EF] bg-white px-4 pt-3 pb-[max(18px,env(safe-area-inset-bottom))] lg:hidden">
-        <CertificateButton className="w-full" />
+        <FillCertificateButton interventionId={intervention.id} className="w-full" />
       </div>
       <ConfirmDialog
         isOpen={isConfirming}

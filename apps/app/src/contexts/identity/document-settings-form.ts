@@ -2,6 +2,7 @@ import {
   BRAND_COLORS,
   CONTACT_TEXT_MAX_LENGTH,
   DOCUMENT_NUMBER_PREFIX_PATTERN,
+  DOCUMENT_NUMBER_WIDTH,
   DOCUMENT_TEMPLATES,
   DOCUMENT_TEXT_MAX_LENGTH,
   MAX_FIRST_DOCUMENT_NUMBER,
@@ -13,7 +14,7 @@ import { settingsFr } from "./settings-fr";
 
 const text = settingsFr.documents.errors;
 
-export const NUMBER_WIDTH = 4;
+export const NUMBER_WIDTH = DOCUMENT_NUMBER_WIDTH;
 
 const longText = z.string().trim().max(DOCUMENT_TEXT_MAX_LENGTH, { error: text.tooLong });
 

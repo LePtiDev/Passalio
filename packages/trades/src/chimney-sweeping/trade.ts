@@ -14,3 +14,9 @@ export const chimneySweepingTrade = defineTrade({
 
 export const nextSweepingDueDate = (completedOn: string): string =>
   addMonths(completedOn, CHIMNEY_SWEEPING_PERIODICITY_MONTHS);
+
+export const sweepingDatesAfter = (lastSweepingOn: string | null, completedOn: string) => {
+  const latest =
+    lastSweepingOn !== null && lastSweepingOn > completedOn ? lastSweepingOn : completedOn;
+  return { lastSweepingOn: latest, nextDueDate: nextSweepingDueDate(latest) };
+};

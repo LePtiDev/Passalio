@@ -161,8 +161,6 @@ export const schedulingFr = {
     technicians: "Techniciens",
     visitType: "Prestations",
     typeAndDuration: (types: string, duration: string) => `${types} · ${duration}`,
-    fillCertificate: "Remplir le certificat",
-    soon: "Bientôt",
     subtitle: (day: string, technician: string, equipments: number) =>
       `${day} · ${technician} · ${plural(equipments, "appareil", "appareils")}`,
     actions: "Actions sur le passage",

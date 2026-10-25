@@ -105,3 +105,14 @@ test("explains when the anti-robot check cannot load", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Réessayer" })).toBeEnabled();
   expect(requests).toBe(0);
 });
+
+test("puts the phone number on its own line in the confirmation", async ({ page }) => {
+  await page.route(ENDPOINT, (route) => route.fulfill({ status: 201, headers: CORS, body: "{}" }));
+  await fillValidForm(page);
+  await submit(page);
+
+  await expect(page.getByRole("status")).toContainText("au 06 12 34 56 78.");
+  expect(
+    await page.locator("[data-callback-success-text]").evaluate((element) => element.innerText),
+  ).toBe("On vous appelle demain après-midi, entre 14 h et 18 h,\nau 06 12 34 56 78.");
+});
