@@ -1,6 +1,6 @@
-import { SUBSCRIPTION_STATUSES } from "@passalio/shared";
+import { INVOICE_STATUSES, SUBSCRIPTION_STATUSES } from "@passalio/shared";
 import * as z from "zod";
-import type { StripeEvent, StripeSubscriptionSnapshot } from "../domain/billing-models";
+import type { Invoice, StripeEvent, StripeSubscriptionSnapshot } from "../domain/billing-models";
 
 const stripeReference = z.union([z.string(), z.object({ id: z.string() })]);
 
@@ -122,3 +122,35 @@ export const parseFirstPriceId = (body: unknown): string | undefined =>
   priceListPayload.parse(body).data.at(0)?.id;
 
 export const parseSessionUrl = (body: unknown): string => sessionPayload.parse(body).url;
+
+const invoiceListPayload = z.object({
+  data: z.array(
+    z.object({
+      id: z.string(),
+      number: z.string().nullish(),
+      created: seconds,
+      total: z.number().int(),
+      status: z.string().nullish(),
+      invoice_pdf: z.url().nullish(),
+    }),
+  ),
+});
+
+const isInvoiceStatus = (status: string | null | undefined): status is Invoice["status"] =>
+  INVOICE_STATUSES.some((known) => known === status);
+
+export const parseInvoices = (body: unknown): readonly Invoice[] =>
+  invoiceListPayload.parse(body).data.flatMap((invoice) =>
+    isInvoiceStatus(invoice.status)
+      ? [
+          {
+            id: invoice.id,
+            number: invoice.number ?? null,
+            issuedAt: new Date(invoice.created * 1000),
+            totalCents: invoice.total,
+            status: invoice.status,
+            pdfUrl: invoice.invoice_pdf ?? null,
+          },
+        ]
+      : [],
+  );

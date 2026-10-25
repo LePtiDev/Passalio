@@ -15,6 +15,7 @@ export {
 export { CustomerFileScreen } from "./components/file/customer-file-screen";
 export { CustomerListScreen } from "./components/list/customer-list-screen";
 export { MobileRejectionNotice } from "./components/mobile-rejection-notice";
+export { SegmentedControl, type Choice } from "./components/form/choice-controls";
 export { EditCustomerScreen } from "./components/form/edit-customer-screen";
 export { NewCustomerScreen } from "./components/form/new-customer-screen";
 export { NewEquipmentScreen } from "./components/equipment/new-equipment-screen";

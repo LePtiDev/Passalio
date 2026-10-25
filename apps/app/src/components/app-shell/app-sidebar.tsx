@@ -1,5 +1,6 @@
 import { LogOut } from "lucide-react";
 import { InitialsAvatar } from "@/components/initials-avatar";
+import { usePlanLabel } from "@/contexts/billing";
 import { OrganizationBadge } from "@/contexts/identity";
 import { fr } from "@/fr";
 import { useSignOutButton } from "@/lib/use-sign-out-button";
@@ -13,9 +14,10 @@ export type SignedInUser = {
 
 export const AppSidebar = ({ user }: { readonly user: SignedInUser }) => {
   const { signOut, isSigningOut } = useSignOutButton();
+  const planLabel = usePlanLabel();
   return (
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col gap-5 border-r border-[#E3E8EF] bg-[#F7F9FB] px-3 py-4 lg:flex">
-      <OrganizationBadge />
+      <OrganizationBadge planLabel={planLabel} />
       <nav aria-label={fr.shell.mainNavigation} className="flex flex-1 flex-col gap-5">
         <div className="flex flex-col gap-0.5">
           {MAIN_NAVIGATION.map((item) => (

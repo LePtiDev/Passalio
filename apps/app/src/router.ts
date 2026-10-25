@@ -48,6 +48,7 @@ import { resetPasswordRoute } from "./routes/reset-password";
 import {
   companySettingsRoute,
   documentSettingsRoute,
+  subscriptionRoute,
   servicesRoute,
   settingsRoute,
 } from "./routes/settings";
@@ -102,6 +103,7 @@ const routeTree = rootRoute.addChildren([
     servicesRoute,
     companySettingsRoute,
     documentSettingsRoute,
+    subscriptionRoute,
     customersRoute,
     newCustomerRoute,
     customerRoute,

@@ -25,6 +25,7 @@ export type NavigationItem = {
     | "/reglages/prestations"
     | "/reglages/entreprise"
     | "/reglages/documents"
+    | "/reglages/abonnement"
     | "/clients"
     | "/planning"
     | "/admin"
@@ -62,7 +63,7 @@ export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
   { label: text.services, icon: Tags, to: "/reglages/prestations" },
   { label: text.company, icon: Building2, to: "/reglages/entreprise" },
   { label: text.documentSettings, icon: FileText, to: "/reglages/documents" },
-  { label: text.subscription, icon: CreditCard, to: null },
+  { label: text.subscription, icon: CreditCard, to: "/reglages/abonnement" },
 ];
 
 export const MOBILE_NAVIGATION: readonly NavigationItem[] = [

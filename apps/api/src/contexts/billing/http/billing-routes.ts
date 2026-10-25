@@ -2,7 +2,9 @@ import { startCheckoutBody } from "@passalio/shared";
 import { Hono } from "hono";
 import { requireActor, type ActorEnv } from "../../identity";
 import { validateJson } from "../../../platform/validation";
+import { getBillingSeats } from "../application/get-billing-seats";
 import { getSubscription } from "../application/get-subscription";
+import { listInvoices } from "../application/list-invoices";
 import { openBillingPortal } from "../application/open-billing-portal";
 import { startCheckout } from "../application/start-checkout";
 import type { CheckoutError, PortalError } from "../domain/billing-error";
@@ -47,4 +49,18 @@ export const billingRoutes = new Hono<ActorEnv>()
           { error: result.error, traceId: context.get("traceId") },
           STATUS_OF_ERROR[result.error],
         );
-  });
+  })
+  .get("/seats", async (context) =>
+    context.json({
+      seats: await getBillingSeats(billingDependencies(context.var, context.env))(
+        context.get("actor"),
+      ),
+    }),
+  )
+  .get("/invoices", async (context) =>
+    context.json({
+      invoices: await listInvoices(billingDependencies(context.var, context.env))(
+        context.get("actor"),
+      ),
+    }),
+  );
