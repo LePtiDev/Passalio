@@ -29,6 +29,7 @@ export const JOURNAL_ACTIONS: Readonly<
   "organization.onboarding_completed": () => "a terminé la configuration de",
   "organization.updated": () => "a modifié les informations de",
   "organization.logo_updated": () => "a changé le logo de",
+  "organization.logo_removed": () => "a retiré le logo de",
   "member.invited": (data) => `a invité une personne (${roleLabel(data["role"])}) chez`,
   "invitation.accepted": (data) => `a rejoint l'équipe (${roleLabel(data["role"])}) de`,
   "invitation.canceled": () => "a annulé une invitation chez",

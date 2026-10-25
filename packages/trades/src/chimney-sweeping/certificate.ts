@@ -9,6 +9,14 @@ export const LEGAL_FORMS = ["ei", "eurl", "sarl", "sasu", "sas", "sa", "other"] 
 
 export type LegalForm = (typeof LEGAL_FORMS)[number];
 
+export const REGISTRY_KINDS = ["rcs", "rne"] as const;
+
+export type RegistryKind = (typeof REGISTRY_KINDS)[number];
+
+export const COMPANY_TEXT_MAX_LENGTH = 120;
+
+export const COMPANY_ADDRESS_MAX_LENGTH = 2000;
+
 export const SWEEPING_EXTENTS = ["full_length", "partial", "sealed_appliance"] as const;
 
 export type SweepingExtent = (typeof SWEEPING_EXTENTS)[number];
@@ -17,8 +25,8 @@ export const CHIMNEY_STACK_STATES = ["good", "needs_repair", "not_checked"] as c
 
 export const SIGNATURE_MAX_LENGTH = 300_000;
 
-const SHORT_TEXT = 120;
-const LONG_TEXT = 2000;
+const SHORT_TEXT = COMPANY_TEXT_MAX_LENGTH;
+const LONG_TEXT = COMPANY_ADDRESS_MAX_LENGTH;
 
 const text = (maxLength: number) => z.string().trim().min(1).max(maxLength);
 const optionalText = (maxLength: number) => z.string().trim().max(maxLength).nullable();
@@ -76,3 +84,5 @@ export const chimneySweepingCertificate = z.strictObject({
 });
 
 export type ChimneySweepingCertificate = z.infer<typeof chimneySweepingCertificate>;
+
+export type CertificateCompany = ChimneySweepingCertificate["company"];

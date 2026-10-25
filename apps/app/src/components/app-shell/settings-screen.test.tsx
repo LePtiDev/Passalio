@@ -24,14 +24,29 @@ describe("SettingsScreen", () => {
 
     const { user, router } = renderSettings();
 
-    const company = (await screen.findByText(fr.shell.company)).closest("[aria-disabled]");
-    expect(company).toHaveAttribute("aria-disabled", "true");
-    expect(company).toHaveTextContent(fr.shell.soon);
+    const subscription = (await screen.findByText(fr.shell.subscription)).closest(
+      "[aria-disabled]",
+    );
+    expect(subscription).toHaveAttribute("aria-disabled", "true");
+    expect(subscription).toHaveTextContent(fr.shell.soon);
     expect(screen.queryByRole("link", { name: fr.shell.subscription })).toBeNull();
 
     await user.click(screen.getByRole("link", { name: fr.shell.team }));
 
     expect(router.state.location.pathname).toBe("/equipe");
+  });
+
+  it.each([
+    { label: fr.shell.company, path: "/reglages/entreprise" },
+    { label: fr.shell.documentSettings, path: "/reglages/documents" },
+  ])("opens the $label settings", async ({ label, path }) => {
+    installFakeApi(signedInRoutes("owner"));
+
+    const { user, router } = renderSettings();
+
+    await user.click(await screen.findByRole("link", { name: label }));
+
+    expect(router.state.location.pathname).toBe(path);
   });
 
   it("shows the signed-in address", async () => {

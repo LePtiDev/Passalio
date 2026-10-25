@@ -23,3 +23,4 @@ export {
 } from "./certificate-pdf-input";
 export { pdfFingerprint } from "./pdf-fingerprint";
 export { renderCertificate, type CertificateFonts } from "./render-certificate";
+export { previewCertificateInput, type CertificatePreview } from "./certificate-preview";

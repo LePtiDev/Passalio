@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "15abbf0e-b413-4671-95f9-38c7244f70b1",
+  "id": "b3ab5d79-47ec-45ec-af4f-41a596fef2bf",
   "prevId": "4f1a4d7c-3002-48e7-99db-f2200460dcc6",
   "tables": {
     "activity_days": {
@@ -1779,6 +1779,48 @@
           "notNull": false,
           "autoincrement": false
         },
+        "legal_form": {
+          "name": "legal_form",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "share_capital_euros": {
+          "name": "share_capital_euros",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "registry_kind": {
+          "name": "registry_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "registry_city": {
+          "name": "registry_city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ape_code": {
+          "name": "ape_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "qualification": {
+          "name": "qualification",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "trades": {
           "name": "trades",
           "type": "text",
@@ -1810,6 +1852,42 @@
           "notNull": true,
           "autoincrement": false,
           "default": 1
+        },
+        "document_template": {
+          "name": "document_template",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'banner'"
+        },
+        "contact_email": {
+          "name": "contact_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "website": {
+          "name": "website",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "customer_message": {
+          "name": "customer_message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_text": {
+          "name": "footer_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "onboarding_completed_at": {
           "name": "onboarding_completed_at",
@@ -2638,13 +2716,6 @@
             "search_name"
           ],
           "isUnique": false
-        },
-        "prospect_companies_phone_idx": {
-          "name": "prospect_companies_phone_idx",
-          "columns": [
-            "phone"
-          ],
-          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -2782,20 +2853,6 @@
           "name": "prospect_contacts_search_name_idx",
           "columns": [
             "search_name"
-          ],
-          "isUnique": false
-        },
-        "prospect_contacts_phone_idx": {
-          "name": "prospect_contacts_phone_idx",
-          "columns": [
-            "phone"
-          ],
-          "isUnique": false
-        },
-        "prospect_contacts_mobile_idx": {
-          "name": "prospect_contacts_mobile_idx",
-          "columns": [
-            "mobile"
           ],
           "isUnique": false
         }
@@ -3127,13 +3184,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "created_at": {

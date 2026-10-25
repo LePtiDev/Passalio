@@ -13,4 +13,7 @@ export const createR2LogoStorage = (bucket: R2Bucket): LogoStorage => ({
           contentType: object.httpMetadata?.contentType ?? "application/octet-stream",
         };
   },
+  delete: async (key) => {
+    await bucket.delete(key);
+  },
 });

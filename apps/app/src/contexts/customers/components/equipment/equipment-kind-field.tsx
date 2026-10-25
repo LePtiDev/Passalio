@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { ENERGY_LABELS, EQUIPMENT_KIND_LABELS, customersFr } from "../../fr";
 import { DEFAULT_ENERGY } from "../../plate-reading";
 import { SELECT_TRIGGER_CLASS } from "../customer-styles";
-import { describedBy, FormField } from "../form/form-field";
+import { describedBy, FormField } from "@/components/form-field";
 import { isHeatPumpKind, type EquipmentFormValues } from "./equipment-form-schema";
 import { plateFieldClassOf, PlateTag, usePlateMark } from "./plate-marks";
 

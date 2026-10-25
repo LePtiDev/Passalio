@@ -17,6 +17,8 @@ const ERROR_STATUS: Readonly<Record<IdentityError, ContentfulStatusCode>> = {
   sign_up_closed: 403,
   invalid_siret: 422,
   invalid_document_numbering: 422,
+  invalid_ape_code: 422,
+  document_number_already_used: 409,
   invalid_logo: 422,
   logo_not_found: 404,
   company_search_unavailable: 503,

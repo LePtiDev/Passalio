@@ -142,13 +142,19 @@ export {
 } from "./password-policy";
 export {
   BRAND_COLORS,
+  CONTACT_TEXT_MAX_LENGTH,
   DEFAULT_BRAND_COLOR,
+  DEFAULT_DOCUMENT_TEMPLATE,
   DOCUMENT_NUMBER_PREFIX_PATTERN,
+  DOCUMENT_TEMPLATES,
+  DOCUMENT_TEXT_MAX_LENGTH,
   LOGO_CONTENT_TYPES,
   LOGO_MAX_BYTES,
   MAX_FIRST_DOCUMENT_NUMBER,
+  MAX_SHARE_CAPITAL_EUROS,
   TEAM_SIZES,
   type BrandColor,
+  type DocumentTemplate,
   type TeamSize,
 } from "./organization-profile";
 export { isReadPermission, PERMISSIONS, type Permission } from "./permissions";

@@ -11,7 +11,7 @@ import { AddressSuggestions } from "./address-suggestions";
 import { SegmentedControl } from "./choice-controls";
 import type { SiteFormValues } from "./customer-form-schema";
 import { FieldRow } from "./form-shell";
-import { describedBy, FormField } from "./form-field";
+import { describedBy, FormField } from "@/components/form-field";
 
 const text = customersFr.form;
 

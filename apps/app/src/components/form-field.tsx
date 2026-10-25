@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Label } from "@/components/ui/label";
-import { customersFr } from "../../fr";
-import { ERROR_TEXT_CLASS, HINT_TEXT_CLASS, LABEL_CLASS } from "../customer-styles";
+import { fr } from "@/fr";
+import { ERROR_TEXT_CLASS, HINT_TEXT_CLASS, LABEL_CLASS } from "./field-styles";
 
 type FormFieldProps = {
   readonly id: string;
@@ -43,7 +43,7 @@ export const FormField = ({
           </span>
         ) : null}
         {isOptional === true ? (
-          <span className="font-normal text-[#64748B]">{customersFr.form.optional}</span>
+          <span className="font-normal text-[#64748B]">{fr.form.optional}</span>
         ) : null}
       </Label>
       {labelAside}
