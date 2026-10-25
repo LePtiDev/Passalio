@@ -1,4 +1,4 @@
-# 0030 — Contexte billing et blocage de l'espace
+# 0031 — Contexte billing et blocage de l'espace
 
 - Date : 2026-10-25
 - Statut : accepté

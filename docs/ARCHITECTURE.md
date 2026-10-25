@@ -61,7 +61,7 @@ Passalio : SaaS pour artisans d'entretien obligatoire (ramoneurs d'abord) : atte
 | `scheduling`        | Interventions, tournées, confirmation J-1, suivi d'arrivée                 |
 | `compliance`        | Attestations, signature, PDF, numérotation, versions                       |
 | `engagement`        | Échéances, relances, envois email/SMS                                      |
-| `billing`           | Abonnement Stripe (`docs/stripe.md`), état de l'espace, blocage (ADR 0030) |
+| `billing`           | Abonnement Stripe (`docs/stripe.md`), état de l'espace, blocage (ADR 0031) |
 | `backoffice`        | Outils internes : support, impersonation, métriques                        |
 | `sales`             | Prospection de Passalio : entreprises, contacts, étapes, historique        |
 | `platform-team`     | Équipe Passalio : membres, rôles plateforme, invitations                   |
@@ -248,36 +248,36 @@ Voir `docs/SECURITY.md` pour la protection et les sauvegardes.
 
 D1 facture les lignes lues et écrites. Un index bien placé baisse la facture, un index inutile l'augmente à chaque écriture.
 
-| Table                    | Index                                                                                                                                                                    |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `customers`              | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                                                                        |
-| `sites`                  | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                                                                        |
-| `equipments`             | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                                                                        |
-| `equipment_photos`       | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                                                                       |
-| `plate_readings`         | `(organization_id, day)` pour le quota du jour                                                                                                                           |
-| `interventions`          | `(organization_id, updated_at)`                                                                                                                                          |
-| `services`               | `(organization_id, created_at)` pour la liste des prestations                                                                                                            |
-| `documents`              | `(organization_id, number)` unique, `(organization_id, cancels_document_id)` unique, `(organization_id, updated_at)`, `(organization_id, signed_by_user_id, updated_at)` |
-| `document_number_blocks` | `(organization_id, user_id, last_number)` pour vérifier qu'un numéro est réservé                                                                                         |
-| `reminders`              | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                                                                       |
-| `notifications`          | `(organization_id, created_at)`                                                                                                                                          |
-| `audit_logs`             | `(organization_id, created_at)`                                                                                                                                          |
-| `members`                | `(user_id)`, `(organization_id, user_id)` unique                                                                                                                         |
-| `invitations`            | `(organization_id, status)`, `(email)`                                                                                                                                   |
-| `sessions`               | `(token)` unique, `(user_id)`                                                                                                                                            |
-| `accounts`               | `(user_id)`                                                                                                                                                              |
-| `verifications`          | `(identifier)`                                                                                                                                                           |
-| `rate_limits`            | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                                                                     |
-| `prospect_companies`     | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)`                                          |
-| `prospect_contacts`      | `(company_id)`, `(search_name)`                                                                                                                                          |
-| `prospect_events`        | `(company_id, created_at)`, `(contact_id, created_at)`                                                                                                                   |
-| `prospect_calls`         | `(company_id, called_at)`, `(author_user_id, called_at)` pour les appels du jour, `(contact_id)`                                                                         |
-| `prospect_tasks`         | `(owner_user_id, status, due_at)` pour Ma journée, `(company_id, status)`, `(contact_id)`                                                                                |
-| `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                 |
-| `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                |
-| `platform_settings`      | une seule ligne, lue par sa clé primaire ; l'inscription fermée lit `invitations (email)` et `platform_invitations (email, status)`                                      |
-| `subscriptions`          | `(organization_id)` unique : l'état de l'espace se lit à chaque écriture, par entreprise                                                                                 |
-| `stripe_events`          | lu par sa clé primaire, l'identifiant de l'événement Stripe                                                                                                              |
+| Table                    | Index                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `customers`              | `(organization_id, updated_at)`, `(organization_id, search_name)`                                                                                                              |
+| `sites`                  | `(organization_id, customer_id)`, `(organization_id, updated_at)`                                                                                                              |
+| `equipments`             | `(organization_id, site_id)`, `(organization_id, next_due_date)`, `(organization_id, updated_at)`                                                                              |
+| `equipment_photos`       | `(organization_id, equipment_id)`, `(organization_id, updated_at)`                                                                                                             |
+| `plate_readings`         | `(organization_id, day)` pour le quota du jour                                                                                                                                 |
+| `interventions`          | `(organization_id, updated_at)`                                                                                                                                                |
+| `services`               | `(organization_id, created_at)` pour la liste des prestations                                                                                                                  |
+| `documents`              | `(organization_id, number)` unique, `(organization_id, cancels_document_id)` unique, `(organization_id, updated_at)`, `(organization_id, signed_by_user_id, updated_at)`       |
+| `document_number_blocks` | `(organization_id, user_id, last_number)` pour vérifier qu'un numéro est réservé                                                                                               |
+| `reminders`              | `(status, due_at)` pour le cron, `(organization_id, equipment_id)`                                                                                                             |
+| `notifications`          | `(organization_id, created_at)`                                                                                                                                                |
+| `audit_logs`             | `(organization_id, created_at)`                                                                                                                                                |
+| `members`                | `(user_id)`, `(organization_id, user_id)` unique                                                                                                                               |
+| `invitations`            | `(organization_id, status)`, `(email)`                                                                                                                                         |
+| `sessions`               | `(token)` unique, `(user_id)`                                                                                                                                                  |
+| `accounts`               | `(user_id)`                                                                                                                                                                    |
+| `verifications`          | `(identifier)`                                                                                                                                                                 |
+| `rate_limits`            | `(key)` unique, `(last_request)` pour la purge des compteurs expirés                                                                                                           |
+| `prospect_companies`     | `(source_ref)` unique, `(department, stage, search_name)`, `(department, search_name)`, `(stage, search_name)`, `(search_name)`, `(phone)` pour les demandes de rappel du site |
+| `prospect_contacts`      | `(company_id)`, `(search_name)`, `(phone)`, `(mobile)` pour les demandes de rappel du site                                                                                     |
+| `prospect_events`        | `(company_id, created_at)`, `(contact_id, created_at)`                                                                                                                         |
+| `prospect_calls`         | `(company_id, called_at)`, `(author_user_id, called_at)` pour les appels du jour, `(contact_id)`                                                                               |
+| `prospect_tasks`         | `(owner_user_id, status, due_at)` pour Ma journée, `(company_id, status)`, `(contact_id)`                                                                                      |
+| `users`                  | `(email)` unique, `(role)` pour lister l'équipe Passalio                                                                                                                       |
+| `platform_invitations`   | `(status, created_at)` pour les invitations en attente, `(email, status)`                                                                                                      |
+| `platform_settings`      | une seule ligne, lue par sa clé primaire ; l'inscription fermée lit `invitations (email)` et `platform_invitations (email, status)`                                            |
+| `subscriptions`          | `(organization_id)` unique : l'état de l'espace se lit à chaque écriture, par entreprise                                                                                       |
+| `stripe_events`          | lu par sa clé primaire, l'identifiant de l'événement Stripe                                                                                                                    |
 
 Règles :
 

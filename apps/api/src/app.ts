@@ -12,6 +12,7 @@ import {
   prospectCallRoutes,
   prospectCompanyRoutes,
   prospectContactRoutes,
+  websiteCallbackRoutes,
 } from "./contexts/sales";
 import { serviceRoutes } from "./contexts/scheduling";
 import { syncRoutes } from "./contexts/sync";
@@ -55,4 +56,5 @@ const apiRoutes = new Hono<AppEnv>()
 export const app = createApp()
   .get("/health", (context) => context.json({ status: "ok" }))
   .route("/", mcpRoutes)
+  .route("/api/public", websiteCallbackRoutes)
   .route("/api", apiRoutes);

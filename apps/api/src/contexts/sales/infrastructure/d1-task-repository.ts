@@ -68,4 +68,7 @@ export const createD1TaskRepository = (database: Database): TaskRepository => ({
       ),
       limit,
     ),
+  createFromWebsite: async (task) => {
+    await database.insert(prospectTasks).values({ ...task, source: "website" });
+  },
 });

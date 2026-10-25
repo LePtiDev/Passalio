@@ -63,7 +63,7 @@ Dernière mise à jour : 2026-10-25.
 | Grille de prix (Solo 29 € HT, Équipe 49 € HT) et fonctionnement du paiement Stripe                                                                                                                                        | ADR 0025                                            |
 | Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                                      | `docs/stripe.md`                                    |
 | Interrupteur des inscriptions (super admin) : fermer en production sans bloquer la connexion ni les invités                                                                                                               | ADR 0029                                            |
-| Abonnement, données et Stripe (API) : état de l'espace, Checkout, portail, webhook signé et idempotent, blocage des écritures (inactif sans clé Stripe), certificat signé hors ligne accepté                              | ADR 0030                                            |
+| Abonnement, données et Stripe (API) : état de l'espace, Checkout, portail, webhook signé et idempotent, blocage des écritures (inactif sans clé Stripe), certificat signé hors ligne accepté                              | ADR 0031                                            |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100         | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
 | Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                                   | `contexts/sales/components/calls`                   |
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                                | PR #62                                              |
@@ -71,6 +71,7 @@ Dernière mise à jour : 2026-10-25.
 | Réglages › Entreprise (mentions légales du certificat) et Réglages › Documents (modèle, couleur, logo, coordonnées, textes, numérotation, aperçu du PDF) ; le prochain numéro ne redescend plus sous les numéros réservés | `contexts/identity/components/settings`             |
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                                       | ADR 0028                                            |
 | Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                               | ADR 0028                                            |
+| Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                          | ADR 0030                                            |
 
 ## Hors code (Quentin)
 
@@ -139,7 +140,7 @@ Dernière mise à jour : 2026-10-25.
 - [x] Abonnement, maquettes : Réglages › Abonnement, choix de la formule, bandeaux d'essai et d'impayé, espace bloqué, e-mails (fin d'essai J-2, paiement refusé, espace bloqué), validées le 2026-10-24
 - [x] Fermer les inscriptions depuis l'admin (Plateforme › Réglages, super admin), connexion et invitations toujours possibles (ADR 0029)
 - [ ] Offre des 20 premiers clients : 19 € HT par mois à vie, quelle que soit la formule (choix de Quentin du 2026-10-24, à consigner dans l'ADR 0025 et à coder avec l'abonnement)
-- [x] Abonnement, code (PR 1) : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures d'un espace bloqué (ADR 0030)
+- [x] Abonnement, code (PR 1) : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures d'un espace bloqué (ADR 0031)
 - [ ] Abonnement, écrans (PR 2) : Réglages › Abonnement dans tous ses états, bandeaux d'essai et d'impayé, espace bloqué, passage Solo vers Équipe à l'invitation d'un deuxième technicien, refus d'Équipe vers Solo avec plusieurs techniciens
 - [ ] Abonnement, e-mails et offre fondateurs (PR 3) : fin d'essai J-2, paiement refusé J0, J3, J7, J12, espace bloqué (cron quotidien) ; prix `founder_monthly` à 19 € HT pour les 20 premiers payeurs
 - [ ] Stripe : régler les relances pour garder l'abonnement `past_due` ou `unpaid` au moins 15 jours, poser `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` et `STRIPE_PAYMENT_METHOD_CONFIGURATION` en staging (sur demande de déploiement)
@@ -220,7 +221,9 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Landing : réponse « client sans email » et section « Qui est derrière Passalio » avec Quentin et Antho
 - [ ] Adresse de contact publique (contact@passalio.com) à créer, puis l'ajouter au pied de page
 - [x] Barre de navigation commune, pages par activité, pages fonction, histoires de terrain, page Sans réseau, SEO complet (maquette : https://claude.ai/artifact/6LZhtqB84KkzXpjxumRoqt)
-- [ ] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com) et comptage des visites par page et par jour, sans donnée personnelle
+- [x] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com, ADR 0030)
+- [ ] Comptage des visites par page et par jour, sans donnée personnelle
+- [ ] Ajouter passalio.com et staging.passalio.com au widget Turnstile avant de déployer le site
 - [ ] Publier les pages Certificat, Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et leurs histoires quand la fonction est en production (`isPublished`)
 - [ ] Remplacer les histoires inventées par de vrais témoignages dès les premiers clients
 - [ ] Pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement

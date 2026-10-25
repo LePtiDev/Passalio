@@ -40,6 +40,7 @@ type Editable<Record> = {
 export type CompanyRepository = {
   readonly create: (company: ProspectCompany) => Promise<void>;
   readonly findById: (companyId: string) => Promise<ProspectCompany | undefined>;
+  readonly findByPhone: (phone: string) => Promise<ProspectCompany | undefined>;
   readonly update: (companyId: string, changes: Editable<ProspectCompany>) => Promise<void>;
   readonly changeStage: (
     companyId: string,

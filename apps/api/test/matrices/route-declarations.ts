@@ -7,7 +7,13 @@ export type ForeignResourceStatus = 403 | 404;
 type RouteLocation = { readonly method: RouteMethod; readonly path: string };
 
 export type InfrastructureRoute = RouteLocation & {
-  readonly access: "middleware" | "public" | "auth-proxy" | "mcp-bearer" | "stripe-signature";
+  readonly access:
+    | "middleware"
+    | "public"
+    | "website"
+    | "auth-proxy"
+    | "mcp-bearer"
+    | "stripe-signature";
 };
 
 export type UserRoute = RouteLocation & {
@@ -72,7 +78,9 @@ export const DECLARED_ROUTES: readonly DeclaredRoute[] = [
   infrastructure("ALL", "/api/team-invitations/*", "middleware"),
   infrastructure("ALL", "/api/billing/*", "middleware"),
   infrastructure("POST", "/api/billing/stripe-webhook", "stripe-signature"),
+  infrastructure("ALL", "/api/public/*", "middleware"),
   infrastructure("GET", "/health", "public"),
+  infrastructure("POST", "/api/public/callback-requests", "website"),
   infrastructure("GET", "/.well-known/oauth-protected-resource", "public"),
   infrastructure("GET", "/.well-known/oauth-protected-resource/mcp", "public"),
   infrastructure("ALL", "/api/auth/*", "auth-proxy"),

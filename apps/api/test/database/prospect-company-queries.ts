@@ -14,6 +14,11 @@ export const PROSPECT_COMPANY_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.prospectCompanies.findById(s.company.id),
   },
   {
+    method: "prospectCompanies.findByPhone",
+    query: "prospect company or contact with the phone of a website visitor",
+    run: (r) => r.prospectCompanies.findByPhone("06 12 34 56 78"),
+  },
+  {
     method: "prospectCompanies.update",
     query: "update a prospect company",
     run: (r, s) =>

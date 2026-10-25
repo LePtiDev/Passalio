@@ -134,6 +134,15 @@ describe("workspace at the end of the trial", () => {
     expect((await platform.setActiveOrganization(owner, organizationId)).status).toBe(200);
   });
 
+  it("leaves the public website routes to their own rules", async () => {
+    const response = await platform.request(
+      "/api/public/callback-requests",
+      jsonBody({ firstName: "Claire" }),
+      owner,
+    );
+    expect(await response.text()).not.toContain("workspace_blocked");
+  });
+
   it("lets the owner create another company", async () => {
     const response = await platform.request(
       "/api/organizations",

@@ -19,6 +19,10 @@ export type NotifyMode = (typeof NOTIFY_MODES)[number];
 
 export const PROSPECT_TASK_STATUSES = ["open", "done", "cancelled"] as const;
 
+export const PROSPECT_TASK_SOURCES = ["website"] as const;
+
+export type ProspectTaskSource = (typeof PROSPECT_TASK_SOURCES)[number];
+
 export type ProspectTaskStatus = (typeof PROSPECT_TASK_STATUSES)[number];
 
 export const INTEREST_LEVELS = ["hot", "warm", "cold"] as const;
