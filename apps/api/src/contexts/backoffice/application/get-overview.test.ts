@@ -45,7 +45,7 @@ describe("getOverview", () => {
     state.activePeople = 7;
     state.accounts.push(
       inMemoryAccount({ id: "organization-new", name: "New", createdAt: daysAgo(1) }),
-      inMemoryAccount({ id: "organization-ending", name: "Ending", createdAt: daysAgo(8) }),
+      inMemoryAccount({ id: "organization-ending", name: "Ending", createdAt: daysAgo(4) }),
       inMemoryAccount({
         id: "organization-drop",
         name: "Drop",
@@ -58,7 +58,7 @@ describe("getOverview", () => {
       all: 3,
       trial: 2,
       dropping: 1,
-      endingSoon: 1,
+      endingSoon: 2,
       activePeople: 7,
     });
   });
@@ -66,16 +66,15 @@ describe("getOverview", () => {
   it("lists the trials that end within seven days, the closest end first", async () => {
     expect(ENDING_SOON_DAYS).toBe(7);
     state.accounts.push(
+      inMemoryAccount({ id: "organization-1", name: "One day", createdAt: daysAgo(1) }),
       inMemoryAccount({ id: "organization-6", name: "Six days", createdAt: daysAgo(6) }),
-      inMemoryAccount({ id: "organization-7", name: "Seven days", createdAt: daysAgo(7) }),
-      inMemoryAccount({ id: "organization-12", name: "Twelve days", createdAt: daysAgo(12) }),
-      inMemoryAccount({ id: "organization-9", name: "Nine days", createdAt: daysAgo(9) }),
-      inMemoryAccount({ id: "organization-15", name: "Trial over", createdAt: daysAgo(15) }),
+      inMemoryAccount({ id: "organization-3", name: "Three days", createdAt: daysAgo(3) }),
+      inMemoryAccount({ id: "organization-8", name: "Trial over", createdAt: daysAgo(8) }),
     );
     expect((await run()(admin)).endingTrials.map(({ id }) => id)).toEqual([
-      "organization-12",
-      "organization-9",
-      "organization-7",
+      "organization-6",
+      "organization-3",
+      "organization-1",
     ]);
   });
 
@@ -85,7 +84,7 @@ describe("getOverview", () => {
         inMemoryAccount({
           id: `organization-${index}`,
           name: `Ending ${index}`,
-          createdAt: daysAgo(8 + index * 0.5),
+          createdAt: daysAgo(1 + index * 0.5),
         }),
       ),
     );

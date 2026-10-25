@@ -119,7 +119,7 @@ describe("admin read routes", () => {
 
   it("gives the overview and the journals", async () => {
     const overview = await adminGet("/overview", overviewResponse);
-    expect(overview.counts).toMatchObject({ all: 2, trial: 2, dropping: 1, endingSoon: 0 });
+    expect(overview.counts).toMatchObject({ all: 2, trial: 2, dropping: 1, endingSoon: 2 });
     expect(overview.dropping.map(({ name }) => name)).toEqual(["Cheminées du Val"]);
     const accountJournal = await adminGet(`/accounts/${dupontId}/journal`, journalPageResponse);
     expect(accountJournal.entries.map(({ action }) => action)).toContain("organization.created");
