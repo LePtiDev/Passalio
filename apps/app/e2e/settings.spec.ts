@@ -69,7 +69,11 @@ test.describe("settings on desktop", () => {
 
   test("the sidebar sign-out button signs the user out", async ({ page }) => {
     await signUpAndOnboardOwner(page, { companyName: "Ramonage Perrin" });
-    await page.getByRole("complementary").getByRole("button", { name: "Se déconnecter" }).click();
+    await page
+      .getByRole("complementary")
+      .getByRole("button", { name: /^Votre compte / })
+      .click();
+    await page.getByRole("menuitem", { name: "Se déconnecter" }).click();
     await expect(page).toHaveURL(/\/connexion/);
     await expect(page.getByRole("heading", { name: "Connexion" })).toBeVisible();
 

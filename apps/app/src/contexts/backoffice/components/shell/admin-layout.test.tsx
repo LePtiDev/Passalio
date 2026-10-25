@@ -1,6 +1,7 @@
 import type { PlatformRole } from "@passalio/shared";
 import { screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { fr } from "@/fr";
 import { installFakeApi } from "@/test-support/fake-api";
 import { renderScreen } from "@/test-support/render-screen";
 import type { PlatformAdmin } from "../../backoffice-api";
@@ -123,16 +124,31 @@ describe("AdminLayout", () => {
       "aria-current",
       "page",
     );
-    expect(screen.getByText("quentin@passalio.test")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: `${fr.shell.account} Quentin Admin` }),
+    ).toBeInTheDocument();
   });
 
-  it("opens the member's configuration from the profile at the bottom of the sidebar", async () => {
-    renderLayout("sales");
+  it("opens the account menu to the profile, the configuration and the sign-out", async () => {
+    const { user } = renderLayout("sales");
 
-    const profile = await screen.findByRole("link", {
-      name: `${text.configuration} Quentin Admin quentin@passalio.test`,
-    });
-    expect(profile).toHaveAttribute("href", "/admin/configuration");
-    expect(within(profile).getByText("quentin@passalio.test")).toBeInTheDocument();
+    await user.click(
+      await screen.findByRole("button", { name: `${fr.shell.account} Quentin Admin` }),
+    );
+
+    const menu = await screen.findByRole("menu");
+    expect(within(menu).getByText("quentin@passalio.test")).toBeInTheDocument();
+    expect(within(menu).getByRole("menuitem", { name: text.profile })).toHaveAttribute(
+      "href",
+      "/admin/configuration?rubrique=profil",
+    );
+    expect(within(menu).getByRole("menuitem", { name: text.configuration })).toHaveAttribute(
+      "href",
+      "/admin/configuration",
+    );
+    expect(within(menu).getByRole("menuitem", { name: fr.app.signOut })).toHaveAttribute(
+      "data-variant",
+      "destructive",
+    );
   });
 });

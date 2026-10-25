@@ -13,6 +13,7 @@ export const fr = {
     documents: "Attestations",
     reminders: "Relances",
     settings: "Réglages",
+    account: "Votre compte",
     team: "Équipe",
     services: "Prestations",
     company: "Entreprise",

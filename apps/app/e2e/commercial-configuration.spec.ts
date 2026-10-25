@@ -15,11 +15,12 @@ const userIdOf = async (page: Page) =>
 
 const openConfiguration = async (page: Page) => {
   await page.goto("/admin/journee");
-  await (
-    isMobile(page)
-      ? page.getByRole("link", { name: "Configuration", exact: true })
-      : page.getByRole("link", { name: /^Configuration de / })
-  ).click();
+  if (isMobile(page)) {
+    await page.getByRole("link", { name: "Configuration", exact: true }).click();
+  } else {
+    await page.getByRole("button", { name: /^Votre compte / }).click();
+    await page.getByRole("menuitem", { name: "Configuration" }).click();
+  }
   await expect(page).toHaveURL(/\/admin\/configuration/);
 };
 

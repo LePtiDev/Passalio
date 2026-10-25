@@ -9,6 +9,7 @@ export const backofficeFr = {
     commercial: "Commercial",
     myDay: "Ma journée",
     configuration: "Configuration",
+    profile: "Mon profil",
     calls: "Appels",
     platform: "Plateforme",
     companies: "Entreprises",
