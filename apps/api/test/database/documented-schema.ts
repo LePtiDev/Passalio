@@ -67,6 +67,7 @@ export const ARCHITECTURE_INDEXES: readonly DocumentedIndex[] = [
   index("users", ["role"]),
   index("platform_invitations", ["status", "created_at"]),
   index("platform_invitations", ["email", "status"]),
+  uniqueIndex("subscriptions", ["organization_id"]),
 ];
 
 export const ORGANIZATION_DATA_TABLES = [
@@ -81,6 +82,7 @@ export const ORGANIZATION_DATA_TABLES = [
   "document_number_blocks",
   "members",
   "invitations",
+  "subscriptions",
 ] as const;
 
 export const TABLES_WITHOUT_ORGANIZATION: Readonly<Record<string, string>> = {
@@ -102,6 +104,7 @@ export const TABLES_WITHOUT_ORGANIZATION: Readonly<Record<string, string>> = {
   platform_invitations: "Passalio team",
   platform_mail_settings: "Passalio team",
   platform_settings: "Passalio settings, one row for the whole platform",
+  stripe_events: "Stripe events already handled, identified by Stripe",
 };
 
 export const PASSALIO_TABLES = [
@@ -112,6 +115,7 @@ export const PASSALIO_TABLES = [
   "prospect_follow_ups",
   "prospect_tasks",
   "platform_settings",
+  "stripe_events",
 ];
 
 export const SYNCHRONIZED_TABLES = [

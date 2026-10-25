@@ -16,6 +16,7 @@ const COMPOSING_FACTORIES: Readonly<Record<string, string>> = {
   createMailSettingsDependencies: "only calls the cataloged repositories",
   createReminderDependencies: "only calls the cataloged repositories",
   createPlatformSettingsDependencies: "only calls the cataloged repositories",
+  createBillingDependencies: "only calls the cataloged repositories",
   createAuth: "Better Auth, cataloged through the session read of every request",
 };
 

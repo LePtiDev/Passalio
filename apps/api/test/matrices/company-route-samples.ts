@@ -1,4 +1,4 @@
-import { reserveNumberBlockBody, syncPushBody } from "@passalio/shared";
+import { reserveNumberBlockBody, startCheckoutBody, syncPushBody } from "@passalio/shared";
 import { serviceChanges, serviceFields } from "@passalio/trades";
 import {
   addEquipmentBody,
@@ -109,6 +109,13 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     withBytes("POST", `/api/equipments/${ids.equipmentId}/photos?kind=plate`, "image/jpeg"),
   "GET /api/photos/:photoId": (ids) => read(`/api/photos/${ids.photoId}`),
   "POST /api/plate-readings": () => withBytes("POST", "/api/plate-readings", "image/jpeg"),
+  "GET /api/billing/subscription": () => read("/api/billing/subscription"),
+  "POST /api/billing/checkout": () =>
+    withJson("POST", "/api/billing/checkout", startCheckoutBody, {
+      plan: "team",
+      interval: "month",
+    }),
+  "POST /api/billing/portal": () => withoutBody("POST", "/api/billing/portal"),
   "POST /api/sync/push": (ids) =>
     withJson("POST", "/api/sync/push", syncPushBody, {
       mutations: [

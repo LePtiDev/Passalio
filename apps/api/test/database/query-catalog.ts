@@ -1,4 +1,5 @@
 import { BACKOFFICE_QUERIES } from "./backoffice-queries";
+import { BILLING_QUERIES } from "./billing-queries";
 import type { CatalogedQuery } from "./cataloged-query";
 import { COMPLIANCE_QUERIES } from "./compliance-queries";
 import { CUSTOMER_QUERIES } from "./customer-queries";
@@ -25,4 +26,5 @@ export const QUERY_CATALOG: readonly CatalogedQuery[] = [
   ...REMINDER_QUERIES,
   ...SCHEDULING_QUERIES,
   ...COMPLIANCE_QUERIES,
+  ...BILLING_QUERIES,
 ];

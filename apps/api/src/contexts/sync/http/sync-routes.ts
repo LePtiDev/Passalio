@@ -1,6 +1,7 @@
 import { syncPushBody, type SyncPushResult } from "@passalio/shared";
 import { Hono } from "hono";
 import * as z from "zod";
+import { syncWriteGateOf } from "../../billing";
 import { requireActor, type ActorEnv } from "../../identity";
 import { validateJson, validateQuery } from "../../../platform/validation";
 import { decodeSyncCursor, encodeSyncCursor } from "./sync-cursor";
@@ -14,10 +15,14 @@ export const syncRoutes = new Hono<ActorEnv>()
   .post("/sync/push", validateJson(syncPushBody), async (context) => {
     const apply = syncMutationApplier(context.var, context.env);
     const actor = context.get("actor");
+    const isWriteAllowed = await syncWriteGateOf(context.var, context.env, actor.organizationId);
     const results = await context.req
       .valid("json")
       .mutations.reduce<Promise<SyncPushResult[]>>(async (previous, { id, mutation }) => {
         const applied = [...(await previous)];
+        if (!isWriteAllowed(mutation)) {
+          return [...applied, { id, status: "rejected", error: "workspace_blocked" }];
+        }
         const result = await apply(actor, mutation);
         return [
           ...applied,

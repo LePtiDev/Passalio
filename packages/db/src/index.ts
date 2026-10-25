@@ -35,6 +35,8 @@ export {
   USER_ROLES,
   sessions,
   sites,
+  stripeEvents,
+  subscriptions,
   users,
   verifications,
 } from "./schema";

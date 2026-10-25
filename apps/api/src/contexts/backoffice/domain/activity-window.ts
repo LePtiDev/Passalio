@@ -1,7 +1,8 @@
-import { lastMonths, parisDay, parisDayBefore } from "@passalio/shared";
+import { lastMonths, parisDay, parisDayBefore, TRIAL_DAYS, trialEndOf } from "@passalio/shared";
+
+export { TRIAL_DAYS, trialEndOf };
 
 export const USAGE_HISTORY_MONTHS = 6;
-export const TRIAL_DAYS = 7;
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 const WINDOW_DAYS = 30;
@@ -26,6 +27,3 @@ export const activityWindow = (now: Date): ActivityWindow => {
     trialStartedAfter: new Date(now.getTime() - TRIAL_DAYS * DAY_IN_MS),
   };
 };
-
-export const trialEndOf = (createdAt: Date): Date =>
-  new Date(createdAt.getTime() + TRIAL_DAYS * DAY_IN_MS);

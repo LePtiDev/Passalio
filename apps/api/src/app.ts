@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { backofficeRoutes } from "./contexts/backoffice";
+import { billingRoutes, stripeWebhookRoutes, workspaceGuardMiddleware } from "./contexts/billing";
 import { numberBlockRoutes } from "./contexts/compliance";
 import { customerRoutes, equipmentRoutes, plateReadingRoutes } from "./contexts/customers";
 import { identityRoutes, organizationRoutes } from "./contexts/identity";
@@ -26,6 +27,7 @@ export const createApp = () => new Hono<AppEnv>().use(traceMiddleware).onError(h
 const apiRoutes = new Hono<AppEnv>()
   .use(requestServicesMiddleware)
   .use(impersonationGuardMiddleware)
+  .use(workspaceGuardMiddleware)
   .route("/auth", authRoutes)
   .route("/admin/prospects", prospectCompanyRoutes)
   .route("/admin/prospects", prospectContactRoutes)
@@ -35,6 +37,8 @@ const apiRoutes = new Hono<AppEnv>()
   .route("/admin/settings", platformSettingsRoutes)
   .route("/admin/mcp/authorization", mcpAuthorizationRoutes)
   .route("/admin", backofficeRoutes)
+  .route("/billing/stripe-webhook", stripeWebhookRoutes)
+  .route("/billing", billingRoutes)
   .route("/team-invitations", teamInvitationRoutes)
   .route("/sign-up-availability", signUpAvailabilityRoutes)
   .route("/", identityRoutes.userRoutes)
