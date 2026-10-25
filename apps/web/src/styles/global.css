@@ -74,7 +74,7 @@
 }
 
 @layer base {
-  main > section:nth-child(n + 4) {
+  main > section:nth-child(n + 4):not(:last-child) {
     content-visibility: auto;
     contain-intrinsic-size: auto 900px;
   }

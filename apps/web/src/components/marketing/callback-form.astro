@@ -1,6 +1,7 @@
 ---
 import { callbackFormFr } from "../../copy/callback-form-fr";
 import { apiUrl, appUrl } from "../../links";
+import { turnstileSiteKey } from "../../turnstile";
 
 interface Props {
   pagePath: string;
@@ -13,6 +14,8 @@ const labelClass = "flex flex-col gap-1.5 text-[13px] font-semibold";
 const copy = {
   failed: callbackFormFr.failed("CODE"),
   failedWithoutCode: callbackFormFr.failedWithoutCode,
+  tooManyRequests: callbackFormFr.tooManyRequests,
+  robotCheckFailed: callbackFormFr.robotCheckFailed,
   sending: callbackFormFr.sending,
   submit: callbackFormFr.submit,
   retry: callbackFormFr.retry,
@@ -31,6 +34,7 @@ const copy = {
     data-callback-form
     data-endpoint={apiUrl("callbackRequests")}
     data-page-path={pagePath}
+    data-turnstile-site-key={turnstileSiteKey(import.meta.env.DEV)}
     data-copy={JSON.stringify(copy)}
   >
     <p
@@ -70,25 +74,52 @@ const copy = {
         />
       </label>
     </div>
-    <label class={labelClass}>
-      <span>
-        {callbackFormFr.phone}
-        <span class="text-red-600" aria-hidden="true">*</span>
-      </span>
-      <input
-        type="tel"
-        name="phone"
-        autocomplete="tel"
-        inputmode="tel"
-        aria-required="true"
-        aria-describedby="callback-phone-error"
-        placeholder={callbackFormFr.phonePlaceholder}
-        class={fieldClass}
-      />
-      <span id="callback-phone-error" hidden class="text-xs font-medium text-red-700" data-error-for="phone">
-        {callbackFormFr.invalidPhone}
-      </span>
-    </label>
+    <div class="grid gap-3.5 sm:grid-cols-[3fr_2fr]">
+      <label class={labelClass}>
+        <span>
+          {callbackFormFr.phone}
+          <span class="text-red-600" aria-hidden="true">*</span>
+        </span>
+        <input
+          type="tel"
+          name="phone"
+          autocomplete="tel"
+          inputmode="tel"
+          aria-required="true"
+          aria-describedby="callback-phone-error"
+          placeholder={callbackFormFr.phonePlaceholder}
+          class={fieldClass}
+        />
+        <span id="callback-phone-error" hidden class="text-xs font-medium text-red-700" data-error-for="phone">
+          {callbackFormFr.invalidPhone}
+        </span>
+      </label>
+      <label class={labelClass}>
+        <span>
+          {callbackFormFr.postalCode}
+          <span class="text-red-600" aria-hidden="true">*</span>
+        </span>
+        <input
+          type="text"
+          name="postalCode"
+          autocomplete="postal-code"
+          inputmode="numeric"
+          maxlength="5"
+          aria-required="true"
+          aria-describedby="callback-postal-code-error"
+          placeholder={callbackFormFr.postalCodePlaceholder}
+          class={fieldClass}
+        />
+        <span
+          id="callback-postal-code-error"
+          hidden
+          class="text-xs font-medium text-red-700"
+          data-error-for="postalCode"
+        >
+          {callbackFormFr.invalidPostalCode}
+        </span>
+      </label>
+    </div>
     <label class={labelClass}>
       <span>
         {callbackFormFr.slot}
@@ -108,6 +139,7 @@ const copy = {
         class="w-full rounded-[7px] border border-line bg-white px-3 py-2.5 text-base font-normal text-navy placeholder:text-slate-400 sm:text-sm"
       ></textarea>
     </label>
+    <div data-turnstile></div>
     <button
       type="submit"
       class="h-12 rounded-[7px] bg-navy text-[15px] font-semibold text-white shadow-button hover:bg-navy-hover disabled:opacity-70 sm:h-10 sm:text-[13px]"
@@ -137,15 +169,20 @@ const copy = {
 
 <script>
   import {
-    callbackRequestBody,
+    callbackFailureOf,
     formatPhone,
-    invalidCallbackFields,
+    invalidWebsiteCallbackFields,
     shortTraceId,
+    websiteCallbackRequestBody,
+    type CallbackFailure,
   } from "../../callback-form";
+  import { createAntiRobotCheck } from "../../turnstile";
 
   interface Copy {
     failed: string;
     failedWithoutCode: string;
+    tooManyRequests: string;
+    robotCheckFailed: string;
     sending: string;
     submit: string;
     retry: string;
@@ -169,7 +206,9 @@ const copy = {
       });
   };
 
-  type Outcome = { isSent: true } | { isSent: false; code: string | null };
+  type Outcome =
+    | { isSent: true }
+    | { isSent: false; failure: CallbackFailure | "offline"; code: string | null };
 
   const send = async (endpoint: string, body: unknown): Promise<Outcome> => {
     try {
@@ -180,9 +219,13 @@ const copy = {
       });
       return response.ok
         ? { isSent: true }
-        : { isSent: false, code: shortTraceId(response.headers.get("x-trace-id")) };
+        : {
+            isSent: false,
+            failure: callbackFailureOf(response.status),
+            code: shortTraceId(response.headers.get("x-trace-id")),
+          };
     } catch {
-      return { isSent: false, code: null };
+      return { isSent: false, failure: "offline", code: null };
     }
   };
 
@@ -191,8 +234,25 @@ const copy = {
     const submit = root.querySelector<HTMLButtonElement>("[data-callback-submit]");
     const errorBox = root.querySelector<HTMLElement>("[data-callback-error]");
     const success = root.querySelector<HTMLElement>("[data-callback-success]");
-    if (!form || !submit || !errorBox || !success) return;
+    const turnstileBox = root.querySelector<HTMLElement>("[data-turnstile]");
+    if (!form || !submit || !errorBox || !success || !turnstileBox) return;
     const copy: Copy = JSON.parse(form.dataset["copy"] ?? "{}");
+    const antiRobot = createAntiRobotCheck(turnstileBox, form.dataset["turnstileSiteKey"] ?? "");
+    form.addEventListener("focusin", () => antiRobot.start(), { once: true });
+
+    const showFailure = (message: string) => {
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+      setBusy(form, false);
+      submit.textContent = copy.retry;
+    };
+
+    const failureMessage = (outcome: Exclude<Outcome, { isSent: true }>): string => {
+      if (outcome.failure === "too_many_requests") return copy.tooManyRequests;
+      return outcome.code === null
+        ? copy.failedWithoutCode
+        : copy.failed.replace("CODE", outcome.code);
+    };
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -200,11 +260,12 @@ const copy = {
         firstName: read(form, "firstName"),
         company: read(form, "company"),
         phone: read(form, "phone"),
+        postalCode: read(form, "postalCode"),
         slot: read(form, "slot"),
         message: read(form, "message"),
         pagePath: form.dataset["pagePath"] ?? "/",
       };
-      const invalid = invalidCallbackFields(draft);
+      const invalid = invalidWebsiteCallbackFields(draft);
       form.querySelectorAll<HTMLElement>("[data-error-for]").forEach((message) => {
         const field = message.dataset["errorFor"] ?? "";
         const isInvalid = invalid.some((name) => name === field);
@@ -219,14 +280,16 @@ const copy = {
       errorBox.hidden = true;
       setBusy(form, true);
       submit.textContent = copy.sending;
-      const body = callbackRequestBody(draft);
+      const turnstileToken = await antiRobot.token();
+      if (turnstileToken === null) {
+        showFailure(copy.robotCheckFailed);
+        return;
+      }
+      const body = websiteCallbackRequestBody(draft, turnstileToken);
       const outcome = await send(form.dataset["endpoint"] ?? "", body);
       if (!outcome.isSent) {
-        errorBox.textContent =
-          outcome.code === null ? copy.failedWithoutCode : copy.failed.replace("CODE", outcome.code);
-        errorBox.hidden = false;
-        setBusy(form, false);
-        submit.textContent = copy.retry;
+        antiRobot.renew();
+        showFailure(failureMessage(outcome));
         return;
       }
       form.hidden = true;

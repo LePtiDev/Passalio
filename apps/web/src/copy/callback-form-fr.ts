@@ -7,6 +7,8 @@ export const callbackFormFr = {
   companyPlaceholder: "Ramonage Martin",
   phone: "Téléphone",
   phonePlaceholder: "06 12 34 56 78",
+  postalCode: "Code postal",
+  postalCodePlaceholder: "94100",
   slot: "Moment",
   slots: [
     {
@@ -40,6 +42,9 @@ export const callbackFormFr = {
   required: "obligatoire",
   missingFirstName: "Indiquez votre prénom.",
   invalidPhone: "Numéro incomplet. Exemple : 06 12 34 56 78.",
+  invalidPostalCode: "Code postal à 5 chiffres. Exemple : 94100.",
+  tooManyRequests: "Vous avez déjà envoyé plusieurs demandes. Réessayez dans une heure.",
+  robotCheckFailed: "La vérification anti-robot n’a pas abouti. Rechargez la page, puis réessayez.",
   failed: (code: string) =>
     `Votre demande n’est pas partie. Réessayez dans un instant. Code : ${code}`,
   failedWithoutCode: "Votre demande n’est pas partie. Vérifiez votre connexion, puis réessayez.",
