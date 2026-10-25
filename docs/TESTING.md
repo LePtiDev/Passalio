@@ -75,6 +75,16 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 5, 6, 7, 11  | `POST /api/document-number-blocks` : 401, 400, 201, blocs sans chevauchement, secrétariat 403, impersonation      | `apps/api/test/number-block-routes.test.ts`                            |
 | 6, 7, 11, 12 | Parcours hors ligne jusqu'au certificat signé, immuable, numéros, isolation, rôles, curseur                       | `apps/api/test/intervention-sync-routes.test.ts`                       |
 
+## PDF du certificat (ADR 0027)
+
+| Famille | Ce qui est vérifié                                                                                                   | Test                                                                                              |
+| ------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 2       | Dates, SIREN, ligne légale (forme, capital, RCS ou RNE, siège), conseils joints selon l'appareil                     | `packages/pdf/src/format.test.ts`, `certificate-legal-line.test.ts`, `certificate-advice.test.ts` |
+| 2       | Entrée refusée : données invalides, règles du certificat, gaz étanche, image illisible                               | `packages/pdf/src/certificate-content.test.ts`                                                    |
+| 12      | Mentions obligatoires relues dans le PDF, variantes (partiel, conduit à ne pas utiliser, client absent), métadonnées | `packages/pdf/src/render-certificate.test.ts`                                                     |
+| 12      | Mêmes données, mêmes octets et même empreinte ; un mot changé, une autre empreinte                                   | `packages/pdf/src/pdf-fingerprint.test.ts`                                                        |
+| 17      | Chaque page conforme aux captures de référence (2 modèles × 5 couleurs, conseils, 3 conduits et logo, textes longs)  | `packages/pdf/src/render-certificate-pages.test.ts`                                               |
+
 ## Prestations et techniciens d'un passage
 
 | Famille     | Ce qui est vérifié                                                                                                                                                                                                                                                                                                                                               | Test                                                                                                                                                      |
