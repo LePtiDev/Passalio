@@ -31,7 +31,7 @@ const SignedInLayout = () => {
   });
   return (
     <LocalDatabaseProvider userId={userId} organizationId={organizationId}>
-      <SigningPreparation />
+      <SigningPreparation userName={user.name} />
       <div className="min-h-dvh bg-[#F7F9FB] lg:flex lg:bg-white">
         <AppSidebar user={user} />
         <main className="flex min-h-dvh min-w-0 flex-1 flex-col pb-[84px] lg:pb-0">

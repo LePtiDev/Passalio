@@ -10,7 +10,8 @@ import {
   sampleIssuer,
 } from "@/test-support/certificate-records";
 import { saveIssuer } from "./issuer-store";
-import { signCertificate, sweptEquipmentOf, type SignCertificateInput } from "./sign-certificate";
+import { signCertificate, type SignCertificateInput } from "./sign-certificate";
+import { sweptEquipmentOf } from "./swept-equipment";
 import { signingDeviceIdOf } from "./signing-device";
 
 const EQUIPMENT_ID = "0190f3a0-0000-7000-8000-00000000e001";

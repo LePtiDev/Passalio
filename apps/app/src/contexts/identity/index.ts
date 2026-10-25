@@ -23,3 +23,4 @@ export { TwoFactorSetup } from "./components/two-factor/two-factor-setup";
 export { twoFactorFr } from "./two-factor-fr";
 export { CompanySettingsScreen } from "./components/settings/company-settings-screen";
 export { DocumentSettingsScreen } from "./components/settings/document-settings-screen";
+export { CompanyLegalForm } from "./components/settings/company-legal-form";

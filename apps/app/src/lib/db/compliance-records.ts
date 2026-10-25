@@ -18,9 +18,19 @@ export const documentIssuer = z.object({
 
 export const localSetting = z.discriminatedUnion("key", [
   z.object({ key: z.literal("device"), deviceId: z.string() }),
+  z.object({ key: z.literal("signer"), userId: z.string(), name: z.string() }),
+  z.object({ key: z.literal("signature"), userId: z.string(), image: z.string() }),
   z.object({ key: z.literal("issuer"), issuer: documentIssuer, savedAt: z.string() }),
 ]);
 
 export type NumberBlockRecord = z.infer<typeof numberBlockRecord>;
 export type DocumentIssuer = z.infer<typeof documentIssuer>;
 export type LocalSetting = z.infer<typeof localSetting>;
+
+export type CertificateDraftRecord = {
+  readonly id: string;
+  readonly interventionId: string;
+  readonly equipmentId: string;
+  readonly values: Readonly<Record<string, unknown>>;
+  readonly updatedAt: string;
+};

@@ -29,7 +29,7 @@ const SettingsSkeleton = () => (
   </div>
 );
 
-const SettingsError = ({
+export const SettingsError = ({
   error,
   onRetry,
 }: {

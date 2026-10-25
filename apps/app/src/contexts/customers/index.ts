@@ -45,3 +45,4 @@ export { EquipmentIcon } from "./components/file/equipment-icon";
 export { ConfirmDialog } from "./components/confirm-dialog";
 export { CustomerNotFound } from "./components/file/customer-not-found";
 export { SOON_BADGE_CLASS } from "./components/customer-styles";
+export { FLUE_TYPE_LABELS } from "./fr";

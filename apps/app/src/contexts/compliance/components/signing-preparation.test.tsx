@@ -120,56 +120,71 @@ beforeEach(() => {
 
 describe("SigningPreparation", () => {
   it("copies the company and document settings to the device", async () => {
-    render(<SigningPreparation />);
+    render(<SigningPreparation userName="Jean Dupont" />);
     await vi.waitFor(async () => expect(await readIssuer(database)).toBeDefined());
     expect(await readIssuer(database)).toMatchObject({
       company: { name: "Ramonage Dupont", legalForm: "ei", registry: { kind: "rne" } },
       missingLegalMentions: [],
       branding: { template: "banner", brandColor: "#0F2A44", logo: null },
     });
+    await vi.waitFor(async () => expect(await database.numberBlocks.count()).toBe(1));
   });
 
   it("waits for the logo before copying the settings of a company that has one", async () => {
     context.organization = { ...ORGANIZATION, hasLogo: true };
-    const view = render(<SigningPreparation />);
+    const view = render(<SigningPreparation userName="Jean Dupont" />);
     await vi.waitFor(() => expect(reserve).toHaveBeenCalled());
     expect(await readIssuer(database)).toBeUndefined();
 
     context.logo = { format: "png", base64: "iVBORw0KGgo=" };
-    view.rerender(<SigningPreparation />);
+    view.rerender(<SigningPreparation userName="Jean Dupont" />);
     await vi.waitFor(async () =>
       expect((await readIssuer(database))?.branding.logo).toEqual(context.logo),
     );
+    await vi.waitFor(async () => expect(await database.numberBlocks.count()).toBe(1));
   });
 
   it("reserves a block of numbers for this device", async () => {
-    render(<SigningPreparation />);
+    render(<SigningPreparation userName="Jean Dupont" />);
     await vi.waitFor(async () => expect(await database.numberBlocks.count()).toBe(1));
     expect(reserve).toHaveBeenCalledTimes(1);
   });
 
   it("does not reserve while the device has enough numbers", async () => {
     await database.numberBlocks.put(numberBlock());
-    render(<SigningPreparation />);
+    render(<SigningPreparation userName="Jean Dupont" />);
     await vi.waitFor(async () => expect(await readIssuer(database)).toBeDefined());
     expect(reserve).not.toHaveBeenCalled();
   });
 
   it("reserves once the connection is back", async () => {
     reserve.mockResolvedValueOnce(err({ code: "network", traceId: null }));
-    render(<SigningPreparation />);
+    render(<SigningPreparation userName="Jean Dupont" />);
     await vi.waitFor(() => expect(reserve).toHaveBeenCalledTimes(1));
     window.dispatchEvent(new Event("online"));
+    await vi.waitFor(async () => expect(await database.numberBlocks.count()).toBe(1));
+  });
+
+  it("keeps the name of the signer for the certificate", async () => {
+    render(<SigningPreparation userName=" Jean Dupont " />);
+    await vi.waitFor(async () =>
+      expect(await database.localSettings.get("signer")).toEqual({
+        key: "signer",
+        userId: "user-1",
+        name: "Jean Dupont",
+      }),
+    );
     await vi.waitFor(async () => expect(await database.numberBlocks.count()).toBe(1));
   });
 
   it("prepares nothing for a member who cannot sign", async () => {
     context.canSign = false;
     context.organization = { ...ORGANIZATION, hasLogo: true };
-    render(<SigningPreparation />);
+    render(<SigningPreparation userName="Jean Dupont" />);
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(reserve).not.toHaveBeenCalled();
     expect(await readIssuer(database)).toBeUndefined();
     expect(context.logoRequests.every((isEnabled) => !isEnabled)).toBe(true);
+    expect(await database.localSettings.get("signer")).toBeUndefined();
   });
 });
