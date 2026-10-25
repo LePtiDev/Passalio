@@ -10,10 +10,11 @@ const expectSettingsScreen = async (page: Page, email: string) => {
   await expect(main.getByText("Connecté en tant que")).toBeVisible();
   await expect(main.getByText(email)).toBeVisible();
   await expect(main.getByRole("link", { name: "Équipe" })).toBeVisible();
-  await expect(main.getByText("Entreprise")).toBeVisible();
+  await expect(main.getByRole("link", { name: "Entreprise" })).toBeVisible();
+  await expect(main.getByRole("link", { name: "Documents" })).toBeVisible();
   await expect(main.getByText("Abonnement")).toBeVisible();
-  await expect(main.getByText("Bientôt")).toHaveCount(2);
-  await expect(main.getByRole("link", { name: /Entreprise|Abonnement/ })).toHaveCount(0);
+  await expect(main.getByText("Bientôt")).toHaveCount(1);
+  await expect(main.getByRole("link", { name: "Abonnement" })).toHaveCount(0);
 };
 
 test.beforeEach(async ({ context }) => {

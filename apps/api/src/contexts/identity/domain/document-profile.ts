@@ -16,7 +16,6 @@ export type DocumentAppearance = {
   readonly website: string | null;
   readonly customerMessage: string | null;
   readonly footerText: string | null;
-  readonly isAdviceAttachedByDefault: boolean;
 };
 
 type OptionalFields<T> = { readonly [Key in keyof T]?: T[Key] | undefined };
@@ -74,6 +73,5 @@ export const normalizeDocumentProfileChanges = (
     ...definedOnly("website", textChange(changes.website)),
     ...definedOnly("customerMessage", textChange(changes.customerMessage)),
     ...definedOnly("footerText", textChange(changes.footerText)),
-    ...definedOnly("isAdviceAttachedByDefault", changes.isAdviceAttachedByDefault),
   });
 };

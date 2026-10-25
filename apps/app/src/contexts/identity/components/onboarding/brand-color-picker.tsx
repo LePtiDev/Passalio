@@ -37,11 +37,16 @@ const Swatch = ({ color, isSelected, onSelect }: SwatchProps) => {
 type BrandColorPickerProps = {
   readonly value: BrandColor;
   readonly onChange: (color: BrandColor) => void;
+  readonly legend?: string;
 };
 
-export const BrandColorPicker = ({ value, onChange }: BrandColorPickerProps) => (
+export const BrandColorPicker = ({
+  value,
+  onChange,
+  legend = onboardingFr.documents.colorLegend,
+}: BrandColorPickerProps) => (
   <fieldset className="flex flex-col gap-1">
-    <legend className={cn(AUTH_LABEL_CLASS, "mb-1")}>{onboardingFr.documents.colorLegend}</legend>
+    <legend className={cn(AUTH_LABEL_CLASS, "mb-1")}>{legend}</legend>
     <div className="flex gap-1">
       {BRAND_COLORS.map((color) => (
         <Swatch key={color} color={color} isSelected={color === value} onSelect={onChange} />

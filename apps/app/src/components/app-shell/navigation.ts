@@ -4,6 +4,7 @@ import {
   CalendarDays,
   CreditCard,
   FileCheck2,
+  FileText,
   House,
   LayoutDashboard,
   Settings,
@@ -22,6 +23,8 @@ export type NavigationItem = {
     | "/equipe"
     | "/reglages"
     | "/reglages/prestations"
+    | "/reglages/entreprise"
+    | "/reglages/documents"
     | "/clients"
     | "/planning"
     | "/admin"
@@ -57,7 +60,8 @@ export const MAIN_NAVIGATION: readonly NavigationItem[] = [
 export const SETTINGS_NAVIGATION: readonly NavigationItem[] = [
   { label: text.team, icon: UsersRound, to: "/equipe" },
   { label: text.services, icon: Tags, to: "/reglages/prestations" },
-  { label: text.company, icon: Building2, to: null },
+  { label: text.company, icon: Building2, to: "/reglages/entreprise" },
+  { label: text.documentSettings, icon: FileText, to: "/reglages/documents" },
   { label: text.subscription, icon: CreditCard, to: null },
 ];
 

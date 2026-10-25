@@ -8,5 +8,4 @@ ALTER TABLE `organizations` ADD `document_template` text DEFAULT 'banner' NOT NU
 ALTER TABLE `organizations` ADD `contact_email` text;--> statement-breakpoint
 ALTER TABLE `organizations` ADD `website` text;--> statement-breakpoint
 ALTER TABLE `organizations` ADD `customer_message` text;--> statement-breakpoint
-ALTER TABLE `organizations` ADD `footer_text` text;--> statement-breakpoint
-ALTER TABLE `organizations` ADD `is_advice_attached_by_default` integer DEFAULT true NOT NULL;
+ALTER TABLE `organizations` ADD `footer_text` text;

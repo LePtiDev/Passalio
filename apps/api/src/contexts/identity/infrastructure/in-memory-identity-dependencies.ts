@@ -55,7 +55,6 @@ export const inMemoryOrganization = (
   website: null,
   customerMessage: null,
   footerText: null,
-  isAdviceAttachedByDefault: true,
   logoKey: null,
   onboardingCompletedAt: null,
   hasReservedNumbers: false,

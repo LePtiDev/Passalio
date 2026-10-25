@@ -71,7 +71,6 @@ describe("document settings", () => {
       website: null,
       customerMessage: null,
       footerText: null,
-      isAdviceAttachedByDefault: true,
       hasReservedNumbers: false,
       missingLegalMentions: ["legalForm", "siret", "registry", "address"],
     });
@@ -92,7 +91,6 @@ describe("document settings", () => {
       website: "ramonage-dupont.fr",
       customerMessage: "Merci de votre confiance.",
       footerText: "Assurance RC professionnelle : MAAF Pro.",
-      isAdviceAttachedByDefault: false,
     });
     expect(response.status).toBe(204);
     expect(await settingsOf(technician)).toMatchObject({
@@ -107,7 +105,6 @@ describe("document settings", () => {
       website: "ramonage-dupont.fr",
       customerMessage: "Merci de votre confiance.",
       footerText: "Assurance RC professionnelle : MAAF Pro.",
-      isAdviceAttachedByDefault: false,
       missingLegalMentions: [],
     });
   });

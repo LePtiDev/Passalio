@@ -38,7 +38,6 @@ describe("updateOrganizationProfile, legal details and documents", () => {
         website: "ramonage-dupont.fr",
         customerMessage: "Merci de votre confiance.",
         footerText: "Assurance RC professionnelle : MAAF Pro.",
-        isAdviceAttachedByDefault: false,
       }),
     ).toEqual({ isOk: true, value: undefined });
     expect(state.organizations[0]).toMatchObject({
@@ -53,7 +52,6 @@ describe("updateOrganizationProfile, legal details and documents", () => {
       website: "ramonage-dupont.fr",
       customerMessage: "Merci de votre confiance.",
       footerText: "Assurance RC professionnelle : MAAF Pro.",
-      isAdviceAttachedByDefault: false,
     });
   });
 

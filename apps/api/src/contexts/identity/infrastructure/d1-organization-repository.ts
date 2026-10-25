@@ -44,7 +44,6 @@ export const createD1OrganizationRepository = (database: Database): Organization
         website: organizations.website,
         customerMessage: organizations.customerMessage,
         footerText: organizations.footerText,
-        isAdviceAttachedByDefault: organizations.isAdviceAttachedByDefault,
         logoKey: organizations.logo,
         onboardingCompletedAt: organizations.onboardingCompletedAt,
         hasReservedNumbers: sql<boolean>`exists ${database

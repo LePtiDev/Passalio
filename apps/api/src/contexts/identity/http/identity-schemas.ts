@@ -50,7 +50,6 @@ export const updateOrganizationBody = z.object({
   website: z.string().max(CONTACT_TEXT_MAX_LENGTH).nullable().optional(),
   customerMessage: z.string().max(DOCUMENT_TEXT_MAX_LENGTH).nullable().optional(),
   footerText: z.string().max(DOCUMENT_TEXT_MAX_LENGTH).nullable().optional(),
-  isAdviceAttachedByDefault: z.boolean().optional(),
 });
 
 export const companySearchQuery = z.object({

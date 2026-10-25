@@ -32,13 +32,12 @@ describe("normalizeDocumentProfileChanges", () => {
     });
   });
 
-  it("keeps the legal form, capital, registry and advice choice as sent", () => {
+  it("keeps the legal form, capital and registry as sent", () => {
     expect(
       normalizeDocumentProfileChanges({
         legalForm: "sarl",
         shareCapitalEuros: 7500,
         registryKind: "rcs",
-        isAdviceAttachedByDefault: false,
       }),
     ).toEqual({
       isOk: true,
@@ -46,7 +45,6 @@ describe("normalizeDocumentProfileChanges", () => {
         legalForm: "sarl",
         shareCapitalEuros: 7500,
         registryKind: "rcs",
-        isAdviceAttachedByDefault: false,
       },
     });
   });

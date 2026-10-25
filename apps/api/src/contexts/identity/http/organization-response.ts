@@ -28,7 +28,6 @@ export const toDocumentSettingsResponse = (profile: OrganizationProfile) => ({
   website: profile.website,
   customerMessage: profile.customerMessage,
   footerText: profile.footerText,
-  isAdviceAttachedByDefault: profile.isAdviceAttachedByDefault,
   hasReservedNumbers: profile.hasReservedNumbers,
   missingLegalMentions: missingLegalMentions(profile),
 });

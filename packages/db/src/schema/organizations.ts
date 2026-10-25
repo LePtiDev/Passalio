@@ -39,9 +39,6 @@ export const organizations = sqliteTable("organizations", {
   website: text("website"),
   customerMessage: text("customer_message"),
   footerText: text("footer_text"),
-  isAdviceAttachedByDefault: integer("is_advice_attached_by_default", { mode: "boolean" })
-    .notNull()
-    .default(true),
   onboardingCompletedAt: integer("onboarding_completed_at", { mode: "timestamp_ms" }),
   ...defaultedTimestampColumns(),
   deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e65945a0-cffa-43b5-92f5-230bb4c05869",
+  "id": "b3ab5d79-47ec-45ec-af4f-41a596fef2bf",
   "prevId": "4f1a4d7c-3002-48e7-99db-f2200460dcc6",
   "tables": {
     "activity_days": {
@@ -1888,14 +1888,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "is_advice_attached_by_default": {
-          "name": "is_advice_attached_by_default",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": true
         },
         "onboarding_completed_at": {
           "name": "onboarding_completed_at",
