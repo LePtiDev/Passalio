@@ -32,7 +32,7 @@ export const SubscriptionNotice = ({
     <div
       role={tone === "warning" ? "alert" : "status"}
       className={cn(
-        "flex flex-col gap-3 rounded-[10px] px-3.5 py-3 text-sm lg:flex-row lg:items-start lg:text-[13px]",
+        "flex flex-col gap-3 rounded-[10px] px-3.5 py-3 text-[14px] lg:flex-row lg:items-start lg:text-[13px]",
         TONES[tone],
       )}
     >

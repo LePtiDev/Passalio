@@ -20,7 +20,7 @@ export const BillingPill = ({
 }) => (
   <span
     className={cn(
-      "inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-xs font-semibold",
+      "inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-[12px] font-semibold",
       TONES[tone],
     )}
   >

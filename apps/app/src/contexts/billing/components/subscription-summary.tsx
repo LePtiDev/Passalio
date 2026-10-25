@@ -95,8 +95,13 @@ export const SubscriptionSummary = ({
       <div className="flex items-center gap-2.5 p-3.5 lg:p-4">
         <span className="flex flex-col gap-1">
           <span className="flex flex-wrap items-center gap-2">
-            <h2 id="plan-title" className="text-[17px] font-bold lg:text-base">
-              {text.title(details.plan, isYearly, details.isFounder)}
+            <h2 id="plan-title" className="text-[17px] font-bold lg:text-[16px]">
+              <span aria-hidden="true" className="lg:hidden">
+                {text.shortTitle(details.plan, isYearly, details.isFounder)}
+              </span>
+              <span className="sr-only lg:not-sr-only">
+                {text.title(details.plan, isYearly, details.isFounder)}
+              </span>
             </h2>
             <BillingPill tone={BADGE_TONES[badge]}>
               {badge === "ending" && periodEnd !== null
@@ -104,20 +109,20 @@ export const SubscriptionSummary = ({
                 : text.badges[badge]}
             </BillingPill>
           </span>
-          <span className="text-sm text-[#475569] lg:text-[13px]">
+          <span className="text-[14px] text-[#475569] lg:text-[13px]">
             {text.priceLine(subscriptionPriceOf(details), isYearly)}
-            <span className="hidden lg:inline"> {text.planLine(details.plan)}</span>
+            <span className="hidden lg:inline">. {text.planLine(details.plan)}</span>
           </span>
         </span>
         <span className="ml-auto hidden gap-2 lg:flex">{children}</span>
       </div>
-      <dl className="grid border-t border-[#E3E8EF] text-sm lg:auto-cols-fr lg:grid-flow-col lg:bg-[#F7F9FB] lg:text-[13px]">
+      <dl className="grid border-t border-[#E3E8EF] text-[14px] lg:auto-cols-fr lg:grid-flow-col lg:bg-[#F7F9FB] lg:text-[13px]">
         {terms.map((term) => (
           <div
             key={term.label}
             className="flex justify-between gap-3 border-b border-[#EEF2F6] px-3.5 py-3 last:border-b-0 lg:flex-col lg:justify-start lg:gap-1 lg:border-b-0 lg:border-l lg:border-[#E3E8EF] lg:px-4 lg:first:border-l-0"
           >
-            <dt className="text-[#64748B] lg:text-xs lg:font-semibold">{term.label}</dt>
+            <dt className="text-[#64748B] lg:text-[12px] lg:font-semibold">{term.label}</dt>
             <dd className="text-right font-semibold lg:text-left">{term.value}</dd>
           </div>
         ))}

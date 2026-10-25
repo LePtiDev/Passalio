@@ -2,6 +2,7 @@ import { PLANS, type BillingInterval, type Plan } from "@passalio/shared";
 import { useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { SegmentedControl, type Choice } from "@/contexts/customers";
+import { DESKTOP_QUERY, useMediaQuery } from "@/lib/use-media-query";
 import { cn } from "@/lib/utils";
 import { billingFr, PLAN_NAMES } from "../billing-fr";
 import { PLAN_PRICES_EUROS } from "../subscription-view";
@@ -15,6 +16,7 @@ type PlanCardProps = {
   readonly recommendation: string | null;
   readonly isDisabled: boolean;
   readonly isOpening: boolean;
+  readonly isCompact: boolean;
   readonly onChoose: (plan: Plan) => void;
 };
 
@@ -24,6 +26,7 @@ const PlanCard = ({
   recommendation,
   isDisabled,
   isOpening,
+  isCompact,
   onChoose,
 }: PlanCardProps) => {
   const choose = useCallback(() => onChoose(plan), [onChoose, plan]);
@@ -39,16 +42,18 @@ const PlanCard = ({
       )}
     >
       <div className="flex min-h-[22px] items-center gap-2">
-        <h3 id={headingId} className="text-[17px] font-bold lg:text-base">
+        <h3 id={headingId} className="text-[17px] font-bold lg:text-[16px]">
           {PLAN_NAMES[plan]}
         </h3>
         {isRecommended ? (
-          <BillingPill tone="navy">
-            <span className="lg:hidden">{text.recommended}</span>
-            <span className="hidden lg:inline">{recommendation}</span>
-          </BillingPill>
+          <span className={isCompact ? "hidden lg:inline-flex" : "inline-flex"}>
+            <BillingPill tone="navy">
+              <span className="lg:hidden">{text.recommended}</span>
+              <span className="hidden lg:inline">{recommendation}</span>
+            </BillingPill>
+          </span>
         ) : null}
-        <strong className="ml-auto text-xl lg:hidden">
+        <strong className="ml-auto text-[20px] lg:hidden">
           {price}{" "}
           <span className="text-[13px] font-medium text-[#475569]">
             {interval === "month" ? text.perMonthShort : text.perYearShort}
@@ -56,14 +61,21 @@ const PlanCard = ({
         </strong>
       </div>
       <span className="hidden items-baseline gap-1.5 lg:flex">
-        <strong className="text-[28px] tracking-[-0.02em]">{price}</strong>
+        <strong className={cn("tracking-[-0.02em]", isCompact ? "text-[26px]" : "text-[28px]")}>
+          {price}
+        </strong>
         <span className="text-[13px] text-[#475569]">
           {interval === "month" ? text.perMonth : text.perYear}
         </span>
       </span>
-      <span className="text-sm text-[#475569] lg:text-[13px]">
-        <span className="lg:hidden">{text.shortDescription[plan]}</span>
-        <span className="hidden lg:inline">{text.description[plan]}</span>
+      <span
+        className={cn(
+          "text-[14px] text-[#475569] lg:text-[13px]",
+          isCompact ? "hidden lg:inline" : "inline",
+        )}
+      >
+        <span className={isCompact ? "inline" : "lg:hidden"}>{text.shortDescription[plan]}</span>
+        {isCompact ? null : <span className="hidden lg:inline">{text.description[plan]}</span>}
       </span>
       <Button
         type="button"
@@ -84,7 +96,15 @@ type PlanChoiceProps = {
   readonly technicianCount: number | null;
   readonly isDisabled: boolean;
   readonly openingPlan: Plan | null;
+  readonly isCompact: boolean;
   readonly onChoose: (plan: Plan) => void;
+};
+
+const yearLabelOf = (isDesktop: boolean, isCompact: boolean) => {
+  if (!isDesktop) {
+    return billingFr.interval.yearShort;
+  }
+  return isCompact ? billingFr.interval.yearWithOffer : billingFr.interval.year;
 };
 
 export const PlanChoice = ({
@@ -94,26 +114,35 @@ export const PlanChoice = ({
   technicianCount,
   isDisabled,
   openingPlan,
+  isCompact,
   onChoose,
 }: PlanChoiceProps) => {
+  const isDesktop = useMediaQuery(DESKTOP_QUERY);
   const intervals = useMemo(
     (): readonly Choice<BillingInterval>[] => [
       { value: "month", label: billingFr.interval.month },
-      { value: "year", label: billingFr.interval.year },
+      { value: "year", label: yearLabelOf(isDesktop, isCompact) },
     ],
-    [],
+    [isDesktop, isCompact],
   );
   return (
     <>
-      <div className="flex flex-wrap items-center gap-3">
+      <div className={cn("flex flex-wrap items-center gap-3", isCompact && "lg:justify-center")}>
         <SegmentedControl
           label={billingFr.interval.label}
           choices={intervals}
           value={interval}
           onChange={onIntervalChange}
-          className="w-full lg:w-60"
+          className={cn(
+            "w-full lg:rounded-[9px] lg:p-0.5",
+            isCompact ? "lg:w-[334px]" : "lg:w-[178px]",
+          )}
         />
-        <BillingPill tone="green">{billingFr.interval.yearOffer}</BillingPill>
+        {isCompact ? null : (
+          <span className="hidden lg:inline-flex">
+            <BillingPill tone="green">{billingFr.interval.yearOffer}</BillingPill>
+          </span>
+        )}
       </div>
       <div className="grid gap-3.5 lg:grid-cols-2 lg:gap-4">
         {PLANS.map((plan) => (
@@ -130,6 +159,7 @@ export const PlanChoice = ({
             }
             isDisabled={isDisabled || openingPlan !== null}
             isOpening={openingPlan === plan}
+            isCompact={isCompact}
             onChoose={onChoose}
           />
         ))}

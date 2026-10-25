@@ -44,7 +44,7 @@ const InvoiceRow = ({
           target="_blank"
           rel="noreferrer"
           aria-label={text.downloadLabel(number)}
-          className="font-semibold text-[#0E7C5A] hover:text-[#0F2A44]"
+          className="font-semibold text-[#334155] hover:text-[#0F2A44]"
         >
           {text.download}
         </a>
@@ -89,7 +89,7 @@ export const InvoicesTable = (props: InvoicesTableProps) => (
     aria-labelledby="invoices-title"
     className="hidden overflow-hidden rounded-xl border border-[#E3E8EF] text-[13px] lg:block"
   >
-    <h2 id="invoices-title" className="px-4 py-3.5 text-sm font-bold">
+    <h2 id="invoices-title" className="px-4 py-3.5 text-[14px] font-bold">
       {text.title}
     </h2>
     <div
@@ -103,6 +103,6 @@ export const InvoicesTable = (props: InvoicesTableProps) => (
       <span />
     </div>
     <InvoicesBody {...props} />
-    <p className="px-4 py-2.5 text-xs text-[#64748B]">{text.stripeNote}</p>
+    <p className="px-4 py-2.5 text-[12px] text-[#64748B]">{text.stripeNote}</p>
   </section>
 );

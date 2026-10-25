@@ -148,7 +148,7 @@ export const SubscribedPanel = ({
                 type="button"
                 disabled={isOpening}
                 onClick={openPortal}
-                className="font-semibold text-[#0E7C5A] hover:text-[#0F2A44]"
+                className="font-semibold text-[#334155] hover:text-[#0F2A44]"
               >
                 {text.cancel}
               </button>

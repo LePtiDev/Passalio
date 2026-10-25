@@ -16,6 +16,8 @@ import {
 import { errorReply, heldReply, installFakeApi, type FakeRoutes } from "@/test-support/fake-api";
 import {
   forgetToasts,
+  ORGANIZATION_ROUTE,
+  organizationReply,
   signedInRoutes,
   SHORT_TRACE_ID,
   TRACE_ID,
@@ -168,6 +170,19 @@ describe("SubscriptionScreen of a subscribed company", () => {
     ).toHaveAttribute("href", "https://pay.stripe.com/invoice/in_1/pdf");
   });
 
+  it("shortens the plan name on the phone and keeps the full name for screen readers", async () => {
+    installBilling({ [SUBSCRIPTION_ROUTE]: subscribed() });
+    renderSubscription();
+
+    expect(
+      await screen.findByRole("heading", { name: text.subscribed.title("solo", false, false) }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(text.subscribed.shortTitle("solo", false, false))).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+  });
+
   it("opens the Stripe portal to change the plan", async () => {
     installBilling({
       [SUBSCRIPTION_ROUTE]: subscribed(),
@@ -305,6 +320,13 @@ describe("SubscriptionScreen of a subscribed company", () => {
 });
 
 describe("SubscriptionScreen loading and errors", () => {
+  it("names the company under the title on the phone", async () => {
+    installBilling({ [ORGANIZATION_ROUTE]: organizationReply({ name: "Ramonage Martin" }) });
+    renderSubscription();
+
+    expect(await screen.findByText("Ramonage Martin")).toBeInTheDocument();
+  });
+
   it("shows a skeleton shaped like the trial while loading", async () => {
     const held = heldReply(subscriptionReply());
     installBilling({ [SUBSCRIPTION_ROUTE]: held.reply });

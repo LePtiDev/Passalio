@@ -23,6 +23,7 @@ const OwnerPlanChoice = ({ technicianCount }: { readonly technicianCount: number
         technicianCount={null}
         isDisabled={false}
         openingPlan={checkout.openingPlan}
+        isCompact
         onChoose={checkout.choose}
       />
       <p className="text-[13px] text-[#64748B] lg:text-center">{billingFr.paymentNoteShort}</p>
@@ -62,14 +63,14 @@ export const BlockedWorkspaceScreen = ({
   const seats = useBillingSeats();
   const { canManage, blockedReason } = subscription;
   return (
-    <div className="flex min-h-dvh flex-col bg-[#F7F9FB] text-[#0F2A44]">
-      <header className="flex min-h-14 shrink-0 items-center gap-3 border-b border-[#E3E8EF] bg-white py-1 pr-1 pl-4 lg:min-h-16 lg:px-6">
-        <span className="flex flex-1 items-center gap-2 text-[17px] font-bold lg:flex-none lg:text-lg">
+    <div className="flex min-h-dvh flex-col bg-[#F7F9FB] leading-[normal] text-[#0F2A44]">
+      <header className="flex min-h-16 shrink-0 items-center gap-3 border-b border-[#E3E8EF] bg-white py-1 pr-1 pl-4 lg:px-6">
+        <span className="flex flex-1 items-center gap-2 text-[17px] font-bold lg:flex-none lg:text-[18px]">
           <span aria-hidden="true" className="size-5 rounded-[5px] bg-[#0F2A44] lg:size-[22px]" />
           {fr.app.name}
         </span>
         {organizationName === null ? null : (
-          <span className="hidden text-sm text-[#64748B] lg:inline">{organizationName}</span>
+          <span className="hidden text-[14px] text-[#64748B] lg:inline">{organizationName}</span>
         )}
         <span className="flex items-center gap-4 lg:ml-auto">
           <span className="hidden text-[13px] text-[#475569] lg:inline">{email}</span>
@@ -95,12 +96,12 @@ export const BlockedWorkspaceScreen = ({
             >
               <Lock className="size-5" strokeWidth={1.8} />
             </span>
-            <h1 className="text-[22px] leading-tight font-bold lg:text-2xl lg:tracking-[-0.015em]">
+            <h1 className="text-[22px] leading-[1.25] font-bold lg:leading-[normal] lg:text-[24px] lg:tracking-[-0.015em]">
               {canManage
                 ? text.titles[blockedReason ?? "trial_ended"]
                 : text.memberTitle(organizationName)}
             </h1>
-            <p className="max-w-[560px] text-[15px] leading-normal text-[#475569] lg:text-sm">
+            <p className="max-w-[560px] text-[15px] leading-normal text-[#475569] lg:text-[14px]">
               {canManage
                 ? ownerTextOf(blockedReason)
                 : text.memberText(seats.data?.ownerName ?? null)}
@@ -114,7 +115,7 @@ export const BlockedWorkspaceScreen = ({
             aria-labelledby="data-title"
             className="flex flex-col gap-0.5 rounded-xl border border-[#E3E8EF] bg-white p-4"
           >
-            <h2 id="data-title" className="text-sm font-bold">
+            <h2 id="data-title" className="text-[14px] font-bold">
               {text.dataTitle}
             </h2>
             <p className="text-[13px] leading-normal text-[#475569]">{text.dataText}</p>

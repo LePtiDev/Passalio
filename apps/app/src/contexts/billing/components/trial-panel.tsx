@@ -25,7 +25,7 @@ const TrialCard = ({ trialEndsAt, now }: { readonly trialEndsAt: Date; readonly 
       className="flex flex-col gap-2 rounded-xl border border-[#E3E8EF] bg-white p-3.5 lg:gap-2.5 lg:p-4"
     >
       <div className="flex flex-wrap items-center gap-2">
-        <h2 id="trial-title" className="text-[15px] font-bold lg:text-sm">
+        <h2 id="trial-title" className="text-[15px] font-bold lg:text-[14px]">
           {text.title}
         </h2>
         <BillingPill tone="blue">{text.daysLeft(daysLeft)}</BillingPill>
@@ -39,7 +39,7 @@ const TrialCard = ({ trialEndsAt, now }: { readonly trialEndsAt: Date; readonly 
         value={daysUsed}
         className="h-1.5 w-full appearance-none overflow-hidden rounded-full bg-[#EEF2F6] [&::-moz-progress-bar]:bg-[#1D4F91] [&::-webkit-progress-bar]:bg-[#EEF2F6] [&::-webkit-progress-value]:bg-[#1D4F91]"
       />
-      <p className="text-sm leading-relaxed text-[#475569] lg:text-[13px]">
+      <p className="text-[14px] leading-[1.45] text-[#475569] lg:text-[13px] lg:leading-normal">
         <span className="lg:hidden">{text.mobileText(DAY_DATE.format(trialEndsAt))}</span>
         <span className="hidden lg:inline">{text.text}</span>
       </p>
@@ -101,10 +101,11 @@ export const TrialPanel = ({ subscription, technicianCount, ownerName, now }: Tr
         technicianCount={technicianCount}
         isDisabled={!isBillingEnabled || !canManage}
         openingPlan={checkout.openingPlan}
+        isCompact={false}
         onChoose={checkout.choose}
       />
       <IncludedFeatures />
-      <p className="text-[13px] leading-relaxed text-[#64748B] lg:text-xs">
+      <p className="text-[13px] leading-relaxed text-[#64748B] lg:text-[12px]">
         <span className="lg:hidden">{billingFr.paymentNoteShort}</span>
         <span className="hidden lg:inline">{billingFr.paymentNote}</span>
       </p>

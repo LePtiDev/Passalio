@@ -147,6 +147,23 @@ describe("blocked workspace", () => {
     expect(api.requestsTo(CHECKOUT_ROUTE)[0]?.body).toEqual({ plan: "solo", interval: "month" });
   });
 
+  it("lets the owner pay yearly, with the two free months written in the choice", async () => {
+    const api = installBilling({
+      [SUBSCRIPTION_ROUTE]: blocked(),
+      [CHECKOUT_ROUTE]: redirectReply("https://checkout.stripe.com/c/pay/cs_3"),
+    });
+    vi.spyOn(window.location, "assign").mockReturnValue();
+    const { user } = renderGate();
+
+    await user.click(await screen.findByRole("radio", { name: billingFr.interval.yearWithOffer }));
+    expect(screen.queryByText(billingFr.interval.yearOffer)).toBeNull();
+    await user.click(screen.getByRole("button", { name: billingFr.plans.choose("team") }));
+
+    await waitFor(() =>
+      expect(api.requestsTo(CHECKOUT_ROUTE)[0]?.body).toEqual({ plan: "team", interval: "year" }),
+    );
+  });
+
   it("asks the owner of an unpaid space to update the payment, not to subscribe again", async () => {
     installBilling({
       [SUBSCRIPTION_ROUTE]: blocked({

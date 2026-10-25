@@ -34,11 +34,11 @@ const BannerContent = ({ banner }: { readonly banner: Banner }) => {
     <div
       role={isTrial ? "status" : "alert"}
       className={cn(
-        "flex shrink-0 flex-col gap-2 px-4 py-3 text-sm leading-normal lg:min-h-11 lg:flex-row lg:items-center lg:gap-2.5 lg:px-6 lg:py-1.5 lg:text-[13px]",
+        "flex shrink-0 flex-col gap-2 px-4 py-3 text-[14px] leading-[1.45] lg:min-h-11 lg:leading-[normal] lg:flex-row lg:items-center lg:gap-2.5 lg:px-6 lg:py-1.5 lg:text-[13px]",
         isTrial ? "bg-[#EAF1FB] text-[#1D4F91]" : "bg-[#FEF3E2] text-[#7A3B05]",
       )}
     >
-      <Icon aria-hidden="true" className="hidden size-[18px] shrink-0 lg:block" strokeWidth={1.8} />
+      <Icon aria-hidden="true" className="hidden size-4 shrink-0 lg:block" strokeWidth={1.8} />
       {banner.kind === "trial_ending" ? (
         <span className="flex-1">
           <strong>{text.trialEnding(banner.daysLeft)}</strong> {text.trialText}

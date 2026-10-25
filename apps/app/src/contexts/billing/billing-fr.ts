@@ -79,8 +79,10 @@ export const billingFr = {
   subscribed: {
     title: (plan: Plan, isYearly: boolean, isFounder: boolean) =>
       `${isFounder ? "Offre fondateur" : PLAN_NAMES[plan]}, paiement ${isYearly ? "annuel" : "mensuel"}`,
+    shortTitle: (plan: Plan, isYearly: boolean, isFounder: boolean) =>
+      `${isFounder ? "Offre fondateur" : PLAN_NAMES[plan]}, ${isYearly ? "annuel" : "mensuel"}`,
     priceLine: (euros: number, isYearly: boolean) =>
-      `${price(euros)} HT par ${isYearly ? "an" : "mois"}.`,
+      `${price(euros)} HT par ${isYearly ? "an" : "mois"}`,
     planLine: (plan: Plan) =>
       plan === "solo"
         ? "Un technicien, bureau et secrétariat illimités."
