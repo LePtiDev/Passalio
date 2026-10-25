@@ -6,7 +6,7 @@ import { CIVILITY_LABELS, customersFr } from "../../fr";
 import { FIELD_CLASS, LABEL_CLASS } from "../customer-styles";
 import { SegmentedControl, type Choice } from "./choice-controls";
 import type { CustomerFormValues } from "./customer-form-schema";
-import { describedBy, FormField } from "./form-field";
+import { describedBy, FormField } from "@/components/form-field";
 import { FieldRow } from "./form-shell";
 
 const text = customersFr.form;

@@ -57,6 +57,8 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
     withJson("PATCH", "/api/organization", updateOrganizationBody, { phone: "01 23 45 67 89" }),
   "PUT /api/organization/logo": () => withBytes("PUT", "/api/organization/logo", "image/png"),
   "GET /api/organization/logo": () => read("/api/organization/logo"),
+  "DELETE /api/organization/logo": () => withoutBody("DELETE", "/api/organization/logo"),
+  "GET /api/organization/document-settings": () => read("/api/organization/document-settings"),
   "POST /api/organization/onboarding-completion": () =>
     withoutBody("POST", "/api/organization/onboarding-completion"),
   "POST /api/document-number-blocks": () =>

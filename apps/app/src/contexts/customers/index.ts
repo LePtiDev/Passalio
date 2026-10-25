@@ -29,7 +29,7 @@ export {
 } from "./customer-view";
 export { equipmentDetailLine } from "./equipment-view";
 export { FieldRow, Fieldset, FormShell } from "./components/form/form-shell";
-export { describedBy, FormField } from "./components/form/form-field";
+export { describedBy, FormField } from "@/components/form-field";
 export {
   CARD_CLASS,
   DASHED_CARD_CLASS,

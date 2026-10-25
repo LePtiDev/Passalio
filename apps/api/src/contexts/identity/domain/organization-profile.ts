@@ -8,6 +8,12 @@ import {
   type TeamSize,
 } from "@passalio/shared";
 import type { TradeId } from "@passalio/trades";
+import {
+  blankToNull,
+  normalizeDocumentProfileChanges,
+  type DocumentAppearance,
+  type LegalDetails,
+} from "./document-profile";
 import type { Organization } from "./identity-models";
 import { normalizeOrganizationName } from "./organization-name";
 
@@ -27,16 +33,23 @@ export type DocumentSettings = {
 
 export type OrganizationProfile = Organization &
   CompanyDetails &
-  DocumentSettings & {
+  LegalDetails &
+  DocumentSettings &
+  DocumentAppearance & {
     readonly logoKey: string | null;
     readonly onboardingCompletedAt: Date | null;
+    readonly hasReservedNumbers: boolean;
   };
 
 type OptionalFields<T> = { readonly [Key in keyof T]?: T[Key] | undefined };
 
 export type OptionalCompanyDetails = OptionalFields<CompanyDetails>;
 
-type EditableProfile = Pick<Organization, "name"> & CompanyDetails & DocumentSettings;
+type EditableProfile = Pick<Organization, "name"> &
+  CompanyDetails &
+  LegalDetails &
+  DocumentSettings &
+  DocumentAppearance;
 
 export type ProfileChanges = OptionalFields<EditableProfile>;
 
@@ -45,6 +58,7 @@ export type NormalizedProfileChanges = Partial<EditableProfile>;
 export type ProfileError =
   | "invalid_organization_name"
   | "invalid_siret"
+  | "invalid_ape_code"
   | "invalid_document_numbering";
 
 const SIRET_LENGTH = 14;
@@ -52,11 +66,6 @@ const SIRET_LENGTH = 14;
 export const normalizeSiret = (raw: string): Result<string, "invalid_siret"> => {
   const digits = raw.replaceAll(/\s/g, "");
   return /^\d+$/.test(digits) && digits.length === SIRET_LENGTH ? ok(digits) : err("invalid_siret");
-};
-
-const blankToNull = (value: string | null): string | null => {
-  const trimmed = value?.trim() ?? "";
-  return trimmed.length === 0 ? null : trimmed;
 };
 
 const isValidNumbering = ({ documentNumberPrefix, nextDocumentNumber }: ProfileChanges) =>
@@ -93,7 +102,12 @@ export const normalizeProfileChanges = (
   if (!isValidNumbering(changes)) {
     return err("invalid_document_numbering");
   }
+  const documentProfile = normalizeDocumentProfileChanges(changes);
+  if (!documentProfile.isOk) {
+    return documentProfile;
+  }
   return ok({
+    ...documentProfile.value,
     ...definedOnly("name", name.value),
     ...definedOnly("siret", siret.value),
     ...definedOnly(
@@ -111,3 +125,11 @@ export const normalizeProfileChanges = (
     ...definedOnly("nextDocumentNumber", changes.nextDocumentNumber),
   });
 };
+
+export const isNumberingRewound = (
+  profile: Pick<OrganizationProfile, "hasReservedNumbers" | "nextDocumentNumber">,
+  changes: NormalizedProfileChanges,
+) =>
+  profile.hasReservedNumbers &&
+  changes.nextDocumentNumber !== undefined &&
+  changes.nextDocumentNumber < profile.nextDocumentNumber;

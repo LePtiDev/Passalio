@@ -28,7 +28,7 @@ export type OrganizationRepository = {
     organizationId: string,
     changes: NormalizedProfileChanges,
   ) => Promise<void>;
-  readonly setLogoKey: (organizationId: string, logoKey: string) => Promise<void>;
+  readonly setLogoKey: (organizationId: string, logoKey: string | null) => Promise<void>;
   readonly completeOnboarding: (organizationId: string, completedAt: Date) => Promise<void>;
 };
 
@@ -40,6 +40,7 @@ export type StoredLogo = {
 export type LogoStorage = {
   readonly put: (key: string, body: ArrayBuffer, contentType: string) => Promise<void>;
   readonly get: (key: string) => Promise<StoredLogo | undefined>;
+  readonly delete: (key: string) => Promise<void>;
 };
 
 export type CompanyDirectory = {
@@ -86,6 +87,7 @@ export type IdentityAuditAction =
   | "organization.created"
   | "organization.updated"
   | "organization.logo_updated"
+  | "organization.logo_removed"
   | "organization.onboarding_completed"
   | "member.invited"
   | "invitation.accepted"

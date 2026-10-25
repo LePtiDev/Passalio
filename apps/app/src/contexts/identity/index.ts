@@ -19,3 +19,5 @@ export { ONBOARDING_PATHS } from "./components/onboarding/onboarding-steps";
 export { TwoFactorCodeForm } from "./components/two-factor/two-factor-code-form";
 export { TwoFactorSetup } from "./components/two-factor/two-factor-setup";
 export { twoFactorFr } from "./two-factor-fr";
+export { CompanySettingsScreen } from "./components/settings/company-settings-screen";
+export { DocumentSettingsScreen } from "./components/settings/document-settings-screen";

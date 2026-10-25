@@ -1,17 +1,20 @@
-import { BRAND_COLORS, type BrandColor } from "@passalio/shared";
+import {
+  BRAND_COLORS,
+  CONTACT_TEXT_MAX_LENGTH,
+  DOCUMENT_TEMPLATES,
+  DOCUMENT_TEXT_MAX_LENGTH,
+  type BrandColor,
+} from "@passalio/shared";
 import { chimneySweepingCertificate } from "@passalio/trades";
 import * as z from "zod";
 
-export const DOCUMENT_TEMPLATES = ["banner", "plain"] as const;
-
-export type DocumentTemplate = (typeof DOCUMENT_TEMPLATES)[number];
+export { DOCUMENT_TEMPLATES, type DocumentTemplate } from "@passalio/shared";
 
 export const LOGO_FORMATS = ["png", "jpeg"] as const;
 
-export const BRANDING_TEXT_MAX_LENGTH = 300;
+export const BRANDING_TEXT_MAX_LENGTH = DOCUMENT_TEXT_MAX_LENGTH;
 
 const LOGO_MAX_BASE64_LENGTH = 3_000_000;
-const CONTACT_MAX_LENGTH = 120;
 
 const optionalText = (maxLength: number) => z.string().trim().min(1).max(maxLength).nullable();
 
@@ -28,9 +31,9 @@ export const documentBranding = z.strictObject({
     })
     .nullable(),
   contact: z.strictObject({
-    phone: optionalText(CONTACT_MAX_LENGTH),
-    email: optionalText(CONTACT_MAX_LENGTH),
-    website: optionalText(CONTACT_MAX_LENGTH),
+    phone: optionalText(CONTACT_TEXT_MAX_LENGTH),
+    email: optionalText(CONTACT_TEXT_MAX_LENGTH),
+    website: optionalText(CONTACT_TEXT_MAX_LENGTH),
   }),
   customerMessage: optionalText(BRANDING_TEXT_MAX_LENGTH),
   footerText: optionalText(BRANDING_TEXT_MAX_LENGTH),

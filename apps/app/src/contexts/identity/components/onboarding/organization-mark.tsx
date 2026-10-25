@@ -8,13 +8,14 @@ const MARK_SIZE_CLASS = {
   tiny: "size-8 rounded-lg text-xs lg:size-[26px] lg:rounded-md lg:text-[11px]",
   small: "size-9 rounded-lg text-[13px]",
   large: "size-11 rounded-[10px] text-[15px]",
+  huge: "size-16 rounded-xl text-[22px]",
 } as const;
 
 type OrganizationMarkProps = {
   readonly name: string;
   readonly brandColor: BrandColor;
   readonly logoUrl: string | null;
-  readonly size: "tiny" | "small" | "large";
+  readonly size: keyof typeof MARK_SIZE_CLASS;
 };
 
 export const OrganizationMark = ({ name, brandColor, logoUrl, size }: OrganizationMarkProps) => {

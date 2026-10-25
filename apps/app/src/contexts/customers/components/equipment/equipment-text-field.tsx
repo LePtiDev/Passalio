@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { FIELD_CLASS } from "../customer-styles";
-import { describedBy, FormField } from "../form/form-field";
+import { describedBy, FormField } from "@/components/form-field";
 import type { EquipmentFormValues } from "./equipment-form-schema";
 import { plateFieldClassOf, PlateTag, usePlateMark } from "./plate-marks";
 

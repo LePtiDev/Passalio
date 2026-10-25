@@ -30,6 +30,9 @@ const LEGAL_FORMS_WITH_CAPITAL: ReadonlySet<LegalForm> = new Set([
   "sa",
 ]);
 
+export const requiresShareCapital = (legalForm: LegalForm) =>
+  LEGAL_FORMS_WITH_CAPITAL.has(legalForm);
+
 export const isSealedAppliance = ({ flueType }: SweptEquipment) => flueType === "sealed_concentric";
 
 export const requiresUsageAdvice = ({ kind }: SweptEquipment) =>
@@ -51,7 +54,7 @@ const firstBroken = (
     ],
     [requiresUsageAdvice(equipment) && !certificate.isAdviceAttached, "advice_required"],
     [
-      LEGAL_FORMS_WITH_CAPITAL.has(certificate.company.legalForm) &&
+      requiresShareCapital(certificate.company.legalForm) &&
         certificate.company.shareCapitalEuros === null,
       "share_capital_required",
     ],
