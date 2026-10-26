@@ -91,7 +91,7 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 14, 15  | Parcours mobile et ordinateur : formulaire, erreurs, mentions légales demandées puis signature, PDF téléchargé, certificat sur le serveur ; signature sans réseau avec client absent                       | `apps/app/e2e/certificate-signing.spec.ts`                                                                                                                                                            |
 | 6, 13   | Préparation du téléphone : copie des réglages et du logo, réservation, retour du réseau, rien pour qui ne signe pas ; base locale version 5                                                                | `apps/app/src/contexts/compliance/components/signing-preparation.test.tsx`, `apps/app/src/lib/db/local-database-signing-upgrade.test.ts`                                                              |
 
-## Archive du PDF et page du certificat (ADR 0033)
+## Archive du PDF et page du certificat (ADR 0035)
 
 | Famille  | Ce qui est vérifié                                                                                                                                                                                                       | Test                                                                                                                            |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
