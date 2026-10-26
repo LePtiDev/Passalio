@@ -12,6 +12,7 @@ import type {
   NormalizedProfileChanges,
   OrganizationProfile,
 } from "./organization-profile";
+import type { TechnicianSeats } from "../../../platform/technician-seats";
 
 export type Page = {
   readonly limit: number;
@@ -120,6 +121,7 @@ export type SignUpPolicy = {
 
 export type IdentityDependencies = {
   readonly signUpPolicy: SignUpPolicy;
+  readonly technicianSeats: TechnicianSeats;
   readonly organizations: OrganizationRepository;
   readonly members: MemberRepository;
   readonly invitations: InvitationRepository;

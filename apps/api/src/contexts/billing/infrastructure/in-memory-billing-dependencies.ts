@@ -25,6 +25,7 @@ export type InMemoryBillingState = {
   readonly emails: Map<string, string>;
   readonly ownerNames: Map<string, string>;
   readonly technicianCounts: Map<string, number>;
+  readonly pendingTechnicianInvitations: Map<string, number>;
   readonly processedEvents: Map<string, StripeEvent>;
   readonly auditEntries: BillingAuditEntry[];
   readonly stripe: InMemoryStripeState;
@@ -38,6 +39,7 @@ export const createInMemoryBillingState = (): InMemoryBillingState => ({
   emails: new Map(),
   ownerNames: new Map(),
   technicianCounts: new Map(),
+  pendingTechnicianInvitations: new Map(),
   processedEvents: new Map(),
   auditEntries: [],
   stripe: {
@@ -95,6 +97,8 @@ export const createInMemoryBillingDependencies = (
     findEmail: async (userId) => state.emails.get(userId),
     findOwnerName: async (organizationId) => state.ownerNames.get(organizationId),
     countTechnicians: async (organizationId) => state.technicianCounts.get(organizationId) ?? 0,
+    countPendingTechnicianInvitations: async (organizationId) =>
+      state.pendingTechnicianInvitations.get(organizationId) ?? 0,
   },
   stripeEvents: {
     hasProcessed: async (eventId) => state.processedEvents.has(eventId),

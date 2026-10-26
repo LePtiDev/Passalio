@@ -1,4 +1,5 @@
 import { createMiddleware } from "hono/factory";
+import { createBillingDependencies, hasTechnicianSeat } from "../contexts/billing";
 import { canSignUp, createPlatformSettingsDependencies } from "../contexts/platform-settings";
 import type { AppEnv } from "../env";
 import { createActivityLog } from "./activity-log";
@@ -35,6 +36,11 @@ export const requestServicesMiddleware = createMiddleware<AppEnv>(async (context
   context.set("database", database);
   context.set("auditTrail", auditTrail);
   context.set("emailSender", emailSender);
+  context.set("technicianSeats", {
+    hasFreeSeat: hasTechnicianSeat(
+      createBillingDependencies({ database, auditTrail, bindings: context.env }),
+    ),
+  });
   context.set("auth", auth);
   context.set("session", await auth.api.getSession({ headers: context.req.raw.headers }));
   await next();

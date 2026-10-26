@@ -18,6 +18,7 @@ export const identityDependencies = (
         }),
       ),
     },
+    technicianSeats: variables.technicianSeats,
     database: variables.database,
     auditTrail: variables.auditTrail,
     emailSender: variables.emailSender,

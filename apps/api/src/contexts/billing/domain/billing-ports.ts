@@ -19,6 +19,7 @@ export type BillingContactDirectory = {
   readonly findEmail: (userId: string) => Promise<string | undefined>;
   readonly findOwnerName: (organizationId: string) => Promise<string | undefined>;
   readonly countTechnicians: (organizationId: string) => Promise<number>;
+  readonly countPendingTechnicianInvitations: (organizationId: string) => Promise<number>;
 };
 
 export type StripeEventLog = {

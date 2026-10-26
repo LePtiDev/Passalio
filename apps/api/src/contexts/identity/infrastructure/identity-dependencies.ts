@@ -2,6 +2,7 @@ import type { AuditTrail } from "../../../platform/audit-trail";
 import type { Database } from "../../../platform/database";
 import type { EmailSender } from "../../../platform/email";
 import type { Logger } from "../../../platform/logger";
+import type { TechnicianSeats } from "../../../platform/technician-seats";
 import type { IdentityDependencies, SignUpPolicy } from "../domain/identity-ports";
 import { createD1InvitationRepository } from "./d1-invitation-repository";
 import { createD1MemberRepository } from "./d1-member-repository";
@@ -11,6 +12,7 @@ import { createSireneCompanyDirectory } from "./sirene-company-directory";
 
 export type IdentityInfrastructure = {
   readonly signUpPolicy: SignUpPolicy;
+  readonly technicianSeats: TechnicianSeats;
   readonly database: Database;
   readonly auditTrail: AuditTrail;
   readonly emailSender: EmailSender;
@@ -24,6 +26,7 @@ export const invitationUrl = (appUrl: string, organizationId: string, invitation
 
 export const createIdentityDependencies = ({
   signUpPolicy,
+  technicianSeats,
   database,
   auditTrail,
   emailSender,
@@ -34,6 +37,7 @@ export const createIdentityDependencies = ({
   const members = createD1MemberRepository(database);
   return {
     signUpPolicy,
+    technicianSeats,
     organizations: createD1OrganizationRepository(database),
     members,
     invitations: createD1InvitationRepository(database),

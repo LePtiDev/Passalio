@@ -3,6 +3,7 @@ import type { Auth, AuthSession } from "./platform/auth";
 import type { Database } from "./platform/database";
 import type { EmailDelivery, EmailSender } from "./platform/email";
 import type { Logger } from "./platform/logger";
+import type { TechnicianSeats } from "./platform/technician-seats";
 
 export type Bindings = {
   readonly DB: D1Database;
@@ -35,6 +36,7 @@ export type Variables = {
   readonly database: Database;
   readonly auditTrail: AuditTrail;
   readonly emailSender: EmailSender;
+  readonly technicianSeats: TechnicianSeats;
   readonly auth: Auth;
   readonly session: AuthSession | null;
 };

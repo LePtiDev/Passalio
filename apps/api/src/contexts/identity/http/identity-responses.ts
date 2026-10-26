@@ -15,6 +15,7 @@ const ERROR_STATUS: Readonly<Record<IdentityError, ContentfulStatusCode>> = {
   invitation_email_mismatch: 403,
   impersonation_read_only: 403,
   sign_up_closed: 403,
+  team_plan_required: 409,
   invalid_siret: 422,
   invalid_document_numbering: 422,
   invalid_ape_code: 422,

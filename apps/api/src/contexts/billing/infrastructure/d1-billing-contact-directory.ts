@@ -1,4 +1,4 @@
-import { members, users } from "@passalio/db";
+import { invitations, members, users } from "@passalio/db";
 import { TECHNICIAN_ROLES } from "@passalio/shared";
 import { and, count, eq, inArray } from "drizzle-orm";
 import type { Database } from "../../../platform/database";
@@ -27,4 +27,18 @@ export const createD1BillingContactDirectory = (database: Database): BillingCont
         )
         .get()
     )?.technicians ?? 0,
+  countPendingTechnicianInvitations: async (organizationId) =>
+    (
+      await database
+        .select({ pending: count() })
+        .from(invitations)
+        .where(
+          and(
+            eq(invitations.organizationId, organizationId),
+            eq(invitations.status, "pending"),
+            inArray(invitations.role, TECHNICIAN_ROLES),
+          ),
+        )
+        .get()
+    )?.pending ?? 0,
 });
