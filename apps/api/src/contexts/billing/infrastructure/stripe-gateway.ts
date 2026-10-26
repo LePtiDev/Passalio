@@ -1,6 +1,9 @@
-import type { CheckoutRequest } from "../domain/billing-models";
+import type { CheckoutRequest, PriceChange, Proration } from "../domain/billing-models";
 import type { StripeGateway } from "../domain/billing-ports";
+import { unixSecondsOf } from "../domain/proration";
 import {
+  parseAmountDue,
+  parseFirstItemId,
   parseFirstPriceId,
   parseInvoices,
   parseSessionUrl,
@@ -34,6 +37,23 @@ const checkoutFields = (request: CheckoutRequest, paymentMethodConfiguration: st
   locale: "fr",
 });
 
+const PAYMENT_REQUIRED = 402;
+
+const prorationFields = (keyOf: (name: string) => string, proration: Proration): FormFields =>
+  proration.kind === "next_invoice"
+    ? { [keyOf("proration_behavior")]: "create_prorations" }
+    : {
+        [keyOf("proration_behavior")]: "always_invoice",
+        [keyOf("proration_date")]: String(unixSecondsOf(proration.at)),
+      };
+
+const previewKey = (name: string) => `subscription_details[${name}]`;
+
+const updateKey = (name: string) => name;
+
+const subscriptionPath = (subscriptionId: string) =>
+  `/subscriptions/${encodeURIComponent(subscriptionId)}`;
+
 export const createStripeGateway = ({
   secretKey,
   paymentMethodConfiguration,
@@ -64,7 +84,57 @@ export const createStripeGateway = ({
     return body;
   };
 
+  const firstItemIdOf = async (subscriptionId: string) => {
+    const itemId = parseFirstItemId(
+      await succeeded(subscriptionPath(subscriptionId), { method: "GET" }),
+    );
+    if (itemId === undefined) {
+      throw new Error("stripe_subscription_without_item");
+    }
+    return itemId;
+  };
+
+  const previewPriceChange = async ({ subscriptionId, priceId, proration }: PriceChange) => {
+    const itemId = await firstItemIdOf(subscriptionId);
+    return {
+      amountDueCents: parseAmountDue(
+        await succeeded("/invoices/create_preview", {
+          method: "POST",
+          fields: {
+            subscription: subscriptionId,
+            "subscription_details[items][0][id]": itemId,
+            "subscription_details[items][0][price]": priceId,
+            ...prorationFields(previewKey, proration),
+          },
+        }),
+      ),
+    };
+  };
+
+  const changePrice = async ({ subscriptionId, priceId, proration }: PriceChange) => {
+    const itemId = await firstItemIdOf(subscriptionId);
+    const { status, body } = await call(subscriptionPath(subscriptionId), {
+      method: "POST",
+      fields: {
+        "items[0][id]": itemId,
+        "items[0][price]": priceId,
+        ...prorationFields(updateKey, proration),
+        payment_behavior: proration.kind === "invoice_now" ? "error_if_incomplete" : null,
+        "expand[]": "default_payment_method",
+      },
+    });
+    if (status === PAYMENT_REQUIRED) {
+      return undefined;
+    }
+    if (status >= 400) {
+      throw new Error(`stripe_request_failed:${status}`);
+    }
+    return parseStripeSubscription(body);
+  };
+
   return {
+    previewPriceChange,
+    changePrice,
     findPriceId: async (lookupKey) =>
       parseFirstPriceId(
         await succeeded(

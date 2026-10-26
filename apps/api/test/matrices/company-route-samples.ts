@@ -1,4 +1,9 @@
-import { reserveNumberBlockBody, startCheckoutBody, syncPushBody } from "@passalio/shared";
+import {
+  reserveNumberBlockBody,
+  startCheckoutBody,
+  syncPushBody,
+  upgradeToTeamBody,
+} from "@passalio/shared";
 import { serviceChanges, serviceFields } from "@passalio/trades";
 import {
   addEquipmentBody,
@@ -116,6 +121,12 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
       interval: "month",
     }),
   "POST /api/billing/portal": () => withoutBody("POST", "/api/billing/portal"),
+  "POST /api/billing/team-upgrade/preview": () =>
+    withoutBody("POST", "/api/billing/team-upgrade/preview"),
+  "POST /api/billing/team-upgrade": () =>
+    withJson("POST", "/api/billing/team-upgrade", upgradeToTeamBody, {
+      prorationDate: Math.floor(Date.now() / 1000),
+    }),
   "GET /api/billing/seats": () => read("/api/billing/seats"),
   "GET /api/billing/invoices": () => read("/api/billing/invoices"),
   "POST /api/sync/push": (ids) =>

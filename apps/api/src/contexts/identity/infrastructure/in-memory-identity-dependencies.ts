@@ -20,6 +20,7 @@ export type InMemoryIdentityState = {
   readonly logos: Map<string, string>;
   readonly companies: CompanySummary[];
   readonly signUp?: { isOpen: boolean };
+  readonly fullTechnicianSeats?: ReadonlySet<string>;
 };
 
 export const createInMemoryIdentityState = (): InMemoryIdentityState => ({
@@ -85,6 +86,9 @@ export const createInMemoryIdentityDependencies = (
 
   return {
     signUpPolicy: { isOpen: async () => state.signUp?.isOpen ?? true },
+    technicianSeats: {
+      hasFreeSeat: async (organizationId) => !state.fullTechnicianSeats?.has(organizationId),
+    },
     organizations: {
       createWithOwner: async (organization, owner) => {
         state.organizations.push(inMemoryOrganization(organization));

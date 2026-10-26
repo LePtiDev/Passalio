@@ -9,6 +9,7 @@ import { usePendingInvitations } from "../../hooks/use-pending-invitations";
 import { useTeam } from "../../hooks/use-team";
 import { InviteMemberDialog } from "./invite-member-dialog";
 import { OrganizationSubtitle } from "./organization-subtitle";
+import type { TeamPlanUpgrade } from "./team-plan-upgrade";
 import { TeamTabs, type TeamTab } from "./team-tabs";
 
 const TRAIL = [{ label: fr.shell.settings, to: "/reglages" }, { label: fr.shell.team }] as const;
@@ -22,7 +23,11 @@ const countOf = (pageLengths: readonly number[] | undefined, hasMore: boolean) =
     ? null
     : pageLengths.reduce((total, length) => total + length, 0);
 
-export const TeamScreen = () => {
+type TeamScreenProps = {
+  readonly teamPlanUpgrade?: TeamPlanUpgrade;
+};
+
+export const TeamScreen = ({ teamPlanUpgrade }: TeamScreenProps) => {
   const canManage = useCan("members:manage");
   const team = useTeam();
   const pending = usePendingInvitations();
@@ -89,7 +94,11 @@ export const TeamScreen = () => {
           onTabChange={setTab}
         />
       </PageContent>
-      <InviteMemberDialog isOpen={isInviteOpen} onOpenChange={setInviteOpen} />
+      <InviteMemberDialog
+        isOpen={isInviteOpen}
+        onOpenChange={setInviteOpen}
+        teamPlanUpgrade={teamPlanUpgrade}
+      />
     </>
   );
 };

@@ -14,6 +14,7 @@ import {
   checkAssignableRole,
   INVITATION_LIFETIME_MS,
   normalizeEmail,
+  takesTechnicianSeat,
 } from "../domain/membership-rules";
 
 export type InviteMemberInput = {
@@ -28,6 +29,7 @@ export const inviteMember =
     invitations,
     auditTrail,
     invitationNotifier,
+    technicianSeats,
     now,
   }: IdentityDependencies) =>
   async (actor: Actor, input: InviteMemberInput): Promise<Result<Invitation, IdentityError>> => {
@@ -43,6 +45,12 @@ export const inviteMember =
     const organization = await organizations.findById(actor.organizationId);
     if (organization === undefined) {
       return err("organization_not_found");
+    }
+    if (
+      takesTechnicianSeat(role.value) &&
+      !(await technicianSeats.hasFreeSeat(actor.organizationId))
+    ) {
+      return err("team_plan_required");
     }
     const invitation: Invitation = {
       id: newId(),

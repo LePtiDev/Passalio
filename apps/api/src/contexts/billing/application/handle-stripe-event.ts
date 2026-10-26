@@ -1,17 +1,9 @@
-import { newId } from "@passalio/shared";
 import type { StripeEventOutcome } from "../domain/billing-error";
-import type {
-  StripeEvent,
-  StripeSubscriptionSnapshot,
-  Subscription,
-} from "../domain/billing-models";
+import type { StripeEvent, Subscription } from "../domain/billing-models";
 import type { BillingDependencies, StripeGateway } from "../domain/billing-ports";
-import { pricedPlanOf } from "../domain/plan-catalog";
-import {
-  isEndedStatus,
-  isOutdatedSubscription,
-  paymentFailedAtOf,
-} from "../domain/subscription-rules";
+import { subscriptionFrom } from "../domain/subscription-from-snapshot";
+import { revertSoloDowngrade } from "./revert-solo-downgrade";
+import { isEndedStatus, isOutdatedSubscription } from "../domain/subscription-rules";
 
 const hasChanged = (previous: Subscription | null, next: Subscription) =>
   previous === null ||
@@ -20,41 +12,10 @@ const hasChanged = (previous: Subscription | null, next: Subscription) =>
   previous.interval !== next.interval ||
   previous.isCancelScheduled !== next.isCancelScheduled;
 
-const subscriptionFrom = (
-  snapshot: StripeSubscriptionSnapshot,
-  organizationId: string,
-  current: Subscription | null,
-  at: Date,
-): Subscription | undefined => {
-  const pricedPlan = pricedPlanOf(snapshot.lookupKey);
-  if (pricedPlan === undefined) {
-    return undefined;
-  }
-  const sameSubscription = current?.stripeSubscriptionId === snapshot.id ? current : null;
-  return {
-    id: current?.id ?? newId(),
-    organizationId,
-    ...pricedPlan,
-    status: snapshot.status,
-    stripeCustomerId: snapshot.customerId,
-    stripeSubscriptionId: snapshot.id,
-    currentPeriodEnd: snapshot.currentPeriodEnd,
-    isCancelScheduled: snapshot.isCancelScheduled,
-    endedAt: snapshot.endedAt,
-    paymentFailedAt: paymentFailedAtOf(
-      snapshot.status,
-      sameSubscription?.paymentFailedAt ?? null,
-      at,
-    ),
-    paymentMethod: snapshot.paymentMethod,
-    createdAt: current?.createdAt ?? at,
-    updatedAt: at,
-  };
-};
-
 const synchronizeSubscription =
-  ({ workspaces, subscriptions, auditTrail, now }: BillingDependencies, stripe: StripeGateway) =>
+  (dependencies: BillingDependencies, stripe: StripeGateway) =>
   async (subscriptionId: string): Promise<StripeEventOutcome> => {
+    const { workspaces, subscriptions, auditTrail, now } = dependencies;
     const snapshot = await stripe.retrieveSubscription(subscriptionId);
     if (snapshot === undefined || snapshot.organizationId === null) {
       return "ignored";
@@ -67,10 +28,11 @@ const synchronizeSubscription =
     if (isOutdatedSubscription(current, snapshot.id, isEndedStatus(snapshot.status))) {
       return "ignored";
     }
-    const next = subscriptionFrom(snapshot, workspace.organizationId, current, now());
-    if (next === undefined) {
+    const incoming = subscriptionFrom(snapshot, workspace.organizationId, current, now());
+    if (incoming === undefined) {
       return "ignored";
     }
+    const next = await revertSoloDowngrade(dependencies, stripe)(current, incoming);
     await subscriptions.save(next);
     if (hasChanged(current, next)) {
       await auditTrail.record({

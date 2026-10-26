@@ -8,7 +8,11 @@ import {
 } from "@passalio/shared";
 import type { IdentityError } from "../domain/identity-error";
 import type { IdentityDependencies } from "../domain/identity-ports";
-import { checkAssignableRole, checkMemberIsNotOwner } from "../domain/membership-rules";
+import {
+  checkAssignableRole,
+  checkMemberIsNotOwner,
+  needsNewTechnicianSeat,
+} from "../domain/membership-rules";
 
 export type ChangeMemberRoleInput = {
   readonly memberId: string;
@@ -16,7 +20,11 @@ export type ChangeMemberRoleInput = {
 };
 
 export const changeMemberRole =
-  ({ members, auditTrail }: Pick<IdentityDependencies, "members" | "auditTrail">) =>
+  ({
+    members,
+    auditTrail,
+    technicianSeats,
+  }: Pick<IdentityDependencies, "members" | "auditTrail" | "technicianSeats">) =>
   async (actor: Actor, input: ChangeMemberRoleInput): Promise<Result<void, IdentityError>> => {
     assertCan(actor, "members:manage");
     const role = checkAssignableRole(input.role);
@@ -30,6 +38,12 @@ export const changeMemberRole =
     const changeable = checkMemberIsNotOwner(member);
     if (!changeable.isOk) {
       return changeable;
+    }
+    if (
+      needsNewTechnicianSeat(member.role, role.value) &&
+      !(await technicianSeats.hasFreeSeat(actor.organizationId))
+    ) {
+      return err("team_plan_required");
     }
     await members.updateRole(actor.organizationId, member.id, role.value);
     await auditTrail.record({

@@ -1,4 +1,4 @@
-import { err, ok, type OrganizationRole, type Result } from "@passalio/shared";
+import { err, ok, TECHNICIAN_ROLES, type OrganizationRole, type Result } from "@passalio/shared";
 import type { Invitation, Member, UserActor } from "./identity-models";
 
 export const INVITATION_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
@@ -34,3 +34,9 @@ export const checkInvitationAcceptable = (
   }
   return ok(invitation);
 };
+
+export const takesTechnicianSeat = (role: OrganizationRole): boolean =>
+  TECHNICIAN_ROLES.includes(role);
+
+export const needsNewTechnicianSeat = (from: OrganizationRole, to: OrganizationRole): boolean =>
+  takesTechnicianSeat(to) && !takesTechnicianSeat(from);

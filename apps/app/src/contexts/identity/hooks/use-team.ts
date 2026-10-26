@@ -38,12 +38,18 @@ export const useTeamPage = (cursor: string | null, limit: number | null) =>
     placeholderData: keepPreviousData,
   });
 
+type TeamMutationOptions = {
+  readonly showsErrorsInline?: boolean;
+};
+
 export const useTeamMutation = <Input>(
   action: (input: Input) => Promise<ApiResult<unknown>>,
   successMessage: (input: Input) => string,
+  { showsErrorsInline = false }: TeamMutationOptions = {},
 ) => {
   const queryClient = useQueryClient();
   return useMutation({
+    meta: { showsErrorsInline },
     mutationFn: async (input: Input) => unwrap(await action(input)),
     onSuccess: async (_value, input) => {
       toast.success(successMessage(input));
@@ -91,4 +97,5 @@ export const useInviteMember = () =>
   useTeamMutation(
     ({ email, role }: InvitationRequest) => identityApi.inviteMember(email, role),
     ({ email }) => identityFr.invite.sent(email),
+    { showsErrorsInline: true },
   );

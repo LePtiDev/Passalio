@@ -100,3 +100,14 @@ export const invoiceResponse = z.object({
 export type InvoiceResponse = z.infer<typeof invoiceResponse>;
 
 export const invoicesResponse = z.object({ invoices: z.array(invoiceResponse) });
+
+export const teamUpgradePreviewResponse = z.object({
+  amountDueCents: z.number().int(),
+  interval: z.enum(BILLING_INTERVALS),
+  currentPeriodEndsAt: z.iso.datetime().nullable(),
+  prorationDate: z.number().int().positive(),
+});
+export type TeamUpgradePreviewResponse = z.infer<typeof teamUpgradePreviewResponse>;
+
+export const upgradeToTeamBody = z.object({ prorationDate: z.number().int().positive() });
+export type UpgradeToTeamBody = z.infer<typeof upgradeToTeamBody>;

@@ -148,6 +148,12 @@ export const fr = {
       already_subscribed: "Votre entreprise a déjà un abonnement. Rechargez la page.",
       price_not_found: "Cette formule n'est pas disponible. Réessayez dans un instant.",
       no_subscription: "Aucun abonnement à gérer pour le moment.",
+      team_plan_required:
+        "La formule Solo comprend un seul technicien. Passez à la formule Équipe dans Réglages, Abonnement.",
+      not_on_solo: "Votre entreprise a déjà la formule Équipe. Rechargez la page.",
+      preview_expired: "Le montant a été recalculé. Vérifiez-le, puis confirmez.",
+      payment_failed:
+        "Le paiement a été refusé. Vérifiez votre moyen de paiement dans Réglages, Abonnement.",
     },
   },
 } as const;

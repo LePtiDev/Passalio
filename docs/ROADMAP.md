@@ -78,6 +78,7 @@ Dernière mise à jour : 2026-10-26.
 | Prospection, écran Configuration : Profil, Boîte mail (test de connexion), Rappels, Signature, admin pour un autre membre                                                                                                                                                                                                                   | ADR 0028                                            |
 | Menu « Mon compte » en bas des barres latérales : Mon profil, Configuration ou Réglages, Se déconnecter                                                                                                                                                                                                                                     | `account-menu.tsx`                                  |
 | Règle : chaque maquette vérifiée uniforme avec le reste de l'application avant d'être montrée                                                                                                                                                                                                                                               | ADR 0033, skill `new-screen`                        |
+| Abonnement, formule Solo : un seul technicien (refus serveur), fenêtre « Passer à la formule Équipe ? » avec le prorata Stripe, retour vers Solo annulé s'il reste plusieurs techniciens                                                                                                                                                    | ADR 0034                                            |
 
 ## Hors code (Quentin)
 
@@ -152,7 +153,7 @@ Dernière mise à jour : 2026-10-26.
 - [ ] Offre des 20 premiers clients : 19 € HT par mois à vie, quelle que soit la formule (choix de Quentin du 2026-10-24, à consigner dans l'ADR 0025 et à coder avec l'abonnement)
 - [x] Abonnement, code (PR 1) : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures d'un espace bloqué (ADR 0031)
 - [x] Abonnement, écrans (PR 2) : Réglages › Abonnement dans tous ses états, factures, bandeaux d'essai et d'impayé, espace bloqué, nom de la formule dans la barre latérale
-- [ ] Abonnement, formule Solo : passage à Équipe à l'invitation d'un deuxième technicien (fenêtre avec prorata), refus côté serveur d'un deuxième technicien en Solo, refus d'Équipe vers Solo avec plusieurs techniciens
+- [x] Abonnement, formule Solo : passage à Équipe à l'invitation d'un deuxième technicien (fenêtre avec prorata), refus côté serveur d'un deuxième technicien en Solo, refus d'Équipe vers Solo avec plusieurs techniciens (ADR 0034)
 - [ ] Abonnement : bouton « Exporter mes données » de l'espace bloqué et ligne « Export de vos données » des formules, à remettre avec l'export
 - [ ] Abonnement, e-mails et offre fondateurs (PR 3) : fin d'essai J-2, paiement refusé J0, J3, J7, J12, espace bloqué (cron quotidien) ; prix `founder_monthly` à 19 € HT pour les 20 premiers payeurs
 - [ ] Stripe : régler les relances pour garder l'abonnement `past_due` ou `unpaid` au moins 15 jours, poser `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` et `STRIPE_PAYMENT_METHOD_CONFIGURATION` en staging (sur demande de déploiement)

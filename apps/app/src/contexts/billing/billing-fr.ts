@@ -161,6 +161,25 @@ export const billingFr = {
     loadFailed: "Les factures n'ont pas pu être chargées.",
     stripeNote: "Toutes les factures sont aussi dans l'espace de paiement Stripe.",
   },
+  teamUpgrade: {
+    title: "Passer à la formule Équipe ?",
+    text: (person: string, role: string) =>
+      `La formule Solo comprend un technicien, et vous en avez déjà un. Pour inviter ${person} comme ${role}, passez à Équipe : techniciens illimités.`,
+    newPlan: "Nouvelle formule",
+    newPlanValue: (euros: number, isYearly: boolean) =>
+      `Équipe, ${price(euros)} HT par ${isYearly ? "an" : "mois"}`,
+    dueToday: "À payer aujourd'hui",
+    prorata: (daysLeft: number, date: string, euros: number, isYearly: boolean) =>
+      `${daysLeft <= 1 ? "Au prorata du jour qui reste" : `Au prorata des ${daysLeft} jours qui restent`} jusqu'au ${date.endsWith(".") ? date : `${date}.`} Ensuite ${price(euros)} par ${isYearly ? "an" : "mois"}.`,
+    secretaryNote: "Vous pouvez aussi l'inviter avec le rôle Secrétariat, inclus dans Solo.",
+    loading: "Calcul du montant",
+    loadFailed: "Le montant n'a pas pu être calculé. Réessayez.",
+    retry: "Réessayer",
+    cancel: "Annuler",
+    confirm: "Passer à Équipe et inviter",
+    confirming: "Passage à Équipe…",
+    upgraded: "Votre formule Équipe est active.",
+  },
   banner: {
     trialEnding: (daysLeft: number) =>
       daysLeft === 0

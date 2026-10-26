@@ -26,3 +26,6 @@ export const lookupKeyOf = (plan: Plan, interval: BillingInterval): string =>
 
 export const pricedPlanOf = (lookupKey: string | null): PricedPlan | undefined =>
   lookupKey === null ? undefined : PRICED_PLANS.get(lookupKey);
+
+export const lookupKeyOfPricedPlan = ({ plan, interval, isFounder }: PricedPlan): string =>
+  isFounder ? FOUNDER_LOOKUP_KEY : lookupKeyOf(plan, interval);

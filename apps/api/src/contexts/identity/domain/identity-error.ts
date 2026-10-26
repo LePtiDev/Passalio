@@ -17,4 +17,5 @@ export type IdentityError =
   | "document_number_already_used"
   | "invalid_logo"
   | "logo_not_found"
-  | "company_search_unavailable";
+  | "company_search_unavailable"
+  | "team_plan_required";

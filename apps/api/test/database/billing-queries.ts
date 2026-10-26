@@ -58,6 +58,11 @@ export const BILLING_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.billingContacts.countTechnicians(s.organization.id),
   },
   {
+    method: "billingContacts.countPendingTechnicianInvitations",
+    query: "pending technician invitations counted by the plan",
+    run: (r, s) => r.billingContacts.countPendingTechnicianInvitations(s.organization.id),
+  },
+  {
     method: "stripeEvents.hasProcessed",
     query: "Stripe event already handled",
     run: (r) => r.stripeEvents.hasProcessed("evt_catalogue"),

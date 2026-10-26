@@ -7,6 +7,7 @@ export { AcceptInvitationCard } from "./components/accept-invitation-card";
 export { SignInForm } from "./components/sign-in-form";
 export { OrganizationBadge } from "./components/organization-badge";
 export { TeamScreen } from "./components/team/team-screen";
+export type { TeamPlanUpgradeProps } from "./components/team/team-plan-upgrade";
 export { TeamScreenSkeleton } from "./components/team/team-skeleton";
 export { usePendingInvitations } from "./hooks/use-pending-invitations";
 export { useOrganization, useOrganizationPdfLogo } from "./hooks/use-organization";
