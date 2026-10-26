@@ -1,11 +1,9 @@
 ---
-import { FEATURE_PAGES } from "../../content/catalog";
+import { publishedFeaturePages } from "../../content/catalog";
 import { homeFr } from "../../copy/home-fr";
 import FeatureTeaser from "./feature-teaser.astro";
 
-const pages = FEATURE_PAGES.toSorted(
-  (first, second) => Number(second.isPublished) - Number(first.isPublished),
-);
+const pages = publishedFeaturePages();
 ---
 
 <section id="produit" class="scroll-mt-4 py-[clamp(56px,8vw,104px)]">
@@ -21,7 +19,7 @@ const pages = FEATURE_PAGES.toSorted(
       </h2>
       <p class="max-w-[26em] text-slate-text">{homeFr.product.lead}</p>
     </div>
-    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {pages.map((page) => <FeatureTeaser page={page} />)}
     </ul>
   </div>

@@ -239,6 +239,7 @@ Dernière mise à jour : 2026-10-26.
 - [ ] Comptage des visites par page et par jour, sans donnée personnelle
 - [ ] Ajouter passalio.com et staging.passalio.com au widget Turnstile avant de déployer le site
 - [x] Site : certificat signé sur place présenté comme disponible (accroche, bandeau, grille) et page Certificat de ramonage publiée, sans promettre l’envoi par mail
+- [x] Site : plus aucun « Bientôt » ; la grille de l’accueil ne montre que les fonctions sorties (demande de Quentin, 2026-10-26)
 - [ ] Publier les pages Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et les histoires du certificat quand la fonction est en production (`isPublished`) ; Lecture de plaque est déjà en production, il reste la réponse sur l’usage des photos
 - [ ] Page Certificat : ajouter l’envoi par mail et le renvoi quand ils sont en production
 - [ ] Remplacer les histoires inventées par de vrais témoignages dès les premiers clients

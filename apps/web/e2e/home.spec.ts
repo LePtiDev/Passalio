@@ -27,24 +27,22 @@ test("the product grid links every feature already in production", async ({ page
       expect(
         cardOf(feature.menu.title).getByRole("link", { name: feature.menu.title }),
       ).toHaveAttribute("href", PATHS.feature(feature.slug)),
-      expect(cardOf(feature.menu.title).getByText(homeFr.product.soon)).toHaveCount(0),
     ]),
   );
 });
 
-test("the product grid marks features not yet in production as coming soon", async ({ page }) => {
+test("the product grid shows only features already in production", async ({ page }) => {
   await page.goto(PATHS.home);
   const grid = page.locator("#produit");
   const upcoming = FEATURE_PAGES.filter((entry) => !entry.isPublished);
   expect(upcoming.length).toBeGreaterThan(0);
-  const cardOf = (title: string) =>
-    grid.getByRole("listitem").filter({ has: page.locator("h3", { hasText: title }) });
+  await expect(grid.getByRole("listitem")).toHaveCount(FEATURE_PAGES.length - upcoming.length);
   await Promise.all(
-    upcoming.flatMap((feature) => [
-      expect(cardOf(feature.menu.title).getByRole("link")).toHaveCount(0),
-      expect(cardOf(feature.menu.title).getByText(homeFr.product.soon)).toBeVisible(),
-    ]),
+    upcoming.map((feature) =>
+      expect(grid.locator("h3", { hasText: feature.menu.title })).toHaveCount(0),
+    ),
   );
+  await expect(grid.getByText(/bientôt/i)).toHaveCount(0);
 });
 
 test("each published trade has its card", async ({ page }) => {

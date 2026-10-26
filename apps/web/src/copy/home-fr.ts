@@ -85,9 +85,8 @@ export const homeFr = {
   product: {
     eyebrow: "Produit",
     title: "Tout votre métier, réuni au même endroit.",
-    lead: "Huit outils pensés pour le conduit et l’appareil. Ceux marqués « Bientôt » arrivent dans les prochains mois.",
+    lead: "Des outils pensés pour le conduit et l’appareil. Tous disponibles dès aujourd’hui, sur le téléphone et l’ordinateur.",
     discover: "Découvrir",
-    soon: "Bientôt",
   },
   activities: {
     eyebrow: "Vous êtes",
