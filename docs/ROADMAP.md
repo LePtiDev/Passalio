@@ -2,7 +2,7 @@
 
 Source de vérité de l'avancement. Mise à jour dans la même PR que le travail qu'elle décrit (voir `CLAUDE.md`, « Définition de terminé »).
 
-Dernière mise à jour : 2026-10-25.
+Dernière mise à jour : 2026-10-26.
 
 ## Fait
 
@@ -77,6 +77,7 @@ Dernière mise à jour : 2026-10-25.
 | Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                                                                                                                                            | ADR 0030                                            |
 | Prospection, écran Configuration : Profil, Boîte mail (test de connexion), Rappels, Signature, admin pour un autre membre                                                                                                                                                                                                                   | ADR 0028                                            |
 | Menu « Mon compte » en bas des barres latérales : Mon profil, Configuration ou Réglages, Se déconnecter                                                                                                                                                                                                                                     | `account-menu.tsx`                                  |
+| Règle : chaque maquette vérifiée uniforme avec le reste de l'application avant d'être montrée                                                                                                                                                                                                                                               | ADR 0033, skill `new-screen`                        |
 
 ## Hors code (Quentin)
 

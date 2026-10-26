@@ -89,6 +89,7 @@ Stratégie dans les ADR 0020 et 0023, inventaire dans `docs/TESTING.md`.
 
 - Avant de coder : plan court (fichiers, tables, index, permissions, tests), puis attendre ma validation.
 - Avant de coder un écran : maquette (artifact Design ou captures) de chaque état, mobile et ordinateur, puis attendre ma validation visuelle. Aucun écran ne se code ni ne se fusionne sans maquette validée.
+- Avant de montrer une maquette : la comparer au reste de l'application (composants, onglets, boutons, tailles, couleurs, 360 px) et lister les écarts restants (ADR 0033).
 - Après avoir codé un écran : me montrer les captures mobile et ordinateur de chaque état (vide, chargement, erreur, succès) avant de fusionner.
 - Utiliser les skills de `.claude/skills/` quand elles s'appliquent.
 - Tests écrits avec le code, selon la section « Tests ».
