@@ -180,6 +180,14 @@ Titres de test en anglais, qui décrivent le comportement attendu (`a technician
 | 14      | Photo de plaque : illisible puis nouvelle photo, PAC (fluide, charge, combustible caché), panne avec code puis saisie à la main, hors ligne sans envoi | `apps/app/e2e/customers.spec.ts`                                                  |
 | Mesure  | Précision par modèle sur le jeu de photos annoté, valeurs inventées, jetons (hors `pnpm check`)                                                        | `apps/api/eval/`, `pnpm --filter @passalio/api plate-reading:eval`                |
 
+## Double authentification admin désactivable (ADR 0034)
+
+| Famille | Ce qui est vérifié                                                                                                                                                 | Test                                                                                                 |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| 2       | Sans exigence : admin, super admin et commercial entrent sans double authentification ni code ; client, sans rôle, impersonation et compte bloqué toujours refusés | `backoffice/domain/admin-access-without-two-factor.test.ts`                                          |
+| 2       | Lecture de `ADMIN_TWO_FACTOR_REQUIRED` (seul `"false"` retire l'exigence) ; valeur de staging, production et local dans `wrangler.json`                            | `backoffice/http/admin-access-policy.test.ts`, `apps/api/test/admin-two-factor-environments.test.ts` |
+| 5, 7    | Route `/api/admin/me` : 200 sans double authentification et après un lien de connexion, 404 pour un client et sans session, 403 quand la variable est absente      | `apps/api/test/admin-without-two-factor-routes.test.ts`                                              |
+
 ## Appels et rappels de prospection (ADR 0024)
 
 | Famille | Ce qui est vérifié                                                                                                                                     | Test                                                                                 |

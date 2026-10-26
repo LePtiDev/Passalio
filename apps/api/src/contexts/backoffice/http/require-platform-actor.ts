@@ -2,6 +2,7 @@ import type { PlatformActor } from "@passalio/shared";
 import { createMiddleware } from "hono/factory";
 import type { AppEnv } from "../../../env";
 import { evaluateAdminAccess, type AdminAccessDenial } from "../domain/admin-access";
+import { adminAccessPolicyOf } from "./admin-access-policy";
 
 export type PlatformEnv = AppEnv & {
   Variables: AppEnv["Variables"] & { readonly platformActor: PlatformActor };
@@ -40,6 +41,7 @@ export const requirePlatformActor = createMiddleware<PlatformEnv>(async (context
           : new Date(session.session.twoFactorVerifiedAt),
     },
     new Date(),
+    adminAccessPolicyOf(context.env),
   );
   if (!access.isOk) {
     context.get("logger").warn({ event: "admin_access_denied", reason: access.error });

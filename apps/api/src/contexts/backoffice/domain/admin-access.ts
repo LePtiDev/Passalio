@@ -15,12 +15,23 @@ export type AdminSessionFacts = {
   readonly twoFactorVerifiedAt: Date | null;
 };
 
+export type AdminAccessPolicy = {
+  readonly isTwoFactorRequired: boolean;
+};
+
+export const STRICT_ADMIN_ACCESS_POLICY: AdminAccessPolicy = { isTwoFactorRequired: true };
+
 export const evaluateAdminAccess = (
   facts: AdminSessionFacts,
   now: Date,
+  policy: AdminAccessPolicy = STRICT_ADMIN_ACCESS_POLICY,
 ): Result<PlatformActor, AdminAccessDenial> => {
   if (!isPlatformRole(facts.role) || facts.isImpersonating || facts.isBanned) {
     return err("not_admin");
+  }
+  const actor = { userId: facts.userId, email: facts.email, name: facts.name, role: facts.role };
+  if (!policy.isTwoFactorRequired) {
+    return ok(actor);
   }
   if (!facts.isTwoFactorEnabled) {
     return err("two_factor_required");
@@ -31,5 +42,5 @@ export const evaluateAdminAccess = (
   ) {
     return err("two_factor_unverified");
   }
-  return ok({ userId: facts.userId, email: facts.email, name: facts.name, role: facts.role });
+  return ok(actor);
 };
