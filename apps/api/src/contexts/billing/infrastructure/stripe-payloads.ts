@@ -154,3 +154,15 @@ export const parseInvoices = (body: unknown): readonly Invoice[] =>
         ]
       : [],
   );
+
+const subscriptionItemsPayload = z.object({
+  items: z.object({ data: z.array(z.object({ id: z.string() })) }),
+});
+
+export const parseFirstItemId = (body: unknown): string | undefined =>
+  subscriptionItemsPayload.parse(body).items.data.at(0)?.id;
+
+const invoicePreviewPayload = z.object({ amount_due: z.number().int() });
+
+export const parseAmountDue = (body: unknown): number =>
+  invoicePreviewPayload.parse(body).amount_due;

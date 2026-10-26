@@ -10,3 +10,5 @@ export const hasFreeTechnicianSeat = (
   subscription: SeatSubscription | null,
   usedSeats: number,
 ): boolean => !isLimitedToSolo(subscription) || usedSeats < SOLO_TECHNICIAN_LIMIT;
+
+export const exceedsSoloSeats = (usedSeats: number): boolean => usedSeats > SOLO_TECHNICIAN_LIMIT;

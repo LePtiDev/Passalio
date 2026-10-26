@@ -1,6 +1,7 @@
 import type {
   CheckoutRequest,
   Invoice,
+  PriceChange,
   StripeEvent,
   StripeSubscriptionSnapshot,
   Subscription,
@@ -17,6 +18,10 @@ export type InMemoryStripeState = {
   readonly checkoutRequests: CheckoutRequest[];
   readonly portalRequests: { readonly customerId: string; readonly returnUrl: string }[];
   readonly invoices: Map<string, readonly Invoice[]>;
+  readonly previewAmounts: Map<string, number>;
+  readonly refusedPayments: Set<string>;
+  readonly priceChanges: PriceChange[];
+  readonly previewRequests: PriceChange[];
 };
 
 export type InMemoryBillingState = {
@@ -54,8 +59,29 @@ export const createInMemoryBillingState = (): InMemoryBillingState => ({
     checkoutRequests: [],
     portalRequests: [],
     invoices: new Map(),
+    previewAmounts: new Map(),
+    refusedPayments: new Set(),
+    priceChanges: [],
+    previewRequests: [],
   },
 });
+
+const lookupKeyOfPrice = (state: InMemoryStripeState, priceId: string) =>
+  [...state.prices].find(([, id]) => id === priceId)?.[0] ?? null;
+
+const changeInMemoryPrice = (state: InMemoryStripeState, change: PriceChange) => {
+  state.priceChanges.push(change);
+  const current = state.subscriptions.get(change.subscriptionId);
+  if (current === undefined) {
+    throw new Error("stripe_subscription_not_found");
+  }
+  if (change.proration.kind === "invoice_now" && state.refusedPayments.has(change.subscriptionId)) {
+    return undefined;
+  }
+  const next = { ...current, lookupKey: lookupKeyOfPrice(state, change.priceId) };
+  state.subscriptions.set(change.subscriptionId, next);
+  return next;
+};
 
 const createInMemoryStripeGateway = (state: InMemoryStripeState): StripeGateway => ({
   findPriceId: async (lookupKey) => state.prices.get(lookupKey),
@@ -69,6 +95,11 @@ const createInMemoryStripeGateway = (state: InMemoryStripeState): StripeGateway 
   },
   retrieveSubscription: async (subscriptionId) => state.subscriptions.get(subscriptionId),
   listInvoices: async (customerId) => state.invoices.get(customerId) ?? [],
+  previewPriceChange: async (change) => {
+    state.previewRequests.push(change);
+    return { amountDueCents: state.previewAmounts.get(change.subscriptionId) ?? 0 };
+  },
+  changePrice: async (change) => changeInMemoryPrice(state, change),
 });
 
 export const createInMemoryBillingDependencies = (

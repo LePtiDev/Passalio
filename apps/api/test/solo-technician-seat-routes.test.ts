@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import * as z from "zod";
 import {
   createFakeStripe,
+  itemsWithPrice,
   signedStripeEvent,
   STRIPE_TEST_BINDINGS,
   stripeSubscription,
@@ -24,11 +25,7 @@ let trialOwner: string;
 const subscribeToSolo = async (organizationId: string) => {
   stripe.subscriptions.set(
     `sub_${organizationId}`,
-    stripeSubscription(organizationId, {
-      items: {
-        data: [{ current_period_end: 1_798_761_600, price: { lookup_key: "solo_monthly" } }],
-      },
-    }),
+    stripeSubscription(organizationId, { items: itemsWithPrice("solo_monthly") }),
   );
   const response = await platform.request(
     "/api/billing/stripe-webhook",

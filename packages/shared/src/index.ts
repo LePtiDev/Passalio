@@ -168,6 +168,8 @@ export {
   invoicesResponse,
   SOLO_TECHNICIAN_LIMIT,
   TECHNICIAN_ROLES,
+  teamUpgradePreviewResponse,
+  upgradeToTeamBody,
   BLOCKED_REASONS,
   PAYMENT_GRACE_DAYS,
   paymentGraceEndOf,
@@ -190,6 +192,8 @@ export {
   type SubscriptionDetailsResponse,
   type SubscriptionResponse,
   type SubscriptionStatus,
+  type TeamUpgradePreviewResponse,
+  type UpgradeToTeamBody,
   type WorkspaceState,
 } from "./billing";
 export { isReadPermission, PERMISSIONS, type Permission } from "./permissions";

@@ -1,6 +1,7 @@
 import type {
   CheckoutRequest,
   Invoice,
+  PriceChange,
   StripeEvent,
   StripeSubscriptionSnapshot,
   Subscription,
@@ -38,12 +39,20 @@ export type StripeGateway = {
     subscriptionId: string,
   ) => Promise<StripeSubscriptionSnapshot | undefined>;
   readonly listInvoices: (customerId: string) => Promise<readonly Invoice[]>;
+  readonly previewPriceChange: (
+    change: PriceChange,
+  ) => Promise<{ readonly amountDueCents: number }>;
+  readonly changePrice: (change: PriceChange) => Promise<StripeSubscriptionSnapshot | undefined>;
 };
 
 export type BillingAuditEntry = {
   readonly organizationId: string;
   readonly actorUserId: string | null;
-  readonly action: "billing.checkout_started" | "billing.subscription_updated";
+  readonly action:
+    | "billing.checkout_started"
+    | "billing.subscription_updated"
+    | "billing.plan_upgraded"
+    | "billing.downgrade_reverted";
   readonly data: Readonly<Record<string, string>>;
 };
 

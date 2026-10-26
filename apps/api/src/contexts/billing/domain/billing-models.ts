@@ -64,3 +64,13 @@ export type Invoice = {
   readonly status: InvoiceStatus;
   readonly pdfUrl: string | null;
 };
+
+export type Proration =
+  | { readonly kind: "invoice_now"; readonly at: Date }
+  | { readonly kind: "next_invoice" };
+
+export type PriceChange = {
+  readonly subscriptionId: string;
+  readonly priceId: string;
+  readonly proration: Proration;
+};
