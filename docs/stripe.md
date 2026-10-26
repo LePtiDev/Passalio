@@ -39,7 +39,9 @@ Configuration `bpc_1UUDh0PVz1KfroPftj0xGe8M` (« Passalio staging », par défau
 - Résiliation à la fin de la période payée, sans remboursement, avec motif demandé.
 - Retour vers `https://app.staging.passalio.com/reglages/abonnement`. Liens vers `/conditions` et `/confidentialite`.
 
-Le portail ne connaît pas le nombre de techniciens : le contexte `billing` refuse Équipe vers Solo s'il reste plus d'un technicien, sur l'événement `customer.subscription.updated`.
+Le portail ne connaît pas le nombre de techniciens : sur l'événement `customer.subscription.updated`, si l'abonnement passe d'Équipe à Solo alors qu'il reste plus d'un technicien, le contexte `billing` remet le prix précédent (`create_prorations`) et l'écrit au journal (ADR 0034).
+
+Dans l'application, le passage de Solo à Équipe au deuxième technicien ne passe pas par le portail : l'aperçu vient de `POST /v1/invoices/create_preview`, puis `POST /v1/subscriptions/:id` change le prix à la même date de calcul (`always_invoice`, `error_if_incomplete`).
 
 ## Webhook
 
