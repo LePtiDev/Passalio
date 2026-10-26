@@ -3,3 +3,4 @@ export { SubscriptionScreen } from "./components/subscription-screen";
 export { WorkspaceGate } from "./components/workspace-gate";
 export { refreshWhenWorkspaceBlocked } from "./blocked-workspace-refresh";
 export { usePlanLabel } from "./hooks/use-plan-label";
+export { TeamUpgradeDialog } from "./components/team-upgrade-dialog";

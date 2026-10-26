@@ -4,13 +4,16 @@ import {
   invoicesResponse,
   ok,
   subscriptionResponse,
+  teamUpgradePreviewResponse,
   type StartCheckoutBody,
+  type UpgradeToTeamBody,
 } from "@passalio/shared";
 import * as z from "zod";
 import { apiRequest } from "@/lib/api-client";
 
 const subscriptionBody = z.object({ subscription: subscriptionResponse });
 const seatsBody = z.object({ seats: billingSeatsResponse });
+const previewBody = z.object({ preview: teamUpgradePreviewResponse });
 
 export const billingApi = {
   fetchSubscription: async () => {
@@ -28,4 +31,12 @@ export const billingApi = {
   startCheckout: (body: StartCheckoutBody) =>
     apiRequest("/billing/checkout", billingRedirectResponse, { method: "POST", body }),
   openPortal: () => apiRequest("/billing/portal", billingRedirectResponse, { method: "POST" }),
+  previewTeamUpgrade: async () => {
+    const result = await apiRequest("/billing/team-upgrade/preview", previewBody, {
+      method: "POST",
+    });
+    return result.isOk ? ok(result.value.preview) : result;
+  },
+  upgradeToTeam: (body: UpgradeToTeamBody) =>
+    apiRequest("/billing/team-upgrade", z.undefined(), { method: "POST", body }),
 };
