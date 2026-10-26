@@ -18,7 +18,7 @@ export const API_PORT = portFromEnv("E2E_API_PORT", DEFAULT_API_PORT);
 export const APP_PORT = portFromEnv("E2E_APP_PORT", 5173);
 export const INSPECTOR_PORT = portFromEnv("E2E_INSPECTOR_PORT", 9229);
 
-const API_URL = `http://localhost:${API_PORT}`;
+export const API_URL = `http://localhost:${API_PORT}`;
 export const APP_URL = `http://localhost:${APP_PORT}`;
 
 const E2E_DIR = API_PORT === DEFAULT_API_PORT ? ".e2e" : `.e2e/port-${API_PORT}`;
@@ -43,7 +43,7 @@ export default defineConfig({
         `rm -rf ${E2E_STATE} && mkdir -p ${E2E_DIR}`,
         `cd ../api && npx wrangler d1 migrations apply DB --local --persist-to ../app/${E2E_STATE}`,
         [
-          `npx wrangler dev --port ${API_PORT} --inspector-port ${INSPECTOR_PORT}`,
+          `npx wrangler dev --port ${API_PORT} --inspector-port ${INSPECTOR_PORT} --test-scheduled`,
           `--persist-to ../app/${E2E_STATE}`,
           "--var BETTER_AUTH_SECRET:e2e-secret-long-enough-for-better-auth",
           `--var BETTER_AUTH_URL:${APP_URL} --var APP_URL:${APP_URL}`,

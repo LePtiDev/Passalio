@@ -51,6 +51,7 @@ export const documentRecord = z.object({
   completedOn: z.string(),
   cancelsDocumentId: nullableText,
   data: z.record(z.string(), z.unknown()),
+  pdfSha256: nullableText.optional(),
 });
 
 export const memberRecord = z.object({

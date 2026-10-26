@@ -82,6 +82,28 @@ export const COMPLIANCE_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.documents.changesSignedBy(s.technician.id)(s.organization.id, CURSOR, PAGE),
   },
   {
+    method: "pdfArchives.pending",
+    query: "signed certificates whose PDF is not archived yet",
+    run: (r) => r.pdfArchives.pending(5, 3),
+  },
+  {
+    method: "pdfArchives.markArchived",
+    query: "record the archived PDF of a certificate",
+    run: (r, s) =>
+      r.pdfArchives.markArchived({
+        documentId: s.document.id,
+        organizationId: s.organization.id,
+        key: "organizations/key.pdf",
+        sha256: "0".repeat(64),
+        at: LATER,
+      }),
+  },
+  {
+    method: "pdfArchives.markFailed",
+    query: "count a failed PDF archive attempt",
+    run: (r, s) => r.pdfArchives.markFailed(s.organization.id, s.document.id),
+  },
+  {
     method: "signingTargets.interventionOf",
     query: "intervention of the certificate",
     run: (r, s) => r.signingTargets.interventionOf(s.organization.id, s.intervention.id),

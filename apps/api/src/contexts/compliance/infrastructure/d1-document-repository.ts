@@ -1,7 +1,8 @@
 import { documents, equipments } from "@passalio/db";
-import { and, asc, eq, getTableColumns, gt, isNull, or, type SQL } from "drizzle-orm";
+import { and, asc, eq, getTableColumns, gt, isNull, lt, or, sql, type SQL } from "drizzle-orm";
 import type { Database } from "../../../platform/database";
 import type { DocumentRepository } from "../domain/compliance-ports";
+import type { PdfArchiveRepository } from "../domain/pdf-archive-ports";
 
 const { deletedAt: _deletedAt, ...DOCUMENT_COLUMNS } = getTableColumns(documents);
 
@@ -85,3 +86,42 @@ export const createD1DocumentRepository = (database: Database): DocumentReposito
       ),
   };
 };
+
+const ownDocument = (organizationId: string, documentId: string) =>
+  and(eq(documents.organizationId, organizationId), eq(documents.id, documentId));
+
+export const createD1PdfArchiveRepository = (database: Database): PdfArchiveRepository => ({
+  pending: async (limit, maxAttempts) =>
+    database
+      .select({
+        id: documents.id,
+        organizationId: documents.organizationId,
+        numberPrefix: documents.numberPrefix,
+        number: documents.number,
+        signedAt: documents.signedAt,
+        data: documents.data,
+      })
+      .from(documents)
+      .where(
+        and(
+          isNull(documents.pdfArchivedAt),
+          isNull(documents.deletedAt),
+          lt(documents.pdfArchiveAttempts, maxAttempts),
+        ),
+      )
+      .orderBy(asc(documents.pdfArchiveAttempts), asc(documents.signedAt))
+      .limit(limit)
+      .all(),
+  markArchived: async ({ documentId, organizationId, key, sha256, at }) => {
+    await database
+      .update(documents)
+      .set({ pdfKey: key, pdfSha256: sha256, pdfArchivedAt: at, updatedAt: at })
+      .where(ownDocument(organizationId, documentId));
+  },
+  markFailed: async (organizationId, documentId) => {
+    await database
+      .update(documents)
+      .set({ pdfArchiveAttempts: sql`${documents.pdfArchiveAttempts} + 1` })
+      .where(ownDocument(organizationId, documentId));
+  },
+});

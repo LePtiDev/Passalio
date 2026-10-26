@@ -22,6 +22,7 @@
     "@modelcontextprotocol/sdk": "1.32.1",
     "@passalio/db": "workspace:*",
     "@passalio/emails": "workspace:*",
+    "@passalio/pdf": "workspace:*",
     "@passalio/shared": "workspace:*",
     "@passalio/trades": "workspace:*",
     "ai": "7.0.137",

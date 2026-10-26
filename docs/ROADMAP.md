@@ -72,6 +72,7 @@ Dernière mise à jour : 2026-10-26.
 | Réglages › Entreprise (mentions légales du certificat) et Réglages › Documents (modèle, couleur, logo, coordonnées, textes, numérotation, aperçu du PDF) ; le prochain numéro ne redescend plus sous les numéros réservés                                                                                                                   | `contexts/identity/components/settings`             |
 | Certificat signé hors ligne, sans écran : réglages figés dans le certificat (version 2), copie des réglages et numéros réservés sur le téléphone, signature dans la file d'envoi, PDF refait sur le téléphone                                                                                                                               | ADR 0032, `contexts/compliance` (app)               |
 | Écrans du certificat sur le terrain : formulaire par appareil (brouillon dans Dexie), récapitulatif et signatures au doigt, tous les appareils du passage signés d'un coup, feuille « Avant votre premier certificat », certificat signé (voir, télécharger, partager le PDF, passage suivant), bouton « Remplir le certificat » du passage | `contexts/compliance/components` (app)              |
+| Archive du PDF du certificat sur R2 avec son empreinte, page du certificat (pages, empreinte vérifiée, télécharger, partager), historique sur la fiche client                                                                                                                                                                               | ADR 0035                                            |
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                                                                                                                                                         | ADR 0028                                            |
 | Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                                                                                                                                                 | ADR 0028                                            |
 | Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                                                                                                                                            | ADR 0030                                            |
@@ -131,7 +132,7 @@ Dernière mise à jour : 2026-10-26.
 - [x] Passages et certificats, données : tables, synchronisation, numérotation par blocs de 20, certificat immuable (ADR 0021)
 - [x] Planning, écrans selon la maquette validée le 2026-10-23 (https://claude.ai/artifact/EwJHEip57EberjMUzBVmpL) : planning jour, semaine et équipe, nouveau passage, fiche passage
 - [x] Certificat, écrans selon la même maquette : formulaire, récapitulatif et signatures, certificat signé
-- [ ] Certificat : historique sur la fiche client et page du certificat (`/certificats/:id`, maquette 16 et 17)
+- [x] Certificat : historique sur la fiche client et page du certificat (`/certificats/:id`, maquette 16 et 17)
 - [ ] Certificat : bloc Paiement du récapitulatif (montant, moyen de paiement), à livrer avec la facture (décision de Quentin du 2026-10-25)
 - [ ] Rappel un mois avant l'échéance annoncé sur l'écran « Certificat signé » une fois les relances codées
 - [x] Types de passage : durée par défaut par métier (Réglages › Types de passage), type et durée modifiable sur le nouveau passage (maquette validée le 2026-10-23)
@@ -144,7 +145,9 @@ Dernière mise à jour : 2026-10-26.
 - [x] Copier les réglages Documents dans le certificat signé (schéma version 2) et bloquer la signature tant que des mentions légales manquent (ADR 0032)
 - [x] Réglages hors ligne pour le certificat sur le terrain (copie dans Dexie, ADR 0032)
 - [ ] Aperçu des réglages Documents hors ligne (lire la copie de Dexie dans Réglages › Documents)
-- [ ] PDF du certificat sur le téléphone après signature, envoi sur R2 avec son empreinte, partage au client (table `document_deliveries`, permission `documents:send`)
+- [x] PDF du certificat archivé sur R2 avec son empreinte (ADR 0035)
+- [ ] Envoi du certificat au client par e-mail, suivi des remises (table `document_deliveries`, permission `documents:send`)
+- [ ] Page du certificat : « Renvoyer », « Corriger » et lignes « Envoyé » et « Paiement » (maquette 16)
 - [ ] Relances : échéances, envoi du PDF et relance par email (Resend), cron, SPF/DKIM/DMARC
 - [ ] Espace particulier commun à tous les prestataires (ADR 0013), après clients et attestations, avec ses conditions et sa partie de la politique de confidentialité (brouillon validé le 2026-10-22)
 - [x] Grille de prix et fonctionnement du paiement décidés (ADR 0025, choix de Quentin du 2026-10-24)

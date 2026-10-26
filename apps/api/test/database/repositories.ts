@@ -4,7 +4,10 @@ import { createD1BillingContactDirectory } from "../../src/contexts/billing/infr
 import { createD1StripeEventLog } from "../../src/contexts/billing/infrastructure/d1-stripe-event-log";
 import { createD1SubscriptionRepository } from "../../src/contexts/billing/infrastructure/d1-subscription-repository";
 import { createD1WorkspaceRepository } from "../../src/contexts/billing/infrastructure/d1-workspace-repository";
-import { createD1DocumentRepository } from "../../src/contexts/compliance/infrastructure/d1-document-repository";
+import {
+  createD1DocumentRepository,
+  createD1PdfArchiveRepository,
+} from "../../src/contexts/compliance/infrastructure/d1-document-repository";
 import { createD1NumberBlockRepository } from "../../src/contexts/compliance/infrastructure/d1-number-block-repository";
 import { createD1SigningTargets } from "../../src/contexts/compliance/infrastructure/d1-signing-targets";
 import { createD1ChangeFeed } from "../../src/contexts/customers/infrastructure/d1-change-feed";
@@ -72,6 +75,7 @@ export const createRepositories = (database: Database) => {
     serviceCatalog: createD1ServiceCatalog(database),
     documents: createD1DocumentRepository(database),
     numberBlocks: createD1NumberBlockRepository(database),
+    pdfArchives: createD1PdfArchiveRepository(database),
     signingTargets: createD1SigningTargets(database),
     prospectCompanies: createD1CompanyRepository(database),
     prospectContacts: createD1ContactRepository(database),
