@@ -48,6 +48,16 @@ export const BILLING_QUERIES: readonly CatalogedQuery[] = [
     run: (r, s) => r.billingContacts.findEmail(s.owner.id),
   },
   {
+    method: "billingContacts.findOwnerName",
+    query: "name of the owner shown to the members",
+    run: (r, s) => r.billingContacts.findOwnerName(s.organization.id),
+  },
+  {
+    method: "billingContacts.countTechnicians",
+    query: "technicians counted by the plan",
+    run: (r, s) => r.billingContacts.countTechnicians(s.organization.id),
+  },
+  {
     method: "stripeEvents.hasProcessed",
     query: "Stripe event already handled",
     run: (r) => r.stripeEvents.hasProcessed("evt_catalogue"),

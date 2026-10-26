@@ -1,6 +1,13 @@
 import type { CheckoutRequest } from "../domain/billing-models";
 import type { StripeGateway } from "../domain/billing-ports";
-import { parseFirstPriceId, parseSessionUrl, parseStripeSubscription } from "./stripe-payloads";
+import {
+  parseFirstPriceId,
+  parseInvoices,
+  parseSessionUrl,
+  parseStripeSubscription,
+} from "./stripe-payloads";
+
+export const INVOICE_PAGE_SIZE = 12;
 
 const STRIPE_API = "https://api.stripe.com/v1";
 export const STRIPE_API_VERSION = "2025-09-30.clover";
@@ -94,5 +101,12 @@ export const createStripeGateway = ({
       }
       return parseStripeSubscription(body);
     },
+    listInvoices: async (customerId) =>
+      parseInvoices(
+        await succeeded(
+          `/invoices?${new URLSearchParams({ customer: customerId, limit: String(INVOICE_PAGE_SIZE) }).toString()}`,
+          { method: "GET" },
+        ),
+      ),
   };
 };

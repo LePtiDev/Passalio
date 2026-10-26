@@ -12,9 +12,8 @@ const expectSettingsScreen = async (page: Page, email: string) => {
   await expect(main.getByRole("link", { name: "Équipe" })).toBeVisible();
   await expect(main.getByRole("link", { name: "Entreprise" })).toBeVisible();
   await expect(main.getByRole("link", { name: "Documents" })).toBeVisible();
-  await expect(main.getByText("Abonnement")).toBeVisible();
-  await expect(main.getByText("Bientôt")).toHaveCount(1);
-  await expect(main.getByRole("link", { name: "Abonnement" })).toHaveCount(0);
+  await expect(main.getByRole("link", { name: "Abonnement" })).toBeVisible();
+  await expect(main.getByText("Bientôt")).toHaveCount(0);
 };
 
 test.beforeEach(async ({ context }) => {
@@ -70,7 +69,11 @@ test.describe("settings on desktop", () => {
 
   test("the sidebar sign-out button signs the user out", async ({ page }) => {
     await signUpAndOnboardOwner(page, { companyName: "Ramonage Perrin" });
-    await page.getByRole("complementary").getByRole("button", { name: "Se déconnecter" }).click();
+    await page
+      .getByRole("complementary")
+      .getByRole("button", { name: /^Votre compte / })
+      .click();
+    await page.getByRole("menuitem", { name: "Se déconnecter" }).click();
     await expect(page).toHaveURL(/\/connexion/);
     await expect(page.getByRole("heading", { name: "Connexion" })).toBeVisible();
 

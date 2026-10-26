@@ -26,3 +26,15 @@ export const stripeSubscriptionJson = (changes: Record<string, unknown> = {}) =>
   },
   ...changes,
 });
+
+export const stripeInvoiceJson = (changes: Record<string, unknown> = {}) => ({
+  id: "in_1",
+  object: "invoice",
+  number: "PASSALIO-0001",
+  created: 1_761_300_000,
+  total: 2900,
+  currency: "eur",
+  status: "paid",
+  invoice_pdf: "https://pay.stripe.com/invoice/acct_1/test_1/pdf",
+  ...changes,
+});

@@ -116,6 +116,8 @@ export const COMPANY_ROUTE_SAMPLES: Readonly<Record<string, SampleBuilder>> = {
       interval: "month",
     }),
   "POST /api/billing/portal": () => withoutBody("POST", "/api/billing/portal"),
+  "GET /api/billing/seats": () => read("/api/billing/seats"),
+  "GET /api/billing/invoices": () => read("/api/billing/invoices"),
   "POST /api/sync/push": (ids) =>
     withJson("POST", "/api/sync/push", syncPushBody, {
       mutations: [

@@ -1,5 +1,6 @@
 import type {
   CheckoutRequest,
+  Invoice,
   StripeEvent,
   StripeSubscriptionSnapshot,
   Subscription,
@@ -15,12 +16,15 @@ export type InMemoryStripeState = {
   readonly subscriptions: Map<string, StripeSubscriptionSnapshot>;
   readonly checkoutRequests: CheckoutRequest[];
   readonly portalRequests: { readonly customerId: string; readonly returnUrl: string }[];
+  readonly invoices: Map<string, readonly Invoice[]>;
 };
 
 export type InMemoryBillingState = {
   readonly organizations: Map<string, Date>;
   readonly subscriptions: Map<string, Subscription>;
   readonly emails: Map<string, string>;
+  readonly ownerNames: Map<string, string>;
+  readonly technicianCounts: Map<string, number>;
   readonly processedEvents: Map<string, StripeEvent>;
   readonly auditEntries: BillingAuditEntry[];
   readonly stripe: InMemoryStripeState;
@@ -32,6 +36,8 @@ export const createInMemoryBillingState = (): InMemoryBillingState => ({
   organizations: new Map(),
   subscriptions: new Map(),
   emails: new Map(),
+  ownerNames: new Map(),
+  technicianCounts: new Map(),
   processedEvents: new Map(),
   auditEntries: [],
   stripe: {
@@ -45,6 +51,7 @@ export const createInMemoryBillingState = (): InMemoryBillingState => ({
     subscriptions: new Map(),
     checkoutRequests: [],
     portalRequests: [],
+    invoices: new Map(),
   },
 });
 
@@ -59,6 +66,7 @@ const createInMemoryStripeGateway = (state: InMemoryStripeState): StripeGateway 
     return { url: `https://billing.stripe.test/${state.portalRequests.length}` };
   },
   retrieveSubscription: async (subscriptionId) => state.subscriptions.get(subscriptionId),
+  listInvoices: async (customerId) => state.invoices.get(customerId) ?? [],
 });
 
 export const createInMemoryBillingDependencies = (
@@ -83,7 +91,11 @@ export const createInMemoryBillingDependencies = (
       state.subscriptions.set(subscription.organizationId, subscription);
     },
   },
-  contacts: { findEmail: async (userId) => state.emails.get(userId) },
+  contacts: {
+    findEmail: async (userId) => state.emails.get(userId),
+    findOwnerName: async (organizationId) => state.ownerNames.get(organizationId),
+    countTechnicians: async (organizationId) => state.technicianCounts.get(organizationId) ?? 0,
+  },
   stripeEvents: {
     hasProcessed: async (eventId) => state.processedEvents.has(eventId),
     markProcessed: async (event) => {

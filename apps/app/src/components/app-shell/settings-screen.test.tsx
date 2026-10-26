@@ -19,26 +19,21 @@ const USER = { name: "Paul Dupont", email: "paul@ramonage-dupont.fr" };
 const renderSettings = () => renderScreen(<SettingsScreen user={USER} />, { path: "/reglages" });
 
 describe("SettingsScreen", () => {
-  it("opens the team page and shows the sections that are not built yet as disabled", async () => {
+  it("opens the team page, every section being built", async () => {
     installFakeApi(signedInRoutes("owner"));
 
     const { user, router } = renderSettings();
 
-    const subscription = (await screen.findByText(fr.shell.subscription)).closest(
-      "[aria-disabled]",
-    );
-    expect(subscription).toHaveAttribute("aria-disabled", "true");
-    expect(subscription).toHaveTextContent(fr.shell.soon);
-    expect(screen.queryByRole("link", { name: fr.shell.subscription })).toBeNull();
-
-    await user.click(screen.getByRole("link", { name: fr.shell.team }));
+    await user.click(await screen.findByRole("link", { name: fr.shell.team }));
 
     expect(router.state.location.pathname).toBe("/equipe");
+    expect(screen.queryByText(fr.shell.soon)).toBeNull();
   });
 
   it.each([
     { label: fr.shell.company, path: "/reglages/entreprise" },
     { label: fr.shell.documentSettings, path: "/reglages/documents" },
+    { label: fr.shell.subscription, path: "/reglages/abonnement" },
   ])("opens the $label settings", async ({ label, path }) => {
     installFakeApi(signedInRoutes("owner"));
 

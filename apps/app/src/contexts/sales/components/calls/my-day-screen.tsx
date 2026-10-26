@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Play } from "lucide-react";
+import { Play, Settings } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { ErrorState } from "@/components/error-state";
 import { buttonVariants } from "@/components/ui/button";
@@ -44,6 +44,16 @@ const StartCallsLink = ({
   );
 };
 
+const CONFIGURATION_LINK = (
+  <Link
+    to="/admin/configuration"
+    aria-label={text.configuration}
+    className="-mr-2 flex size-12 shrink-0 items-center justify-center rounded-xl text-[#475569]"
+  >
+    <Settings aria-hidden="true" className="size-[22px]" />
+  </Link>
+);
+
 export const MyDayScreen = () => {
   const now = useNow();
   const day = useMyDay();
@@ -56,7 +66,13 @@ export const MyDayScreen = () => {
   const hasTasks = (day.data?.tasks.length ?? 0) > 0;
   const title = dayTitle(now);
   return (
-    <AdminPage section="commercial" trail={TRAIL} mobileTitle={text.title} mobileSubtitle={title}>
+    <AdminPage
+      section="commercial"
+      trail={TRAIL}
+      mobileTitle={text.title}
+      mobileSubtitle={title}
+      mobileAction={CONFIGURATION_LINK}
+    >
       <AdminHeading title={text.title} subtitle={title}>
         {day.isSuccess ? <StartCallsLink hasTasks={hasTasks} /> : null}
       </AdminHeading>

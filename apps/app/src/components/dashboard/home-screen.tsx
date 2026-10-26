@@ -3,6 +3,7 @@ import { CircleCheck } from "lucide-react";
 import { useCallback } from "react";
 import { DesktopTopBar, MobileTopBar, PageContent } from "@/components/app-shell/page-bars";
 import { ErrorState } from "@/components/error-state";
+import { usePlanLabel } from "@/contexts/billing";
 import { InitialsAvatar } from "@/components/initials-avatar";
 import {
   OrganizationBadge,
@@ -80,12 +81,13 @@ const HomeContent = ({ isWelcome }: { readonly isWelcome: boolean }) => {
 
 export const HomeScreen = ({ userName, isWelcome }: HomeScreenProps) => {
   const firstName = userName.split(/\s+/)[0] ?? "";
+  const planLabel = usePlanLabel();
   return (
     <>
       <DesktopTopBar trail={TRAIL} />
       <MobileTopBar>
         <span className="min-w-0 flex-1">
-          <OrganizationBadge placement="header" />
+          <OrganizationBadge placement="header" planLabel={planLabel} />
         </span>
         <Link to="/reglages" className="flex size-12 items-center justify-center">
           <span aria-hidden="true">

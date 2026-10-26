@@ -64,6 +64,7 @@ Dernière mise à jour : 2026-10-25.
 | Stripe en mode test : produits, prix, carte et SEPA, portail client, webhook staging                                                                                                                                                                                                                                                        | `docs/stripe.md`                                    |
 | Interrupteur des inscriptions (super admin) : fermer en production sans bloquer la connexion ni les invités                                                                                                                                                                                                                                 | ADR 0029                                            |
 | Abonnement, données et Stripe (API) : état de l'espace, Checkout, portail, webhook signé et idempotent, blocage des écritures (inactif sans clé Stripe), certificat signé hors ligne accepté                                                                                                                                                | ADR 0031                                            |
+| Abonnement, écrans : Réglages › Abonnement (essai, abonné, SEPA, impayé, résilié, membre), factures Stripe, bandeaux, espace bloqué                                                                                                                                                                                                         | `contexts/billing` (app)                            |
 | Site : accueil enrichi (hero, fonctions, activités, rappel), navigation commune, pages Activité, Produit, Histoires, Sans réseau, 404, SEO (images de partage, données structurées, plan du site), Lighthouse 100                                                                                                                           | [#64](https://github.com/LePtiDev/Passalio/pull/64) |
 | Prospection, écrans d'appel : Ma journée, Appels, série d'appels, « Noter un appel » sur la fiche, ordinateur et mobile                                                                                                                                                                                                                     | `contexts/sales/components/calls`                   |
 | Boutons uniformes : un seul composant `Button` (primaire, secondaire, danger), 48 px sur mobile, 32 px sur ordinateur ; champs de saisie alignés sur 32 px                                                                                                                                                                                  | PR #62                                              |
@@ -75,6 +76,8 @@ Dernière mise à jour : 2026-10-25.
 | Prospection, boîte mail de chaque membre (API) : réglages SMTP, mot de passe chiffré, test d'envoi, journal et e-mail récapitulatif                                                                                                                                                                                                         | ADR 0028                                            |
 | Prospection, rappels par e-mail : cron toutes les 5 minutes, gabarit selon la maquette v2, envoi par Resend                                                                                                                                                                                                                                 | ADR 0028                                            |
 | Site : demande de rappel (API publique, Turnstile, limite par IP, CORS, code postal) et « On vous appelle » à la place du prénom                                                                                                                                                                                                            | ADR 0030                                            |
+| Prospection, écran Configuration : Profil, Boîte mail (test de connexion), Rappels, Signature, admin pour un autre membre                                                                                                                                                                                                                   | ADR 0028                                            |
+| Menu « Mon compte » en bas des barres latérales : Mon profil, Configuration ou Réglages, Se déconnecter                                                                                                                                                                                                                                     | `account-menu.tsx`                                  |
 
 ## Hors code (Quentin)
 
@@ -150,11 +153,13 @@ Dernière mise à jour : 2026-10-25.
 - [x] Fermer les inscriptions depuis l'admin (Plateforme › Réglages, super admin), connexion et invitations toujours possibles (ADR 0029)
 - [ ] Offre des 20 premiers clients : 19 € HT par mois à vie, quelle que soit la formule (choix de Quentin du 2026-10-24, à consigner dans l'ADR 0025 et à coder avec l'abonnement)
 - [x] Abonnement, code (PR 1) : contexte `billing`, Stripe Checkout et portail client, carte et SEPA, webhooks signés, refus des écritures d'un espace bloqué (ADR 0031)
-- [ ] Abonnement, écrans (PR 2) : Réglages › Abonnement dans tous ses états, bandeaux d'essai et d'impayé, espace bloqué, passage Solo vers Équipe à l'invitation d'un deuxième technicien, refus d'Équipe vers Solo avec plusieurs techniciens
+- [x] Abonnement, écrans (PR 2) : Réglages › Abonnement dans tous ses états, factures, bandeaux d'essai et d'impayé, espace bloqué, nom de la formule dans la barre latérale
+- [ ] Abonnement, formule Solo : passage à Équipe à l'invitation d'un deuxième technicien (fenêtre avec prorata), refus côté serveur d'un deuxième technicien en Solo, refus d'Équipe vers Solo avec plusieurs techniciens
+- [ ] Abonnement : bouton « Exporter mes données » de l'espace bloqué et ligne « Export de vos données » des formules, à remettre avec l'export
 - [ ] Abonnement, e-mails et offre fondateurs (PR 3) : fin d'essai J-2, paiement refusé J0, J3, J7, J12, espace bloqué (cron quotidien) ; prix `founder_monthly` à 19 € HT pour les 20 premiers payeurs
 - [ ] Stripe : régler les relances pour garder l'abonnement `past_due` ou `unpaid` au moins 15 jours, poser `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` et `STRIPE_PAYMENT_METHOD_CONFIGURATION` en staging (sur demande de déploiement)
 - [ ] Ouvrir le compte Stripe de production au nom de la micro-entreprise de Quentin (ADR 0025), mentions de la facture Stripe validées par la vérification réglementaire
-- [ ] Abonnement : écran bloquant en fin d'essai (7 jours), avec souscription, export et déconnexion
+- [x] Abonnement : écran bloquant en fin d'essai (7 jours), avec souscription et déconnexion (export à venir)
 - [ ] Espace admin : revoir « essais qui finissent cette semaine », qui couvre désormais tous les essais (7 jours)
 - [x] Envoi réel des emails (lien de connexion, mot de passe oublié, invitation) avec Resend
 - [ ] Poser le secret `RESEND_API_KEY` en staging et en production, puis tester un envoi sur chaque environnement
@@ -179,7 +184,7 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Tests de composants : la synchronisation de fond de `renderScreen` appelle parfois `/api/sync/pull` hors du faux serveur (ECONNREFUSED dans la sortie, sans échec)
 - [x] Prospection, boîte mail : données et API (réglages, mot de passe chiffré, test d'envoi SMTP, journal, e-mail récapitulatif) (ADR 0028)
 - [x] Prospection, rappels par e-mail : cron toutes les 5 minutes sur `notify_at`, index partiel, envoi par Resend (ADR 0028)
-- [ ] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
+- [x] Prospection, écran Configuration selon la maquette v2 : Profil, Boîte mail, Rappels, Signature (admin pour un autre membre)
 - [ ] Créer le secret `MAIL_SECRET_KEY` en staging et en production avant le déploiement de la boîte mail (sur demande de Quentin)
 - [ ] Prospection, boîte mail : récapitulatif quotidien, vérification nocturne du domaine (SPF, DKIM, DMARC), historique des changements à l'écran
 - [ ] Prospection, réception des réponses (Email Routing), écran Mails, désinscription et liste d'exclusion
@@ -218,6 +223,7 @@ Dernière mise à jour : 2026-10-25.
 - [ ] Modifications refusées : dire laquelle a été refusée et pourquoi, pas seulement combien
 - [ ] Photos d'appareil : réduire la photo sur le téléphone avant l'envoi plutôt que refuser au-delà de 5 Mo
 - [ ] Régression visuelle : captures de référence de chaque état
+- [ ] Test instable : `offline-field-changes` « synchronisation en échec » sur mobile, l'inscription dépasse 5 s quand toute la suite tourne (vu le 2026-10-25)
 - [ ] Couverture avec seuils, tests de mutation, `test:all` obligatoire dans `release:*`, tests de fumée après déploiement
 
 ## Site passalio.com

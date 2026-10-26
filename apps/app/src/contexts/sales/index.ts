@@ -18,3 +18,8 @@ export {
   CALL_SERIES_MIN_SIZE,
   type CallSession,
 } from "./components/calls/call-session";
+export { ConfigurationScreen } from "./components/configuration/configuration-screen";
+export {
+  CONFIGURATION_TABS,
+  type ConfigurationTab,
+} from "./components/configuration/configuration-form-schema";
