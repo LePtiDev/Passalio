@@ -81,6 +81,7 @@
         "EMAIL_DELIVERY": "resend",
         "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
         "MCP_ENABLED": "true",
+        "ADMIN_TWO_FACTOR_REQUIRED": "false",
         "STRIPE_PAYMENT_METHOD_CONFIGURATION": "pmc_1UUDgZPVz1KfroPfb9DmbHvp"
       }
     },
@@ -122,7 +123,8 @@
         "SITE_URL": "https://passalio.com",
         "EMAIL_DELIVERY": "resend",
         "EMAIL_FROM": "Passalio <ne-pas-repondre@passalio.com>",
-        "MCP_ENABLED": "true"
+        "MCP_ENABLED": "true",
+        "ADMIN_TWO_FACTOR_REQUIRED": "false"
       }
     }
   }

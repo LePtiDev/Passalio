@@ -1,7 +1,7 @@
 # 0015 — Espace admin : rôles plateforme, double authentification, accès invisible
 
 - Date : 2026-10-23
-- Statut : accepté, rôles et attribution remplacés par 0018
+- Statut : accepté, rôles et attribution remplacés par 0018, double authentification rendue désactivable par 0034
 
 ## Contexte
 
