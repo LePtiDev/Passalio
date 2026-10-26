@@ -49,12 +49,7 @@ describe("site content", () => {
 
   it("keeps features that are not in production off the site", () => {
     const unpublished = FEATURE_PAGES.filter((page) => !page.isPublished).map((page) => page.slug);
-    expect(unpublished).toEqual([
-      "certificat-de-ramonage",
-      "attestation-entretien",
-      "relances",
-      "lecture-de-plaque",
-    ]);
+    expect(unpublished).toEqual(["attestation-entretien", "relances", "lecture-de-plaque"]);
     expect(indexedPaths()).not.toContain(PATHS.feature("relances"));
   });
 

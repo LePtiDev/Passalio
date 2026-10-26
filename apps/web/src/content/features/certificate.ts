@@ -2,11 +2,11 @@ import type { MarketingPageInput } from "../content-schema";
 
 export const certificatePage: MarketingPageInput = {
   slug: "certificat-de-ramonage",
-  isPublished: false,
+  isPublished: true,
   seo: {
     title: "Certificat de ramonage sur téléphone | Passalio",
     description:
-      "Remplissez le certificat de ramonage chez le client : mentions obligatoires vérifiées, signature sur l’écran, PDF envoyé par mail.",
+      "Remplissez le certificat de ramonage chez le client : mentions obligatoires vérifiées, signature sur l’écran, PDF prêt à partager.",
   },
   menu: {
     title: "Certificat de ramonage",
@@ -15,7 +15,7 @@ export const certificatePage: MarketingPageInput = {
   },
   eyebrow: "Produit · Certificat de ramonage",
   title: "Un certificat complet, signé chez le client, en quelques minutes.",
-  lead: "Vous cochez ce que vous avez fait, Passalio vérifie qu’il ne manque aucune mention, le client signe sur l’écran et reçoit son PDF par mail.",
+  lead: "Vous cochez ce que vous avez fait, Passalio vérifie qu’il ne manque aucune mention, le client signe sur l’écran et vous lui partagez le PDF.",
   highlights: [
     "Mentions de l’arrêté du 20 juillet 2023",
     "Non modifiable une fois signé",
@@ -44,10 +44,6 @@ export const certificatePage: MarketingPageInput = {
         label: "Anomalie",
         value: "Aucune",
       },
-      {
-        label: "Photos",
-        value: "2 photos jointes",
-      },
     ],
     action: "Faire signer le client",
   },
@@ -73,8 +69,8 @@ export const certificatePage: MarketingPageInput = {
       text: "Le client, l’appareil et le conduit sont déjà dans la fiche. Votre entreprise, votre assurance et votre qualification aussi.",
       bullets: [
         "Méthode de ramonage, vacuité, état du conduit",
-        "Anomalies et photos jointes",
-        "Date du prochain passage proposée",
+        "Anomalies et conduit déconseillé",
+        "Date du prochain ramonage conseillée",
       ],
       visual: {
         title: "Votre entreprise, déjà remplie",
@@ -132,12 +128,12 @@ export const certificatePage: MarketingPageInput = {
     },
     {
       label: "Signature et envoi",
-      title: "Signé sur l’écran, reçu par mail, gardé pour toujours",
-      text: "Le client signe avec le doigt. Le PDF part tout de suite, ou dès que le réseau revient. Signé, le certificat ne se modifie plus.",
+      title: "Signé sur l’écran, partagé tout de suite, gardé tel quel",
+      text: "Le client signe avec le doigt, même sans réseau. Le PDF est prêt sur le téléphone : vous le partagez ou le téléchargez. Signé, le certificat ne se modifie plus.",
       bullets: [
         "PDF à vos couleurs, avec votre logo",
-        "Numérotation continue, sans trou",
-        "Rangé dans la fiche du client",
+        "Un numéro unique par certificat",
+        "Conseils d’utilisation joints pour le bois",
       ],
       visual: {
         title: "Certificat n° 2026-0142",
@@ -153,9 +149,9 @@ export const certificatePage: MarketingPageInput = {
             tag: "Signé",
           },
           {
-            label: "Envoi",
-            value: "marie.durand@email.fr",
-            tag: "Envoyé",
+            label: "PDF",
+            value: "Certificat et conseils d’utilisation",
+            tag: "Prêt",
           },
           {
             label: "Modification",
@@ -174,12 +170,7 @@ export const certificatePage: MarketingPageInput = {
     },
     {
       question: "Et si je me suis trompé après la signature ?",
-      answer:
-        "Un certificat signé ne se modifie pas : c’est ce qui en fait une preuve. [Procédure de correction à définir]",
-    },
-    {
-      question: "Mon client n’a pas d’email.",
-      answer: "[Réponse à définir : PDF par SMS ou impression]",
+      answer: "Un certificat signé ne se modifie pas : c’est ce qui en fait une preuve.",
     },
   ],
   finalTitle: "Faites votre prochain certificat sur Passalio.",

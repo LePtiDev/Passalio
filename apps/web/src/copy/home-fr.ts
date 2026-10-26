@@ -1,10 +1,10 @@
 export const homeFr = {
   hero: {
     badge: "Nouveau",
-    news: "Planning d’équipe et mode hors ligne disponibles",
+    news: "Certificat de ramonage signé sur place, même sans réseau",
     titleStart: "Ramonage et entretien,",
     titleEnd: "du rendez-vous à la relance.",
-    lead: "Le logiciel des pros du conduit et de l’appareil : ramoneurs, poêliers, chauffagistes. Planning, fiches clients, équipe, et bientôt les certificats signés sur place. Sur le téléphone, même sans réseau.",
+    lead: "Le logiciel des pros du conduit et de l’appareil : ramoneurs, poêliers, chauffagistes. Planning, fiches clients, équipe et certificats signés sur place. Sur le téléphone, même sans réseau.",
     primary: "Essayer gratuitement",
     secondary: "Être rappelé pour une démo",
     highlights: [
