@@ -78,6 +78,7 @@ Dernière mise à jour : 2026-10-26.
 | Prospection, écran Configuration : Profil, Boîte mail (test de connexion), Rappels, Signature, admin pour un autre membre                                                                                                                                                                                                                   | ADR 0028                                            |
 | Menu « Mon compte » en bas des barres latérales : Mon profil, Configuration ou Réglages, Se déconnecter                                                                                                                                                                                                                                     | `account-menu.tsx`                                  |
 | Règle : chaque maquette vérifiée uniforme avec le reste de l'application avant d'être montrée                                                                                                                                                                                                                                               | ADR 0033, skill `new-screen`                        |
+| Site : certificat signé sur place présenté comme disponible, page Certificat de ramonage publiée                                                                                                                                                                                                                                            | [#84](https://github.com/LePtiDev/Passalio/pull/84) |
 
 ## Hors code (Quentin)
 
@@ -237,7 +238,10 @@ Dernière mise à jour : 2026-10-26.
 - [x] API publique « Être rappelé » (rappel dans « Ma journée », Turnstile, limite par IP, CORS depuis passalio.com, ADR 0030)
 - [ ] Comptage des visites par page et par jour, sans donnée personnelle
 - [ ] Ajouter passalio.com et staging.passalio.com au widget Turnstile avant de déployer le site
-- [ ] Publier les pages Certificat, Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et leurs histoires quand la fonction est en production (`isPublished`)
+- [x] Site : certificat signé sur place présenté comme disponible (accroche, bandeau, grille) et page Certificat de ramonage publiée, sans promettre l’envoi par mail
+- [x] Site : plus aucun « Bientôt » ; la grille de l’accueil ne montre que les fonctions sorties (demande de Quentin, 2026-10-26)
+- [ ] Publier les pages Attestation d’entretien, Relances, Lecture de plaque, Changer de logiciel et les histoires du certificat quand la fonction est en production (`isPublished`) ; Lecture de plaque est déjà en production, il reste la réponse sur l’usage des photos
+- [ ] Page Certificat : ajouter l’envoi par mail et le renvoi quand ils sont en production
 - [ ] Remplacer les histoires inventées par de vrais témoignages dès les premiers clients
 - [ ] Pages comparatives (Ramio, Ramonia), prix datés, sans dénigrement
 

@@ -16,7 +16,7 @@ describe("sitemap and robots", () => {
   });
 
   it("leaves out pages whose feature is not in production", () => {
-    expect(indexedPaths()).not.toContain("/produit/certificat-de-ramonage");
+    expect(indexedPaths()).not.toContain("/produit/relances");
     expect(indexedPaths()).not.toContain("/activite/changer-de-logiciel");
     expect(indexedPaths()).not.toContain("/histoires/plaque-derriere-le-poele");
   });

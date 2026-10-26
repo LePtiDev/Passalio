@@ -37,31 +37,14 @@ const rows = visual?.rows.slice(0, 3) ?? [];
     }
   </div>
   <div class="flex flex-1 flex-col gap-1 p-4">
-    <h3 class="flex flex-wrap items-center gap-2 font-bold">
-      {
-        page.isPublished ? (
-          <a href={PATHS.feature(page.slug)} class="after:absolute after:inset-0">
-            {page.menu.title}
-          </a>
-        ) : (
-          page.menu.title
-        )
-      }
-      {
-        !page.isPublished && (
-          <span class="rounded-full bg-amber-soft px-2 py-0.5 text-[11px] font-semibold text-amber-text">
-            {homeFr.product.soon}
-          </span>
-        )
-      }
+    <h3 class="font-bold">
+      <a href={PATHS.feature(page.slug)} class="after:absolute after:inset-0">
+        {page.menu.title}
+      </a>
     </h3>
     <p class="text-[13px] text-slate-text">{page.menu.text}</p>
-    {
-      page.isPublished && (
-        <p class="mt-auto pt-2 text-[13px] font-semibold text-validated" aria-hidden="true">
-          {homeFr.product.discover} →
-        </p>
-      )
-    }
+    <p class="mt-auto pt-2 text-[13px] font-semibold text-validated" aria-hidden="true">
+      {homeFr.product.discover} →
+    </p>
   </div>
 </li>
